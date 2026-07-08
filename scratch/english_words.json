@@ -1,0 +1,408 @@
+{
+  "Saatler": [
+    {"tr": "Saat bir", "en": "One o'clock"},
+    {"tr": "Yarım", "en": "Half past"},
+    {"tr": "Çeyrek geçiyor", "en": "Quarter past"},
+    {"tr": "Çeyrek var", "en": "Quarter to"},
+    {"tr": "Öğlen", "en": "Noon"}
+  ],
+  "Evcil Hayvanlar": [
+    {"tr": "Kedi", "en": "Cat"},
+    {"tr": "Köpek", "en": "Dog"},
+    {"tr": "Kuş", "en": "Bird"},
+    {"tr": "Balık", "en": "Fish"},
+    {"tr": "Tavşan", "en": "Rabbit"}
+  ],
+  "Vahşi Hayvanlar": [
+    {"tr": "Aslan", "en": "Lion"},
+    {"tr": "Kaplan", "en": "Tiger"},
+    {"tr": "Fil", "en": "Elephant"},
+    {"tr": "Zürafa", "en": "Giraffe"},
+    {"tr": "Maymun", "en": "Monkey"}
+  ],
+  "Doğa": [
+    {"tr": "Ağaç", "en": "Tree"},
+    {"tr": "Çiçek", "en": "Flower"},
+    {"tr": "Dağ", "en": "Mountain"},
+    {"tr": "Nehir", "en": "River"},
+    {"tr": "Güneş", "en": "Sun"}
+  ],
+  "Meyveler": [
+    {"tr": "Elma", "en": "Apple"},
+    {"tr": "Muz", "en": "Banana"},
+    {"tr": "Portakal", "en": "Orange"},
+    {"tr": "Çilek", "en": "Strawberry"},
+    {"tr": "Üzüm", "en": "Grape"}
+  ],
+  "Sebzeler": [
+    {"tr": "Domates", "en": "Tomato"},
+    {"tr": "Patates", "en": "Potato"},
+    {"tr": "Soğan", "en": "Onion"},
+    {"tr": "Havuç", "en": "Carrot"},
+    {"tr": "Biber", "en": "Pepper"}
+  ],
+  "İçecekler": [
+    {"tr": "Su", "en": "Water"},
+    {"tr": "Çay", "en": "Tea"},
+    {"tr": "Kahve", "en": "Coffee"},
+    {"tr": "Süt", "en": "Milk"},
+    {"tr": "Meyve suyu", "en": "Fruit juice"}
+  ],
+  "Odalar": [
+    {"tr": "Yatak odası", "en": "Bedroom"},
+    {"tr": "Oturma odası", "en": "Living room"},
+    {"tr": "Mutfak", "en": "Kitchen"},
+    {"tr": "Banyo", "en": "Bathroom"},
+    {"tr": "Çalışma odası", "en": "Study room"}
+  ],
+  "Mobilyalar": [
+    {"tr": "Masa", "en": "Table"},
+    {"tr": "Sandalye", "en": "Chair"},
+    {"tr": "Koltuk", "en": "Armchair"},
+    {"tr": "Yatak", "en": "Bed"},
+    {"tr": "Dolap", "en": "Wardrobe"}
+  ],
+  "Mutfak Eşyaları": [
+    {"tr": "Tabak", "en": "Plate"},
+    {"tr": "Bardak", "en": "Glass"},
+    {"tr": "Çatal", "en": "Fork"},
+    {"tr": "Kaşık", "en": "Spoon"},
+    {"tr": "Bıçak", "en": "Knife"}
+  ],
+  "Vücut Bölümleri": [
+    {"tr": "Baş", "en": "Head"},
+    {"tr": "Göz", "en": "Eye"},
+    {"tr": "Kulak", "en": "Ear"},
+    {"tr": "El", "en": "Hand"},
+    {"tr": "Ayak", "en": "Foot"}
+  ],
+  "Hastalıklar": [
+    {"tr": "Grip", "en": "Flu"},
+    {"tr": "Soğuk algınlığı", "en": "Cold"},
+    {"tr": "Ateş", "en": "Fever"},
+    {"tr": "Öksürük", "en": "Cough"},
+    {"tr": "Baş ağrısı", "en": "Headache"}
+  ],
+  "Hastanede": [
+    {"tr": "Doktor", "en": "Doctor"},
+    {"tr": "Hemşire", "en": "Nurse"},
+    {"tr": "Hasta", "en": "Patient"},
+    {"tr": "İlaç", "en": "Medicine"},
+    {"tr": "Reçete", "en": "Prescription"}
+  ],
+  "Kıyafetler": [
+    {"tr": "Gömlek", "en": "Shirt"},
+    {"tr": "Pantolon", "en": "Pants"},
+    {"tr": "Elbise", "en": "Dress"},
+    {"tr": "Etek", "en": "Skirt"},
+    {"tr": "Ceket", "en": "Jacket"}
+  ],
+  "Renklerle Giyim": [
+    {"tr": "Kırmızı gömlek", "en": "Red shirt"},
+    {"tr": "Mavi pantolon", "en": "Blue pants"},
+    {"tr": "Siyah ayakkabı", "en": "Black shoes"},
+    {"tr": "Beyaz şapka", "en": "White hat"},
+    {"tr": "Sarı elbise", "en": "Yellow dress"}
+  ],
+  "Pazarda": [
+    {"tr": "Fiyat", "en": "Price"},
+    {"tr": "Pahalı", "en": "Expensive"},
+    {"tr": "Ucuz", "en": "Cheap"},
+    {"tr": "Taze", "en": "Fresh"},
+    {"tr": "Satıcı", "en": "Seller"}
+  ],
+  "Meslekler 1": [
+    {"tr": "Öğretmen", "en": "Teacher"},
+    {"tr": "Mühendis", "en": "Engineer"},
+    {"tr": "Doktor", "en": "Doctor"},
+    {"tr": "Avukat", "en": "Lawyer"},
+    {"tr": "Polis", "en": "Police officer"}
+  ],
+  "Meslekler 2": [
+    {"tr": "Aşçı", "en": "Chef"},
+    {"tr": "Şoför", "en": "Driver"},
+    {"tr": "Berber", "en": "Barber"},
+    {"tr": "Garson", "en": "Waiter"},
+    {"tr": "Çiftçi", "en": "Farmer"}
+  ],
+  "İş Yerinde": [
+    {"tr": "Ofis", "en": "Office"},
+    {"tr": "Patron", "en": "Boss"},
+    {"tr": "Çalışan", "en": "Employee"},
+    {"tr": "Toplantı", "en": "Meeting"},
+    {"tr": "Maaş", "en": "Salary"}
+  ],
+  "Mekanlar": [
+    {"tr": "Okul", "en": "School"},
+    {"tr": "Hastane", "en": "Hospital"},
+    {"tr": "Banka", "en": "Bank"},
+    {"tr": "Restoran", "en": "Restaurant"},
+    {"tr": "Park", "en": "Park"}
+  ],
+  "Taşıtlar": [
+    {"tr": "Araba", "en": "Car"},
+    {"tr": "Otobüs", "en": "Bus"},
+    {"tr": "Tren", "en": "Train"},
+    {"tr": "Uçak", "en": "Airplane"},
+    {"tr": "Gemi", "en": "Ship"}
+  ],
+  "Yön Sorma": [
+    {"tr": "Sağ", "en": "Right"},
+    {"tr": "Sol", "en": "Left"},
+    {"tr": "Düz", "en": "Straight"},
+    {"tr": "Nerede", "en": "Where"},
+    {"tr": "Uzak", "en": "Far"}
+  ],
+  "Sabah Rutini": [
+    {"tr": "Uyanmak", "en": "Wake up"},
+    {"tr": "Yüzünü yıkamak", "en": "Wash face"},
+    {"tr": "Kahvaltı yapmak", "en": "Have breakfast"},
+    {"tr": "Diş fırçalamak", "en": "Brush teeth"},
+    {"tr": "Giyinmek", "en": "Get dressed"}
+  ],
+  "İş ve Okul": [
+    {"tr": "Çalışmak", "en": "Work"},
+    {"tr": "Öğrenmek", "en": "Learn"},
+    {"tr": "Ödev", "en": "Homework"},
+    {"tr": "Sınav", "en": "Exam"},
+    {"tr": "Mola", "en": "Break"}
+  ],
+  "Akşam Rutini": [
+    {"tr": "Eve dönmek", "en": "Return home"},
+    {"tr": "Akşam yemeği", "en": "Dinner"},
+    {"tr": "Televizyon izlemek", "en": "Watch TV"},
+    {"tr": "Kitap okumak", "en": "Read a book"},
+    {"tr": "Uyumak", "en": "Sleep"}
+  ],
+  "Hisler": [
+    {"tr": "Mutlu", "en": "Happy"},
+    {"tr": "Üzgün", "en": "Sad"},
+    {"tr": "Kızgın", "en": "Angry"},
+    {"tr": "Korkmuş", "en": "Scared"},
+    {"tr": "Heyecanlı", "en": "Excited"}
+  ],
+  "Karakter Özellikleri": [
+    {"tr": "Dürüst", "en": "Honest"},
+    {"tr": "Tembel", "en": "Lazy"},
+    {"tr": "Çalışkan", "en": "Hardworking"},
+    {"tr": "Komik", "en": "Funny"},
+    {"tr": "Ciddi", "en": "Serious"}
+  ],
+  "Tepkiler": [
+    {"tr": "Harika!", "en": "Great!"},
+    {"tr": "İnanılmaz", "en": "Unbelievable"},
+    {"tr": "Gerçekten mi?", "en": "Really?"},
+    {"tr": "Maalesef", "en": "Unfortunately"},
+    {"tr": "Tabii ki", "en": "Of course"}
+  ],
+  "Hareket Fiilleri": [
+    {"tr": "Koşmak", "en": "Run"},
+    {"tr": "Zıplamak", "en": "Jump"},
+    {"tr": "Yürümek", "en": "Walk"},
+    {"tr": "Yüzmek", "en": "Swim"},
+    {"tr": "Uçmak", "en": "Fly"}
+  ],
+  "Durum Fiilleri": [
+    {"tr": "Bilmek", "en": "Know"},
+    {"tr": "İnanmak", "en": "Believe"},
+    {"tr": "Hatırlamak", "en": "Remember"},
+    {"tr": "Sevmek", "en": "Love"},
+    {"tr": "İstemek", "en": "Want"}
+  ],
+  "Günlük Fiiller": [
+    {"tr": "Yapmak", "en": "Do"},
+    {"tr": "Gitmek", "en": "Go"},
+    {"tr": "Gelmek", "en": "Come"},
+    {"tr": "Almak", "en": "Take"},
+    {"tr": "Vermek", "en": "Give"}
+  ],
+  "Geçmiş Zaman": [
+    {"tr": "Dün", "en": "Yesterday"},
+    {"tr": "Geçen hafta", "en": "Last week"},
+    {"tr": "Yaptım", "en": "I did"},
+    {"tr": "Gittim", "en": "I went"},
+    {"tr": "Gördüm", "en": "I saw"}
+  ],
+  "Gelecek Zaman": [
+    {"tr": "Yarın", "en": "Tomorrow"},
+    {"tr": "Gelecek hafta", "en": "Next week"},
+    {"tr": "Yapacağım", "en": "I will do"},
+    {"tr": "Gideceğim", "en": "I will go"},
+    {"tr": "Göreceğim", "en": "I will see"}
+  ],
+  "Emir Kipleri": [
+    {"tr": "Dur!", "en": "Stop!"},
+    {"tr": "Gel!", "en": "Come!"},
+    {"tr": "Dinle!", "en": "Listen!"},
+    {"tr": "Bak!", "en": "Look!"},
+    {"tr": "Söyle!", "en": "Tell!"}
+  ],
+  "Okul Eşyaları": [
+    {"tr": "Kalem", "en": "Pen"},
+    {"tr": "Defter", "en": "Notebook"},
+    {"tr": "Kitap", "en": "Book"},
+    {"tr": "Silgi", "en": "Eraser"},
+    {"tr": "Çanta", "en": "Bag"}
+  ],
+  "Dersler": [
+    {"tr": "Matematik", "en": "Math"},
+    {"tr": "Tarih", "en": "History"},
+    {"tr": "Coğrafya", "en": "Geography"},
+    {"tr": "Fen bilgisi", "en": "Science"},
+    {"tr": "İngilizce", "en": "English"}
+  ],
+  "Sınıfta": [
+    {"tr": "Öğrenci", "en": "Student"},
+    {"tr": "Tahta", "en": "Board"},
+    {"tr": "Sıra", "en": "Desk"},
+    {"tr": "Sınav", "en": "Exam"},
+    {"tr": "Soru", "en": "Question"}
+  ],
+  "Tatil Yerleri": [
+    {"tr": "Plaj", "en": "Beach"},
+    {"tr": "Köy", "en": "Village"},
+    {"tr": "Şehir", "en": "City"},
+    {"tr": "Orman", "en": "Forest"},
+    {"tr": "Ada", "en": "Island"}
+  ],
+  "Otelde": [
+    {"tr": "Oda", "en": "Room"},
+    {"tr": "Resepsiyon", "en": "Reception"},
+    {"tr": "Anahtar", "en": "Key"},
+    {"tr": "Rezervasyon", "en": "Reservation"},
+    {"tr": "Havlu", "en": "Towel"}
+  ],
+  "Seyahat Planı": [
+    {"tr": "Bilet", "en": "Ticket"},
+    {"tr": "Pasaport", "en": "Passport"},
+    {"tr": "Valiz", "en": "Suitcase"},
+    {"tr": "Uçuş", "en": "Flight"},
+    {"tr": "Yolculuk", "en": "Journey"}
+  ],
+  "Spor": [
+    {"tr": "Futbol", "en": "Football"},
+    {"tr": "Basketbol", "en": "Basketball"},
+    {"tr": "Tenis", "en": "Tennis"},
+    {"tr": "Yüzme", "en": "Swimming"},
+    {"tr": "Koşu", "en": "Running"}
+  ],
+  "Müzik ve Sanat": [
+    {"tr": "Şarkı", "en": "Song"},
+    {"tr": "Müzik", "en": "Music"},
+    {"tr": "Resim", "en": "Painting"},
+    {"tr": "Gitar", "en": "Guitar"},
+    {"tr": "Dans", "en": "Dance"}
+  ],
+  "Boş Zaman": [
+    {"tr": "Hobi", "en": "Hobby"},
+    {"tr": "Oyun", "en": "Game"},
+    {"tr": "Sinema", "en": "Cinema"},
+    {"tr": "Tiyatro", "en": "Theater"},
+    {"tr": "Piknik", "en": "Picnic"}
+  ],
+  "Mevsimler": [
+    {"tr": "İlkbahar", "en": "Spring"},
+    {"tr": "Yaz", "en": "Summer"},
+    {"tr": "Sonbahar", "en": "Autumn"},
+    {"tr": "Kış", "en": "Winter"},
+    {"tr": "Mevsim", "en": "Season"}
+  ],
+  "Hava Durumu": [
+    {"tr": "Güneşli", "en": "Sunny"},
+    {"tr": "Yağmurlu", "en": "Rainy"},
+    {"tr": "Bulutlu", "en": "Cloudy"},
+    {"tr": "Karlı", "en": "Snowy"},
+    {"tr": "Rüzgarlı", "en": "Windy"}
+  ],
+  "Coğrafya": [
+    {"tr": "Harita", "en": "Map"},
+    {"tr": "Dünya", "en": "World"},
+    {"tr": "Kıta", "en": "Continent"},
+    {"tr": "Ülke", "en": "Country"},
+    {"tr": "Başkent", "en": "Capital"}
+  ],
+  "Arkadaşlık": [
+    {"tr": "Arkadaş", "en": "Friend"},
+    {"tr": "Dost", "en": "Close friend"},
+    {"tr": "Sır", "en": "Secret"},
+    {"tr": "Güven", "en": "Trust"},
+    {"tr": "Yardım", "en": "Help"}
+  ],
+  "Davetler": [
+    {"tr": "Davetiye", "en": "Invitation"},
+    {"tr": "Parti", "en": "Party"},
+    {"tr": "Misafir", "en": "Guest"},
+    {"tr": "Katılmak", "en": "Join"},
+    {"tr": "Kabul etmek", "en": "Accept"}
+  ],
+  "Kutlamalar": [
+    {"tr": "Doğum günü", "en": "Birthday"},
+    {"tr": "Düğün", "en": "Wedding"},
+    {"tr": "Yılbaşı", "en": "New Year"},
+    {"tr": "Bayram", "en": "Festival"},
+    {"tr": "Hediye", "en": "Gift"}
+  ],
+  "Bağlaçlar": [
+    {"tr": "Ve", "en": "And"},
+    {"tr": "Veya", "en": "Or"},
+    {"tr": "Ama", "en": "But"},
+    {"tr": "Çünkü", "en": "Because"},
+    {"tr": "Eğer", "en": "If"}
+  ],
+  "Soru Kelimeleri": [
+    {"tr": "Kim", "en": "Who"},
+    {"tr": "Ne", "en": "What"},
+    {"tr": "Nerede", "en": "Where"},
+    {"tr": "Ne zaman", "en": "When"},
+    {"tr": "Neden", "en": "Why"}
+  ],
+  "Edatlar": [
+    {"tr": "İçinde", "en": "In"},
+    {"tr": "Üstünde", "en": "On"},
+    {"tr": "Altında", "en": "Under"},
+    {"tr": "Yanında", "en": "Next to"},
+    {"tr": "Arasında", "en": "Between"}
+  ],
+  "Fikir Belirtme": [
+    {"tr": "Bence", "en": "I think"},
+    {"tr": "Katılıyorum", "en": "I agree"},
+    {"tr": "Katılmıyorum", "en": "I disagree"},
+    {"tr": "Eminim", "en": "I am sure"},
+    {"tr": "Belki", "en": "Maybe"}
+  ],
+  "Tartışma": [
+    {"tr": "Tartışmak", "en": "Argue"},
+    {"tr": "Haklısın", "en": "You are right"},
+    {"tr": "Haksızsın", "en": "You are wrong"},
+    {"tr": "Sorun", "en": "Problem"},
+    {"tr": "Çözüm", "en": "Solution"}
+  ],
+  "Haberler": [
+    {"tr": "Haber", "en": "News"},
+    {"tr": "Gazete", "en": "Newspaper"},
+    {"tr": "Röportaj", "en": "Interview"},
+    {"tr": "Manşet", "en": "Headline"},
+    {"tr": "Olay", "en": "Event"}
+  ],
+  "Atasözleri": [
+    {"tr": "Atasözü", "en": "Proverb"},
+    {"tr": "Deyim", "en": "Idiom"},
+    {"tr": "Öğüt", "en": "Advice"},
+    {"tr": "Tecrübe", "en": "Experience"},
+    {"tr": "Bilgelik", "en": "Wisdom"}
+  ],
+  "Masallar": [
+    {"tr": "Masal", "en": "Fairy tale"},
+    {"tr": "Hikaye", "en": "Story"},
+    {"tr": "Prens", "en": "Prince"},
+    {"tr": "Prenses", "en": "Princess"},
+    {"tr": "Cadı", "en": "Witch"}
+  ],
+  "Gelenekler": [
+    {"tr": "Gelenek", "en": "Tradition"},
+    {"tr": "Kültür", "en": "Culture"},
+    {"tr": "Görenek", "en": "Custom"},
+    {"tr": "Tören", "en": "Ceremony"},
+    {"tr": "Miras", "en": "Heritage"}
+  ]
+}

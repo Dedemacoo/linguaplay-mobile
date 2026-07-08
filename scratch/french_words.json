@@ -1,0 +1,464 @@
+{
+  "Saatler": [
+    {"tr": "Saat kaç?", "fr": "Quelle heure est-il?"},
+    {"tr": "Yarım", "fr": "Demi"},
+    {"tr": "Çeyrek geçiyor", "fr": "Et quart"},
+    {"tr": "Dakika", "fr": "Minute"},
+    {"tr": "Saat", "fr": "Heure"}
+  ],
+  "Evcil Hayvanlar": [
+    {"tr": "Kedi", "fr": "Chat"},
+    {"tr": "Köpek", "fr": "Chien"},
+    {"tr": "Kuş", "fr": "Oiseau"},
+    {"tr": "Balık", "fr": "Poisson"},
+    {"tr": "Tavşan", "fr": "Lapin"}
+  ],
+  "Vahşi Hayvanlar": [
+    {"tr": "Aslan", "fr": "Lion"},
+    {"tr": "Kaplan", "fr": "Tigre"},
+    {"tr": "Fil", "fr": "Éléphant"},
+    {"tr": "Ayı", "fr": "Ours"},
+    {"tr": "Yılan", "fr": "Serpent"}
+  ],
+  "Doğa": [
+    {"tr": "Ağaç", "fr": "Arbre"},
+    {"tr": "Çiçek", "fr": "Fleur"},
+    {"tr": "Dağ", "fr": "Montagne"},
+    {"tr": "Nehir", "fr": "Rivière"},
+    {"tr": "Güneş", "fr": "Soleil"}
+  ],
+  "Meyveler": [
+    {"tr": "Elma", "fr": "Pomme"},
+    {"tr": "Muz", "fr": "Banane"},
+    {"tr": "Portakal", "fr": "Orange"},
+    {"tr": "Üzüm", "fr": "Raisin"},
+    {"tr": "Çilek", "fr": "Fraise"}
+  ],
+  "Sebzeler": [
+    {"tr": "Domates", "fr": "Tomate"},
+    {"tr": "Patates", "fr": "Pomme de terre"},
+    {"tr": "Soğan", "fr": "Oignon"},
+    {"tr": "Havuç", "fr": "Carotte"},
+    {"tr": "Biber", "fr": "Poivron"}
+  ],
+  "İçecekler": [
+    {"tr": "Su", "fr": "Eau"},
+    {"tr": "Çay", "fr": "Thé"},
+    {"tr": "Kahve", "fr": "Café"},
+    {"tr": "Süt", "fr": "Lait"},
+    {"tr": "Meyve Suyu", "fr": "Jus"}
+  ],
+  "Odalar": [
+    {"tr": "Yatak odası", "fr": "Chambre"},
+    {"tr": "Oturma odası", "fr": "Salon"},
+    {"tr": "Mutfak", "fr": "Cuisine"},
+    {"tr": "Banyo", "fr": "Salle de bain"},
+    {"tr": "Bahçe", "fr": "Jardin"}
+  ],
+  "Mobilyalar": [
+    {"tr": "Yatak", "fr": "Lit"},
+    {"tr": "Masa", "fr": "Table"},
+    {"tr": "Sandalye", "fr": "Chaise"},
+    {"tr": "Koltuk", "fr": "Canapé"},
+    {"tr": "Dolap", "fr": "Armoire"}
+  ],
+  "Mutfak Eşyaları": [
+    {"tr": "Bıçak", "fr": "Couteau"},
+    {"tr": "Çatal", "fr": "Fourchette"},
+    {"tr": "Kaşık", "fr": "Cuillère"},
+    {"tr": "Tabak", "fr": "Assiette"},
+    {"tr": "Bardak", "fr": "Verre"}
+  ],
+  "Vücut Bölümleri": [
+    {"tr": "Baş", "fr": "Tête"},
+    {"tr": "Göz", "fr": "Œil"},
+    {"tr": "El", "fr": "Main"},
+    {"tr": "Ayak", "fr": "Pied"},
+    {"tr": "Kol", "fr": "Bras"}
+  ],
+  "Hastalıklar": [
+    {"tr": "Ateş", "fr": "Fièvre"},
+    {"tr": "Öksürük", "fr": "Toux"},
+    {"tr": "Baş ağrısı", "fr": "Mal de tête"},
+    {"tr": "Grip", "fr": "Grippe"},
+    {"tr": "Soğuk algınlığı", "fr": "Rhume"}
+  ],
+  "Hastanede": [
+    {"tr": "Doktor", "fr": "Médecin"},
+    {"tr": "Hemşire", "fr": "Infirmière"},
+    {"tr": "İlaç", "fr": "Médicament"},
+    {"tr": "Reçete", "fr": "Ordonnance"},
+    {"tr": "Acil", "fr": "Urgence"}
+  ],
+  "Kıyafetler": [
+    {"tr": "Gömlek", "fr": "Chemise"},
+    {"tr": "Pantolon", "fr": "Pantalon"},
+    {"tr": "Elbise", "fr": "Robe"},
+    {"tr": "Ceket", "fr": "Veste"},
+    {"tr": "Ayakkabı", "fr": "Chaussure"}
+  ],
+  "Renklerle Giyim": [
+    {"tr": "Kırmızı elbise", "fr": "Robe rouge"},
+    {"tr": "Mavi gömlek", "fr": "Chemise bleue"},
+    {"tr": "Siyah pantolon", "fr": "Pantalon noir"},
+    {"tr": "Yeşil ceket", "fr": "Veste verte"},
+    {"tr": "Sarı şapka", "fr": "Chapeau jaune"}
+  ],
+  "Pazarda": [
+    {"tr": "Taze", "fr": "Frais"},
+    {"tr": "Ucuz", "fr": "Moins cher"},
+    {"tr": "Pahalı", "fr": "Cher"},
+    {"tr": "Para üstü", "fr": "Monnaie"},
+    {"tr": "Fiyat", "fr": "Prix"}
+  ],
+  "Meslekler 1": [
+    {"tr": "Öğretmen", "fr": "Professeur"},
+    {"tr": "Mühendis", "fr": "Ingénieur"},
+    {"tr": "Polis", "fr": "Police"},
+    {"tr": "Aşçı", "fr": "Cuisinier"},
+    {"tr": "Şoför", "fr": "Chauffeur"}
+  ],
+  "Meslekler 2": [
+    {"tr": "Avukat", "fr": "Avocat"},
+    {"tr": "Mimar", "fr": "Architecte"},
+    {"tr": "Çiftçi", "fr": "Agriculteur"},
+    {"tr": "Hemşire", "fr": "Infirmière"},
+    {"tr": "Doktor", "fr": "Docteur"}
+  ],
+  "İş Yerinde": [
+    {"tr": "Ofis", "fr": "Bureau"},
+    {"tr": "Patron", "fr": "Patron"},
+    {"tr": "Çalışan", "fr": "Employé"},
+    {"tr": "Toplantı", "fr": "Réunion"},
+    {"tr": "Masa", "fr": "Bureau"}
+  ],
+  "Mekanlar": [
+    {"tr": "Banka", "fr": "Banque"},
+    {"tr": "Okul", "fr": "École"},
+    {"tr": "Hastane", "fr": "Hôpital"},
+    {"tr": "Park", "fr": "Parc"},
+    {"tr": "Kütüphane", "fr": "Bibliothèque"}
+  ],
+  "Taşıtlar": [
+    {"tr": "Araba", "fr": "Voiture"},
+    {"tr": "Otobüs", "fr": "Bus"},
+    {"tr": "Tren", "fr": "Train"},
+    {"tr": "Uçak", "fr": "Avion"},
+    {"tr": "Bisiklet", "fr": "Vélo"}
+  ],
+  "Yön Sorma": [
+    {"tr": "Sağ", "fr": "Droite"},
+    {"tr": "Sol", "fr": "Gauche"},
+    {"tr": "Düz", "fr": "Tout droit"},
+    {"tr": "Geri", "fr": "Derrière"},
+    {"tr": "Harita", "fr": "Carte"}
+  ],
+  "Sabah Rutini": [
+    {"tr": "Uyanmak", "fr": "Se réveiller"},
+    {"tr": "Yüz yıkamak", "fr": "Se laver"},
+    {"tr": "Kahvaltı yapmak", "fr": "Prendre le petit déjeuner"},
+    {"tr": "Giyinmek", "fr": "S'habiller"},
+    {"tr": "Diş fırçalamak", "fr": "Se brosser les dents"}
+  ],
+  "İş ve Okul": [
+    {"tr": "Çalışmak", "fr": "Travailler"},
+    {"tr": "Okumak", "fr": "Lire"},
+    {"tr": "Öğrenmek", "fr": "Apprendre"},
+    {"tr": "Sınav", "fr": "Examen"},
+    {"tr": "Ödev", "fr": "Devoirs"}
+  ],
+  "Akşam Rutini": [
+    {"tr": "Akşam yemeği", "fr": "Dîner"},
+    {"tr": "Televizyon izlemek", "fr": "Regarder la télé"},
+    {"tr": "Dinlenmek", "fr": "Se reposer"},
+    {"tr": "Kitap okumak", "fr": "Lire un livre"},
+    {"tr": "Uyumak", "fr": "Dormir"}
+  ],
+  "Hisler": [
+    {"tr": "Mutlu", "fr": "Heureux"},
+    {"tr": "Üzgün", "fr": "Triste"},
+    {"tr": "Kızgın", "fr": "En colère"},
+    {"tr": "Korkmuş", "fr": "Effrayé"},
+    {"tr": "Heyecanlı", "fr": "Excité"}
+  ],
+  "Karakter Özellikleri": [
+    {"tr": "Komik", "fr": "Drôle"},
+    {"tr": "Zeki", "fr": "Intelligent"},
+    {"tr": "Tembel", "fr": "Paresseux"},
+    {"tr": "Çalışkan", "fr": "Travailleur"},
+    {"tr": "Kibar", "fr": "Gentil"}
+  ],
+  "Tepkiler": [
+    {"tr": "Harika", "fr": "Génial"},
+    {"tr": "Kötü", "fr": "Mauvais"},
+    {"tr": "Sürpriz", "fr": "Surprise"},
+    {"tr": "İlginç", "fr": "Intéressant"},
+    {"tr": "Mükemmel", "fr": "Parfait"}
+  ],
+  "Hareket Fiilleri": [
+    {"tr": "Koşmak", "fr": "Courir"},
+    {"tr": "Zıplamak", "fr": "Sauter"},
+    {"tr": "Yürümek", "fr": "Marcher"},
+    {"tr": "Yüzmek", "fr": "Nager"},
+    {"tr": "Uçmak", "fr": "Voler"}
+  ],
+  "Durum Fiilleri": [
+    {"tr": "Olmak", "fr": "Être"},
+    {"tr": "Sahip olmak", "fr": "Avoir"},
+    {"tr": "Bilmek", "fr": "Savoir"},
+    {"tr": "Düşünmek", "fr": "Penser"},
+    {"tr": "Sevmek", "fr": "Aimer"}
+  ],
+  "Günlük Fiiller": [
+    {"tr": "Görmek", "fr": "Voir"},
+    {"tr": "Duymak", "fr": "Entendre"},
+    {"tr": "Yemek", "fr": "Manger"},
+    {"tr": "İçmek", "fr": "Boire"},
+    {"tr": "Yazmak", "fr": "Écrire"}
+  ],
+  "Geçmiş Zaman": [
+    {"tr": "Dün", "fr": "Hier"},
+    {"tr": "Geçen hafta", "fr": "La semaine dernière"},
+    {"tr": "Önce", "fr": "Avant"},
+    {"tr": "Gitti", "fr": "Est allé"},
+    {"tr": "Yaptı", "fr": "A fait"}
+  ],
+  "Gelecek Zaman": [
+    {"tr": "Yarın", "fr": "Demain"},
+    {"tr": "Gelecek hafta", "fr": "La semaine prochaine"},
+    {"tr": "Sonra", "fr": "Après"},
+    {"tr": "Gidecek", "fr": "Ira"},
+    {"tr": "Yapacak", "fr": "Fera"}
+  ],
+  "Emir Kipleri": [
+    {"tr": "Dur", "fr": "Arrête"},
+    {"tr": "Gel", "fr": "Viens"},
+    {"tr": "Git", "fr": "Va"},
+    {"tr": "Dinle", "fr": "Écoute"},
+    {"tr": "Bak", "fr": "Regarde"}
+  ],
+  "Okul Eşyaları": [
+    {"tr": "Kalem", "fr": "Stylo"},
+    {"tr": "Kitap", "fr": "Livre"},
+    {"tr": "Defter", "fr": "Cahier"},
+    {"tr": "Silgi", "fr": "Gomme"},
+    {"tr": "Çanta", "fr": "Sac"}
+  ],
+  "Dersler": [
+    {"tr": "Matematik", "fr": "Mathématiques"},
+    {"tr": "Fen", "fr": "Science"},
+    {"tr": "Tarih", "fr": "Histoire"},
+    {"tr": "Coğrafya", "fr": "Géographie"},
+    {"tr": "Müzik", "fr": "Musique"}
+  ],
+  "Sınıfta": [
+    {"tr": "Öğrenci", "fr": "Élève"},
+    {"tr": "Öğretmen", "fr": "Professeur"},
+    {"tr": "Tahta", "fr": "Tableau"},
+    {"tr": "Sıra", "fr": "Bureau"},
+    {"tr": "Sınıf", "fr": "Classe"}
+  ],
+  "Tatil Yerleri": [
+    {"tr": "Plaj", "fr": "Plage"},
+    {"tr": "Orman", "fr": "Forêt"},
+    {"tr": "Dağ", "fr": "Montagne"},
+    {"tr": "Şehir", "fr": "Ville"},
+    {"tr": "Köy", "fr": "Village"}
+  ],
+  "Otelde": [
+    {"tr": "Oda", "fr": "Chambre"},
+    {"tr": "Anahtar", "fr": "Clé"},
+    {"tr": "Rezervasyon", "fr": "Réservation"},
+    {"tr": "Resepsiyon", "fr": "Réception"},
+    {"tr": "Havlu", "fr": "Serviette"}
+  ],
+  "Seyahat Planı": [
+    {"tr": "Bilet", "fr": "Billet"},
+    {"tr": "Pasaport", "fr": "Passeport"},
+    {"tr": "Valiz", "fr": "Valise"},
+    {"tr": "Havalimanı", "fr": "Aéroport"},
+    {"tr": "Uçuş", "fr": "Vol"}
+  ],
+  "Spor": [
+    {"tr": "Futbol", "fr": "Football"},
+    {"tr": "Basketbol", "fr": "Basket-ball"},
+    {"tr": "Tenis", "fr": "Tennis"},
+    {"tr": "Yüzme", "fr": "Natation"},
+    {"tr": "Koşu", "fr": "Course"}
+  ],
+  "Müzik ve Sanat": [
+    {"tr": "Şarkı", "fr": "Chanson"},
+    {"tr": "Müzik", "fr": "Musique"},
+    {"tr": "Gitar", "fr": "Guitare"},
+    {"tr": "Resim", "fr": "Peinture"},
+    {"tr": "Sanat", "fr": "Art"}
+  ],
+  "Boş Zaman": [
+    {"tr": "Oyun", "fr": "Jeu"},
+    {"tr": "Film", "fr": "Film"},
+    {"tr": "Kitap", "fr": "Livre"},
+    {"tr": "Park", "fr": "Parc"},
+    {"tr": "Hobi", "fr": "Loisir"}
+  ],
+  "Mevsimler": [
+    {"tr": "İlkbahar", "fr": "Printemps"},
+    {"tr": "Yaz", "fr": "Été"},
+    {"tr": "Sonbahar", "fr": "Automne"},
+    {"tr": "Kış", "fr": "Hiver"},
+    {"tr": "Mevsim", "fr": "Saison"}
+  ],
+  "Hava Durumu": [
+    {"tr": "Güneşli", "fr": "Ensoleillé"},
+    {"tr": "Yağmurlu", "fr": "Pluvieux"},
+    {"tr": "Karlı", "fr": "Neigeux"},
+    {"tr": "Rüzgarlı", "fr": "Venteux"},
+    {"tr": "Bulutlu", "fr": "Nuageux"}
+  ],
+  "Coğrafya": [
+    {"tr": "Ülke", "fr": "Pays"},
+    {"tr": "Şehir", "fr": "Ville"},
+    {"tr": "Nehir", "fr": "Fleuve"},
+    {"tr": "Okyanus", "fr": "Océan"},
+    {"tr": "Kıta", "fr": "Continent"}
+  ],
+  "Arkadaşlık": [
+    {"tr": "Arkadaş", "fr": "Ami"},
+    {"tr": "Dost", "fr": "Meilleur ami"},
+    {"tr": "Sohbet", "fr": "Discussion"},
+    {"tr": "Oynamak", "fr": "Jouer"},
+    {"tr": "Birlikte", "fr": "Ensemble"}
+  ],
+  "Davetler": [
+    {"tr": "Parti", "fr": "Fête"},
+    {"tr": "Davetiye", "fr": "Invitation"},
+    {"tr": "Hediye", "fr": "Cadeau"},
+    {"tr": "Kutlama", "fr": "Célébration"},
+    {"tr": "Misafir", "fr": "Invité"}
+  ],
+  "Kutlamalar": [
+    {"tr": "Doğum günü", "fr": "Anniversaire"},
+    {"tr": "Yılbaşı", "fr": "Nouvel An"},
+    {"tr": "Düğün", "fr": "Mariage"},
+    {"tr": "Bayram", "fr": "Fête"},
+    {"tr": "Tebrikler", "fr": "Félicitations"}
+  ],
+  "Bağlaçlar": [
+    {"tr": "Ve", "fr": "Et"},
+    {"tr": "Veya", "fr": "Ou"},
+    {"tr": "Çünkü", "fr": "Parce que"},
+    {"tr": "Ama", "fr": "Mais"},
+    {"tr": "Eğer", "fr": "Si"}
+  ],
+  "Soru Kelimeleri": [
+    {"tr": "Kim", "fr": "Qui"},
+    {"tr": "Ne", "fr": "Quoi"},
+    {"tr": "Nerede", "fr": "Où"},
+    {"tr": "Ne zaman", "fr": "Quand"},
+    {"tr": "Neden", "fr": "Pourquoi"}
+  ],
+  "Edatlar": [
+    {"tr": "İçinde", "fr": "Dans"},
+    {"tr": "Üzerinde", "fr": "Sur"},
+    {"tr": "Altında", "fr": "Sous"},
+    {"tr": "Yanında", "fr": "À côté de"},
+    {"tr": "Arasında", "fr": "Entre"}
+  ],
+  "Fikir Belirtme": [
+    {"tr": "Bence", "fr": "Je pense"},
+    {"tr": "Belki", "fr": "Peut-être"},
+    {"tr": "Eminim", "fr": "Je suis sûr"},
+    {"tr": "Katılıyorum", "fr": "Je suis d'accord"},
+    {"tr": "Fikir", "fr": "Idée"}
+  ],
+  "Tartışma": [
+    {"tr": "Konuşmak", "fr": "Parler"},
+    {"tr": "Sormak", "fr": "Demander"},
+    {"tr": "Cevap", "fr": "Réponse"},
+    {"tr": "Neden", "fr": "Raison"},
+    {"tr": "Sorun", "fr": "Problème"}
+  ],
+  "Haberler": [
+    {"tr": "Gazete", "fr": "Journal"},
+    {"tr": "Haber", "fr": "Nouvelles"},
+    {"tr": "Televizyon", "fr": "Télévision"},
+    {"tr": "Radyo", "fr": "Radio"},
+    {"tr": "Bugün", "fr": "Aujourd'hui"}
+  ],
+  "Atasözleri": [
+    {"tr": "Gelenek", "fr": "Tradition"},
+    {"tr": "Kültür", "fr": "Culture"},
+    {"tr": "Geçmiş", "fr": "Passé"},
+    {"tr": "Hikaye", "fr": "Histoire"},
+    {"tr": "Tarih", "fr": "Histoire"}
+  ],
+  "Masallar": [
+    {"tr": "Kral", "fr": "Roi"},
+    {"tr": "Kraliçe", "fr": "Reine"},
+    {"tr": "Prens", "fr": "Prince"},
+    {"tr": "Prenses", "fr": "Princesse"},
+    {"tr": "Büyü", "fr": "Magie"}
+  ],
+  "Gelenekler": [
+    {"tr": "Dans", "fr": "Danse"},
+    {"tr": "Müzik", "fr": "Musique"},
+    {"tr": "Giyim", "fr": "Vêtements"},
+    {"tr": "Yemek", "fr": "Nourriture"},
+    {"tr": "Festival", "fr": "Festival"}
+  ],
+  "Temeller 1": [
+    {"tr": "Elma", "fr": "Pomme"},
+    {"tr": "Kitap", "fr": "Livre"},
+    {"tr": "Araba", "fr": "Voiture"},
+    {"tr": "Su", "fr": "Eau"},
+    {"tr": "Kedi", "fr": "Chat"}
+  ],
+  "Alfabe ve Sesler": [
+    {"tr": "Harf", "fr": "Lettre"},
+    {"tr": "Ses", "fr": "Son"},
+    {"tr": "Kelime", "fr": "Mot"},
+    {"tr": "Okumak", "fr": "Lire"},
+    {"tr": "Yazmak", "fr": "Écrire"}
+  ],
+  "Temeller 2": [
+    {"tr": "Çocuk", "fr": "Enfant"},
+    {"tr": "Ev", "fr": "Maison"},
+    {"tr": "Güneş", "fr": "Soleil"},
+    {"tr": "Ay", "fr": "Lune"},
+    {"tr": "Ağaç", "fr": "Arbre"}
+  ],
+  "Selamlaşma": [
+    {"tr": "Merhaba", "fr": "Bonjour"},
+    {"tr": "Nasılsın?", "fr": "Comment ça va?"},
+    {"tr": "İyiyim", "fr": "Je vais bien"},
+    {"tr": "Teşekkürler", "fr": "Merci"},
+    {"tr": "Görüşürüz", "fr": "Au revoir"}
+  ],
+  "Renkler": [
+    {"tr": "Kırmızı", "fr": "Rouge"},
+    {"tr": "Mavi", "fr": "Bleu"},
+    {"tr": "Yeşil", "fr": "Vert"},
+    {"tr": "Sarı", "fr": "Jaune"},
+    {"tr": "Siyah", "fr": "Noir"}
+  ],
+  "Sayılar": [
+    {"tr": "Bir", "fr": "Un"},
+    {"tr": "İki", "fr": "Deux"},
+    {"tr": "Üç", "fr": "Trois"},
+    {"tr": "Dört", "fr": "Quatre"},
+    {"tr": "Beş", "fr": "Cinq"}
+  ],
+  "Aile": [
+    {"tr": "Anne", "fr": "Mère"},
+    {"tr": "Baba", "fr": "Père"},
+    {"tr": "Kız kardeş", "fr": "Sœur"},
+    {"tr": "Erkek kardeş", "fr": "Frère"},
+    {"tr": "Çocuk", "fr": "Enfant"}
+  ],
+  "Yiyecekler": [
+    {"tr": "Ekmek", "fr": "Pain"},
+    {"tr": "Peynir", "fr": "Fromage"},
+    {"tr": "Et", "fr": "Viande"},
+    {"tr": "Tavuk", "fr": "Poulet"},
+    {"tr": "Balık", "fr": "Poisson"}
+  ]
+}

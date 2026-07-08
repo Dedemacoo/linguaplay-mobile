@@ -1,25 +1,52 @@
 {
   "expo": {
-    "name": "mobile",
+    "name": "LinguaPlay",
     "slug": "mobile",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
+    "splash": {
+      "image": "./assets/logo.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#080C16"
+    },
     "userInterfaceStyle": "light",
     "ios": {
       "supportsTablet": true
     },
     "android": {
       "adaptiveIcon": {
-        "backgroundColor": "#E6F4FE",
-        "foregroundImage": "./assets/android-icon-foreground.png",
-        "backgroundImage": "./assets/android-icon-background.png",
-        "monochromeImage": "./assets/android-icon-monochrome.png"
+        "backgroundColor": "#FFFFFF",
+        "foregroundImage": "./assets/icon.png"
       },
-      "predictiveBackGestureEnabled": false
+      "predictiveBackGestureEnabled": false,
+      "package": "com.linguaplay.app"
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "plugins": [
+      "expo-font",
+      [
+        "expo-notifications",
+        {
+          "icon": "./assets/icon.png",
+          "color": "#00D2FF",
+          "defaultChannel": "reminders"
+        }
+      ],
+      [
+        "expo-speech-recognition",
+        {
+          "microphonePermission": "Allow LinguaPlay to access your microphone for pronunciation practice.",
+          "speechRecognitionPermission": "Allow LinguaPlay to securely recognize your voice for pronunciation grading."
+        }
+      ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "8b8d9efb-e793-4b1c-b7ca-c9dd64885e4b"
+      }
     }
   }
 }

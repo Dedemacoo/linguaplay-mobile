@@ -2,5 +2,13 @@
   "extends": "expo/tsconfig.base",
   "compilerOptions": {
     "strict": true
-  }
+  },
+  "exclude": [
+    "node_modules",
+    "**/node_modules/*",
+    "scratch",
+    "**/scratch/*",
+    "functions",
+    "functions/**"
+  ]
 }
