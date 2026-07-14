@@ -1,4 +1,4 @@
-/**
+﻿/**
  * LeagueService — Haftalık Lig Sistemi
  *
  * Ligler:

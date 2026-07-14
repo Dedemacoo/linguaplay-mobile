@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from 'react';
-import { View, Animated, StyleSheet, ViewStyle } from 'react-native';
+import { View, Animated, StyleSheet, ViewStyle, Text } from 'react-native';
+import { Mascot } from './Mascot';
 
 interface SkeletonProps {
   width: number | string;

@@ -163,4 +163,37 @@ export class ChatService {
       onChats(chats);
     });
   }
+
+  /** Sohbet mesajlarını temizle (sil) */
+  static async clearChat(chatId: string): Promise<void> {
+    const msgRef = collection(db, 'chats', chatId, 'messages');
+    const snap = await getDocs(msgRef);
+    
+    // Batch deletion is best, but since messages are few, we can delete one by one
+    // or use a simple loop (Note: Real apps should use writeBatch)
+    const { writeBatch } = await import('firebase/firestore');
+    const batch = writeBatch(db);
+    
+    snap.docs.forEach((docSnap) => {
+      batch.delete(docSnap.ref);
+    });
+    
+    await batch.commit();
+
+    // Reset lastMessage
+    const chatRef = doc(db, 'chats', chatId);
+    await setDoc(chatRef, {
+      lastMessage: '',
+      lastMessageTime: null,
+    }, { merge: true });
+  }
+
+  /** Sohbeti tamamen sil */
+  static async deleteChat(chatId: string): Promise<void> {
+    // Önce mesajları sil
+    await this.clearChat(chatId);
+    // Sonra sohbet dokümanını sil
+    const { deleteDoc } = await import('firebase/firestore');
+    await deleteDoc(doc(db, 'chats', chatId));
+  }
 }

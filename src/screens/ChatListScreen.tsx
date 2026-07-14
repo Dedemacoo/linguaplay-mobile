@@ -2,9 +2,13 @@ import React, { useState, useEffect, useCallback } from 'react';
 import {
   View, Text, StyleSheet, FlatList, TouchableOpacity,
   ActivityIndicator, RefreshControl, Platform, StatusBar,
+  Modal, Animated, Easing, Alert
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useThemeColors } from '../theme/colors';
+import * as Haptics from 'expo-haptics';
+import { Mascot } from '../components/Mascot';
+import { BRAND } from '../theme/colors';
 import { useAuth } from '../context/AuthContext';
 import { ChatService, ChatConversation } from '../services/ChatService';
 import { FriendService, FriendProfile } from '../services/FriendService';
@@ -29,6 +33,10 @@ const ChatListScreen: React.FC<any> = ({ navigation }) => {
   const [friends, setFriends] = useState<FriendProfile[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
+
+  // Delete Chat Modal States
+  const [chatToDelete, setChatToDelete] = useState<ChatConversation | null>(null);
+  const [deleteAnim] = useState(new Animated.Value(0));
 
   useEffect(() => {
     if (!user) return;
@@ -79,10 +87,45 @@ const ChatListScreen: React.FC<any> = ({ navigation }) => {
     });
   };
 
+  // Filter out AITestBot
+  const validFriends = friends.filter(f => f.uid !== 'AITestBot');
+  const validConversations = conversations.filter(c => !c.participants.includes('AITestBot'));
+
   // Arkadaşlardan henüz sohbet başlatılmamış olanlar
-  const friendsWithoutChat = friends.filter(f =>
-    !conversations.some(c => c.participants.includes(f.uid))
+  const friendsWithoutChat = validFriends.filter(f =>
+    !validConversations.some(c => c.participants.includes(f.uid))
   );
+
+  const handleLongPressChat = (conv: ChatConversation) => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
+    setChatToDelete(conv);
+    Animated.spring(deleteAnim, {
+      toValue: 1,
+      useNativeDriver: true,
+      friction: 5,
+      tension: 40,
+    }).start();
+  };
+
+  const closeDeleteModal = () => {
+    Animated.timing(deleteAnim, {
+      toValue: 0,
+      duration: 200,
+      easing: Easing.ease,
+      useNativeDriver: true,
+    }).start(() => setChatToDelete(null));
+  };
+
+  const confirmDeleteChat = async () => {
+    if (!chatToDelete) return;
+    try {
+      await ChatService.deleteChat(chatToDelete.id);
+      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+    } catch (e) {
+      console.log('Error deleting chat', e);
+    }
+    closeDeleteModal();
+  };
 
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]}>
@@ -106,7 +149,7 @@ const ChatListScreen: React.FC<any> = ({ navigation }) => {
       ) : (
         <FlatList
           refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={colors.primary} />}
-          data={[...conversations]}
+          data={[...validConversations]}
           keyExtractor={(item) => item.id}
           contentContainerStyle={styles.listContent}
           ListHeaderComponent={() => (
@@ -134,7 +177,7 @@ const ChatListScreen: React.FC<any> = ({ navigation }) => {
                 </View>
               )}
 
-              {conversations.length > 0 && (
+              {validConversations.length > 0 && (
                 <Text style={[styles.sectionTitle, { color: colors.textLight, paddingHorizontal: 16, marginTop: 8 }]}>
                   SON MESAJLAR
                 </Text>
@@ -149,6 +192,7 @@ const ChatListScreen: React.FC<any> = ({ navigation }) => {
               <TouchableOpacity
                 style={[styles.convRow, { backgroundColor: colors.surface, borderColor: colors.border }]}
                 onPress={() => openExistingChat(item)}
+                onLongPress={() => handleLongPressChat(item)}
               >
                 <View style={[styles.avatarCircle, { backgroundColor: colors.primary + '15' }]}>
                   <Text style={{ fontSize: 26 }}>{avatar}</Text>
@@ -166,11 +210,13 @@ const ChatListScreen: React.FC<any> = ({ navigation }) => {
             );
           }}
           ListEmptyComponent={() => (
-            friends.length === 0 ? (
+            validFriends.length === 0 ? (
               <View style={styles.empty}>
-                <Text style={{ fontSize: 60 }}>👥</Text>
-                <Text style={[styles.emptyTitle, { color: colors.text }]}>Henüz arkadaşın yok</Text>
-                <Text style={[styles.emptyDesc, { color: colors.textLight }]}>
+                <View style={styles.mascotCircle}>
+                  <Mascot mascotId="professor" size={120} animationState="thinking" animated />
+                </View>
+                <Text style={[styles.emptyTitle, { color: BRAND.text }]}>Sohbet bulunamadı</Text>
+                <Text style={[styles.emptyDesc, { color: BRAND.textSub }]}>
                   Lig ekranından arkadaş ekleyerek sohbet başlatabilirsin!
                 </Text>
                 <TouchableOpacity
@@ -184,6 +230,31 @@ const ChatListScreen: React.FC<any> = ({ navigation }) => {
           )}
         />
       )}
+
+      {/* Modern Delete Chat Modal */}
+      <Modal visible={!!chatToDelete} transparent animationType="fade">
+        <View style={styles.modalOverlay}>
+          <TouchableOpacity style={StyleSheet.absoluteFill} activeOpacity={1} onPress={closeDeleteModal} />
+          <Animated.View style={[styles.deleteModal, { backgroundColor: colors.surface, transform: [{ scale: deleteAnim }] }]}>
+            <View style={[styles.deleteIconBox, { backgroundColor: BRAND.danger + '20' }]}>
+              <Text style={{ fontSize: 32 }}>🗑️</Text>
+            </View>
+            <Text style={[styles.deleteModalTitle, { color: colors.text }]}>Sohbeti Sil</Text>
+            <Text style={[styles.deleteModalDesc, { color: colors.textLight }]}>
+              Bu sohbeti silmek istediğine emin misin? Bu işlem geri alınamaz.
+            </Text>
+            <View style={styles.deleteModalActions}>
+              <TouchableOpacity style={[styles.deleteModalBtn, { backgroundColor: colors.border }]} onPress={closeDeleteModal}>
+                <Text style={[styles.deleteModalBtnText, { color: colors.text }]}>İptal</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={[styles.deleteModalBtn, { backgroundColor: BRAND.danger }]} onPress={confirmDeleteChat}>
+                <Text style={[styles.deleteModalBtnText, { color: '#FFF' }]}>Sil</Text>
+              </TouchableOpacity>
+            </View>
+          </Animated.View>
+        </View>
+      </Modal>
+
     </SafeAreaView>
   );
 };
@@ -215,11 +286,20 @@ const styles = StyleSheet.create({
   rowSub: { fontSize: 13, marginTop: 2 },
   timeText: { fontSize: 12 },
   startBtn: { fontSize: 22, fontWeight: 'bold' },
-  empty: { alignItems: 'center', paddingTop: 80, paddingHorizontal: 30, gap: 14 },
-  emptyTitle: { fontSize: 20, fontWeight: 'bold', fontFamily: 'SpaceGrotesk_700Bold', textAlign: 'center' },
+  empty: { flex: 1, alignItems: 'center', paddingTop: 80, paddingHorizontal: 20 },
+  mascotCircle: { width: 160, height: 160, borderRadius: 80, backgroundColor: 'transparent', justifyContent: 'center', alignItems: 'center', marginBottom: 20 },
+  emptyTitle: { fontSize: 20, fontWeight: 'bold', marginTop: 16, fontFamily: 'SpaceGrotesk_700Bold', textAlign: 'center' },
   emptyDesc: { fontSize: 15, textAlign: 'center', lineHeight: 22 },
   goLeagueBtn: { paddingHorizontal: 30, paddingVertical: 14, borderRadius: 25, marginTop: 10 },
   goLeagueBtnText: { color: '#FFF', fontWeight: 'bold', fontSize: 16, fontFamily: 'SpaceGrotesk_700Bold' },
+  modalOverlay: { flex: 1, backgroundColor: 'rgba(0,0,0,0.6)', justifyContent: 'center', alignItems: 'center', padding: 20 },
+  deleteModal: { width: '100%', maxWidth: 340, borderRadius: 24, padding: 24, alignItems: 'center', shadowColor: '#000', shadowOffset: { width: 0, height: 10 }, shadowOpacity: 0.25, shadowRadius: 20, elevation: 10 },
+  deleteIconBox: { width: 70, height: 70, borderRadius: 35, justifyContent: 'center', alignItems: 'center', marginBottom: 16 },
+  deleteModalTitle: { fontSize: 22, fontWeight: 'bold', fontFamily: 'SpaceGrotesk_700Bold', marginBottom: 8 },
+  deleteModalDesc: { fontSize: 15, textAlign: 'center', lineHeight: 22, marginBottom: 24 },
+  deleteModalActions: { flexDirection: 'row', gap: 12, width: '100%' },
+  deleteModalBtn: { flex: 1, paddingVertical: 14, borderRadius: 16, alignItems: 'center' },
+  deleteModalBtnText: { fontSize: 16, fontWeight: 'bold', fontFamily: 'SpaceGrotesk_700Bold' },
 });
 
 export default ChatListScreen;

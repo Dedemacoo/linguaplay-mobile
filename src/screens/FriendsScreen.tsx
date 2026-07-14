@@ -4,16 +4,19 @@ import {
   TouchableOpacity, ActivityIndicator, RefreshControl, Alert,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useThemeColors } from '../theme/colors';
+import { BRAND } from '../theme/colors';
 import { useAuth } from '../context/AuthContext';
 import { FriendService, FriendProfile, FriendRequest } from '../services/FriendService';
 import { ChatService } from '../services/ChatService';
 import { DuelService, DuelRequest } from '../services/DuelService';
 import { doc, getDoc } from 'firebase/firestore';
 import { db } from '../config/firebase';
+import { Mascot } from '../components/Mascot';
+import { useThemeColors } from '../theme/colors';
 
 const FriendsScreen: React.FC<any> = ({ navigation }) => {
   const colors = useThemeColors();
+  const styles = React.useMemo(() => getStyles(colors), [colors]);
   const { user } = useAuth();
   
   const [friends, setFriends] = useState<FriendProfile[]>([]);
@@ -32,7 +35,6 @@ const FriendsScreen: React.FC<any> = ({ navigation }) => {
         FriendService.getIncomingRequests(user.uid),
         DuelService.getIncomingRequests(user.uid).catch(() => [])
       ]);
-      // Rank friends by XP (the user asked: "show who is the first in the friends section")
       const sortedList = [...list].sort((a, b) => b.xp - a.xp);
       setFriends(sortedList);
       setIncomingRequests(reqs);
@@ -125,11 +127,11 @@ const FriendsScreen: React.FC<any> = ({ navigation }) => {
   };
 
   return (
-    <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]}>
+    <SafeAreaView style={styles.container}>
       <StatusBar barStyle="light-content" backgroundColor={colors.surface} />
       
-      <View style={[styles.header, { backgroundColor: colors.surface, borderBottomWidth: 1, borderBottomColor: colors.border }]}>
-        <Text style={[styles.headerTitle, { color: colors.text }]}>👥 Arkadaşlar</Text>
+      <View style={styles.header}>
+        <Text style={styles.headerTitle}>👥 Arkadaşlar</Text>
       </View>
 
       {friendsLoading ? (
@@ -140,18 +142,21 @@ const FriendsScreen: React.FC<any> = ({ navigation }) => {
         <FlatList
           data={friends}
           keyExtractor={(item) => item.uid}
-          contentContainerStyle={[styles.listContent, { paddingTop: 20 }]}
+          contentContainerStyle={styles.listContent}
           refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={colors.primary} />}
           ListEmptyComponent={() => (
-            <View style={{ flex: 1, alignItems: 'center', paddingTop: 60, gap: 14 }}>
-              <Text style={{ fontSize: 56 }}>👥</Text>
-              <Text style={[styles.name, { color: colors.text, textAlign: 'center' }]}>Henüz arkadaşın yok</Text>
-              <Text style={{ color: colors.textLight, textAlign: 'center', fontSize: 14, lineHeight: 20 }}>
-                Lig sıralamasındaki kişilere{'\n'}arkadaşlık isteği gönderebilirsin!
+            <View style={styles.emptyContainer}>
+              <View style={styles.mascotCircle}>
+                <Mascot mascotId="professor" size={120} animationState="sad" animated />
+              </View>
+              <Text style={styles.emptyTitle}>Henüz arkadaşın yok</Text>
+              <Text style={styles.emptyDesc}>
+                Lingo seninle öğrenmeyi çok seviyor ama tek başına biraz sıkıldı. Lig sıralamasından yeni arkadaşlar ekleyebilirsin!
               </Text>
               <TouchableOpacity
-                style={[styles.addBtn, { backgroundColor: colors.primary, paddingHorizontal: 24, marginTop: 10 }]}
+                style={styles.addBtn}
                 onPress={() => navigation.navigate('Lig' as any)}
+                activeOpacity={0.8}
               >
                 <Text style={styles.addBtnText}>🏆 Lig'e Bak</Text>
               </TouchableOpacity>
@@ -161,14 +166,14 @@ const FriendsScreen: React.FC<any> = ({ navigation }) => {
             <View style={{ marginBottom: 20 }}>
               {incomingDuelRequests.length > 0 && (
                 <View style={{ marginBottom: 15 }}>
-                  <Text style={{ color: colors.text, fontWeight: 'bold', fontSize: 16, marginBottom: 10, paddingHorizontal: 5 }}>Gelen Düello İstekleri ({incomingDuelRequests.length})</Text>
+                  <Text style={styles.sectionTitle}>Gelen Düello İstekleri ({incomingDuelRequests.length})</Text>
                   {incomingDuelRequests.map(req => (
-                    <View key={req.id} style={[styles.card, { backgroundColor: colors.surface, borderColor: colors.error }]}>
+                    <View key={req.id} style={[styles.card, { borderColor: colors.error }]}>
                       <View style={[styles.friendAvatar, { backgroundColor: colors.error + '20' }]}>
                         <Text style={{ fontSize: 26 }}>{req.fromAvatar || '🙋'}</Text>
                       </View>
                       <View style={styles.cardInfo}>
-                        <Text style={[styles.name, { color: colors.text }]}>{req.fromName}</Text>
+                        <Text style={styles.name}>{req.fromName}</Text>
                         <Text style={{ color: colors.error, fontSize: 13, marginTop: 2, fontWeight: 'bold' }}>⚔️ Sana meydan okudu!</Text>
                       </View>
                       {actionLoading === req.id ? (
@@ -190,14 +195,14 @@ const FriendsScreen: React.FC<any> = ({ navigation }) => {
 
               {incomingRequests.length > 0 && (
                 <View style={{ marginBottom: 15 }}>
-                  <Text style={{ color: colors.text, fontWeight: 'bold', fontSize: 16, marginBottom: 10, paddingHorizontal: 5 }}>Gelen İstekler ({incomingRequests.length})</Text>
+                  <Text style={styles.sectionTitle}>Gelen İstekler ({incomingRequests.length})</Text>
                   {incomingRequests.map(req => (
-                    <View key={req.id} style={[styles.card, { backgroundColor: colors.surface, borderColor: colors.border }]}>
+                    <View key={req.id} style={styles.card}>
                       <View style={[styles.friendAvatar, { backgroundColor: colors.primary + '20' }]}>
                         <Text style={{ fontSize: 26 }}>{req.fromAvatar || '🙋'}</Text>
                       </View>
                       <View style={styles.cardInfo}>
-                        <Text style={[styles.name, { color: colors.text }]}>{req.fromName}</Text>
+                        <Text style={styles.name}>{req.fromName}</Text>
                         <Text style={{ color: colors.textLight, fontSize: 13, marginTop: 2 }}>Seni eklemek istiyor</Text>
                       </View>
                       {actionLoading === req.id ? (
@@ -224,15 +229,14 @@ const FriendsScreen: React.FC<any> = ({ navigation }) => {
               )}
 
               {friends.length > 0 && (
-                <Text style={{ color: colors.text, fontWeight: 'bold', fontSize: 16, marginTop: 5, paddingHorizontal: 5 }}>Sıralama (Arkadaşlar) ({friends.length})</Text>
+                <Text style={styles.sectionTitle}>Sıralama (Arkadaşlar) ({friends.length})</Text>
               )}
             </View>
           )}
           renderItem={({ item, index }) => (
-            <View style={[styles.card, { backgroundColor: colors.surface, borderColor: colors.border }]}>
-              {/* RANK BADGE */}
-              <View style={[styles.rankBadge, { backgroundColor: index === 0 ? '#FFD700' : index === 1 ? '#C0C0C0' : index === 2 ? '#CD7F32' : colors.surface, borderColor: colors.border }]}>
-                <Text style={{ fontSize: 14, fontWeight: 'bold', color: index < 3 ? '#FFF' : colors.textLight }}>
+            <View style={styles.card}>
+              <View style={[styles.rankBadge, { backgroundColor: index === 0 ? colors.warning : index === 1 ? '#C0C0C0' : index === 2 ? '#CD7F32' : colors.surface, borderColor: colors.border }]}>
+                <Text style={{ fontSize: 14, fontWeight: 'bold', color: index < 3 ? '#111' : colors.textLight }}>
                   #{index + 1}
                 </Text>
               </View>
@@ -241,14 +245,14 @@ const FriendsScreen: React.FC<any> = ({ navigation }) => {
                 <Text style={{ fontSize: 26 }}>{item.avatar}</Text>
               </View>
               <View style={styles.cardInfo}>
-                <Text style={[styles.name, { color: colors.text }]}>{item.name}</Text>
+                <Text style={styles.name}>{item.name}</Text>
                 <Text style={{ color: colors.primary, fontSize: 13, marginTop: 2, fontWeight: 'bold' }}>{item.xp.toLocaleString()} XP</Text>
               </View>
 
               {actionLoading === 'remove_' + item.uid ? (
                 <ActivityIndicator size="small" color={colors.error} style={{ marginLeft: 10 }} />
               ) : (
-                <View style={{ flexDirection: 'row', gap: 8 }}>
+               <View style={{ flexDirection: 'row', gap: 8 }}>
                   <TouchableOpacity 
                     style={[styles.chatBtn, { backgroundColor: colors.primary + '20', borderColor: colors.primary }]}
                     onPress={() => handleOpenChat(item)}
@@ -280,8 +284,8 @@ const FriendsScreen: React.FC<any> = ({ navigation }) => {
   );
 };
 
-const styles = StyleSheet.create({
-  container: { flex: 1 },
+const getStyles = (colors: any) => StyleSheet.create({
+  container: { flex: 1, backgroundColor: colors.background },
   header: {
     paddingHorizontal: 20,
     paddingBottom: 15,
@@ -289,10 +293,22 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingTop: Platform.OS === 'android' ? 10 : 0,
+    backgroundColor: colors.surface,
+    borderBottomWidth: 1,
+    borderBottomColor: colors.border,
   },
   headerTitle: {
     fontSize: 20,
-    fontWeight: 'bold',
+    fontWeight: '900',
+    color: colors.text,
+    fontFamily: 'SpaceGrotesk_700Bold',
+  },
+  sectionTitle: {
+    color: colors.text,
+    fontWeight: '800',
+    fontSize: 16,
+    marginBottom: 10,
+    paddingHorizontal: 5,
     fontFamily: 'SpaceGrotesk_700Bold',
   },
   listContent: { padding: 15, paddingBottom: 100 },
@@ -300,49 +316,88 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     padding: 12,
-    borderRadius: 16,
-    marginBottom: 10,
+    borderRadius: 20,
+    marginBottom: 12,
     borderWidth: 1,
+    borderColor: colors.border,
+    backgroundColor: colors.card,
     shadowColor: '#000',
-    shadowOpacity: 0.05,
-    shadowRadius: 10,
+    shadowOpacity: 0.2,
+    shadowRadius: 5,
     shadowOffset: { width: 0, height: 4 },
-    elevation: 2,
+    elevation: 4,
   },
   rankBadge: {
-    width: 30,
-    height: 30,
-    borderRadius: 15,
+    width: 32,
+    height: 32,
+    borderRadius: 16,
     justifyContent: 'center',
     alignItems: 'center',
-    marginRight: 10,
-    borderWidth: 1,
+    marginRight: 12,
+    borderWidth: 2,
   },
   friendAvatar: {
-    width: 48,
-    height: 48,
-    borderRadius: 24,
+    width: 50,
+    height: 50,
+    borderRadius: 25,
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 12,
   },
   cardInfo: { flex: 1 },
-  name: { fontSize: 16, fontWeight: '700', fontFamily: 'SpaceGrotesk_700Bold' },
+  name: { fontSize: 16, fontWeight: '800', color: colors.text, fontFamily: 'SpaceGrotesk_700Bold' },
   chatBtn: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
+    width: 44,
+    height: 44,
+    borderRadius: 22,
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 1,
   },
-  addBtn: {
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-    borderRadius: 20,
-    marginLeft: 10,
+  emptyContainer: {
+    flex: 1,
+    alignItems: 'center',
+    paddingTop: 40,
+    paddingHorizontal: 20,
   },
-  addBtnText: { color: '#FFF', fontSize: 14, fontWeight: 'bold' },
+  mascotCircle: {
+    width: 160,
+    height: 160,
+    borderRadius: 80,
+    backgroundColor: colors.surface,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: 2,
+    borderColor: colors.border,
+    marginBottom: 24,
+  },
+  emptyTitle: {
+    fontSize: 22,
+    fontWeight: '900',
+    color: colors.text,
+    textAlign: 'center',
+    fontFamily: 'SpaceGrotesk_700Bold',
+    marginBottom: 12,
+  },
+  emptyDesc: {
+    color: colors.textLight,
+    textAlign: 'center',
+    fontSize: 15,
+    lineHeight: 22,
+    marginBottom: 24,
+  },
+  addBtn: {
+    backgroundColor: colors.primary,
+    paddingHorizontal: 24,
+    paddingVertical: 14,
+    borderRadius: 20,
+    shadowColor: colors.primary,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 10,
+    elevation: 5,
+  },
+  addBtnText: { color: '#FFF', fontSize: 16, fontWeight: '800', fontFamily: 'SpaceGrotesk_700Bold' },
 });
 
 export default FriendsScreen;

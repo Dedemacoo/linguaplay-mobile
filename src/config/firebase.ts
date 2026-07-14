@@ -1,4 +1,4 @@
-import { initializeApp, getApps, getApp } from 'firebase/app';
+﻿import { initializeApp, getApps, getApp } from 'firebase/app';
 import { initializeAuth, getAuth } from 'firebase/auth';
 // @ts-ignore — getReactNativePersistence lives in the RN subpath of @firebase/auth
 import { getReactNativePersistence } from '@firebase/auth/dist/rn';

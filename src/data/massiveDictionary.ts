@@ -1,4 +1,4 @@
-export const massiveDictionary: Record<string, string[]> = {
+﻿export const massiveDictionary: Record<string, string[]> = {
   animals: [
     "kedi", "köpek", "at", "inek", "koyun", "keçi", "tavuk", "horoz", "ördek", "kaz",
     "kuş", "balık", "fare", "aslan", "kaplan", "fil", "zürafa", "maymun", "yılan", "ayı",

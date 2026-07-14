@@ -27,12 +27,11 @@ const PathSelectionScreen: React.FC<Props> = ({ navigation }) => {
   }, []);
 
   const handleStartBeginner = () => {
-    navigation.navigate('Reminder');
+    navigation.navigate('Lesson' as never, { lessonId: 'intro', fromOnboarding: true, isPlacementTest: false } as never);
   };
 
-  const handleFindLevel = () => {
-    // Instead of intro lesson, we can directly send them to placement test via LessonScreen
-    navigation.navigate('Lesson', { lessonId: undefined, fromOnboarding: true, isPlacementTest: true });
+  const handleFindLevel = (difficulty: 'easy' | 'medium' | 'hard') => {
+    navigation.navigate('Lesson' as never, { lessonId: undefined, fromOnboarding: true, isPlacementTest: true, difficulty } as never);
   };
 
   return (
@@ -50,7 +49,7 @@ const PathSelectionScreen: React.FC<Props> = ({ navigation }) => {
         <View style={styles.mascotContainer}>
           <Mascot size={80} />
           <View style={[styles.chatBubble, { backgroundColor: colors.surface, borderColor: colors.border }]}>
-            <Text style={[styles.chatText, { color: colors.text }]}>Nereden başlamak istersin?</Text>
+            <Text style={[styles.chatText, { color: colors.text }]}>Ne kadar {langData.title.split(' ')[0]} biliyorsun?</Text>
             <View style={[styles.chatBubbleTail, { borderTopColor: colors.surface }]} />
           </View>
         </View>
@@ -61,41 +60,57 @@ const PathSelectionScreen: React.FC<Props> = ({ navigation }) => {
           activeOpacity={0.8}
         >
           <View style={styles.cardIconBox}>
-            <Text style={{ fontSize: 36 }}>📒</Text>
+            <Text style={{ fontSize: 28 }}>🌱</Text>
           </View>
           <View style={styles.cardTextBox}>
-            <Text style={[styles.cardTitle, { color: colors.info }]}>Sil baştan başla</Text>
-            <Text style={[styles.cardDesc, { color: colors.textLight }]}>{langData.title} kursunun en kolay dersine gir</Text>
+            <Text style={[styles.cardTitle, { color: colors.info }]}>{langData.title.split(' ')[0]} öğrenmeye yeni başlıyorum</Text>
+            <Text style={[styles.cardDesc, { color: colors.textLight }]}>En temelden başla</Text>
           </View>
         </TouchableOpacity>
 
         <TouchableOpacity 
-          style={[styles.card, { backgroundColor: colors.surface, borderColor: colors.border, marginTop: 15 }]} 
-          onPress={handleFindLevel}
+          style={[styles.card, { backgroundColor: colors.surface, borderColor: colors.border, marginTop: 12 }]} 
+          onPress={() => handleFindLevel('easy')}
           activeOpacity={0.8}
         >
-          <View style={[styles.badge, { backgroundColor: colors.info }]}>
-            <Text style={styles.badgeText}>TAVSİYE EDİLEN</Text>
-          </View>
           <View style={styles.cardIconBox}>
-            <Text style={{ fontSize: 36 }}>🧭</Text>
+            <Text style={{ fontSize: 28 }}>📗</Text>
           </View>
           <View style={styles.cardTextBox}>
-            <Text style={[styles.cardTitle, { color: colors.text }]}>Seviyemi bul</Text>
-            <Text style={[styles.cardDesc, { color: colors.textLight }]}>Öğrenmeye nereden başlaman gerektiğini bırak LinguaPlay önersin</Text>
+            <Text style={[styles.cardTitle, { color: colors.text }]}>Bazı yaygın kelimeleri biliyorum</Text>
+            <Text style={[styles.cardDesc, { color: colors.textLight }]}>Temel seviyeni test et</Text>
+          </View>
+        </TouchableOpacity>
+
+        <TouchableOpacity 
+          style={[styles.card, { backgroundColor: colors.surface, borderColor: colors.border, marginTop: 12 }]} 
+          onPress={() => handleFindLevel('medium')}
+          activeOpacity={0.8}
+        >
+          <View style={styles.cardIconBox}>
+            <Text style={{ fontSize: 28 }}>📘</Text>
+          </View>
+          <View style={styles.cardTextBox}>
+            <Text style={[styles.cardTitle, { color: colors.text }]}>Basit konuşmalar yapabilirim</Text>
+            <Text style={[styles.cardDesc, { color: colors.textLight }]}>Orta seviyeni test et</Text>
+          </View>
+        </TouchableOpacity>
+
+        <TouchableOpacity 
+          style={[styles.card, { backgroundColor: colors.surface, borderColor: colors.border, marginTop: 12 }]} 
+          onPress={() => handleFindLevel('hard')}
+          activeOpacity={0.8}
+        >
+          <View style={styles.cardIconBox}>
+            <Text style={{ fontSize: 28 }}>🚀</Text>
+          </View>
+          <View style={styles.cardTextBox}>
+            <Text style={[styles.cardTitle, { color: colors.text }]}>Çeşitli konular hakkında konuşabilirim</Text>
+            <Text style={[styles.cardDesc, { color: colors.textLight }]}>İleri seviyeni test et</Text>
           </View>
         </TouchableOpacity>
       </Animated.View>
 
-      <View style={styles.footer}>
-        <TouchableOpacity 
-          style={[styles.button, { backgroundColor: colors.primary, borderBottomColor: colors.primaryDark }]} 
-          onPress={handleStartBeginner}
-          activeOpacity={0.8}
-        >
-          <Text style={styles.buttonText}>DEVAM ET</Text>
-        </TouchableOpacity>
-      </View>
     </SafeAreaView>
   );
 };
@@ -166,12 +181,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     borderWidth: 2,
     borderRadius: 16,
-    padding: 20,
+    padding: 15,
     alignItems: 'center',
     position: 'relative',
   },
   cardIconBox: {
-    width: 60,
+    width: 50,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -180,13 +195,13 @@ const styles = StyleSheet.create({
     marginLeft: 10,
   },
   cardTitle: {
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: 'bold', fontFamily: 'SpaceGrotesk_700Bold',
-    marginBottom: 5,
+    marginBottom: 2,
   },
   cardDesc: {
-    fontSize: 14,
-    lineHeight: 20,
+    fontSize: 12,
+    lineHeight: 16,
   },
   badge: {
     position: 'absolute',

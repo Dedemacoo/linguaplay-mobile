@@ -7,7 +7,10 @@ const text_to_speech_1 = require("@google-cloud/text-to-speech");
 const openai_1 = require("openai");
 admin.initializeApp();
 const client = new text_to_speech_1.default.TextToSpeechClient();
-const openai = new openai_1.default({ apiKey: process.env.OPENAI_API_KEY || '' });
+const openai = new openai_1.default({
+    apiKey: process.env.OPENAI_API_KEY || '',
+    baseURL: 'https://generativelanguage.googleapis.com/v1beta/openai/'
+});
 exports.getTTS = functions.https.onCall(async (data, context) => {
     // Ensure user is authenticated
     if (!context.auth) {
@@ -66,7 +69,7 @@ Rules:
 - Be encouraging and warm`;
     try {
         const completion = await openai.chat.completions.create({
-            model: 'gpt-4o-mini',
+            model: 'gemini-1.5-flash',
             messages: [
                 { role: 'system', content: systemPrompt },
                 ...messages.slice(-10),
@@ -103,7 +106,7 @@ exports.analyzeProgress = functions.https.onCall(async (data, context) => {
     const prompt = `Sen Arjin adında bir ${language} dil koçusun. Aşağıdaki hata verilerine göre öğrenciye Türkçe kişiselleştirilmiş bir gelişim raporu yaz (max 200 kelime). Güçlü yönleri, zayıf noktaları ve 3 somut öneri içersin.\n\nBu dönem hatalar:\n${mistakeLines || 'Henüz hata yok'}\n\nÖnceki rapor:\n${prevLines || 'İlk rapor'}`;
     try {
         const completion = await openai.chat.completions.create({
-            model: 'gpt-4o-mini',
+            model: 'gemini-1.5-flash',
             messages: [{ role: 'user', content: prompt }],
             max_tokens: 350,
             temperature: 0.7,

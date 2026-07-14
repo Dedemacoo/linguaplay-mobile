@@ -11,7 +11,11 @@ import { AIService } from '../services/AIService';
 import { VocabularyService, WordPair } from '../services/VocabularyService';
 import * as Speech from 'expo-speech';
 import * as Haptics from 'expo-haptics';
-import { ExpoSpeechRecognitionModule, useSpeechRecognitionEvent } from 'expo-speech-recognition';
+import { Mascot } from '../components/Mascot';
+
+const ExpoSpeechRecognitionModule = { requestPermissionsAsync: async () => ({ granted: true }), start: () => {}, stop: () => {} };
+const useSpeechRecognitionEvent = (e: any, cb: any) => {};
+
 
 const { width } = Dimensions.get('window');
 
@@ -95,11 +99,11 @@ const SpeakingScreen: React.FC<any> = ({ navigation }) => {
       processPronunciation(transcript.trim());
     }
   });
-  useSpeechRecognitionEvent('result', (event) => {
+  useSpeechRecognitionEvent('result', (event: any) => {
     const text = event.results[0]?.transcript || '';
     setTranscript(text);
   });
-  useSpeechRecognitionEvent('error', (event) => {
+  useSpeechRecognitionEvent('error', (event: any) => {
     console.log('[STT Error]', event.error, event.message);
     setIsRecording(false);
     // Eğer STT desteklenmiyorsa simüle et
@@ -109,7 +113,8 @@ const SpeakingScreen: React.FC<any> = ({ navigation }) => {
   });
 
   const requestMicrophone = async () => {
-    const { status } = await ExpoSpeechRecognitionModule.requestPermissionsAsync();
+    const permResult = await ExpoSpeechRecognitionModule.requestPermissionsAsync();
+    const status = (permResult as any).status ?? (permResult.granted ? 'granted' : 'denied');
     return status === 'granted';
   };
 
@@ -235,7 +240,7 @@ const SpeakingScreen: React.FC<any> = ({ navigation }) => {
     return (
       <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]}>
         <View style={styles.center}>
-          <Text style={{ fontSize: 48 }}>📭</Text>
+          <Mascot mascotId="professor" size={120} animationState="sad" animated />
           <Text style={[styles.emptyText, { color: colors.text }]}>Kelime bulunamadı</Text>
           <TouchableOpacity style={[styles.backBtn, { backgroundColor: colors.primary }]} onPress={() => navigation.goBack()}>
             <Text style={styles.backBtnText}>Geri Dön</Text>
@@ -271,7 +276,13 @@ const SpeakingScreen: React.FC<any> = ({ navigation }) => {
       <View style={styles.cardSection}>
         <View style={[styles.wordCard, { backgroundColor: colors.surface, borderColor: colors.border }]}>
           <Text style={[styles.turkishWord, { color: colors.textLight }]}>{currentWord.turkish}</Text>
-          <Text style={[styles.foreignWord, { color: colors.text }]}>{currentWord.foreign}</Text>
+          <Text 
+            style={[styles.foreignWord, { color: colors.text }]}
+            adjustsFontSizeToFit
+            numberOfLines={4}
+          >
+            {currentWord.foreign}
+          </Text>
           {currentWord.phonetic && (
             <Text style={[styles.phonetic, { color: colors.primary }]}>[{currentWord.phonetic}]</Text>
           )}
@@ -362,8 +373,8 @@ const styles = StyleSheet.create({
     shadowColor: '#000', shadowOpacity: 0.08, shadowRadius: 16, shadowOffset: { width: 0, height: 4 },
     elevation: 4,
   },
-  turkishWord: { fontSize: 16, fontWeight: '500' },
-  foreignWord: { fontSize: 32, fontWeight: '800', fontFamily: 'SpaceGrotesk_700Bold', textAlign: 'center' },
+  turkishWord: { fontSize: 18, fontWeight: '500', textAlign: 'center', marginBottom: 8 },
+  foreignWord: { fontSize: 32, fontWeight: '800', fontFamily: 'SpaceGrotesk_700Bold', textAlign: 'center', lineHeight: 40 },
   phonetic: { fontSize: 16, fontWeight: '500' },
   resultSection: { alignItems: 'center', paddingHorizontal: 24, paddingBottom: 40, gap: 12 },
   scoreText: { fontSize: 48, fontWeight: '900' },

@@ -108,7 +108,7 @@ const RegisterScreen: React.FC<Props> = ({ navigation }) => {
         showsVerticalScrollIndicator={false}
       >
         <View style={styles.header}>
-          <Mascot size={150} style={{ marginBottom: 20 }} />
+          <Mascot mascotId="classic" size={150} animationState="celebrate" animated style={{ marginBottom: 20, marginLeft: 15 }} />
           <Text style={[styles.title, { color: colors.text }]}>Aramıza Katıl!</Text>
           <Text style={[styles.subtitle, { color: colors.textLight }]}>Hemen bir hesap oluştur ve öğrenmeye başla.</Text>
         </View>

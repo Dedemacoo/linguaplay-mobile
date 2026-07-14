@@ -1,5 +1,6 @@
 import React from 'react';
-import { Text, Platform, View } from 'react-native';
+import { Text, Platform, View, StyleSheet } from 'react-native';
+import { Feather, FontAwesome5 } from '@expo/vector-icons';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import HomeScreen from '../screens/HomeScreen';
@@ -8,12 +9,15 @@ import ProfileScreen from '../screens/ProfileScreen';
 import GamesScreen from '../screens/GamesScreen';
 import ChatListScreen from '../screens/ChatListScreen';
 import { useThemeColors } from '../theme/colors';
+import { Mascot } from '../components/Mascot';
+import { useProgressStore } from '../store/useProgressStore';
 
 const Tab = createBottomTabNavigator();
 
 export const MainTabNavigator = () => {
   const colors = useThemeColors();
   const insets = useSafeAreaInsets();
+  const { progress } = useProgressStore();
 
   return (
     <Tab.Navigator
@@ -25,9 +29,9 @@ export const MainTabNavigator = () => {
           borderTopWidth: 1,
           borderTopColor: colors.border,
           backgroundColor: colors.surface,
-          height: 60 + (insets.bottom > 0 ? insets.bottom : 10),
-          paddingBottom: insets.bottom > 0 ? insets.bottom : 10,
-          paddingTop: 8,
+          height: 52 + (insets.bottom > 0 ? insets.bottom : 5),
+          paddingBottom: insets.bottom > 0 ? insets.bottom : 5,
+          paddingTop: 6,
           elevation: 15,
           shadowColor: '#000',
           shadowOpacity: 0.10,
@@ -36,7 +40,7 @@ export const MainTabNavigator = () => {
         },
         tabBarLabelStyle: {
           fontSize: 10,
-          fontWeight: '700',
+          fontWeight: '600',
           marginTop: 2,
         },
       }}
@@ -46,7 +50,7 @@ export const MainTabNavigator = () => {
         component={HomeScreen}
         options={{
           tabBarIcon: ({ focused }) => (
-            <Text style={{ fontSize: 22, opacity: focused ? 1 : 0.5 }}>🏠</Text>
+            <Feather name="map" size={20} color={focused ? colors.primary : colors.textLight} />
           ),
         }}
       />
@@ -55,7 +59,7 @@ export const MainTabNavigator = () => {
         component={LeaderboardScreen}
         options={{
           tabBarIcon: ({ focused }) => (
-            <Text style={{ fontSize: 22, opacity: focused ? 1 : 0.5 }}>🏆</Text>
+            <Feather name="award" size={20} color={focused ? colors.primary : colors.textLight} />
           ),
         }}
       />
@@ -65,24 +69,26 @@ export const MainTabNavigator = () => {
         options={{
           tabBarIcon: ({ focused }) => (
             <View style={{
-              backgroundColor: focused ? colors.primary : 'transparent',
-              width: 48,
-              height: 48,
-              borderRadius: 24,
+              backgroundColor: focused ? colors.primary : colors.surface,
+              width: 44,
+              height: 44,
+              borderRadius: 22,
               justifyContent: 'center',
               alignItems: 'center',
-              marginTop: -16,
+              marginTop: -15,
+              borderWidth: 2,
+              borderColor: colors.background,
               shadowColor: colors.primary,
-              shadowOpacity: focused ? 0.4 : 0,
-              shadowRadius: 8,
+              shadowOpacity: focused ? 0.4 : 0.1,
+              shadowRadius: 6,
               shadowOffset: { width: 0, height: 4 },
-              elevation: focused ? 8 : 0,
+              elevation: focused ? 8 : 2,
             }}>
-              <Text style={{ fontSize: 24 }}>🎮</Text>
+              <FontAwesome5 name="gamepad" size={18} color={focused ? '#000' : colors.textLight} />
             </View>
           ),
           tabBarLabel: ({ focused }) => (
-            <Text style={{ fontSize: 10, fontWeight: '700', color: focused ? colors.primary : colors.textLight, marginTop: 4 }}>
+            <Text style={{ fontSize: 10, fontWeight: '600', color: focused ? colors.primary : colors.textLight, marginTop: 4 }}>
               Oyunlar
             </Text>
           ),
@@ -94,7 +100,7 @@ export const MainTabNavigator = () => {
         component={ChatListScreen}
         options={{
           tabBarIcon: ({ focused }) => (
-            <Text style={{ fontSize: 22, opacity: focused ? 1 : 0.5 }}>💬</Text>
+            <Feather name="message-circle" size={20} color={focused ? colors.primary : colors.textLight} />
           ),
         }}
       />
@@ -103,7 +109,9 @@ export const MainTabNavigator = () => {
         component={ProfileScreen}
         options={{
           tabBarIcon: ({ focused }) => (
-            <Text style={{ fontSize: 22, opacity: focused ? 1 : 0.5 }}>👤</Text>
+            <View style={{ opacity: focused ? 1 : 0.6, marginTop: 0 }}>
+              <Mascot mascotId={progress.equippedMascot || 'classic'} size={35} animated={true} />
+            </View>
           ),
         }}
       />

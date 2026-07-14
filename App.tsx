@@ -6,6 +6,8 @@ import { AppNavigator } from './src/navigation/AppNavigator';
 import { AuthProvider } from './src/context/AuthContext';
 import { ThemeProvider } from './src/context/ThemeContext';
 import SoundManager from './src/utils/SoundManager';
+import { NotificationService } from './src/services/NotificationService';
+import { IdleMascot } from './src/components/IdleMascot';
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -15,6 +17,15 @@ export default function App() {
 
   useEffect(() => {
     SoundManager.init();
+    
+    // Refresh notifications to push back the "absence" nudges
+    const refreshNotifications = async () => {
+      const saved = await NotificationService.getSavedReminder();
+      if (saved) {
+        await NotificationService.scheduleDailyReminder(saved.hour, saved.minute);
+      }
+    };
+    refreshNotifications();
   }, []);
 
   if (!fontsLoaded) {
@@ -29,7 +40,9 @@ export default function App() {
     <SafeAreaProvider>
       <ThemeProvider>
         <AuthProvider>
-          <AppNavigator />
+          <IdleMascot>
+            <AppNavigator />
+          </IdleMascot>
         </AuthProvider>
       </ThemeProvider>
     </SafeAreaProvider>

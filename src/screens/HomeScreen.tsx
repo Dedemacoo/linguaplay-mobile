@@ -1,615 +1,863 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Platform, StatusBar, Dimensions, Alert, Modal, ActivityIndicator } from 'react-native';
-import { HomeScreenSkeleton } from '../components/SkeletonLoader';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { RootStackParamList } from '../navigation/AppNavigator';
-import { useThemeColors } from '../theme/colors';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, StatusBar, Dimensions, Animated } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { LinearGradient } from 'expo-linear-gradient';
+import { Ionicons, FontAwesome5, MaterialCommunityIcons, Feather } from '@expo/vector-icons';
+import * as Haptics from 'expo-haptics';
+import { useNavigation } from '@react-navigation/native';
+import Svg, { Circle } from 'react-native-svg';
+import LottieView from 'lottie-react-native';
 import { useLanguageStore } from '../store/useLanguageStore';
 import { useProgressStore } from '../store/useProgressStore';
-import { LanguageCourse } from '../data/mockData';
 import { ContentService } from '../services/ContentService';
-import { ParticleBackground } from '../components/ParticleBackground';
-import { LinearGradient } from 'expo-linear-gradient';
-import { AIService } from '../services/AIService';
-
-type Props = any;
+import { LanguageCourse } from '../data/mockData';
+import { Mascot } from '../components/Mascot';
+import { HomeScreenSkeleton } from '../components/SkeletonLoader';
+import SoundManager from '../utils/SoundManager';
 
 const { width } = Dimensions.get('window');
 
-const fallbackLangData = {
-  title: 'Yakında',
-  description: 'Bu dil için içerikler hazırlanıyor.',
-  units: [
-    {
-      id: 'placeholder-u',
-      title: 'Ünite 1',
-      description: 'Çok Yakında',
-      color: '#58CC02',
-      levels: [
-        { id: 'placeholder', name: 'Çok Yakında', icon: '🚧', type: 'lesson' }
-      ]
-    }
-  ]
+import { HexagonNode } from '../components/HexagonNode';
+
+const SegmentedRing = ({ size = 96, strokeWidth = 8, progress = 0 }) => {
+  const radius = (size - strokeWidth) / 2;
+  const circumference = 2 * Math.PI * radius;
+  const strokeDashoffset = circumference - (progress * circumference);
+  return (
+    <View style={{ position: 'absolute', width: size, height: size, alignItems: 'center', justifyContent: 'center', zIndex: 0 }}>
+      <Svg width={size} height={size}>
+        <Circle cx={size/2} cy={size/2} r={radius} stroke="rgba(255,255,255,0.2)" strokeWidth={strokeWidth} fill="none" />
+        <Circle cx={size/2} cy={size/2} r={radius} stroke="#4CD964" strokeWidth={strokeWidth} fill="none" strokeDasharray={`${circumference} ${circumference}`} strokeDashoffset={strokeDashoffset} strokeLinecap="round" transform={`rotate(-90 ${size/2} ${size/2})`} />
+      </Svg>
+    </View>
+  );
 };
 
-const HomeScreen: React.FC<Props> = ({ navigation }) => {
-  const colors = useThemeColors();
+// ─── BRAND COLORS ───
+const BRAND = {
+  bg: '#0B1022',
+  surface: 'rgba(17, 26, 46, 0.8)',
+  card: '#141D32',
+  border: '#1E2D4A',
+  primary: '#4CD964',
+  primaryDark: '#2D8A3A',
+  secondary: '#B84DFF',
+  secondaryDark: '#8A2ECC',
+  accent: '#00D9FF',
+  gold: '#FFD54A',
+  danger: '#FF5A5F',
+  text: '#FFFFFF',
+  textSub: '#B8C1D1',
+  textMuted: '#5A6A88',
+  streak: '#FF9600'
+};
+
+const DAILY_GOAL = 50;
+
+// ─── 7 WORLDS CONFIGURATION ───
+const WORLDS = [
+  {
+    id: 1, title: 'Tropikal Okyanus', subtitle: 'KISIM 1',
+    bgGrad: ['#001F3F', '#0074D9'], bannerGrad: ['#003366', '#00509E'],
+    nodeColor: '#0074D9', activeNodeColor: '#00B4D8',
+    decos: ['🌴', '🐢', '⛵', '🦜', '🦀', '🌺', '🐙', '🫧'],
+    cityBlocks: ['#0074D980', '#00A8E880', '#00B4D880'],
+    icon: 'droplet',
+    musicTrack: 'ocean_theme'
+  },
+  {
+    id: 2, title: 'Büyülü Orman', subtitle: 'KISIM 2',
+    bgGrad: ['#0A1C10', '#183D22'], bannerGrad: ['#132A13', '#31572C'],
+    nodeColor: '#2D6A4F', activeNodeColor: '#52B788',
+    decos: ['🍄', '🦊', '🦉', '🌸', '🦋', '🌿', '🐿️', '🪻'],
+    cityBlocks: ['#52B78880', '#74C69D80', '#95D5B280'],
+    icon: 'leaf',
+    musicTrack: 'forest_theme'
+  },
+  {
+    id: 3, title: 'Antik Çöl', subtitle: 'KISIM 3',
+    bgGrad: ['#2C1A0B', '#5A3D22'], bannerGrad: ['#3A2411', '#724B2C'],
+    nodeColor: '#D68C45', activeNodeColor: '#F4A261',
+    decos: ['🐪', '🦂', '☀️', '🏺', '🌵', '🗿', '🐍', '🪙'],
+    cityBlocks: ['#E76F5180', '#F4A26180', '#E9C46A80'],
+    icon: 'sun',
+    musicTrack: 'desert_theme'
+  },
+  {
+    id: 4, title: 'Buzul Krallığı', subtitle: 'KISIM 4',
+    bgGrad: ['#0D1B2A', '#1B263B'], bannerGrad: ['#14253A', '#293C5A'],
+    nodeColor: '#457B9D', activeNodeColor: '#A8DADC',
+    decos: ['🐧', '❄️', '🏔️', '🌨️', '🐻', '💎', '🦭', '🧊'],
+    cityBlocks: ['#A8DADC80', '#457B9D80', '#1D355780'],
+    icon: 'snowflake',
+    musicTrack: 'frozen_theme'
+  },
+  {
+    id: 5, title: 'Siber Şehir', subtitle: 'KISIM 5',
+    bgGrad: ['#0B1022', '#141D32'], bannerGrad: ['#1A0A2E', '#2D1657'],
+    nodeColor: '#8A2ECC', activeNodeColor: '#B84DFF',
+    decos: ['🤖', '🚀', '💻', '⚡', '🛸', '🌐', '🎮', '👾'],
+    cityBlocks: ['#3B82F680', '#8B5CF680', '#EC489980', '#6366F180', '#E040FB80'],
+    icon: 'zap',
+    musicTrack: 'cyber_theme'
+  },
+  {
+    id: 6, title: 'Galaksi', subtitle: 'KISIM 6',
+    bgGrad: ['#050117', '#120438'], bannerGrad: ['#0B0320', '#250B63'],
+    nodeColor: '#5A189A', activeNodeColor: '#7B68EE',
+    decos: ['🪐', '🌟', '☄️', '🛰️', '👽', '🌙', '🔭', '✨'],
+    cityBlocks: ['#7B68EE80', '#9D4EDD80', '#C77DFF80'],
+    icon: 'star',
+    musicTrack: 'galaxy_theme'
+  },
+  {
+    id: 7, title: 'Ejderha Krallığı', subtitle: 'KISIM 7',
+    bgGrad: ['#1F0303', '#4A0808'], bannerGrad: ['#2E0606', '#690B0B'],
+    nodeColor: '#9D0208', activeNodeColor: '#E63946',
+    decos: ['🐉', '🏰', '⚔️', '🛡️', '👑', '🔥', '🦅', '💀'],
+    cityBlocks: ['#E6394680', '#D6282880', '#9D020880'],
+    icon: 'shield',
+    musicTrack: 'dragon_theme'
+  }
+];
+
+const CHECKPOINT_TYPES = [
+  { type: 'Treasure', emoji: '🎁', title: 'Hazine Avı' },
+  { type: 'Boss', emoji: '👹', title: 'Büyük Sınav' },
+  { type: 'Story', emoji: '📜', title: 'Gizli Hikaye' }
+];
+
+const HomeScreen: React.FC<any> = () => {
+  const insets = useSafeAreaInsets();
+  const navigation = useNavigation();
   const { activeLanguage } = useLanguageStore();
-  const { progress, updateLastReportDate, saveReportSnapshot } = useProgressStore();
+  const { progress } = useProgressStore();
   
-  const [currentLangData, setCurrentLangData] = useState<LanguageCourse | null>(null);
+  const [courseData, setCourseData] = useState<LanguageCourse | null>(null);
   const [loading, setLoading] = useState(true);
+  const [isLangDropdownOpen, setIsLangDropdownOpen] = useState(false);
+  const [isAIPanelOpen, setIsAIPanelOpen] = useState(false);
+  
+  // Animations
+  const pulseAnim = useRef(new Animated.Value(1)).current;
+  const floatAnim = useRef(new Animated.Value(0)).current;
+  const xpAnim = useRef(new Animated.Value(0)).current;
+
+  // Safe Progress Extraction
+  const langProgress = progress?.languages?.[activeLanguage] || { totalXp: 0, dailyXp: 0, completedLessons: [], level: 1 };
+  const completedLevels = langProgress.completedLessons || [];
+  const totalXp = langProgress.totalXp || 0;
+  const dailyXp = langProgress.dailyXp || 0;
+  const userLevel = langProgress.level || Math.floor(totalXp / 100) + 1;
+  const streak = progress?.languages?.[activeLanguage]?.streak || 0;
 
   useEffect(() => {
     let mounted = true;
-    setLoading(true);
     ContentService.getCourseData(activeLanguage).then(data => {
       if (mounted) {
-        // use fallback if null
-        setCurrentLangData(data || { ...fallbackLangData, title: activeLanguage.charAt(0).toUpperCase() + activeLanguage.slice(1) } as any);
+        setCourseData(data);
         setLoading(false);
       }
     });
     return () => { mounted = false; };
   }, [activeLanguage]);
 
-  const langProgress = progress.languages?.[activeLanguage] || { totalXp: 0, dailyXp: 0, streak: 0, level: 1, completedLessons: [], lastActiveDate: '', weakWords: {}, lastReportDate: null };
+  const allNodes = useMemo(() => {
+    if (!courseData) return [];
+    return courseData.units.flatMap(u => u.levels);
+  }, [courseData]);
 
-  const [reportLoading, setReportLoading] = useState(false);
-  const [reportModalVisible, setReportModalVisible] = useState(false);
-  const [aiReport, setAiReport] = useState('');
+  // Determine active node index
+  const activeNodeIndex = Math.max(0, allNodes.findIndex(n => !completedLevels.includes(n.id)));
+  
+  // Calculate Active World
+  const activeWorldIndex = Math.floor(activeNodeIndex / 10) % WORLDS.length;
 
-  const lastReportDate = langProgress.lastReportDate ? new Date(langProgress.lastReportDate) : null;
-  const now = new Date();
-  const diffTime = lastReportDate ? Math.abs(now.getTime() - lastReportDate.getTime()) : null;
-  const diffDays = diffTime !== null ? Math.floor(diffTime / (1000 * 60 * 60 * 24)) : null;
-  const daysUntilNext = diffDays !== null ? 7 - diffDays : 0;
+  useEffect(() => {
+    // Active Node Pulse
+    Animated.loop(
+      Animated.sequence([
+        Animated.timing(pulseAnim, { toValue: 1.15, duration: 1500, useNativeDriver: true }),
+        Animated.timing(pulseAnim, { toValue: 1, duration: 1500, useNativeDriver: true })
+      ])
+    ).start();
 
-  const currentMistakes = langProgress.mistakes || {};
-  const currentMistakeCount = Object.values(currentMistakes).reduce((sum, item) => sum + item.count, 0);
-  const previousMistakeCount = Object.values(langProgress.previousReportSnapshot || {}).reduce((sum, item) => sum + item, 0);
-  const categoryCounts = Object.values(currentMistakes).reduce((acc: Record<string, number>, item) => {
-    acc[item.category] = (acc[item.category] || 0) + item.count;
-    return acc;
-  }, {});
-  const topCategory = Object.entries(categoryCounts)
-    .sort((a, b) => b[1] - a[1])
-    .map(([category]) => category)
-    .shift() || 'Henüz veri yok';
-
-  const canGetReport = !lastReportDate
-    ? currentMistakeCount >= 20
-    : daysUntilNext <= 0 || currentMistakeCount >= 50;
-
-  const progressPercent = previousMistakeCount > 0
-    ? Math.round(((previousMistakeCount - currentMistakeCount) / previousMistakeCount) * 100)
-    : 0;
-
-  const handleGetReport = async () => {
-    if (!canGetReport) {
-      const message = !lastReportDate
-        ? 'İlk rapor için en az 20 yeni hata kaydetmelisin.'
-        : `Yeni rapor için ${Math.max(daysUntilNext, 0)} gün daha ya da 50 yeni hata gerekiyor.`;
-      Alert.alert('Arjin diyor ki', message);
-      return;
-    }
+    // Floating Decorations
+    Animated.loop(
+      Animated.sequence([
+        Animated.timing(floatAnim, { toValue: 10, duration: 2500, useNativeDriver: true }),
+        Animated.timing(floatAnim, { toValue: 0, duration: 2500, useNativeDriver: true })
+      ])
+    ).start();
     
-    setReportLoading(true);
-    setReportModalVisible(true);
+    // Animate XP bar
+    Animated.timing(xpAnim, {
+      toValue: Math.min((dailyXp / DAILY_GOAL) * 100, 100),
+      duration: 1000,
+      useNativeDriver: false,
+    }).start();
 
-    const report = await AIService.analyzeProgress(currentMistakes, activeLanguage, langProgress.previousReportSnapshot || {});
-    setAiReport(report);
-    saveReportSnapshot(activeLanguage);
-    updateLastReportDate(new Date().toISOString(), activeLanguage);
-    setReportLoading(false);
-  };
+    // Play Background Music for Active World
+    // Placeholder: SoundManager.playWorldMusic(WORLDS[activeWorldIndex].musicTrack);
+    console.log(`[Music] Playing ${WORLDS[activeWorldIndex].musicTrack} for ${WORLDS[activeWorldIndex].title}`);
 
-  const handleLevelPress = (level: any) => {
-    navigation.navigate('Lesson', { lessonId: level.id });
-  };
+  }, [dailyXp, activeWorldIndex]);
 
-  const isLessonCompleted = (levelId: string) => langProgress.completedLessons.includes(levelId);
 
-  // Zigzag positions for Duolingo-style path
-  const getNodePosition = (index: number): number => {
-    const positions = [0, 1, 2, 1, 0, -1, 0, 1, 2, 1];
-    const pos = positions[index % positions.length];
-    return pos * 45; // horizontal offset
-  };
-
-  if (loading || !currentLangData) {
-    return (
-      <SafeAreaView style={[styles.safeArea, { backgroundColor: colors.background }]} edges={['top']}>
-        <HomeScreenSkeleton />
-      </SafeAreaView>
-    );
+  if (loading || !courseData) {
+    return <HomeScreenSkeleton />;
   }
 
-  return (
-    <SafeAreaView style={[styles.safeArea, { backgroundColor: colors.background }]} edges={['top']}>
-      <ParticleBackground />
-      {/* Header bar */}
-      <View style={[styles.header, { backgroundColor: colors.surface, borderBottomColor: colors.border }]}>
-        <View style={styles.headerLeft}>
-          <View style={[styles.flagContainer, { borderColor: colors.border }]}>
-            <Text style={styles.flagText}>
-              {activeLanguage === 'kurdish' ? '☀️' : activeLanguage === 'turkish' ? '🇹🇷' : activeLanguage === 'english' ? '🇬🇧' : activeLanguage === 'french' ? '🇫🇷' : '🌐'}
-            </Text>
-          </View>
-        </View>
+  const handleNodePress = (status: string, title: string) => {
+    if (status !== 'locked') {
+      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+      navigation.navigate('Lesson' as never, { title } as never);
+    }
+  };
 
-        <View style={styles.headerRight}>
-          <View style={styles.statItem}>
-            <Text style={[styles.statEmoji]}>🔥</Text>
-            <Text style={[styles.statVal, { color: '#FF9600' }]}>{langProgress.streak}</Text>
-          </View>
-          <View style={styles.statItem}>
-            <Text style={[styles.statEmoji]}>💎</Text>
-            <Text style={[styles.statVal, { color: colors.info }]}>{progress.gems}</Text>
-          </View>
-          <View style={styles.statItem}>
-            <Text style={[styles.statEmoji]}>❤️</Text>
-            <Text style={[styles.statVal, { color: colors.error }]}>{progress.hearts}</Text>
+  const renderTopDashboard = () => {
+    let currentSum = 0;
+    let activeUnitIndex = 0;
+    for(let i=0; i<courseData.units.length; i++){
+       currentSum += courseData.units[i].levels.length;
+       if(activeNodeIndex < currentSum) {
+          activeUnitIndex = i;
+          break;
+       }
+    }
+
+    return (
+    <View style={[styles.dashboard, { paddingTop: insets.top + 10, paddingBottom: 10 }]}>
+      <View style={styles.topBar}>
+        <View style={styles.flagAvatarRow}>
+          <TouchableOpacity onPress={() => setIsLangDropdownOpen(!isLangDropdownOpen)}>
+            <Text style={{ fontSize: 28, marginLeft: 10 }}>🇬🇧</Text>
+          </TouchableOpacity>
+          <View style={{ marginLeft: 8, justifyContent: 'center', alignItems: 'center' }}>
+             <Text style={{ color: '#FFF', fontWeight: 'bold', fontSize: 18 }}>{activeUnitIndex + 1}</Text>
           </View>
         </View>
+        
+        <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.statsScroll}>
+          <View style={styles.statPill}>
+            <Text style={{ fontSize: 16 }}>⚡</Text>
+            <Text style={[styles.statValue, { color: BRAND.streak }]}>{streak}</Text>
+          </View>
+          <View style={styles.statPill}>
+            <Text style={{ fontSize: 16 }}>🔮</Text>
+            <Text style={[styles.statValue, { color: BRAND.accent }]}>{progress?.gems || 0}</Text>
+          </View>
+          <View style={styles.statPill}>
+            <Text style={{ fontSize: 16 }}>💖</Text>
+            <Text style={[styles.statValue, { color: BRAND.danger }]}>{progress?.hearts || 0}</Text>
+          </View>
+          <View style={styles.statPill}>
+            <Text style={{ fontSize: 16 }}>🏆</Text>
+            <Text style={[styles.statValue, { color: BRAND.gold }]}>1.2K</Text>
+          </View>
+          <View style={styles.statPill}>
+            <Text style={{ fontSize: 16 }}>🎯</Text>
+            <View style={styles.notifBadge} />
+          </View>
+        </ScrollView>
       </View>
+    </View>
+    );
+  };
 
-      {/* Daily progress */}
-      <View style={[styles.dailyBar, { backgroundColor: colors.surface, borderBottomColor: colors.border }]}>
-        <View style={styles.dailyRow}>
-          <Text style={[styles.dailyLabel, { color: colors.text }]}>
-            {currentLangData.title}
-          </Text>
-          <Text style={[styles.dailyXp, { color: colors.primary }]}>
-            Seviye {langProgress.level} • {langProgress.dailyXp}/50 XP
-          </Text>
-        </View>
-        <View style={[styles.dailyProgressBg, { backgroundColor: colors.border }]}>
-          <View 
-            style={[
-              styles.dailyProgressFill, 
-              { 
-                backgroundColor: colors.primary,
-                width: `${Math.min((langProgress.dailyXp / 50) * 100, 100)}%`,
-              }
-            ]} 
-          />
-        </View>
+  const renderDailyGoal = () => (
+    <View style={styles.challengeCard}>
+      <LinearGradient colors={['rgba(255,255,255,0.05)', 'rgba(0,0,0,0.2)']} style={styles.cardGradient} />
+      <View style={styles.cardHeader}>
+        <Text style={{ fontSize: 22 }}>🎯</Text>
+        <Text style={styles.cardTitle}>Günlük Hedef</Text>
+        <Text style={styles.cardReward}>+50 💎</Text>
       </View>
+      <View style={styles.cardBarBg}>
+        <View style={[styles.cardBarFill, { width: `${Math.min((dailyXp / DAILY_GOAL) * 100, 100)}%` }]} />
+      </View>
+      <Text style={styles.cardFooterText}>{DAILY_GOAL - dailyXp > 0 ? `${DAILY_GOAL - dailyXp} XP kaldı` : 'Hedef Tamamlandı!'}</Text>
+    </View>
+  );
 
-      {/* Rapor Modal */}
-      <Modal
-        visible={reportModalVisible}
-        transparent={true}
-        animationType="slide"
-        onRequestClose={() => setReportModalVisible(false)}
-      >
-        <View style={styles.modalOverlay}>
-          <View style={[styles.modalContainer, { backgroundColor: colors.surface }]}>
-            <View style={styles.modalHeader}>
-              <Text style={[styles.modalTitle, { color: colors.text }]}>✨ Arjin'in Analizi</Text>
-              <TouchableOpacity onPress={() => setReportModalVisible(false)}>
-                <Text style={{ fontSize: 22, color: colors.textLight }}>✕</Text>
-              </TouchableOpacity>
-            </View>
-            <ScrollView style={styles.modalScroll} showsVerticalScrollIndicator={false}>
-              {reportLoading ? (
-                <View style={{ padding: 30, alignItems: 'center' }}>
-                  <ActivityIndicator size="large" color={colors.primary} />
-                  <Text style={{ marginTop: 14, color: colors.textLight, textAlign: 'center' }}>Arjin verilerini analiz ediyor...</Text>
+  // ─── UNIT BANNER COLOR PALETTE (rotating per unit) ───
+  const UNIT_COLORS = [
+    { bannerGrad: ['#3B82F6', '#2563EB'], nodeActive: '#3B82F6', nodeShadow: '#2563EB' },
+    { bannerGrad: ['#8B5CF6', '#7C3AED'], nodeActive: '#8B5CF6', nodeShadow: '#7C3AED' },
+    { bannerGrad: ['#F59E0B', '#D97706'], nodeActive: '#F59E0B', nodeShadow: '#D97706' },
+    { bannerGrad: ['#EF4444', '#DC2626'], nodeActive: '#EF4444', nodeShadow: '#DC2626' },
+    { bannerGrad: ['#06B6D4', '#0891B2'], nodeActive: '#06B6D4', nodeShadow: '#0891B2' },
+    { bannerGrad: ['#EC4899', '#DB2777'], nodeActive: '#EC4899', nodeShadow: '#DB2777' },
+    { bannerGrad: ['#14B8A6', '#0D9488'], nodeActive: '#14B8A6', nodeShadow: '#0D9488' },
+    { bannerGrad: ['#F97316', '#EA580C'], nodeActive: '#F97316', nodeShadow: '#EA580C' },
+  ];
+
+  const UNITS_PER_KISIM = 10;
+
+  const renderWorldSections = () => {
+    let runningNodeIndex = 0;
+    const totalUnits = courseData.units.length;
+    const kisimCount = Math.ceil(totalUnits / UNITS_PER_KISIM);
+    const sections: React.ReactNode[] = [];
+
+    for (let kisimIdx = 0; kisimIdx < kisimCount; kisimIdx++) {
+      const kisimStart = kisimIdx * UNITS_PER_KISIM;
+      const kisimEnd = Math.min(kisimStart + UNITS_PER_KISIM, totalUnits);
+      const kisimUnits = courseData.units.slice(kisimStart, kisimEnd);
+      const unitElements: React.ReactNode[] = [];
+
+      for (let uIdx = 0; uIdx < kisimUnits.length; uIdx++) {
+        const unit = kisimUnits[uIdx];
+        const globalUnitIndex = kisimStart + uIdx;
+        const unitColor = UNIT_COLORS[globalUnitIndex % UNIT_COLORS.length];
+
+        let forcedLevels = unit.levels.slice(0, 6);
+        while (forcedLevels.length < 6) {
+          forcedLevels.push({ id: `mock-${unit.id}-${forcedLevels.length}`, name: 'Ders', icon: 'star', type: 'lesson' as const });
+        }
+
+        const startIndex = runningNodeIndex;
+        runningNodeIndex += forcedLevels.length;
+        const isCurrentUnit = activeNodeIndex >= startIndex && activeNodeIndex < runningNodeIndex;
+        const isUnitCompleted = activeNodeIndex >= runningNodeIndex;
+
+        unitElements.push(
+          <View key={unit.id}>
+            {/* ÜNİTE BANNER */}
+            <View style={styles.bannerContainer}>
+              <LinearGradient colors={unitColor.bannerGrad} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }} style={styles.bannerGradient}>
+                <View style={styles.bannerContent}>
+                  <Text style={styles.bannerSubtitle}>{(kisimIdx + 1) + '. KISIM, ' + (uIdx + 1) + '. ÜNİTE'}</Text>
+                  <Text style={styles.bannerTitle}>{unit.description}</Text>
+                  <View style={styles.bannerProgressBg}>
+                    <View style={[styles.bannerProgressFill, { width: isCurrentUnit ? '45%' : (isUnitCompleted ? '100%' : '0%'), backgroundColor: '#FFF' }]} />
+                  </View>
                 </View>
-              ) : (
-                <Text style={[styles.modalText, { color: colors.text }]}>{aiReport}</Text>
-              )}
-            </ScrollView>
-            {!reportLoading && (
-              <TouchableOpacity
-                style={[styles.modalButton, { backgroundColor: colors.primary }]}
-                onPress={() => setReportModalVisible(false)}
-              >
-                <Text style={styles.modalButtonText}>Harika, Teşekkürler!</Text>
-              </TouchableOpacity>
-            )}
-          </View>
-        </View>
-      </Modal>
-
-      {/* Learning Path */}
-      <ScrollView contentContainerStyle={styles.pathContainer} showsVerticalScrollIndicator={false}>
-        {/* Alphabet Strip */}
-        <TouchableOpacity
-          style={[styles.alphabetStrip, { backgroundColor: colors.surface, borderColor: colors.border }]}
-          onPress={() => navigation.navigate('Alphabet' as never)}
-          activeOpacity={0.75}
-        >
-          <Text style={styles.alphabetStripEmoji}>🔤</Text>
-          <Text style={[styles.alphabetStripText, { color: colors.text }]}>Sesleri Öğren</Text>
-          <Text style={[styles.alphabetStripSub, { color: colors.textLight }]}>Harfler & telaffuz</Text>
-          <Text style={{ marginLeft: 'auto', fontSize: 16, color: colors.primary, fontWeight: 'bold' }}>→</Text>
-        </TouchableOpacity>
-
-        {/* Yakında banner — 1 üniteli ve "🚧" içeriyorsa göster */}
-        {currentLangData.units.length === 1 && currentLangData.units[0]?.levels?.[0]?.icon === '🚧' && (
-          <View style={[styles.alphabetStrip, { backgroundColor: colors.surface, borderColor: colors.border, marginBottom: 12 }]}>
-            <Text style={styles.alphabetStripEmoji}>🌍</Text>
-            <Text style={[styles.alphabetStripText, { color: colors.text }]}>{currentLangData.title} — Yakında!</Text>
-            <Text style={[styles.alphabetStripSub, { color: colors.textLight }]}>İçerikler hazırlanıyor.</Text>
-          </View>
-        )}
-
-        {currentLangData.units.map((unit: any, unitIndex: number) => (
-          <View key={unit.id} style={styles.unitContainer}>
-            {/* Section title */}
-            <View style={[styles.sectionHeader, { backgroundColor: unit.color, borderBottomColor: unit.color + 'CC' }]}>
-              <View>
-                <Text style={styles.sectionTitle}>{unit.title}</Text>
-                <Text style={styles.sectionSub}>{unit.description}</Text>
-              </View>
+                <TouchableOpacity style={{ width: 44, height: 44, borderRadius: 10, backgroundColor: 'rgba(255,255,255,0.2)', alignItems: 'center', justifyContent: 'center', marginRight: 12 }}>
+                  <FontAwesome5 name="list" size={18} color="#FFF" />
+                </TouchableOpacity>
+              </LinearGradient>
             </View>
 
-            {/* Path nodes */}
-            <View style={styles.pathNodes}>
-              {unit.levels.map((level: any, index: number) => {
-                const completed = isLessonCompleted(level.id);
-                // A lesson is next if it's the very first of the first unit, OR if the previous lesson in the app is completed.
-                // To keep it simple, we just check if it's the first uncompleted lesson.
-                const allFlatLevels = currentLangData.units.flatMap((u: any) => u.levels);
-                const flatIndex = allFlatLevels.findIndex((l: any) => l.id === level.id);
-                const isNext = !completed && (flatIndex === 0 || isLessonCompleted(allFlatLevels[flatIndex - 1]?.id));
-                const isLocked = !completed && !isNext;
-                const offset = getNodePosition(index);
+            {/* WINDING PATH */}
+            <View style={styles.pathContainer}>
+              {forcedLevels.map((node, i) => {
+                const globalIndex = startIndex + i;
+                const isCompleted = completedLevels.includes(node.id);
+                const isActive = globalIndex === activeNodeIndex;
+                const isLocked = globalIndex > activeNodeIndex;
+
+                let nodeContent;
+                let nodeColor = '#3A4651';
+                let shadowColor = '#1F2937';
+                let progressValue = 0;
+
+                const steps = [
+                  { name: 'Etap 1', icon: 'layer-group' },
+                  { name: 'Etap 2', icon: 'layer-group' },
+                  { name: 'Etap 3', icon: 'layer-group' },
+                  { name: 'AI Challenge', icon: 'robot' },
+                  { name: 'Ünite Finali', icon: 'trophy' },
+                  { name: 'Ünite Ödülü', icon: 'gift' }
+                ];
+                const currentStep = steps[i % steps.length];
+                const iconName = currentStep.icon;
+                const displayName = currentStep.name;
+                const isFinalNode = (i % steps.length === 5);
+                const isAINode = (i % steps.length === 3);
+                const isFinaleNode = (i % steps.length === 4);
+
+                if (isFinalNode) {
+                  nodeColor = '#FFC800';
+                  shadowColor = '#D29C00';
+                  nodeContent = <FontAwesome5 name="gift" size={28} color="#FFF" />;
+                } else if (isCompleted) {
+                  nodeColor = unitColor.nodeActive;
+                  shadowColor = unitColor.nodeShadow;
+                  progressValue = 4;
+                  nodeContent = <FontAwesome5 name={isAINode ? 'robot' : isFinaleNode ? 'trophy' : 'check'} size={28} color="#FFF" />;
+                } else if (isActive) {
+                  nodeColor = unitColor.nodeActive;
+                  shadowColor = unitColor.nodeShadow;
+                  progressValue = 2;
+                  nodeContent = <FontAwesome5 name={iconName} size={28} color="#FFF" />;
+                } else {
+                  nodeContent = <FontAwesome5 name={iconName} size={28} color="#3A4651" />;
+                }
+
+                const ZIGZAG = [0, 50, 100, 130, 90, 20, -40, -100, -130, -70];
+                const zigOffset = ZIGZAG[i % ZIGZAG.length];
 
                 return (
-                  <View key={level.id} style={styles.nodeRow}>
-                    {/* Connecting dotted line */}
-                    {index > 0 && (
-                      <View style={[styles.connector, { borderColor: completed ? unit.color : colors.border }]} />
-                    )}
-                    
-                    <View style={[styles.nodeWrapper, { marginLeft: offset + (width / 2 - 50) }]}>
-                      {/* Tüm node alanı tıklanabilir (yukarıdan aşağıya: BAŞLA + yuvarlak + isim) */}
-                      <TouchableOpacity
-                        onPress={() => !isLocked && handleLevelPress(level)}
-                        disabled={isLocked}
-                        activeOpacity={0.75}
-                        style={{ alignItems: 'center' }}
+                  <View key={node.id} style={{ alignItems: 'center', marginVertical: isActive ? 15 : 5, transform: [{ translateX: zigOffset }] }}>
+                    <View style={{ position: 'relative', alignItems: 'center', justifyContent: 'center' }}>
+                      <HexagonNode
+                        size={80}
+                        color={nodeColor}
+                        shadowColor={shadowColor}
+                        isLocked={isLocked}
+                        progress={progressValue}
+                        isActive={isActive}
+                        onPress={() => handleNodePress(isLocked ? 'locked' : isActive ? 'active' : 'completed', node.name)}
                       >
-                        {/* Lesson geometric node */}
-                        <View
-                          style={{
-                            shadowColor: isNext ? unit.color : 'transparent',
-                            shadowOffset: { width: 0, height: 0 },
-                            shadowOpacity: isNext ? 0.9 : 0,
-                            shadowRadius: 14,
-                            elevation: isNext ? 12 : 0,
-                            transform: [{ rotate: '45deg' }],
-                            marginVertical: 10,
-                          }}
+                        {nodeContent}
+                      </HexagonNode>
+                      {isActive && (
+                        <TouchableOpacity
+                          style={{ position: 'absolute', top: -45, zIndex: 10, backgroundColor: '#FFF', paddingHorizontal: 12, paddingVertical: 6, borderRadius: 12, borderWidth: 2, borderColor: '#E5E5E5' }}
+                          onPress={() => handleNodePress('active', node.name)}
                         >
-                          <LinearGradient
-                            colors={
-                              completed ? [colors.warning, '#B8860B'] :
-                              isNext ? [unit.color, '#00B8CC'] :
-                              [colors.border, '#1C2636']
-                            }
-                            style={[
-                              styles.node,
-                              {
-                                borderWidth: isNext ? 2.5 : 1,
-                                borderColor: isNext ? '#FFFFFF66' : 'transparent',
-                              }
-                            ]}
-                            start={{ x: 0, y: 0 }}
-                            end={{ x: 1, y: 1 }}
-                          >
-                            <Text style={[styles.nodeIcon, { transform: [{ rotate: '-45deg' }] }]}>
-                              {isLocked ? '🔒' : level.icon}
-                            </Text>
-                          </LinearGradient>
-                        </View>
-
-                        <Text style={[
-                          styles.nodeName, 
-                          { color: isLocked ? colors.textLight : colors.text }
-                        ]}>{level.name}</Text>
-
-                        {completed && (
-                          <View style={[styles.completeBadge, { backgroundColor: unit.color + '20' }]}>
-                            <Text style={[styles.completeBadgeText, { color: unit.color }]}>✓ Bitti</Text>
-                          </View>
-                        )}
-                      </TouchableOpacity>
+                          <Text style={{ fontWeight: 'bold', color: unitColor.nodeActive, fontSize: 13 }}>BAŞLAT</Text>
+                          <View style={{ position: 'absolute', bottom: -6, left: '50%', marginLeft: -6, width: 10, height: 10, backgroundColor: '#FFF', transform: [{ rotate: '45deg' }], borderBottomWidth: 2, borderRightWidth: 2, borderColor: '#E5E5E5' }} />
+                        </TouchableOpacity>
+                      )}
                     </View>
+                    {!isFinalNode && (
+                      <View style={styles.nodeLabelBox}>
+                        <Text style={[styles.nodeLabel, isLocked && { color: BRAND.textMuted }]}>{displayName}</Text>
+                      </View>
+                    )}
+                    {i < forcedLevels.length - 1 && (
+                      <View style={{ width: 4, height: 30, backgroundColor: isCompleted ? unitColor.nodeActive : '#1E2D4A', marginVertical: 5, borderRadius: 2 }} />
+                    )}
                   </View>
                 );
               })}
             </View>
           </View>
-        ))}
+        );
+      }
 
-        <View style={{ height: 100 }} />
+      const kisimAllCompleted = activeNodeIndex >= runningNodeIndex;
+      const isNextKisim = kisimIdx < kisimCount - 1;
+
+      sections.push(
+        <View key={`kisim-${kisimIdx}`} style={styles.worldSection}>
+          {unitElements}
+          {isNextKisim && (
+            <View style={{ alignItems: 'center', paddingVertical: 40, paddingHorizontal: 20 }}>
+              <View style={{ backgroundColor: '#141D32', borderRadius: 20, padding: 28, alignItems: 'center', width: '90%', borderWidth: 1, borderColor: '#1E2D4A' }}>
+                <View style={{ backgroundColor: 'rgba(59,130,246,0.15)', paddingHorizontal: 16, paddingVertical: 6, borderRadius: 20, marginBottom: 12 }}>
+                  <Text style={{ color: '#94A3B8', fontSize: 12, fontWeight: '700', letterSpacing: 1 }}>SIRADAKİ</Text>
+                </View>
+                <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 8 }}>
+                  <FontAwesome5 name="lock" size={18} color="#5A6A88" style={{ marginRight: 8 }} />
+                  <Text style={{ color: '#FFF', fontSize: 22, fontWeight: '800' }}>{(kisimIdx + 2) + '. Kısım'}</Text>
+                </View>
+                <Text style={{ color: '#94A3B8', fontSize: 14, textAlign: 'center', lineHeight: 20, marginBottom: 16 }}>
+                  Daha ileri seviye kelime, ifade ve{'\n'}dil bilgisi konseptlerini öğren
+                </Text>
+                <TouchableOpacity style={{ backgroundColor: kisimAllCompleted ? '#3B82F6' : '#1E2D4A', paddingHorizontal: 30, paddingVertical: 12, borderRadius: 12 }}>
+                  <Text style={{ color: kisimAllCompleted ? '#FFF' : '#5A6A88', fontWeight: '800', fontSize: 14 }}>BURAYA ATLA!</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          )}
+        </View>
+      );
+    }
+
+    return sections;
+  };
+
+
+  return (
+    <View style={styles.container}>
+      <StatusBar barStyle="light-content" backgroundColor={BRAND.bg} translucent={false} />
+
+      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollContent}>
+        {/* ─── SCROLLING DASHBOARD ─── */}
+        {renderTopDashboard()}
+
+        {/* ─── WORLD MAP SECTIONS ─── */}
+        {renderWorldSections()}
+        
       </ScrollView>
 
-      {/* Arjin Floating Bubble */}
-      <TouchableOpacity
-        style={[
-          styles.arjinBubble,
-          { backgroundColor: colors.surface, opacity: 0.7 },
-        ]}
-        onPress={() => Alert.alert('Çok Yakında', 'Arjin yapay zeka analiz sistemi çok yakında devrede olacak!')}
-        activeOpacity={0.8}
-      >
-        <Text style={styles.arjinBubbleEmoji}>🔒</Text>
-        <Text style={[styles.arjinBubbleLabel, { color: colors.textLight }]}>Yakında</Text>
-      </TouchableOpacity>
-    </SafeAreaView>
+      {/* Language Dropdown Overlay */}
+      {isLangDropdownOpen && (
+        <TouchableOpacity style={{ position: 'absolute', top: 110, left: 16, backgroundColor: BRAND.card, padding: 15, borderRadius: 12, zIndex: 999, borderWidth: 1, borderColor: BRAND.border, width: 150 }} onPress={() => setIsLangDropdownOpen(false)}>
+           <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 12 }}>
+             <Text style={{ fontSize: 20, marginRight: 10 }}>🇬🇧</Text>
+             <Text style={{ color: '#FFF', fontSize: 16, fontWeight: 'bold' }}>English</Text>
+           </View>
+           <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+             <Text style={{ fontSize: 20, marginRight: 10 }}>🇹🇷</Text>
+             <Text style={{ color: '#94A3B8', fontSize: 16 }}>Türkçe</Text>
+           </View>
+        </TouchableOpacity>
+      )}
+
+      {/* ─── FLOATING AI CRYSTAL BUTTON ─── */}
+      <View style={[styles.floatingMascotContainer, { right: 20, bottom: 30 }]}>
+        <TouchableOpacity 
+          style={{ width: 80, height: 80, justifyContent: 'center', alignItems: 'center' }}
+          onPress={() => setIsAIPanelOpen(true)}
+        >
+          {/* Hexagon/Crystal Base */}
+          <View style={{ position: 'absolute', width: 70, height: 70, backgroundColor: 'rgba(45, 212, 191, 0.2)', borderRadius: 35, borderWidth: 2, borderColor: '#2DD4BF', transform: [{ rotate: '45deg' }] }} />
+          {/* Inner Mascot */}
+          <Mascot mascotId="classic" size={50} animationState="action" />
+        </TouchableOpacity>
+      </View>
+
+      {/* AI ANALYSIS MODAL (Placeholder inside HomeScreen for now) */}
+      {isAIPanelOpen && (
+        <View style={[StyleSheet.absoluteFill, { zIndex: 1000 }]}>
+          <TouchableOpacity style={{ flex: 1, backgroundColor: 'rgba(0,0,0,0.6)' }} onPress={() => setIsAIPanelOpen(false)} />
+          <View style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: '70%', backgroundColor: '#0F172A', borderTopLeftRadius: 30, borderTopRightRadius: 30, padding: 25, borderWidth: 1, borderColor: '#1E293B' }}>
+             <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 20 }}>
+               <Mascot mascotId="classic" size={60} animationState="happy" />
+               <View style={{ marginLeft: 15 }}>
+                 <Text style={{ color: '#FFF', fontSize: 22, fontWeight: 'bold' }}>AI Koç Analizi</Text>
+                 <Text style={{ color: '#2DD4BF', fontSize: 14 }}>Genel Başarı: %85</Text>
+               </View>
+             </View>
+             <ScrollView>
+               <View style={{ backgroundColor: 'rgba(255,255,255,0.05)', padding: 15, borderRadius: 15, marginBottom: 10 }}>
+                 <Text style={{ color: '#FFF', fontWeight: 'bold', marginBottom: 5 }}>Zayıf Yönlerin</Text>
+                 <Text style={{ color: '#94A3B8' }}>Past Tense (Geçmiş Zaman) kuralları. Son derslerde %40 başarı gösterdin.</Text>
+               </View>
+               <View style={{ backgroundColor: 'rgba(255,255,255,0.05)', padding: 15, borderRadius: 15, marginBottom: 10 }}>
+                 <Text style={{ color: '#FFF', fontWeight: 'bold', marginBottom: 5 }}>Güçlü Yönlerin</Text>
+                 <Text style={{ color: '#94A3B8' }}>Vocabulary (Kelime Bilgisi). Tüm kelime sorularını %100 doğru cevapladın!</Text>
+               </View>
+               <TouchableOpacity style={{ backgroundColor: '#3B82F6', padding: 15, borderRadius: 15, alignItems: 'center', marginTop: 20 }} onPress={() => setIsAIPanelOpen(false)}>
+                 <Text style={{ color: '#FFF', fontWeight: 'bold', fontSize: 16 }}>Zayıf Yönlerimi Çalış</Text>
+               </TouchableOpacity>
+             </ScrollView>
+          </View>
+        </View>
+      )}
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
-  safeArea: {
+  container: {
     flex: 1,
-    paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
+    backgroundColor: BRAND.bg,
   },
-  header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingHorizontal: 15,
-    paddingVertical: 12,
+  dashboard: {
+    backgroundColor: BRAND.bg,
+    paddingHorizontal: 16,
+    paddingBottom: 16,
     borderBottomWidth: 1,
+    borderBottomColor: BRAND.border,
+    zIndex: 10,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 10 },
+    shadowOpacity: 0.5,
+    shadowRadius: 15,
+    elevation: 10,
   },
-  unitContainer: {
-    marginBottom: 20,
-  },
-  headerLeft: {
+  topBar: {
     flexDirection: 'row',
     alignItems: 'center',
+    marginBottom: 16,
   },
-  flagContainer: {
-    borderWidth: 2,
-    borderRadius: 8,
-    padding: 4,
-  },
-  flagText: {
-    fontSize: 22,
-  },
-  headerRight: {
-    flexDirection: 'row',
-    gap: 18,
-  },
-  statItem: {
+  flagAvatarRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 4,
+    gap: 10,
+    marginRight: 16,
   },
-  statEmoji: {
-    fontSize: 16,
-  },
-  statVal: {
-    fontSize: 15,
-    fontWeight: 'bold', fontFamily: 'SpaceGrotesk_700Bold',
-  },
-  dailyBar: {
-    paddingHorizontal: 15,
-    paddingVertical: 10,
-    borderBottomWidth: 1,
-  },
-  dailyRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+  flagCircle: {
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    backgroundColor: BRAND.card,
+    justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 6,
+    borderWidth: 1.5,
+    borderColor: BRAND.border,
   },
-  dailyLabel: {
-    fontSize: 14,
-    fontWeight: 'bold', fontFamily: 'SpaceGrotesk_700Bold',
-  },
-  dailyXp: {
-    fontSize: 13,
-    fontWeight: '700',
-  },
-  dailyProgressBg: {
-    height: 8,
-    borderRadius: 4,
+  avatarCircle: {
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    backgroundColor: BRAND.card,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: 1.5,
+    borderColor: BRAND.secondary,
     overflow: 'hidden',
   },
-  dailyProgressFill: {
-    height: '100%',
-    borderRadius: 4,
-  },
-
-  pathContainer: {
-    paddingTop: 6,
-    paddingBottom: 30,
-  },  alphabetStrip: {
-    flexDirection: 'row',
+  statsScroll: {
     alignItems: 'center',
-    marginHorizontal: 12,
-    marginBottom: 14,
-    marginTop: 6,
-    paddingHorizontal: 14,
-    paddingVertical: 10,
-    borderRadius: 12,
-    borderWidth: 1,
     gap: 8,
+    paddingRight: 20,
   },
-  alphabetStripEmoji: {
-    fontSize: 20,
-  },
-  alphabetStripText: {
-    fontSize: 14,
-    fontWeight: '700',
-  },
-  alphabetStripSub: {
-    fontSize: 12,
-  },
-  sectionHeader: {
+  statPill: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginHorizontal: 20,
-    padding: 16,
-    borderRadius: 16,
-    borderBottomWidth: 4,
-    gap: 12,
-    marginBottom: 30,
+    paddingHorizontal: 8,
+    paddingVertical: 6,
+    gap: 4,
   },
-  sectionEmoji: {
-    fontSize: 28,
-  },
-  sectionTitle: {
-    fontSize: 18,
-    fontWeight: 'bold', fontFamily: 'SpaceGrotesk_700Bold',
-    color: '#FFF',
-  },
-  sectionSub: {
-    fontSize: 13,
-    color: '#FFF',
-    opacity: 0.85,
-    marginTop: 2,
-  },
-  pathNodes: {
-    alignItems: 'flex-start',
-  },
-  nodeRow: {
-    width: '100%',
-    marginBottom: 15,
-    alignItems: 'center',
-  },
-  connector: {
-    width: 3,
-    height: 25,
-    borderLeftWidth: 3,
-    borderStyle: 'dashed',
-    marginBottom: 5,
-  },
-  nodeWrapper: {
-    alignItems: 'center',
-    position: 'relative',
-  },
-  node: {
-    width: 74,
-    height: 74,
-    borderRadius: 22,
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderBottomWidth: 5,
-    borderBottomColor: 'rgba(0,0,0,0.2)',
-  },
-  nodeIcon: {
-    fontSize: 32,
-  },
-  nodeName: {
-    marginTop: 8,
-    fontSize: 13,
-    fontWeight: 'bold', fontFamily: 'SpaceGrotesk_700Bold',
-    textAlign: 'center',
-  },
-  completeBadge: {
-    marginTop: 4,
-    paddingHorizontal: 10,
-    paddingVertical: 2,
-    borderRadius: 10,
-  },
-  completeBadgeText: {
-    fontSize: 11,
-    fontWeight: 'bold', fontFamily: 'SpaceGrotesk_700Bold',
-  },
-  startBadge: {
-    marginTop: 6,
-    paddingHorizontal: 14,
-    paddingVertical: 5,
-    borderRadius: 12,
-  },
-  startBadgeText: {
-    color: '#FFF',
-    fontSize: 12,
-    fontWeight: 'bold', fontFamily: 'SpaceGrotesk_700Bold',
-    letterSpacing: 1,
-  },
-  modalOverlay: {
-    flex: 1,
-    backgroundColor: 'rgba(0,0,0,0.55)',
-    justifyContent: 'flex-end',
-  },
-  modalContainer: {
-    borderTopLeftRadius: 28,
-    borderTopRightRadius: 28,
-    padding: 20,
-    paddingBottom: 32,
-    maxHeight: '82%',
-  },
-  modalHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 16,
-  },
-  modalTitle: {
-    fontSize: 19,
-    fontWeight: 'bold',
-  },
-  modalScroll: {
-    maxHeight: 420,
-    marginBottom: 16,
-  },
-  modalText: {
+  statValue: {
     fontSize: 15,
-    lineHeight: 24,
+    fontWeight: '800',
+    fontFamily: 'SpaceGrotesk_700Bold',
   },
-  modalButton: {
-    borderRadius: 14,
-    paddingVertical: 14,
-    alignItems: 'center',
-    marginTop: 4,
-  },
-  modalButtonText: {
-    color: '#FFF',
-    fontWeight: 'bold',
-    fontSize: 16,
-  },
-  arjinBubble: {
+  notifBadge: {
     position: 'absolute',
-    right: 18,
-    bottom: 28,
-    width: 64,
-    height: 64,
-    borderRadius: 32,
-    alignItems: 'center',
-    justifyContent: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.22,
-    shadowRadius: 8,
-    elevation: 10,
-    borderWidth: 2,
-    borderColor: 'rgba(255,255,255,0.25)',
-  },
-  arjinBubbleActive: {
-    shadowOpacity: 0.45,
-    elevation: 16,
-  },
-  arjinBubbleEmoji: {
-    fontSize: 22,
-  },
-  arjinBubbleLabel: {
-    fontSize: 10,
-    fontWeight: '700',
-    marginTop: 1,
-    letterSpacing: 0.5,
-  },
-  arjinBubbleDot: {
-    position: 'absolute',
-    top: 6,
+    top: 4,
     right: 6,
     width: 10,
     height: 10,
     borderRadius: 5,
-    backgroundColor: '#FF3B30',
-    borderWidth: 1.5,
-    borderColor: '#FFF',
+    backgroundColor: BRAND.danger,
+    borderWidth: 2,
+    borderColor: BRAND.card,
   },
+  xpSection: {
+    gap: 10,
+  },
+  xpHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'flex-end',
+  },
+  levelTitle: {
+    color: BRAND.text,
+    fontSize: 24,
+    fontWeight: '900',
+    fontFamily: 'SpaceGrotesk_700Bold',
+  },
+  levelSubtitle: {
+    color: BRAND.primary,
+    fontSize: 14,
+    fontWeight: '800',
+  },
+  xpBarBg: {
+    height: 8,
+    backgroundColor: BRAND.card,
+    borderRadius: 4,
+    overflow: 'hidden',
+  },
+  xpBarFill: {
+    height: '100%',
+    borderRadius: 4,
+  },
+  scrollContent: {
+    paddingBottom: 100,
+  },
+  challengeCard: {
+    borderRadius: 20,
+    padding: 16,
+    overflow: 'hidden',
+    borderWidth: 1,
+    borderColor: BRAND.border,
+    backgroundColor: BRAND.card,
+  },
+  cardGradient: {
+    position: 'absolute',
+    left: 0, right: 0, top: 0, bottom: 0,
+  },
+  cardHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    marginBottom: 12,
+  },
+  cardTitle: {
+    color: BRAND.text,
+    fontSize: 18,
+    fontWeight: '800',
+    fontFamily: 'SpaceGrotesk_700Bold',
+    flex: 1,
+  },
+  cardReward: {
+    color: BRAND.accent,
+    fontSize: 15,
+    fontWeight: '800',
+  },
+  cardBarBg: {
+    height: 8,
+    backgroundColor: 'rgba(0,0,0,0.4)',
+    borderRadius: 4,
+    overflow: 'hidden',
+    marginBottom: 8,
+  },
+  cardBarFill: {
+    height: '100%',
+    backgroundColor: BRAND.primary,
+    borderRadius: 4,
+  },
+  cardFooterText: {
+    color: BRAND.textSub,
+    fontSize: 13,
+    fontWeight: '700',
+  },
+  worldSection: {
+    paddingVertical: 20,
+    position: 'relative',
+    overflow: 'hidden',
+  },
+  bannerContainer: {
+    marginHorizontal: 16,
+    marginBottom: 30,
+    borderRadius: 24,
+    overflow: 'hidden',
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.2)',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.4,
+    shadowRadius: 10,
+    elevation: 8,
+  },
+  bannerGradient: {
+    flexDirection: 'row',
+    padding: 16,
+    paddingVertical: 12,
+    minHeight: 80,
+  },
+  bannerContent: {
+    flex: 1,
+    justifyContent: 'center',
+    zIndex: 2,
+  },
+  bannerSubtitle: {
+    color: 'rgba(255,255,255,0.7)',
+    fontSize: 11,
+    fontWeight: '800',
+    letterSpacing: 2,
+    marginBottom: 6,
+  },
+  bannerTitle: {
+    color: '#FFF',
+    fontSize: 26,
+    fontWeight: '900',
+    fontFamily: 'SpaceGrotesk_700Bold',
+    marginBottom: 12,
+  },
+  bannerProgressBg: {
+    height: 6,
+    backgroundColor: 'rgba(0,0,0,0.4)',
+    borderRadius: 3,
+    width: '70%',
+  },
+  bannerProgressFill: {
+    height: '100%',
+    borderRadius: 3,
+  },
+  bannerGraphic: {
+    position: 'absolute',
+    right: 0,
+    top: 0,
+    bottom: 0,
+    width: 160,
+    overflow: 'hidden',
+    justifyContent: 'flex-end',
+    alignItems: 'flex-end',
+  },
+  buildingContainer: {
+    flexDirection: 'row',
+    alignItems: 'flex-end',
+    gap: 4,
+    marginRight: 10,
+    opacity: 0.85,
+  },
+  building: {
+    width: 22,
+    borderTopLeftRadius: 4,
+    borderTopRightRadius: 4,
+  },
+  pathContainer: {
+    alignItems: 'center',
+    paddingVertical: 10,
+  },
+  nodeBtn: {
+    width: 72,
+    height: 72,
+    borderRadius: 36,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  nodeInner: {
+    width: '100%',
+    height: '100%',
+    borderRadius: 36,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  activeAura: {
+    position: 'absolute',
+    width: 130,
+    height: 130,
+    borderRadius: 65,
+    top: -17,
+  },
+  completeBadge: {
+    position: 'absolute',
+    top: -5,
+    right: -5,
+    backgroundColor: BRAND.primaryDark,
+    width: 28,
+    height: 28,
+    borderRadius: 14,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: 2,
+    borderColor: '#0B1022',
+  },
+  nodeLabelBox: {
+    marginTop: 12,
+    backgroundColor: 'rgba(20, 29, 50, 0.7)',
+    paddingHorizontal: 14,
+    paddingVertical: 6,
+    borderRadius: 12,
+  },
+  nodeLabel: {
+    color: BRAND.text,
+    fontSize: 15,
+    fontWeight: '800',
+    fontFamily: 'SpaceGrotesk_700Bold',
+  },
+  checkpointLabel: {
+    position: 'absolute',
+    bottom: -25,
+    color: '#FFF',
+    fontSize: 13,
+    fontWeight: '800',
+    textShadowColor: 'rgba(0,0,0,0.8)',
+    textShadowOffset: { width: 0, height: 1 },
+    textShadowRadius: 3,
+    width: 120,
+    textAlign: 'center',
+  },
+  dotsContainer: {
+    height: 60,
+    justifyContent: 'space-evenly',
+    alignItems: 'center',
+  },
+  dot: {
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+  },
+  floatingMascotContainer: {
+    position: 'absolute',
+    bottom: 20,
+    right: 20,
+    zIndex: 100,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 5,
+    elevation: 8,
+  },
+  decoEmoji: {
+    position: 'absolute',
+    fontSize: 28,
+    opacity: 0.4,
+  },
+  bgParticle: {
+    position: 'absolute',
+    zIndex: 1,
+  }
 });
 
 export default HomeScreen;

@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, StyleSheet, TouchableOpacity, KeyboardAvoidingView, Platform, Alert } from 'react-native';
 import { useThemeColors } from '../theme/colors';
 import { useNavigation } from '@react-navigation/native';
+import { Mascot } from '../components/Mascot';
 
 const ForgotPasswordScreen = () => {
   const colors = useThemeColors();
@@ -38,6 +39,7 @@ const ForgotPasswordScreen = () => {
         </View>
 
         <View style={styles.content}>
+          <Mascot mascotId="professor" size={120} animationState="sad" animated style={{ alignSelf: 'center', marginBottom: 20 }} />
           <Text style={[styles.title, { color: colors.text }]}>Şifreni mi unuttun?</Text>
           <Text style={[styles.subtitle, { color: colors.textLight }]}>
             Endişelenme! Hesabına kayıtlı e-posta adresini gir, sana şifreni sıfırlaman için bir bağlantı gönderelim.

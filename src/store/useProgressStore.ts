@@ -30,6 +30,10 @@ export interface UserProgress {
   avatar: string;
   lastHeartRefill: string;
   isPremium: boolean;
+  equippedMascot: string;
+  unlockedMascots: string[];
+  equippedCostumes?: { head?: string; back?: string; body?: string };
+  unlockedCostumes?: string[];
   languages: {
     [key: string]: LanguageProgress;
   };
@@ -56,6 +60,10 @@ const defaultProgress: UserProgress = {
   avatar: '👤',
   lastHeartRefill: new Date().toISOString(),
   isPremium: false,
+  equippedMascot: 'classic',
+  unlockedMascots: ['classic'],
+  equippedCostumes: {},
+  unlockedCostumes: [],
   languages: {
     kurdish: { ...defaultLangProgress },
     english: { ...defaultLangProgress },
@@ -77,6 +85,11 @@ interface ProgressState {
   addGems: (amount: number) => void;
   setAvatar: (avatar: string) => void;
   setPremium: (value: boolean) => Promise<void>;
+  equipMascot: (id: string) => void;
+  unlockMascot: (id: string) => void;
+  buyMascot: (id: string, cost: number) => boolean;
+  equipCostume: (id: string | null, category: 'head' | 'back' | 'body') => void;
+  buyCostume: (id: string, cost: number) => boolean;
   trackMistake: (item: string, category: string, langKey: string) => void;
   updateLastReportDate: (date: string, langKey: string) => void;
   saveReportSnapshot: (langKey: string) => void;
@@ -129,7 +142,7 @@ export const useProgressStore = create<ProgressState>((set, get) => ({
         if (stored) parsed = JSON.parse(stored);
       }
 
-      if (parsed) {
+      if (parsed !== null) {
         const today = getTodayStr();
         // Auto-refill hearts
         if (parsed.hearts < 20) {
@@ -144,8 +157,8 @@ export const useProgressStore = create<ProgressState>((set, get) => ({
         }
 
         // Check streak and daily resets
-        Object.keys(parsed.languages || {}).forEach(key => {
-          const langData = parsed.languages[key];
+        Object.keys(parsed!.languages || {}).forEach(key => {
+          const langData = (parsed as any).languages[key];
           const lastDate = langData.lastActiveDate;
           if (lastDate && lastDate !== today) {
             const lastActive = new Date(lastDate);
@@ -159,13 +172,19 @@ export const useProgressStore = create<ProgressState>((set, get) => ({
           }
         });
 
+        // Merge defaultProgress to ensure new top-level fields (like unlockedMascots) exist
+        parsed = {
+          ...defaultProgress,
+          ...parsed,
+        };
+
         // Add missing languages from defaultProgress to parsed
         parsed.languages = Object.fromEntries(
           Object.entries(defaultProgress.languages).map(([langKey, defaultLang]) => [
             langKey,
             {
               ...defaultLang,
-              ...(parsed.languages?.[langKey] || {}),
+              ...((parsed as any).languages?.[langKey] || {}),
             },
           ])
         ) as { [key: string]: LanguageProgress };
@@ -251,15 +270,22 @@ export const useProgressStore = create<ProgressState>((set, get) => ({
   completeLesson: (lessonId: string, xpEarned: number, langKey: string) => {
     const prev = get().progress;
     const langData = prev.languages[langKey] || { ...defaultLangProgress };
-    if (!langData.completedLessons.includes(lessonId)) {
+    if (!(langData.completedLessons || []).includes(lessonId)) {
+      
+      const newUnlockedMascots = [...(prev.unlockedMascots || ['classic'])];
+      if (lessonId === 'e_boss_1' && !newUnlockedMascots.includes('professor')) {
+        newUnlockedMascots.push('professor');
+      }
+
       const newProgress = {
         ...prev,
         gems: prev.gems + 5,
+        unlockedMascots: newUnlockedMascots,
         languages: {
           ...prev.languages,
           [langKey]: {
             ...langData,
-            completedLessons: [...langData.completedLessons, lessonId],
+            completedLessons: [...(langData.completedLessons || []), lessonId],
           }
         }
       };
@@ -426,5 +452,71 @@ export const useProgressStore = create<ProgressState>((set, get) => ({
         console.log('Could not sync premium status to Firestore', e);
       }
     }
+  },
+
+  equipMascot: (id: string) => {
+    const prev = get().progress;
+    // Sadece unlocked mascotlar kuşanılabilir
+    if (prev.unlockedMascots.includes(id)) {
+      const newProgress = { ...prev, equippedMascot: id };
+      set({ progress: newProgress });
+      get()._saveProgress(newProgress);
+    }
+  },
+
+  unlockMascot: (id: string) => {
+    const prev = get().progress;
+    if (!prev.unlockedMascots.includes(id)) {
+      const newProgress = { 
+        ...prev, 
+        unlockedMascots: [...prev.unlockedMascots, id] 
+      };
+      set({ progress: newProgress });
+      get()._saveProgress(newProgress);
+    }
+  },
+
+  buyMascot: (id: string, cost: number) => {
+    const prev = get().progress;
+    if (prev.gems >= cost && !prev.unlockedMascots.includes(id)) {
+      const newProgress = {
+        ...prev,
+        gems: prev.gems - cost,
+        unlockedMascots: [...prev.unlockedMascots, id]
+      };
+      set({ progress: newProgress });
+      get()._saveProgress(newProgress);
+      return true;
+    }
+    return false;
+  },
+
+  equipCostume: (id: string | null, category: 'head' | 'back' | 'body') => {
+    const prev = get().progress;
+    const newProgress = {
+      ...prev,
+      equippedCostumes: {
+        ...(prev.equippedCostumes || {}),
+        [category]: id || undefined
+      }
+    };
+    set({ progress: newProgress });
+    get()._saveProgress(newProgress);
+  },
+
+  buyCostume: (id: string, cost: number) => {
+    const prev = get().progress;
+    const unlocked = prev.unlockedCostumes || [];
+    if (prev.gems >= cost && !unlocked.includes(id)) {
+      const newProgress = {
+        ...prev,
+        gems: prev.gems - cost,
+        unlockedCostumes: [...unlocked, id]
+      };
+      set({ progress: newProgress });
+      get()._saveProgress(newProgress);
+      return true;
+    }
+    return false;
   },
 }));

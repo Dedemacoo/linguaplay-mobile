@@ -1,4 +1,4 @@
-import { db } from '../config/firebase';
+﻿import { db } from '../config/firebase';
 import { collection, query, where, getDocs, addDoc, serverTimestamp, deleteDoc, doc, getDoc } from 'firebase/firestore';
 
 export interface DuelRequest {

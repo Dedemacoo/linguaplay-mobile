@@ -1,40 +1,59 @@
 import { useColorScheme } from 'react-native';
+import { useTheme } from '../context/ThemeContext';
+
+export const BRAND = {
+  bg:        '#0B1022',
+  surface:   '#111A2E',
+  card:      '#141D32',
+  border:    '#1E2D4A',
+  primary:   '#4CD964',   // Green
+  secondary: '#B84DFF',   // Purple
+  accent:    '#00D9FF',   // Cyan
+  gold:      '#FFD54A',
+  danger:    '#FF5A5F',
+  text:      '#FFFFFF',
+  textSub:   '#B8C1D1',
+  textMuted: '#5A6A88',
+};
 
 const sharedColors = {
-  primary: '#00F0FF', // Cyber Neon Turquoise
-  primaryDark: '#00B8CC',
-  secondary: '#8A2BE2', // Electric Purple
-  secondaryDark: '#5E1B99',
-  error: '#FF0055', // Cyber Neon Red/Pink
-  warning: '#FFEA00', // Cyber Yellow
-  success: '#58CC02', // Duolingo-style Green
-  info: '#2D00F7', // Deep Royal Blue
+  primary: BRAND.primary,
+  primaryDark: '#3AA34A',
+  secondary: BRAND.secondary,
+  secondaryDark: '#8A2ECC',
+  error: BRAND.danger,
+  warning: BRAND.gold,
+  success: BRAND.primary,
+  info: BRAND.accent,
   white: '#FFFFFF',
   black: '#000000',
   transparent: 'transparent',
-};
-
-export const lightColors = {
-  ...sharedColors,
-  colorScheme: 'light' as const,
-  background: '#EAEFF2', // Very soft cool grey for cyber light theme
-  surface: '#FFFFFF',
-  text: '#0D1321', // Deep dark navy instead of plain black
-  textLight: '#8D99AE',
-  border: '#D8E2E8',
+  streak: '#FF9600',
 };
 
 export const darkColors = {
   ...sharedColors,
   colorScheme: 'dark' as const,
-  background: '#0B1021',  // Deep Space Navy
-  surface: '#151C33',     // Glassy Navy Surface
-  text: '#FFFFFF',
-  textLight: '#7A8C99',
-  border: '#2A3655',
+  background: BRAND.bg,
+  surface: BRAND.surface,
+  card: BRAND.card,
+  text: BRAND.text,
+  textLight: BRAND.textSub,
+  textMuted: BRAND.textMuted,
+  border: BRAND.border,
 };
 
-import { useTheme } from '../context/ThemeContext';
+export const lightColors = {
+  ...sharedColors,
+  colorScheme: 'light' as const,
+  background: '#F8FAFC', // Slate 50
+  surface: '#FFFFFF',
+  card: '#FFFFFF',
+  text: '#0F172A',       // Slate 900
+  textLight: '#475569',  // Slate 600
+  textMuted: '#94A3B8',  // Slate 400
+  border: '#E2E8F0',     // Slate 200
+};
 
 export const useThemeColors = () => {
   const { isDark } = useTheme();

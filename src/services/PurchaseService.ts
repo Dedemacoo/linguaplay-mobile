@@ -1,4 +1,4 @@
-/**
+﻿/**
  * PurchaseService — RevenueCat Altyapısı
  *
  * Şu an Expo Go ortamında native "react-native-purchases" kütüphanesi

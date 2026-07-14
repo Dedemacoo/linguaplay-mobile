@@ -1,4 +1,4 @@
-import { db, auth } from '../config/firebase';
+﻿import { db, auth } from '../config/firebase';
 import { collection, doc, setDoc, getDoc, updateDoc, onSnapshot, query, where, getDocs, limit, deleteDoc, serverTimestamp, increment } from 'firebase/firestore';
 
 export type BattleStatus = 'waiting' | 'playing' | 'finished';

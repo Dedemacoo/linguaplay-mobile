@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import {
   View, Text, StyleSheet, FlatList, TextInput, TouchableOpacity,
   KeyboardAvoidingView, Platform, StatusBar, ActivityIndicator,
-  Animated,
+  Animated, Alert,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
@@ -11,6 +11,7 @@ import { useThemeColors } from '../theme/colors';
 import { useAuth } from '../context/AuthContext';
 import { ChatService, ChatMessage } from '../services/ChatService';
 import * as Haptics from 'expo-haptics';
+import { Mascot } from '../components/Mascot';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'ChatRoom'>;
 
@@ -58,6 +59,25 @@ const ChatRoomScreen: React.FC<Props> = ({ navigation, route }) => {
     } finally {
       setSending(false);
     }
+  };
+
+  const handleClearChat = () => {
+    Alert.alert(
+      "Sohbeti Sil",
+      "Bu sohbetteki tüm mesajlar kalıcı olarak silinecektir. Emin misin?",
+      [
+        { text: "İptal", style: "cancel" },
+        { 
+          text: "Sil", 
+          style: "destructive", 
+          onPress: async () => {
+            Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+            await ChatService.clearChat(chatId);
+            setMessages([]);
+          }
+        }
+      ]
+    );
   };
 
   const renderMessage = ({ item, index }: { item: ChatMessage; index: number }) => {
@@ -112,13 +132,18 @@ const ChatRoomScreen: React.FC<Props> = ({ navigation, route }) => {
             <Text style={[styles.headerStatus, { color: colors.textLight }]}>Çevrimiçi</Text>
           </View>
         </View>
-        <TouchableOpacity
-          style={styles.duelHeaderBtn}
-          onPress={() => navigation.navigate('QuizBattle' as any, { opponentName: otherName, opponentAvatar: otherAvatar })}
-        >
-          <Text style={{ fontSize: 16 }}>⚔️</Text>
-          <Text style={styles.duelHeaderText}>Düello</Text>
-        </TouchableOpacity>
+        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
+          <TouchableOpacity onPress={handleClearChat} style={{ padding: 5 }}>
+            <Text style={{ fontSize: 20, color: '#FF453A' }}>🗑️</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.duelHeaderBtn}
+            onPress={() => navigation.navigate('QuizBattle' as any, { opponentName: otherName, opponentAvatar: otherAvatar })}
+          >
+            <Text style={{ fontSize: 16 }}>⚔️</Text>
+            <Text style={styles.duelHeaderText}>Düello</Text>
+          </TouchableOpacity>
+        </View>
       </View>
 
       {/* Messages */}
@@ -130,7 +155,9 @@ const ChatRoomScreen: React.FC<Props> = ({ navigation, route }) => {
         contentContainerStyle={styles.messagesContent}
         ListEmptyComponent={() => (
           <View style={styles.emptyChat}>
-            <Text style={{ fontSize: 50 }}>💬</Text>
+            <View style={styles.mascotCircle}>
+              <Mascot mascotId="professor" size={100} animationState="happy" animated />
+            </View>
             <Text style={[styles.emptyChatText, { color: colors.textLight }]}>
               Henüz mesaj yok.{'\n'}İlk mesajı sen gönder!
             </Text>
@@ -234,7 +261,8 @@ const styles = StyleSheet.create({
   bubbleText: { fontSize: 15, lineHeight: 21 },
   bubbleTime: { fontSize: 10, marginTop: 4, textAlign: 'right' },
   emptyChat: { flex: 1, justifyContent: 'center', alignItems: 'center', paddingTop: 80, gap: 12 },
-  emptyChatText: { fontSize: 15, textAlign: 'center', lineHeight: 22 },
+  mascotCircle: { width: 120, height: 120, borderRadius: 60, backgroundColor: 'transparent', justifyContent: 'center', alignItems: 'center', marginBottom: 10 },
+  emptyChatText: { fontSize: 16, textAlign: 'center', lineHeight: 24, fontWeight: '600' },
   inputBar: {
     flexDirection: 'row', alignItems: 'flex-end', paddingHorizontal: 12,
     paddingVertical: 10, borderTopWidth: 1, gap: 10,

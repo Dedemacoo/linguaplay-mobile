@@ -14,7 +14,7 @@ type Props = NativeStackScreenProps<RootStackParamList, 'Reminder'>;
 const hours = Array.from({ length: 24 }, (_, i) => String(i).padStart(2, '0'));
 const minutes = ['00', '15', '30', '45'];
 
-const ReminderScreen: React.FC<Props> = ({ navigation }) => {
+const ReminderScreen: React.FC<Props> = ({ navigation, route }) => {
   const colors = useThemeColors();
   const [reminderHour, setReminderHour] = useState('20');
   const [reminderMinute, setReminderMinute] = useState('00');
@@ -52,7 +52,8 @@ const ReminderScreen: React.FC<Props> = ({ navigation }) => {
     try {
       await AsyncStorage.setItem('@reminder_time', `${reminderHour}:${reminderMinute}`);
     } catch (e) {}
-    navigation.navigate('Age');
+    
+    navigation.navigate('Register' as never);
   };
 
   return (

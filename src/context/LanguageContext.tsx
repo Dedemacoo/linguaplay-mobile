@@ -1,4 +1,4 @@
-import React, { createContext, useState, useContext, ReactNode } from 'react';
+﻿import React, { createContext, useState, useContext, ReactNode } from 'react';
 
 type LanguageKey = 'kurdish' | 'turkish' | 'english' | 'french' | 'spanish' | 'german' | 'italian' | 'japanese' | 'korean' | 'russian' | 'chinese' | 'arabic' | 'portuguese' | 'dutch';
 

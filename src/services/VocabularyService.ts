@@ -1,4 +1,4 @@
-/**
+﻿/**
  * VocabularyService
  * Oyunlar (Kart Eşleştirme, Dinleme, Quiz) için dinamik kelime çeker.
  * MyMemory Translation API (ücretsiz, anahtar gerektirmez):

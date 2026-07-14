@@ -1,16 +1,6 @@
-/**
- * AIService — Firebase Callable Functions üzerinden AI
- *
- * chat ve analyzeProgress artık doğrudan Firebase Cloud Functions'ı çağırır.
- * API anahtarı sunucu tarafında güvenli şekilde saklanır.
- */
+import { useLingoStore } from '../store/useLingoStore';
 
-import { getFunctions, httpsCallable } from 'firebase/functions';
-import { getApp } from 'firebase/app';
-
-function getFn() {
-  return getFunctions(getApp(), 'us-central1');
-}
+const GEMINI_API_KEY = 'AQ.Ab8RN6KGitvQn_fHAFi-_fNqUA0wpQmQib_zcL9Nfy22deTX3w';
 
 export interface ChatMessage {
   role: 'user' | 'assistant';
@@ -29,46 +19,109 @@ export interface HintResult {
 }
 
 export class AIService {
-  /**
-   * AI konuşma koçuyla sohbet (Firebase Callable)
-   */
   static async chat(
     messages: ChatMessage[],
     language: string,
     userLevel: 'beginner' | 'intermediate' | 'advanced' = 'beginner'
   ): Promise<string> {
     try {
-      const fn = httpsCallable<unknown, { reply: string }>(getFn(), 'aiChat');
-      const result = await fn({ messages, language, userLevel });
-      return result.data.reply || 'Üzgünüm, yanıt alamadım.';
+      const targetLanguage = language || 'English'; 
+      const { personality, expressionStyle } = useLingoStore.getState();
+      
+      let personalityStr = "arkadaş canlısı ve motive edici";
+      if (personality === 'strict') personalityStr = "disiplinli ve kuralcı";
+      if (personality === 'funny') personalityStr = "komik ve esprili";
+      if (personality === 'academic') personalityStr = "akademik ve ciddi";
+      
+      let expressionStr = "Günlük bir dille";
+      if (expressionStyle === 'formal') expressionStr = "Resmi ve saygılı bir dille";
+      if (expressionStyle === 'encouraging') expressionStr = "Çok destekleyici ve cesaret verici bir dille";
+
+      const systemPrompt = `Sen ${personalityStr} bir dil öğretmenisin ve yapay zeka asistanısın. Adın Lingo. Öğrencinin seviyesi: ${userLevel}. Hedef dil: ${targetLanguage}.
+Kurallar:
+- Öğrencinin doğrudan isteklerini (örn: "bana 10 kelime listele", "bu konuyu anlat") eksiksiz yerine getir. Liste veya kural açıklaması istenirse doğrudan Türkçe cevap verebilirsin.
+- NORMAL SOHBETLERDE ÇOK ÖNEMLİ KURAL: Her yanıtında ZORUNLU OLARAK önce ${targetLanguage} cümleyi kur, ardından HEMEN o cümlenin (Türkçe çevirisini parantez içinde) yaz. SADECE ${targetLanguage} yanıt VERME!
+  Örnek Format: "Hello! How are you today? (Merhaba! Bugün nasılsın?)"
+- Sohbet kısımlarını KISA tut (en fazla 2-3 cümle).
+- Öğrencinin gramer hataları varsa nazikçe düzelt.
+- Sıcak, esprili ve cesaretlendirici ol, yunus olduğunu belli eden tatlı göndermeler yap (su sıçratmak, balık ısmarlamak vb.).`;
+
+      const formattedMessages: { role: string, parts: { text: string }[] }[] = [];
+      messages.forEach(msg => {
+        const mappedRole = msg.role === 'assistant' ? 'model' : 'user';
+        if (formattedMessages.length > 0 && formattedMessages[formattedMessages.length - 1].role === mappedRole) {
+          formattedMessages[formattedMessages.length - 1].parts[0].text += '\n\n' + msg.content;
+        } else {
+          formattedMessages.push({
+            role: mappedRole,
+            parts: [{ text: msg.content }]
+          });
+        }
+      });
+
+      const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${GEMINI_API_KEY}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          contents: formattedMessages,
+          systemInstruction: { parts: [{ text: systemPrompt }] },
+          generationConfig: { temperature: 0.75, maxOutputTokens: 220 }
+        })
+      });
+
+      const data = await response.json();
+      if (!response.ok || data.error) {
+        console.error('[AIService] API Error:', data);
+        throw new Error(data?.error?.message || 'Unknown API error');
+      }
+      
+      return data.candidates?.[0]?.content?.parts?.[0]?.text || 'Üzgünüm, yanıt alamadım.';
     } catch (error: any) {
-      console.warn('[AIService] chat error:', error.message);
-      // Gerçek bir hata — kullanıcıya göster
-      return `⚠️ Bağlantı hatası: ${error.message?.includes('unauthenticated') ? 'Lütfen giriş yap.' : 'Sunucuya ulaşılamıyor, lütfen tekrar dene.'}`;
+      console.error('[AIService] chat catch block error:', error);
+      if (error.message?.includes('high demand') || error.message?.includes('503')) {
+        return 'Şu an sunucularda çok fazla yoğunluk var, biraz nefeslenip tekrar dener misin? 🐳';
+      }
+      return `Zzz... Biraz yoruldum, bağlantı kuramıyorum. (${error.message})`;
     }
   }
 
-  /**
-   * AI Gelişim Raporu Al (Firebase Callable)
-   */
   static async analyzeProgress(
     mistakes: Record<string, { count: number; lastSeen: string; category: string }>,
     language: string,
     previousReportSnapshot: Record<string, number>
   ): Promise<string> {
     try {
-      const fn = httpsCallable<unknown, { report: string }>(getFn(), 'analyzeProgress');
-      const result = await fn({ mistakes, language, previousReportSnapshot });
-      return result.data.report || 'Rapor oluşturulamadı.';
+      const mistakeLines = Object.entries(mistakes || {})
+        .sort((a: any, b: any) => b[1].count - a[1].count)
+        .slice(0, 15)
+        .map(([word, info]: any) => `- "${word}" (${info.category}): ${info.count} hata`)
+        .join('\n');
+
+      const prevLines = Object.entries(previousReportSnapshot || {})
+        .map(([word, count]: any) => `- "${word}": ${count}`)
+        .join('\n');
+
+      const prompt = `Sen Arjin adında bir İngilizce dil koçusun. Aşağıdaki hata verilerine göre öğrenciye Türkçe kişiselleştirilmiş bir gelişim raporu yaz (max 200 kelime). Güçlü yönleri, zayıf noktaları ve 3 somut öneri içersin.\n\nBu dönem hatalar:\n${mistakeLines || 'Henüz hata yok'}\n\nÖnceki rapor:\n${prevLines || 'İlk rapor'}`;
+
+      const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${GEMINI_API_KEY}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          contents: [{ role: 'user', parts: [{ text: prompt }] }],
+          generationConfig: { temperature: 0.7, maxOutputTokens: 350 }
+        })
+      });
+
+      const data = await response.json();
+      if (data.error) throw new Error(data.error.message);
+
+      return data.candidates?.[0]?.content?.parts?.[0]?.text || 'Rapor oluşturulamadı.';
     } catch (error: any) {
       console.warn('[AIService] analyze-progress error:', error.message);
-      return '⚠️ Bağlantı hatası: Arjin şu anda rapora ulaşamıyor. Lütfen daha sonra tekrar dene.';
+      return 'Hmm... Gelişim raporu için geçerli bir API anahtarı gerekiyor.';
     }
   }
 
-  /**
-   * Telaffuz puanlama — basit Levenshtein (sunucu gerektirmez)
-   */
   static async scorePronunciation(
     expected: string,
     spoken: string,
@@ -77,14 +130,11 @@ export class AIService {
     const similarity = this.calculateSimilarity(expected.toLowerCase(), spoken.toLowerCase());
     return {
       score: Math.round(similarity * 100),
-      feedback: similarity > 0.85 ? 'Harika telaffuz! 🎉' : similarity > 0.6 ? 'İyi gidiyor, biraz daha pratik yap!' : 'Tekrar dene, yaklaşıyorsun!',
+      feedback: similarity > 0.85 ? 'Harika telaffuz! 🐳' : similarity > 0.6 ? 'İyi gidiyor, biraz daha pratik yap!' : 'Tekrar dene, yaklaşıyorsun!',
       corrections: [],
     };
   }
 
-  /**
-   * Kelime ipucu (yerel fallback)
-   */
   static async getHint(word: string, _language: string, _context = ''): Promise<HintResult> {
     return {
       hint: `"${word}" kelimesini tekrar dene!`,
@@ -92,9 +142,6 @@ export class AIService {
     };
   }
 
-  /**
-   * Basit Levenshtein benzerlik skoru (0-1)
-   */
   private static calculateSimilarity(a: string, b: string): number {
     if (a === b) return 1;
     const matrix: number[][] = [];

@@ -3,21 +3,25 @@ import { View, Text, StyleSheet, ActivityIndicator, TouchableOpacity } from 'rea
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../navigation/AppNavigator';
-import { useThemeColors } from '../theme/colors';
+import { BRAND } from '../theme/colors';
 import { BattleService } from '../services/BattleService';
 import { useAuth } from '../context/AuthContext';
 import { useLanguageStore } from '../store/useLanguageStore';
 import { ContentService } from '../services/ContentService';
+import { Mascot } from '../components/Mascot';
+import { useThemeColors } from '../theme/colors';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Matchmaking'>;
 
 export const MatchmakingScreen: React.FC<Props> = ({ navigation }) => {
   const colors = useThemeColors();
+  const styles = React.useMemo(() => getStyles(colors), [colors]);
   const { user } = useAuth();
   const { activeLanguage } = useLanguageStore();
   
   const [statusText, setStatusText] = useState('Rakip Aranıyor...');
   const [isCanceled, setIsCanceled] = useState(false);
+  const [matchFailed, setMatchFailed] = useState(false);
 
   useEffect(() => {
     let mounted = true;
@@ -26,14 +30,13 @@ export const MatchmakingScreen: React.FC<Props> = ({ navigation }) => {
       if (!user) return;
       
       try {
-        // Fetch all questions to build a pool
         const lessons = await ContentService.getAllLessonsData(activeLanguage);
-        const questionsPool = lessons.flatMap(l => l.questions).filter(q => q && q.type !== 'flashcard'); // filter out flashcards for duel
+        const questionsPool = lessons.flatMap(l => l.questions).filter(q => q && q.type !== 'flashcard');
 
         const userProfile = {
           uid: user.uid,
           name: user.displayName || 'Oyuncu',
-          avatar: '🧑‍💻' // Could fetch from context if available
+          avatar: '🧑‍💻'
         };
 
         const battleId = await BattleService.findOrCreateMatch(
@@ -43,20 +46,24 @@ export const MatchmakingScreen: React.FC<Props> = ({ navigation }) => {
             if (mounted && !isCanceled) {
               setStatusText('Rakip Bulundu! Hazırlanıyor...');
               setTimeout(() => {
-                navigation.replace('QuizBattle', { battleId: matchedBattleId } as any); // params updated below
+                navigation.replace('QuizBattle', { battleId: matchedBattleId } as any);
               }, 1500);
             }
           },
           () => {
             if (mounted && !isCanceled) {
               setStatusText('Rakip bulunamadı. Lütfen tekrar dene.');
+              setMatchFailed(true);
             }
           }
         );
 
       } catch (e) {
         console.error('Matchmaking error:', e);
-        if (mounted) setStatusText('Bir hata oluştu.');
+        if (mounted) {
+          setStatusText('Bir hata oluştu.');
+          setMatchFailed(true);
+        }
       }
     };
 
@@ -65,29 +72,33 @@ export const MatchmakingScreen: React.FC<Props> = ({ navigation }) => {
     return () => {
       mounted = false;
       setIsCanceled(true);
-      // Ideally, if user cancels, we should remove them from the queue in Firestore if they are waiting
     };
   }, []);
 
   return (
-    <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]}>
+    <SafeAreaView style={styles.container}>
       <View style={styles.content}>
-        <Text style={[styles.title, { color: colors.primary }]}>DÜELLO</Text>
+        <Text style={styles.title}>DÜELLO</Text>
         
+        <View style={styles.mascotContainer}>
+          <Mascot size={150} />
+        </View>
+
         {statusText === 'Rakip Aranıyor...' && (
           <ActivityIndicator size="large" color={colors.primary} style={styles.loader} />
         )}
 
-        <Text style={[styles.status, { color: colors.text }]}>{statusText}</Text>
+        <Text style={styles.status}>{statusText}</Text>
         
         <TouchableOpacity 
-          style={[styles.cancelBtn, { borderColor: colors.border }]} 
+          style={styles.cancelBtn} 
           onPress={() => {
             setIsCanceled(true);
             navigation.goBack();
           }}
+          activeOpacity={0.8}
         >
-          <Text style={[styles.cancelText, { color: colors.textLight }]}>İptal Et</Text>
+          <Text style={styles.cancelText}>{matchFailed ? 'Geri Dön' : 'İptal Et'}</Text>
         </TouchableOpacity>
       </View>
     </SafeAreaView>
@@ -96,9 +107,10 @@ export const MatchmakingScreen: React.FC<Props> = ({ navigation }) => {
 
 export default MatchmakingScreen;
 
-const styles = StyleSheet.create({
+const getStyles = (colors: any) => StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: colors.background,
   },
   content: {
     flex: 1,
@@ -107,11 +119,31 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   title: {
-    fontSize: 32,
-    fontWeight: 'bold',
+    fontSize: 36,
+    fontWeight: '900',
     fontFamily: 'SpaceGrotesk_700Bold',
     marginBottom: 40,
     letterSpacing: 2,
+    color: colors.error,
+    textShadowColor: 'rgba(255, 0, 0, 0.4)',
+    textShadowOffset: { width: 0, height: 2 },
+    textShadowRadius: 10,
+  },
+  mascotContainer: {
+    width: 200,
+    height: 200,
+    borderRadius: 100,
+    backgroundColor: colors.surface,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: 2,
+    borderColor: colors.border,
+    marginBottom: 30,
+    shadowColor: colors.error,
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0.3,
+    shadowRadius: 20,
+    elevation: 8,
   },
   loader: {
     marginBottom: 20,
@@ -121,15 +153,20 @@ const styles = StyleSheet.create({
     fontSize: 20,
     textAlign: 'center',
     marginBottom: 50,
+    color: colors.text,
+    fontWeight: '700',
   },
   cancelBtn: {
-    paddingVertical: 12,
+    paddingVertical: 16,
     paddingHorizontal: 40,
     borderRadius: 25,
-    borderWidth: 1,
+    borderWidth: 2,
+    borderColor: colors.border,
+    backgroundColor: colors.card,
   },
   cancelText: {
-    fontSize: 16,
-    fontWeight: '600',
+    fontSize: 18,
+    fontWeight: '800',
+    color: colors.textLight,
   }
 });

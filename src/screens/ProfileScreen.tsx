@@ -1,25 +1,62 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Modal, Alert } from 'react-native';
-import { useThemeColors } from '../theme/colors';
+import React, { useState, useEffect, useRef } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Modal, Alert, Dimensions, Animated, Pressable } from 'react-native';
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
+import { BRAND } from '../theme/colors';
 import { useLanguageStore } from '../store/useLanguageStore';
 import { useProgressStore } from '../store/useProgressStore';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../navigation/AppNavigator';
 import { useAuth } from '../context/AuthContext';
-
+import { LinearGradient } from 'expo-linear-gradient';
+import { Mascot } from '../components/Mascot';
 import * as Haptics from 'expo-haptics';
-const AVATARS = ['👤', '🧑‍💻', '👩‍🎨', '🧔', '👩‍🏫', '👩‍⚕️', '👨‍🔬', '👩‍🚀', '🧕', '🧑‍🎓', '👩‍💼', '🐦', '🦊', '🐼', '🦁', '🐸', '🦄', '🦖', '🐉', '🐈'];
+import { useThemeColors } from '../theme/colors';
+import { MASCOTS } from '../data/MascotData';
 
-const ProfileScreen = () => {
+const { width } = Dimensions.get('window');
+
+const StatCard = ({ icon, value, label, color }: any) => {
   const colors = useThemeColors();
+  const styles = React.useMemo(() => getStyles(colors), [colors]);
+  const scale = useRef(new Animated.Value(1)).current;
+  return (
+    <Pressable
+      onPressIn={() => Animated.spring(scale, { toValue: 0.95, useNativeDriver: true }).start()}
+      onPressOut={() => Animated.spring(scale, { toValue: 1, useNativeDriver: true }).start()}
+      style={{ flex: 1 }}
+    >
+      <Animated.View style={[styles.statBox, { shadowColor: color, transform: [{ scale }] }]}>
+        <Text style={styles.statIcon}>{icon}</Text>
+        <Text style={[styles.statValue, { color }]}>{value}</Text>
+        <Text style={styles.statLabel}>{label}</Text>
+      </Animated.View>
+    </Pressable>
+  );
+};
+
+export const ProfileScreen = () => {
+  const colors = useThemeColors();
+  const styles = React.useMemo(() => getStyles(colors), [colors]);
+  const insets = useSafeAreaInsets();
   const { activeLanguage, setActiveLanguage } = useLanguageStore();
-  const { progress, setAvatar, refillHearts, addGems  } = useProgressStore();
+  const { progress, refillHearts, addGems } = useProgressStore();
   const { user } = useAuth();
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
-  
-  const [showAvatarModal, setShowAvatarModal] = useState(false);
-  const [showShopModal, setShowShopModal] = useState(false);
+
+  const currXp = progress.languages?.[activeLanguage]?.totalXp || 0;
+  const currLevel = progress.languages?.[activeLanguage]?.level || 1;
+  const reqXp = currLevel * 500;
+  const xpPercent = Math.min((currXp / reqXp) * 100, 100);
+
+  const xpAnim = useRef(new Animated.Value(0)).current;
+  useEffect(() => {
+    Animated.timing(xpAnim, {
+      toValue: xpPercent,
+      duration: 1000,
+      useNativeDriver: false
+    }).start();
+  }, [xpPercent]);
 
   const handleLogout = () => {
     Alert.alert(
@@ -48,125 +85,163 @@ const ProfileScreen = () => {
     { key: 'turkish', label: 'Türkçe', flag: '🇹🇷' },
     { key: 'japanese', label: 'Japonca', flag: '🇯🇵' },
     { key: 'korean', label: 'Korece', flag: '🇰🇷' },
-    { key: 'russian', label: 'Rusça', flag: '🇷🇺' },
-    { key: 'chinese', label: 'Çince', flag: '🇨🇳' },
     { key: 'arabic', label: 'Arapça', flag: '🇸🇦' },
-    { key: 'portuguese', label: 'Portekizce', flag: '🇵🇹' },
-    { key: 'dutch', label: 'Felemenkçe', flag: '🇳🇱' },
   ] as const;
 
   const renderLangCard = (lang: typeof allLanguages[number]) => {
     const langProg = progress.languages?.[lang.key] || { totalXp: 0, level: 1 };
     const isActive = activeLanguage === lang.key;
+    const lreqXp = langProg.level * 500;
+    const lxpPercent = Math.min((langProg.totalXp / lreqXp) * 100, 100);
     
     return (
       <TouchableOpacity 
         key={lang.key}
         style={[
           styles.langCard, 
-          { 
-            backgroundColor: isActive ? colors.primary + '15' : colors.surface,
-            borderColor: isActive ? colors.primary : colors.border
-          }
+          isActive && styles.langCardActive
         ]}
-        onPress={() => setActiveLanguage(lang.key as any)}
+        onPress={() => {
+          Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+          setActiveLanguage(lang.key as any);
+        }}
+        activeOpacity={0.7}
       >
         <Text style={styles.langCardFlag}>{lang.flag}</Text>
-        <Text style={[styles.langCardName, { color: isActive ? colors.primary : colors.text }]}>{lang.label}</Text>
-        <Text style={[styles.langCardStats, { color: colors.textLight }]}>
-          Sv. {langProg.level} • {langProg.totalXp} XP
-        </Text>
+        <Text style={[styles.langCardName, isActive && { color: colors.primary }]}>{lang.label}</Text>
+        <Text style={styles.langCardStats}>Sv. {langProg.level} • {langProg.totalXp} XP</Text>
+        <View style={styles.langCardProgressBg}>
+          <View style={[styles.langCardProgressFill, { width: `${lxpPercent}%`, backgroundColor: isActive ? colors.primary : colors.textLight }]} />
+        </View>
+        <Text style={styles.langCardPercent}>{Math.round(lxpPercent)}% Tamamlandı</Text>
       </TouchableOpacity>
     );
   };
 
-  const handleRefillHearts = () => {
-    if (progress.hearts >= 20) {
-      Alert.alert('Bilgi', 'Canın zaten tamamen dolu!');
-      return;
-    }
-    const success = refillHearts(400);
-    if (success) {
-      Alert.alert('Başarılı', '20 Can tamamen yenilendi!');
-    } else {
-      Alert.alert('Hata', 'Yeterli elmasın yok! Lütfen elmas satın al.');
-    }
-  };
-
-  const handleBuyGems = (amount: number) => {
-    Alert.alert(
-      "Satın Alma Başarılı",
-      `Hesabınıza ${amount} Elmas eklendi!`,
-      [{ text: "Tamam", onPress: () => addGems(amount) }]
-    );
-  };
+  const totalMascots = Object.keys(MASCOTS).length;
+  const unlockedCount = progress.unlockedMascots.length;
+  const percentage = Math.round((unlockedCount / totalMascots) * 100) || 0;
+  const equippedName = MASCOTS[progress.equippedMascot || 'classic']?.name || 'Classic Lingo';
 
   return (
-    <ScrollView style={[styles.container, { backgroundColor: colors.background }]}>
-      <View style={[styles.header, { backgroundColor: colors.background, borderBottomColor: colors.border }]}>
-        <TouchableOpacity 
-          style={[styles.avatarPlaceholder, { backgroundColor: colors.surface, borderColor: colors.border }]}
-          onPress={() => setShowAvatarModal(true)}
-          activeOpacity={0.8}
+    <View style={styles.container}>
+      <ScrollView contentContainerStyle={{ paddingBottom: 100 }} showsVerticalScrollIndicator={false}>
+        
+        {/* ── PREMIUM HEADER PROFILE ── */}
+        <LinearGradient 
+          colors={[colors.surface, colors.background]} 
+          style={[styles.header, { paddingTop: insets.top + 20 }]}
         >
-          <Text style={{ fontSize: 45 }}>{progress.avatar}</Text>
-          <View style={[styles.editBadge, { backgroundColor: colors.background, borderColor: colors.border }]}>
-            <Text style={{ fontSize: 10 }}>✏️</Text>
+          <View style={styles.settingsRow}>
+            <Text style={styles.headerTitle}>Profil</Text>
+            <TouchableOpacity onPress={() => navigation.navigate('Settings')}>
+              <Text style={{ fontSize: 24, color: colors.textMuted }}>⚙️</Text>
+            </TouchableOpacity>
           </View>
-        </TouchableOpacity>
-        <Text style={[styles.name, { color: colors.text }]}>{user?.displayName || 'Kullanıcı'}</Text>
-        <Text style={[styles.username, { color: colors.textLight }]}>{user?.email ? `@${user.email.split('@')[0]}` : '@kullanici'}</Text>
-      </View>
 
-      <View style={styles.statsContainer}>
-        <View style={[styles.statBox, { backgroundColor: colors.surface, borderColor: colors.border }]}>
-          <Text style={styles.statIcon}>🔥</Text>
-          <Text style={[styles.statValue, { color: colors.text }]}>{progress.languages?.[activeLanguage]?.streak || 0}</Text>
-          <Text style={[styles.statLabel, { color: colors.textLight }]}>Günlük Seri</Text>
-        </View>
-        <View style={[styles.statBox, { backgroundColor: colors.surface, borderColor: colors.border }]}>
-          <Text style={styles.statIcon}>⚡</Text>
-          <Text style={[styles.statValue, { color: colors.text }]}>{progress.languages?.[activeLanguage]?.totalXp || 0}</Text>
-          <Text style={[styles.statLabel, { color: colors.textLight }]}>Toplam XP</Text>
-        </View>
-      </View>
+          <View style={styles.profileInfo}>
+            <TouchableOpacity 
+              style={styles.avatarWrap}
+              onPress={() => navigation.navigate('Collection')}
+              activeOpacity={0.8}
+            >
+              <View style={styles.avatarCircle}>
+                <Mascot size={55} />
+              </View>
+              <View style={styles.editBadge}>
+                <Text style={{ fontSize: 12 }}>✏️</Text>
+              </View>
+            </TouchableOpacity>
 
-      <View style={styles.menu}>
-        {/* MARKET & ELMAS BUTONU */}
-        <TouchableOpacity 
-          style={[styles.shopBtn, { backgroundColor: colors.surface, borderColor: colors.border }]}
-          onPress={() => setShowShopModal(true)}
-        >
-          <View style={styles.shopBtnLeft}>
-            <Text style={styles.shopBtnIcon}>💎</Text>
-            <View>
-              <Text style={[styles.shopBtnTitle, { color: colors.text }]}>Market / Elmas</Text>
-              <Text style={[styles.shopBtnSub, { color: colors.textLight }]}>Şu an {progress.gems} Elmasın var</Text>
+            <Text style={styles.name}>{user?.displayName || 'Oyuncu'}</Text>
+            <Text style={styles.username}>{user?.email ? `@${user.email.split('@')[0]}` : '@oyuncu'}</Text>
+            
+            {/* Animated Level Progress Bar */}
+            <View style={styles.levelProgressContainer}>
+              <View style={styles.levelRow}>
+                <Text style={styles.levelText}>Seviye {currLevel}</Text>
+                <Text style={styles.xpText}>{currXp} / {reqXp} XP</Text>
+              </View>
+              <View style={styles.progressBarBg}>
+                <Animated.View style={[styles.progressBarFill, { width: xpAnim.interpolate({ inputRange: [0, 100], outputRange: ['0%', '100%'] }) }]} />
+              </View>
             </View>
+
+            <Text style={styles.joinDate}>Haziran 2026'da katıldı</Text>
           </View>
-          <Text style={[styles.chevron, { color: colors.primary }]}>Dükkana Git ›</Text>
+        </LinearGradient>
+
+        {/* ── STATS ROW ── */}
+        <View style={styles.statsContainer}>
+          <StatCard 
+            icon="🔥" 
+            value={progress.languages?.[activeLanguage]?.streak || 0} 
+            label="Günlük Seri" 
+            color={colors.streak} 
+          />
+          <StatCard 
+            icon="⚡" 
+            value={currXp} 
+            label="Toplam XP" 
+            color={colors.primary} 
+          />
+          <StatCard 
+            icon="🏆" 
+            value="Bronz" 
+            label="Mevcut Lig" 
+            color={colors.warning} 
+          />
+        </View>
+
+        {/* ── STORE BANNER ── */}
+        <TouchableOpacity 
+          style={styles.shopBtn}
+          onPress={() => navigation.navigate('Market')}
+          activeOpacity={0.9}
+        >
+          <LinearGradient colors={['#1c1c1e', '#00c6ff']} style={styles.shopGrad} start={{x:0, y:0}} end={{x:1, y:1}}>
+            <View style={styles.glassOverlay} />
+            <View style={styles.shopBtnLeft}>
+              <View style={{ marginRight: 8, marginLeft: -4, width: 75, height: 75, justifyContent: 'center', alignItems: 'center' }}>
+                <Mascot size={50} animated={false} />
+              </View>
+              <View>
+                <Text style={styles.shopBtnTitle}>Lingo Market</Text>
+                <Text style={styles.shopBtnSub}>{progress.gems} Elmasın var</Text>
+              </View>
+            </View>
+            <Text style={styles.chevron}>→</Text>
+          </LinearGradient>
         </TouchableOpacity>
 
-        <Text style={[styles.sectionTitle, { color: colors.textLight, marginTop: 20 }]}>ÖĞRENİLEN DİLLER</Text>
-        <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.langScroll}>
-          {allLanguages.map(renderLangCard)}
-        </ScrollView>
+        {/* ── COLLECTION BANNER ── */}
+        <TouchableOpacity 
+          style={styles.shopBtn}
+          onPress={() => navigation.navigate('Collection')}
+          activeOpacity={0.9}
+        >
+          <LinearGradient colors={['#1c1c1e', '#0A84FF']} style={styles.shopGrad} start={{x:0, y:0}} end={{x:1, y:1}}>
+            <View style={styles.glassOverlay} />
+            <View style={styles.shopBtnLeft}>
+              <View style={{ marginRight: 8, marginLeft: -4, width: 75, height: 75, justifyContent: 'center', alignItems: 'center' }}>
+                <Mascot size={50} animated={false} />
+              </View>
+              <View>
+                <Text style={styles.shopBtnTitle}>Koleksiyonum</Text>
+                <Text style={styles.shopBtnSub}>{unlockedCount}/{totalMascots} (%{percentage}) • {equippedName}</Text>
+              </View>
+            </View>
+            <Text style={styles.chevron}>→</Text>
+          </LinearGradient>
+        </TouchableOpacity>
 
-        <Text style={[styles.sectionTitle, { color: colors.textLight, marginTop: 25 }]}>HESAP AYARLARI</Text>
-        <TouchableOpacity 
-          style={[styles.menuItem, { borderBottomColor: colors.border }]}
-          onPress={() => navigation.navigate('Settings')}
-        >
-          <Text style={[styles.menuText, { color: colors.text }]}>⚙️ Ayarlar</Text>
-          <Text style={[styles.chevron, { color: colors.textLight }]}>›</Text>
-        </TouchableOpacity>
-        <TouchableOpacity 
-          style={[styles.menuItem, { borderBottomColor: colors.border }]}
-          onPress={() => navigation.navigate('Premium')}
-        >
-          <Text style={[styles.menuText, { color: colors.text }]}>👑 Premium'a Geç</Text>
-          <Text style={[styles.chevron, { color: colors.textLight }]}>›</Text>
-        </TouchableOpacity>
+        {/* ── LANGUAGES SECTION ── */}
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>ÖĞRENİLEN DİLLER</Text>
+          <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.langScroll}>
+            {allLanguages.map(renderLangCard)}
+          </ScrollView>
+        </View>
 
         <TouchableOpacity 
           style={[styles.logoutBtn, { borderColor: colors.error, backgroundColor: colors.surface }]}
@@ -174,283 +249,89 @@ const ProfileScreen = () => {
         >
           <Text style={[styles.logoutText, { color: colors.error }]}>🚪 Çıkış Yap</Text>
         </TouchableOpacity>
-      </View>
-
-      {/* Avatar Modal */}
-      <Modal visible={showAvatarModal} transparent animationType="slide">
-        <View style={styles.modalContainer}>
-          <View style={[styles.modalContent, { backgroundColor: colors.surface }]}>
-            <Text style={[styles.modalTitle, { color: colors.text }]}>Avatar Seç</Text>
-            <View style={styles.avatarGrid}>
-              {AVATARS.map((emoji) => (
-                <TouchableOpacity 
-                  key={emoji}
-                  style={[
-                    styles.avatarOption, 
-                    progress.avatar === emoji && { backgroundColor: colors.primary + '20', borderColor: colors.primary }
-                  ]}
-                  onPress={() => {
-                    setAvatar(emoji);
-                    setShowAvatarModal(false);
-                  }}
-                >
-                  <Text style={{ fontSize: 32 }}>{emoji}</Text>
-                </TouchableOpacity>
-              ))}
-            </View>
-            <TouchableOpacity
-              style={[styles.modalCloseBtn, { backgroundColor: colors.border }]}
-              onPress={() => setShowAvatarModal(false)}
-            >
-              <Text style={[styles.modalCloseBtnText, { color: colors.text }]}>Kapat</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      </Modal>
-
-      {/* Market / Shop Modal */}
-      <Modal visible={showShopModal} transparent animationType="slide">
-        <View style={styles.modalContainer}>
-          <View style={[styles.shopModalContent, { backgroundColor: colors.background }]}>
-            <View style={styles.shopHeader}>
-              <Text style={[styles.shopTitle, { color: colors.text }]}>Market 🏪</Text>
-              <TouchableOpacity onPress={() => setShowShopModal(false)}>
-                <Text style={{ fontSize: 24, color: colors.textLight }}>✖</Text>
-              </TouchableOpacity>
-            </View>
-            
-            <ScrollView showsVerticalScrollIndicator={false}>
-              {/* Can Yenileme */}
-              <Text style={[styles.shopSectionTitle, { color: colors.textLight }]}>CAN & ENERJİ</Text>
-              <TouchableOpacity 
-                style={[styles.shopItem, { backgroundColor: colors.surface, borderColor: colors.border }]}
-                onPress={handleRefillHearts}
-              >
-                <View style={styles.shopItemLeft}>
-                  <Text style={{ fontSize: 30 }}>❤️</Text>
-                  <View style={{ marginLeft: 10 }}>
-                    <Text style={[styles.shopItemTitle, { color: colors.text }]}>Canları Doldur</Text>
-                    <Text style={[styles.shopItemSub, { color: colors.textLight }]}>20 Canı anında geri kazan.</Text>
-                  </View>
-                </View>
-                <View style={[styles.shopPriceBox, { backgroundColor: colors.background, borderColor: colors.border }]}>
-                  <Text style={{ fontSize: 16 }}>💎</Text>
-                  <Text style={[styles.shopPriceText, { color: colors.text }]}>400</Text>
-                </View>
-              </TouchableOpacity>
-
-              {/* Elmas Paketleri */}
-              <Text style={[styles.shopSectionTitle, { color: colors.textLight, marginTop: 25 }]}>ELMAS PAKETLERİ</Text>
-              <View style={styles.diamondGrid}>
-                {[
-                  { amount: 500, price: '₺19.99', icon: '💎' },
-                  { amount: 1200, price: '₺39.99', icon: '💰' },
-                  { amount: 3000, price: '₺79.99', icon: '👑' },
-                  { amount: 10000, price: '₺199.99', icon: '🚀' },
-                ].map((pkg, idx) => (
-                  <TouchableOpacity 
-                    key={idx} 
-                    style={[styles.diamondCard, { backgroundColor: colors.surface, borderColor: colors.border }]}
-                    onPress={() => handleBuyGems(pkg.amount)}
-                  >
-                    <Text style={{ fontSize: 35, marginBottom: 5 }}>{pkg.icon}</Text>
-                    <Text style={[styles.diamondAmount, { color: colors.text }]}>{pkg.amount}</Text>
-                    <Text style={[styles.diamondLabel, { color: colors.textLight }]}>Elmas</Text>
-                    <View style={[styles.diamondPriceBox, { backgroundColor: colors.primary }]}>
-                      <Text style={styles.diamondPriceText}>{pkg.price}</Text>
-                    </View>
-                  </TouchableOpacity>
-                ))}
-              </View>
-            </ScrollView>
-          </View>
-        </View>
-      </Modal>
-
-    </ScrollView>
+      </ScrollView>
+    </View>
   );
 };
 
-const styles = StyleSheet.create({
-  container: { flex: 1 },
+export default ProfileScreen;
+
+const getStyles = (colors: any) => StyleSheet.create({
+  container: { flex: 1, backgroundColor: colors.background },
   header: {
-    alignItems: 'center',
-    paddingTop: 60,
-    paddingBottom: 25,
-    borderBottomWidth: 1,
+    paddingHorizontal: 20, paddingBottom: 30,
+    borderBottomLeftRadius: 30, borderBottomRightRadius: 30,
+    shadowColor: '#000', shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.1, shadowRadius: 10, elevation: 10,
   },
-  avatarPlaceholder: {
-    width: 90,
-    height: 90,
-    borderRadius: 45,
-    marginBottom: 10,
-    justifyContent: 'center',
-    alignItems: 'center',
+  settingsRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 },
+  headerTitle: { fontSize: 28, fontWeight: '800', color: colors.text, letterSpacing: 0.5 },
+  profileInfo: { alignItems: 'center' },
+  avatarWrap: { 
     position: 'relative',
-    borderWidth: 2,
+    shadowColor: colors.primary, shadowOpacity: 0.15, shadowRadius: 15, elevation: 6,
+  },
+  avatarCircle: {
+    width: 96, height: 96,
+    justifyContent: 'center', alignItems: 'center',
   },
   editBadge: {
-    position: 'absolute',
-    bottom: 0,
-    right: 0,
-    width: 26,
-    height: 26,
-    borderRadius: 13,
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderWidth: 1,
+    position: 'absolute', bottom: 0, right: 0,
+    width: 32, height: 32, borderRadius: 16,
+    backgroundColor: colors.card,
+    justifyContent: 'center', alignItems: 'center',
+    borderWidth: 2, borderColor: colors.border,
   },
-  name: { fontSize: 22, fontWeight: 'bold' },
-  username: { fontSize: 15, marginTop: 2 },
-  statsContainer: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    marginTop: -15,
-    gap: 15,
-    paddingHorizontal: 20,
-  },
+  name: { fontSize: 24, fontWeight: 'bold', color: colors.text, marginTop: 15, letterSpacing: -0.5 },
+  username: { fontSize: 15, color: colors.textLight, marginTop: 2, fontWeight: '500' },
+  joinDate: { fontSize: 13, color: colors.textMuted, marginTop: 15, fontWeight: '500' },
+  levelProgressContainer: { width: '85%', marginTop: 25 },
+  levelRow: { flexDirection: 'row', justifyContent: 'space-between', marginBottom: 8 },
+  levelText: { color: colors.text, fontWeight: '700', fontSize: 14 },
+  xpText: { color: colors.primary, fontWeight: '700', fontSize: 14 },
+  progressBarBg: { height: 12, backgroundColor: colors.border, borderRadius: 6, overflow: 'hidden' },
+  progressBarFill: { height: '100%', backgroundColor: colors.primary, borderRadius: 6 },
+  
+  statsContainer: { flexDirection: 'row', paddingHorizontal: 15, marginTop: 25, gap: 10 },
   statBox: {
-    padding: 15,
-    borderRadius: 16,
-    alignItems: 'center',
-    flex: 1,
-    borderWidth: 2,
-    borderBottomWidth: 4,
+    backgroundColor: colors.surface, paddingVertical: 15, paddingHorizontal: 10,
+    borderRadius: 20, alignItems: 'center',
+    shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.1, shadowRadius: 8, elevation: 5,
+    borderWidth: 1, borderColor: colors.border + '50'
   },
-  statIcon: { fontSize: 28, marginBottom: 5 },
-  statValue: { fontSize: 18, fontWeight: 'bold' },
-  statLabel: { fontSize: 13, marginTop: 2, fontWeight: '600' },
-  menu: { padding: 20 },
+  statIcon: { fontSize: 26, marginBottom: 8 },
+  statValue: { fontSize: 20, fontWeight: '800', marginBottom: 2 },
+  statLabel: { fontSize: 11, color: colors.textLight, fontWeight: '600', textTransform: 'uppercase' },
   
-  shopBtn: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    padding: 16,
-    borderRadius: 16,
-    borderWidth: 2,
-    borderBottomWidth: 4,
-  },
-  shopBtnLeft: { flexDirection: 'row', alignItems: 'center', gap: 12 },
-  shopBtnIcon: { fontSize: 28 },
-  shopBtnTitle: { fontSize: 16, fontWeight: 'bold' },
-  shopBtnSub: { fontSize: 13, marginTop: 2 },
-
-  sectionTitle: { fontSize: 13, fontWeight: 'bold', marginBottom: 12, marginLeft: 5, letterSpacing: 1 },
-  langScroll: { paddingRight: 20, gap: 12 },
+  shopBtn: { marginHorizontal: 20, marginTop: 20, borderRadius: 20, overflow: 'hidden', shadowColor: '#000', shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.15, shadowRadius: 10, elevation: 6 },
+  shopGrad: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', padding: 20 },
+  glassOverlay: { ...StyleSheet.absoluteFillObject, backgroundColor: 'rgba(255,255,255,0.05)' },
+  shopBtnLeft: { flexDirection: 'row', alignItems: 'center' },
+  shopBtnIcon: { fontSize: 32, marginRight: 15 },
+  shopBtnTitle: { fontSize: 18, fontWeight: 'bold', color: '#fff', marginBottom: 2 },
+  shopBtnSub: { fontSize: 13, color: 'rgba(255,255,255,0.8)', fontWeight: '500' },
+  chevron: { fontSize: 24, color: 'rgba(255,255,255,0.5)', fontWeight: '300' },
+  
+  section: { marginTop: 30 },
+  sectionTitle: { fontSize: 14, fontWeight: '700', color: colors.textLight, marginLeft: 20, marginBottom: 15, letterSpacing: 1 },
+  langScroll: { paddingHorizontal: 20, gap: 15 },
   langCard: {
-    width: 140,
-    padding: 15,
-    borderRadius: 16,
-    borderWidth: 2,
-    alignItems: 'center',
+    width: 160, backgroundColor: colors.surface, borderRadius: 24, padding: 20,
+    borderWidth: 2, borderColor: colors.border,
+    shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.05, shadowRadius: 5, elevation: 2
   },
-  langCardFlag: { fontSize: 32, marginBottom: 8 },
-  langCardName: { fontSize: 15, fontWeight: 'bold', marginBottom: 4 },
-  langCardStats: { fontSize: 12 },
-  menuItem: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    paddingVertical: 18,
-    borderBottomWidth: 1,
-    paddingHorizontal: 5,
+  langCardActive: { 
+    borderColor: colors.primary, 
+    borderWidth: 3,
+    backgroundColor: colors.surface,
+    elevation: 3,
   },
-  menuText: { fontSize: 16, fontWeight: '600' },
-  chevron: { fontSize: 15, fontWeight: 'bold' },
-  logoutBtn: {
-    marginTop: 30,
-    padding: 16,
-    borderRadius: 16,
-    alignItems: 'center',
-    borderWidth: 2,
-    borderBottomWidth: 4,
-  },
-  logoutText: { fontSize: 16, fontWeight: 'bold' },
+  langCardFlag: { fontSize: 40, marginBottom: 12 },
+  langCardName: { fontSize: 18, fontWeight: '700', color: colors.text, marginBottom: 4 },
+  langCardStats: { fontSize: 13, color: colors.textLight, fontWeight: '500', marginBottom: 12 },
+  langCardProgressBg: { height: 6, backgroundColor: colors.border, borderRadius: 3, overflow: 'hidden', marginBottom: 8 },
+  langCardProgressFill: { height: '100%', borderRadius: 3 },
+  langCardPercent: { fontSize: 11, color: colors.textMuted, fontWeight: '600' },
   
-  modalContainer: { flex: 1, backgroundColor: 'rgba(0,0,0,0.5)', justifyContent: 'flex-end' },
-  modalContent: {
-    borderTopLeftRadius: 30,
-    borderTopRightRadius: 30,
-    padding: 25,
-    minHeight: 400,
-  },
-  modalTitle: { fontSize: 20, fontWeight: 'bold', marginBottom: 20, textAlign: 'center' },
-  avatarGrid: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: 15,
-    justifyContent: 'center',
-  },
-  avatarOption: {
-    width: 65,
-    height: 65,
-    borderRadius: 32.5,
-    borderWidth: 2,
-    borderColor: 'transparent',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  modalCloseBtn: {
-    marginTop: 30,
-    padding: 16,
-    borderRadius: 16,
-    alignItems: 'center',
-  },
-  modalCloseBtnText: { fontSize: 16, fontWeight: 'bold' },
-
-  // Shop Styles
-  shopModalContent: {
-    flex: 0.9,
-    borderTopLeftRadius: 30,
-    borderTopRightRadius: 30,
-    padding: 25,
-  },
-  shopHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 },
-  shopTitle: { fontSize: 24, fontWeight: 'bold' },
-  shopSectionTitle: { fontSize: 13, fontWeight: 'bold', marginBottom: 15, letterSpacing: 1 },
-  shopItem: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    padding: 16,
-    borderRadius: 16,
-    borderWidth: 2,
-    borderBottomWidth: 4,
-    marginBottom: 15,
-  },
-  shopItemLeft: { flexDirection: 'row', alignItems: 'center' },
-  shopItemTitle: { fontSize: 16, fontWeight: 'bold' },
-  shopItemSub: { fontSize: 13, marginTop: 2 },
-  shopPriceBox: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 4,
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderRadius: 12,
-    borderWidth: 1,
-  },
-  shopPriceText: { fontSize: 15, fontWeight: 'bold' },
-  diamondGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: 15, justifyContent: 'space-between' },
-  diamondCard: {
-    width: '47%',
-    padding: 15,
-    borderRadius: 16,
-    borderWidth: 2,
-    borderBottomWidth: 4,
-    alignItems: 'center',
-    marginBottom: 15,
-  },
-  diamondAmount: { fontSize: 18, fontWeight: 'bold' },
-  diamondLabel: { fontSize: 13, marginBottom: 12 },
-  diamondPriceBox: {
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderRadius: 12,
-    width: '100%',
-    alignItems: 'center',
-  },
-  diamondPriceText: { color: '#FFF', fontWeight: 'bold', fontSize: 14 },
+  logoutBtn: { marginHorizontal: 20, marginTop: 40, marginBottom: 20, padding: 16, borderRadius: 16, borderWidth: 2, alignItems: 'center' },
+  logoutText: { fontSize: 16, fontWeight: '700' },
 });
-
-export default ProfileScreen;

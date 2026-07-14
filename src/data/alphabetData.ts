@@ -1,4 +1,4 @@
-export interface AlphabetLetter {
+﻿export interface AlphabetLetter {
   letter: string;
   sound: string;
   example?: string;

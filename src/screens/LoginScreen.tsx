@@ -68,7 +68,7 @@ const LoginScreen: React.FC<Props> = ({ navigation }) => {
         showsVerticalScrollIndicator={false}
       >
         <View style={styles.header}>
-          <Mascot size={150} style={{ marginBottom: 20 }} />
+          <Mascot mascotId="classic" size={150} animationState='idle' animated style={{ marginBottom: 20, marginLeft: 15 }} />
           <Text style={[styles.title, { color: colors.text }]}>Hoş Geldin!</Text>
           <Text style={[styles.subtitle, { color: colors.textLight }]}>Giriş yaparak öğrenmeye devam et.</Text>
         </View>

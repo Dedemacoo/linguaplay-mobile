@@ -9,15 +9,16 @@ import { useNavigation } from '@react-navigation/native';
 import { useProgressStore } from '../store/useProgressStore';
 import { PurchaseService, SUBSCRIPTION_PLANS } from '../services/PurchaseService';
 import * as Haptics from 'expo-haptics';
+import { Mascot } from '../components/Mascot';
 
 const { width } = Dimensions.get('window');
 
 const FEATURES = [
   { icon: '❤️', title: 'Sınırsız Can', desc: 'Hiçbir zaman ders kesme.' },
-  { icon: '📥', title: 'Çevrimdışı Dersler', desc: 'İnternetsiz çalış.' },
+  { icon: '📶', title: 'Çevrimdışı Dersler', desc: 'İnternetsiz çalış.' },
   { icon: '🚫', title: 'Reklamsız Deneyim', desc: 'Kesintisiz öğren.' },
-  { icon: '🤖', title: 'AI Telaffuz Koçu', desc: 'Sesini puanla ve geliştir.' },
-  { icon: '🏆', title: 'Özel Lig Rozeti', desc: 'Liderboard\'da öne çık.' },
+  { icon: 'mascot', title: 'AI Lingo', desc: 'Sesini puanla ve geliştir.' },
+  { icon: '👑', title: 'Özel Lig Rozeti', desc: 'Liderboard\'da öne çık.' },
 ];
 
 const PremiumScreen = () => {
@@ -107,8 +108,14 @@ const PremiumScreen = () => {
         <View style={styles.features}>
           {FEATURES.map((f, i) => (
             <View key={i} style={styles.featureRow}>
-              <Text style={styles.featureIcon}>{f.icon}</Text>
-              <View style={{ flex: 1 }}>
+              {f.icon === 'mascot' ? (
+                <View style={{ width: 40, height: 40, overflow: 'hidden' }}>
+                  <Mascot size={40} />
+                </View>
+              ) : (
+                <Text style={styles.featureIcon}>{f.icon}</Text>
+              )}
+              <View style={{ flex: 1, marginLeft: f.icon === 'mascot' ? 10 : 0 }}>
                 <Text style={styles.featureTitle}>{f.title}</Text>
                 <Text style={styles.featureDesc}>{f.desc}</Text>
               </View>

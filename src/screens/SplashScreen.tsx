@@ -1,9 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { View, StyleSheet, Animated, Dimensions, StatusBar, Text } from 'react-native';
+import { View, StyleSheet, Animated, Dimensions, StatusBar } from 'react-native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../navigation/AppNavigator';
 import { useAuth } from '../context/AuthContext';
 import SoundManager from '../utils/SoundManager';
+import { LinearGradient } from 'expo-linear-gradient';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Splash'>;
 
@@ -13,12 +14,8 @@ const SplashScreen: React.FC<Props> = ({ navigation }) => {
   const { user, isLoading } = useAuth();
   const [animationDone, setAnimationDone] = useState(false);
 
-  // Logo soldan gelecek şekilde ayarlandı
-  const logoTranslateX = useRef(new Animated.Value(-width * 1.5)).current;
-  const logoOpacity = useRef(new Animated.Value(0)).current;
-  
-  const textOpacity = useRef(new Animated.Value(0)).current;
-  const textTranslateY = useRef(new Animated.Value(30)).current;
+  const fadeAnim = useRef(new Animated.Value(0)).current;
+  const progressAnim = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
     StatusBar.setBarStyle('light-content');
@@ -26,44 +23,22 @@ const SplashScreen: React.FC<Props> = ({ navigation }) => {
     // Açılış sesini çal
     SoundManager.init().then(() => SoundManager.playStartup());
 
-    // 1. Logonun soldan kayarak yavaşça gelmesi
-    Animated.parallel([
-      Animated.spring(logoTranslateX, {
-        toValue: 0,
-        friction: 6,
-        tension: 15, // Yavaş ve pürüzsüz geliş
-        useNativeDriver: true,
-      }),
-      Animated.timing(logoOpacity, {
-        toValue: 1,
-        duration: 1200,
-        useNativeDriver: true,
-      }),
-    ]).start();
+    // Fade in the whole screen
+    Animated.timing(fadeAnim, {
+      toValue: 1,
+      duration: 1000,
+      useNativeDriver: true,
+    }).start();
 
-    // 2. Yazıların gecikmeli ve zarif çıkışı
-    Animated.sequence([
-      Animated.delay(1000), 
-      Animated.parallel([
-        Animated.timing(textOpacity, {
-          toValue: 1,
-          duration: 1200, 
-          useNativeDriver: true,
-        }),
-        Animated.spring(textTranslateY, {
-          toValue: 0,
-          friction: 8,
-          tension: 15,
-          useNativeDriver: true,
-        }),
-      ])
-    ]).start();
-
-    const timer = setTimeout(() => {
+    // Loading bar animation
+    Animated.timing(progressAnim, {
+      toValue: 100,
+      duration: 3500, // 3.5 seconds loading time
+      useNativeDriver: false,
+    }).start(() => {
       setAnimationDone(true);
-    }, 4500); 
-    
-    return () => clearTimeout(timer);
+    });
+
   }, []);
 
   useEffect(() => {
@@ -76,33 +51,37 @@ const SplashScreen: React.FC<Props> = ({ navigation }) => {
     }
   }, [animationDone, isLoading, user, navigation]);
 
+  const progressWidth = progressAnim.interpolate({
+    inputRange: [0, 100],
+    outputRange: ['0%', '100%'],
+  });
+
   return (
     <View style={styles.container}>
       <StatusBar translucent backgroundColor="transparent" />
 
-      {/* Devasa logo */}
       <Animated.Image
-        source={require('../../assets/logo.png')}
+        source={require('../../assets/lingo_splash.png')}
         style={[
-          styles.logo,
-          {
-            opacity: logoOpacity,
-            transform: [
-              { translateX: logoTranslateX },
-            ],
-          },
+          styles.backgroundImage,
+          { opacity: fadeAnim }
         ]}
         resizeMode="cover"
       />
       
-      {/* Yazılar logonun üzerine veya hemen altına konumlanır */}
-      <Animated.View style={[styles.textContainer, { opacity: textOpacity, transform: [{ translateY: textTranslateY }] }]}>
-        <Text style={styles.title}>
-          Lingum
-        </Text>
-        <Text style={styles.subtitle}>
-          Yeni Bir Dil, Yeni Bir Dünya.
-        </Text>
+      {/* Loading Bar at the bottom */}
+      <Animated.View style={[styles.loadingWrapper, { opacity: fadeAnim }]}>
+        <View style={styles.loadingContainer}>
+          <View style={styles.progressBarBg}>
+            <Animated.View style={[styles.progressBarFill, { width: progressWidth }]}>
+              <LinearGradient 
+                colors={['#8B5CF6', '#D946EF']} 
+                start={{x: 0, y: 0}} end={{x: 1, y: 0}} 
+                style={StyleSheet.absoluteFill} 
+              />
+            </Animated.View>
+          </View>
+        </View>
       </Animated.View>
     </View>
   );
@@ -112,37 +91,37 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#080C16',
-    justifyContent: 'center',
-    alignItems: 'center',
   },
-  logo: {
-    width: width * 1.2, // Ekran genişliğinden bile büyük, tamamen kaplar
-    height: width * 1.2,
-    position: 'absolute', // Ekranın arka planını/merkezini kaplaması için
-    top: height * 0.1, // Ekranın ortasına veya hafif üstüne yerleşir
-  },
-  textContainer: {
-    alignItems: 'center',
+  backgroundImage: {
+    width: '100%',
+    height: '100%',
     position: 'absolute',
-    bottom: height * 0.15, // Ekranın alt kısmına hizalar
   },
-  title: {
-    color: '#FFFFFF',
-    fontSize: 44,
-    fontWeight: 'bold',
-    letterSpacing: 2,
-    marginBottom: 8,
-    textShadowColor: 'rgba(0, 0, 0, 0.75)',
-    textShadowOffset: { width: -1, height: 1 },
-    textShadowRadius: 10,
+  loadingWrapper: {
+    position: 'absolute',
+    bottom: height * 0.1, // Ekranın %10 yukarısı (alt kısım)
+    width: '100%',
+    alignItems: 'center',
   },
-  subtitle: {
-    color: '#8CA5CE',
-    fontSize: 16,
-    letterSpacing: 0.5,
-    textShadowColor: 'rgba(0, 0, 0, 0.75)',
-    textShadowOffset: { width: -1, height: 1 },
-    textShadowRadius: 10,
+  loadingContainer: {
+    width: width * 0.7,
+    height: 6,
+    borderRadius: 3,
+    backgroundColor: 'rgba(255,255,255,0.15)',
+    overflow: 'hidden',
+  },
+  progressBarBg: {
+    width: '100%',
+    height: '100%',
+  },
+  progressBarFill: {
+    height: '100%',
+    borderRadius: 3,
+    shadowColor: '#D946EF',
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 1,
+    shadowRadius: 10,
+    elevation: 5,
   },
 });
 

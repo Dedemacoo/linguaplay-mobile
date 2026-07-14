@@ -14,7 +14,13 @@ import * as Haptics from 'expo-haptics';
 import * as Speech from 'expo-speech';
 import { useNavigation } from '@react-navigation/native';
 import SoundManager from '../utils/SoundManager';
-import { ExpoSpeechRecognitionModule, useSpeechRecognitionEvent } from 'expo-speech-recognition';
+import LottieView from 'lottie-react-native';
+import { TTSAudioService } from '../services/AudioService';
+
+const ExpoSpeechRecognitionModule = { requestPermissionsAsync: async () => ({ granted: true }), start: () => {}, stop: () => {} };
+const useSpeechRecognitionEvent = (e: any, cb: any) => {};
+
+import { Mascot } from '../components/Mascot';
 
 const { width } = Dimensions.get('window');
 
@@ -382,7 +388,7 @@ const SpeakingGame: React.FC<{ lang: string; category: string; colors: any; onEx
   const timerRef = useRef<any>(null);
 
   // STT events — hook düzeyinde çağrılmalı
-  useSpeechRecognitionEvent('result', (event) => {
+  useSpeechRecognitionEvent('result', (event: any) => {
     const text = event.results?.[0]?.transcript || '';
     setTranscript(text);
     if (text) {
@@ -446,7 +452,8 @@ const SpeakingGame: React.FC<{ lang: string; category: string; colors: any; onEx
 
   const startRecording = async () => {
     if (isRecording || resultState) return;
-    const { status } = await ExpoSpeechRecognitionModule.requestPermissionsAsync();
+    const permResult = await ExpoSpeechRecognitionModule.requestPermissionsAsync();
+    const status = (permResult as any).status ?? (permResult.granted ? 'granted' : 'denied');
     if (status !== 'granted') return;
     setTranscript('');
     setIsRecording(true);
@@ -825,45 +832,25 @@ const GamesScreen: React.FC<any> = () => {
                   <CategoryPicker selected={selectedCategory} onSelect={setSelectedCategory} colors={colors} />
 
                   {/* AI Destekli Özellikler */}
-                  <Text style={[styles.sectionLabel, { color: colors.textLight, marginTop: 20 }]}>🤖 AI DESTEKLİ</Text>
+                  <Text style={[styles.sectionLabel, { color: colors.textLight, marginTop: 20 }]}>🤖 AI DESTEKLİ EĞİTMEN</Text>
                   <TouchableOpacity
-                    style={[styles.gameCard, { backgroundColor: '#8B5CF620', borderColor: '#8B5CF6' }]}
-                    onPress={() => (navigation as any).navigate('AIChat')}
+                    style={[styles.gameCard, { backgroundColor: '#0A84FF20', borderColor: '#0A84FF', paddingVertical: 25 }]}
+                    onPress={() => (navigation as any).navigate('AITutor')}
                     activeOpacity={0.82}
                   >
-                    <View style={[styles.gameCardIconBox, { backgroundColor: '#8B5CF630' }]}>
-                      <Text style={{ fontSize: 38 }}>✨</Text>
+                    <View style={[styles.gameCardIconBox, { backgroundColor: '#0A84FF30', width: 80, height: 80 }]}>
+                      <Mascot mascotId="classic" size={85} style={{ marginLeft: 8 }} />
                     </View>
                     <View style={styles.gameCardInfo}>
                       <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
-                        <Text style={[styles.gameCardTitle, { color: colors.text }]}>Arjin'e Sor</Text>
-                        <View style={[styles.gameBadge, { backgroundColor: '#8B5CF6' }]}>
-                          <Text style={styles.gameBadgeText}>YENİ</Text>
+                        <Text style={[styles.gameCardTitle, { color: colors.text, fontSize: 20 }]}>Lingo AI Eğitmen</Text>
+                        <View style={[styles.gameBadge, { backgroundColor: '#0A84FF' }]}>
+                          <Text style={styles.gameBadgeText}>PREMIUM</Text>
                         </View>
                       </View>
-                      <Text style={[styles.gameCardDesc, { color: colors.textLight }]}>AI koçumuz Arjin ile {langLabel} pratik yap</Text>
+                      <Text style={[styles.gameCardDesc, { color: colors.textLight, fontSize: 13, marginTop: 6 }]}>Konuşma pratikleri, role-play sahneleri ve tamamen sana özel akıllı bir öğretmen.</Text>
                     </View>
-                    <Text style={[styles.gameArrow, { color: '#8B5CF6' }]}>▶</Text>
-                  </TouchableOpacity>
-
-                  <TouchableOpacity
-                    style={[styles.gameCard, { backgroundColor: '#22C55E20', borderColor: '#22C55E' }]}
-                    onPress={() => (navigation as any).navigate('Speaking')}
-                    activeOpacity={0.82}
-                  >
-                    <View style={[styles.gameCardIconBox, { backgroundColor: '#22C55E30' }]}>
-                      <Text style={{ fontSize: 38 }}>🎙️</Text>
-                    </View>
-                    <View style={styles.gameCardInfo}>
-                      <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
-                        <Text style={[styles.gameCardTitle, { color: colors.text }]}>Telaffuz Pratiği</Text>
-                        <View style={[styles.gameBadge, { backgroundColor: '#22C55E' }]}>
-                          <Text style={styles.gameBadgeText}>YENİ</Text>
-                        </View>
-                      </View>
-                      <Text style={[styles.gameCardDesc, { color: colors.textLight }]}>Kelimeleri dinle, tekrarla, AI puanlasın</Text>
-                    </View>
-                    <Text style={[styles.gameArrow, { color: '#22C55E' }]}>▶</Text>
+                    <Text style={[styles.gameArrow, { color: '#0A84FF' }]}>▶</Text>
                   </TouchableOpacity>
 
                   <Text style={[styles.sectionLabel, { color: colors.textLight, marginTop: 20 }]}>OYUNLAR</Text>

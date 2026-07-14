@@ -6,7 +6,10 @@ import OpenAI from 'openai';
 admin.initializeApp();
 
 const client = new textToSpeech.TextToSpeechClient();
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY || '' });
+const openai = new OpenAI({ 
+  apiKey: process.env.OPENAI_API_KEY || '',
+  baseURL: 'https://generativelanguage.googleapis.com/v1beta/openai/'
+});
 
 export const getTTS = functions.https.onCall(async (data, context) => {
   // Ensure user is authenticated
@@ -78,7 +81,7 @@ Rules:
 
   try {
     const completion = await openai.chat.completions.create({
-      model: 'gpt-4o-mini',
+      model: 'gemini-1.5-flash',
       messages: [
         { role: 'system', content: systemPrompt },
         ...messages.slice(-10),
@@ -120,7 +123,7 @@ export const analyzeProgress = functions.https.onCall(async (data, context) => {
 
   try {
     const completion = await openai.chat.completions.create({
-      model: 'gpt-4o-mini',
+      model: 'gemini-1.5-flash',
       messages: [{ role: 'user', content: prompt }],
       max_tokens: 350,
       temperature: 0.7,

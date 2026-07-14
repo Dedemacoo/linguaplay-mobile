@@ -108,15 +108,7 @@ export class FriendService {
     const userDoc = await getDoc(doc(db, 'users', uid));
     const friendIds: string[] = userDoc.data()?.friendIds || [];
     if (friendIds.length === 0) {
-      return [{
-        uid: 'mock_test_bot_999',
-        name: '🤖 AI Test Bot',
-        username: 'testbot',
-        avatar: '🤖',
-        xp: 15000,
-        streak: 365,
-        league: 'Şampiyon'
-      }];
+      return [];
     }
 
     const snapshots = await Promise.all(

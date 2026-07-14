@@ -6,8 +6,6 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../navigation/AppNavigator';
 import { useThemeColors } from '../theme/colors';
 import { useLanguageStore } from '../store/useLanguageStore';
-import { lessonsByLanguage } from '../data/lessonContent';
-
 type Props = NativeStackScreenProps<RootStackParamList, 'IntroLesson'>;
 
 const IntroLessonScreen: React.FC<Props> = ({ navigation }) => {
@@ -24,8 +22,9 @@ const IntroLessonScreen: React.FC<Props> = ({ navigation }) => {
     ]).start();
   }, []);
 
-  const handleContinue = () => {
-    const allLessons = lessonsByLanguage[activeLanguage] || [];
+  const handleContinue = async () => {
+    const { ContentService } = require('../services/ContentService');
+    const allLessons = await ContentService.getAllLessonsData(activeLanguage);
     if (allLessons.length > 0) {
       navigation.replace('Lesson', { lessonId: allLessons[0].id });
     } else {

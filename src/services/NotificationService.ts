@@ -72,76 +72,71 @@ export class NotificationService {
   static async scheduleDailyReminder(hour: number, minute: number): Promise<void> {
     await this.cancelAllScheduled();
 
-    // 14 gün boyunca her güne farklı bir flörtöz yunus mesajı kur
-    for (let i = 0; i < 14; i++) {
-      const msg = REMINDER_MESSAGES[i % REMINDER_MESSAGES.length]; // Sırayla al, böylece hep farklı olur
-      
-      const triggerDate = new Date();
-      triggerDate.setDate(triggerDate.getDate() + i);
-      triggerDate.setHours(hour, minute, 0, 0);
+    // The very next reminder date (Today or Tomorrow depending on current time)
+    const nextTrigger = new Date();
+    nextTrigger.setHours(hour, minute, 0, 0);
+    if (nextTrigger.getTime() <= Date.now()) {
+      nextTrigger.setDate(nextTrigger.getDate() + 1); // move to tomorrow if already passed today
+    }
 
-      // Eğer bugünün saati geçmişse bugünü atla
-      if (i === 0 && triggerDate.getTime() <= Date.now()) continue;
-
+    // 1. 10-15 min pre-reminder
+    const preDate = new Date(nextTrigger.getTime() - 15 * 60000);
+    if (preDate.getTime() > Date.now()) {
       await Notifications.scheduleNotificationAsync({
         content: {
-          title: msg.title,
-          body: msg.body,
+          title: 'Süsleniyorum... 🐬',
+          body: 'Lingo seni bekliyor, derse hazır mısın?',
           sound: 'default',
-          data: { type: 'daily_reminder' },
         },
         trigger: {
           type: Notifications.SchedulableTriggerInputTypes.CALENDAR,
-          year: triggerDate.getFullYear(),
-          month: triggerDate.getMonth() + 1,
-          day: triggerDate.getDate(),
-          hour: hour,
-          minute: minute,
+          year: preDate.getFullYear(),
+          month: preDate.getMonth() + 1,
+          day: preDate.getDate(),
+          hour: preDate.getHours(),
+          minute: preDate.getMinutes(),
         },
       });
+    }
 
-      // 15 dakika öncesi "Pre-reminder"
-      const preDate = new Date(triggerDate.getTime() - 15 * 60000);
-      if (preDate.getTime() > Date.now()) {
-        await Notifications.scheduleNotificationAsync({
-          content: {
-            title: 'Süsleniyorum... 🐬💄',
-            body: `Birazdan ders zamanı! ${String(hour).padStart(2, '0')}:${String(minute).padStart(2, '0')}'de seni bekliyorum.`,
-            sound: 'default',
-            data: { type: 'pre_reminder' },
-          },
-          trigger: {
-            type: Notifications.SchedulableTriggerInputTypes.CALENDAR,
-            year: preDate.getFullYear(),
-            month: preDate.getMonth() + 1,
-            day: preDate.getDate(),
-            hour: preDate.getHours(),
-            minute: preDate.getMinutes(),
-          },
-        });
-      }
+    // 2. Exact lesson time reminder (Flirtatious)
+    const flirtMsg = REMINDER_MESSAGES[Math.floor(Math.random() * REMINDER_MESSAGES.length)];
+    await Notifications.scheduleNotificationAsync({
+      content: {
+        title: flirtMsg.title,
+        body: flirtMsg.body,
+        sound: 'default',
+      },
+      trigger: {
+        type: Notifications.SchedulableTriggerInputTypes.CALENDAR,
+        year: nextTrigger.getFullYear(),
+        month: nextTrigger.getMonth() + 1,
+        day: nextTrigger.getDate(),
+        hour: nextTrigger.getHours(),
+        minute: nextTrigger.getMinutes(),
+      },
+    });
 
-      // 2 saat sonrası "Inactivity Nudge"
-      const nudgeDate = new Date(triggerDate.getTime() + 2 * 3600000);
-      const nudgeMsg = INACTIVITY_MESSAGES[Math.floor(Math.random() * INACTIVITY_MESSAGES.length)];
-      if (nudgeDate.getTime() > Date.now()) {
-        await Notifications.scheduleNotificationAsync({
-          content: {
-            title: nudgeMsg.title,
-            body: nudgeMsg.body,
-            sound: 'default',
-            data: { type: 'inactivity_nudge' },
-          },
-          trigger: {
-            type: Notifications.SchedulableTriggerInputTypes.CALENDAR,
-            year: nudgeDate.getFullYear(),
-            month: nudgeDate.getMonth() + 1,
-            day: nudgeDate.getDate(),
-            hour: nudgeDate.getHours(),
-            minute: nudgeDate.getMinutes(),
-          },
-        });
-      }
+    // 3. Inactivity reminders every 24h for 14 days (Fragile/Broken-hearted)
+    for (let i = 1; i <= 14; i++) {
+      const fragileDate = new Date(nextTrigger.getTime() + i * 24 * 3600000);
+      const fragileMsg = INACTIVITY_MESSAGES[i % INACTIVITY_MESSAGES.length];
+      
+      await Notifications.scheduleNotificationAsync({
+        content: {
+          title: fragileMsg.title,
+          body: fragileMsg.body,
+          sound: 'default',
+        },
+        trigger: {
+          type: Notifications.SchedulableTriggerInputTypes.CALENDAR,
+          year: fragileDate.getFullYear(),
+          month: fragileDate.getMonth() + 1,
+          day: fragileDate.getDate(),
+          hour: fragileDate.getHours(),
+          minute: fragileDate.getMinutes(),
+        },
+      });
     }
 
     await AsyncStorage.setItem(REMINDER_KEY, JSON.stringify({ hour, minute }));

@@ -1,41 +1,131 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Switch, Alert, Platform, StatusBar, Modal, FlatList } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Switch, Alert, Platform, StatusBar, Modal } from 'react-native';
 import { useThemeColors } from '../theme/colors';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../navigation/AppNavigator';
-import { useProgressStore } from '../store/useProgressStore';
 import { useTheme, ThemeMode } from '../context/ThemeContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useEffect } from 'react';
+import { NotificationService } from '../services/NotificationService';
+import DateTimePicker from '@react-native-community/datetimepicker';
+import { useLanguageStore, LanguageKey } from '../store/useLanguageStore';
 
-import * as Haptics from 'expo-haptics';
+const LANG_LABELS: Record<LanguageKey, string> = {
+  kurdish: 'Kürtçe', turkish: 'Türkçe', english: 'İngilizce', french: 'Fransızca',
+  spanish: 'İspanyolca', german: 'Almanca', italian: 'İtalyanca', japanese: 'Japonca',
+  korean: 'Korece', russian: 'Rusça', chinese: 'Çince', arabic: 'Arapça',
+  portuguese: 'Portekizce', dutch: 'Felemenkçe'
+};
+
+import { useLingoStore, AIPersonality, AIExpressionStyle, VoiceType } from '../store/useLingoStore';
+
+const PERSONALITY_LABELS: Record<AIPersonality, string> = {
+  friendly: 'Dostane', strict: 'Disiplinli', funny: 'Eğlenceli', academic: 'Akademik'
+};
+
+const EXPRESSION_LABELS: Record<AIExpressionStyle, string> = {
+  casual: 'Günlük', formal: 'Resmi', encouraging: 'Cesaretlendirici'
+};
+
+const VOICE_LABELS: Record<VoiceType, string> = {
+  male_1: 'Erkek 1 (Kalın)', male_2: 'Erkek 2 (Genç)', female_1: 'Kadın 1 (İnce)', female_2: 'Kadın 2 (Olgun)'
+};
+
 const SettingsScreen = () => {
   const colors = useThemeColors();
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   const { themeMode, setThemeMode } = useTheme();
+  const { activeLanguage, setActiveLanguage } = useLanguageStore();
+  const { personality, expressionStyle, voice, assistantVoice, setPersonality, setExpressionStyle, setVoice, setAssistantVoice } = useLingoStore();
 
   const [soundEnabled, setSoundEnabled] = useState(true);
   const [notificationsEnabled, setNotificationsEnabled] = useState(true);
+  const [winkEnabled, setWinkEnabled] = useState(true);
 
   // States for Reminder Time Modal
   const [showTimeModal, setShowTimeModal] = useState(false);
   const [reminderTime, setReminderTime] = useState('20:00');
-  const times = ['08:00', '12:00', '18:00', '20:00', '22:00'];
+  const [dateValue, setDateValue] = useState(new Date());
+
+  // States for Daily XP Goal Modal
+  const [showGoalModal, setShowGoalModal] = useState(false);
+  const [dailyGoal, setDailyGoal] = useState('500');
+  const goals = ['500', '1000', '1500', '2000', '5000'];
+
+  // States for Language Modal
+  const [showLangModal, setShowLangModal] = useState(false);
+  const availableLangs: LanguageKey[] = ['english', 'kurdish', 'spanish', 'french', 'german', 'turkish'];
+
+  // States for Lingo Modals
+  const [showPersonalityModal, setShowPersonalityModal] = useState(false);
+  const [showExpressionModal, setShowExpressionModal] = useState(false);
+  const [showVoiceModal, setShowVoiceModal] = useState(false);
+  const [showAssistantVoiceModal, setShowAssistantVoiceModal] = useState(false);
+  const personalities: AIPersonality[] = ['friendly', 'strict', 'funny', 'academic'];
+  const expressions: AIExpressionStyle[] = ['casual', 'formal', 'encouraging'];
+  const voices: VoiceType[] = ['male_1', 'male_2', 'female_1', 'female_2'];
 
   useEffect(() => {
     AsyncStorage.getItem('@reminder_time').then(val => {
       if (val) setReminderTime(val);
+    });
+    AsyncStorage.getItem('@daily_goal').then(val => {
+      if (val) setDailyGoal(val);
     });
   }, []);
 
   const saveReminderTime = async (t: string) => {
     setReminderTime(t);
     await AsyncStorage.setItem('@reminder_time', t);
-    setShowTimeModal(false);
+    const [h, m] = t.split(':').map(Number);
+    await NotificationService.scheduleDailyReminder(h, m);
+  };
+
+  const handleOpenTimePicker = () => {
+    const [h, m] = reminderTime.split(':').map(Number);
+    const d = new Date();
+    d.setHours(h, m, 0, 0);
+    setDateValue(d);
+    setShowTimeModal(true);
+  };
+
+  const onChangeTime = (event: any, selectedDate?: Date) => {
+    if (Platform.OS === 'android') {
+      setShowTimeModal(false);
+    }
+    if (selectedDate) {
+      setDateValue(selectedDate);
+      if (event.type === 'set' || Platform.OS === 'ios') {
+        const h = selectedDate.getHours();
+        const m = selectedDate.getMinutes();
+        const t = `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`;
+        saveReminderTime(t);
+      }
+    }
+  };
+
+  const saveDailyGoal = async (g: string) => {
+    setDailyGoal(g);
+    await AsyncStorage.setItem('@daily_goal', g);
+    setShowGoalModal(false);
   };
 
   const showComingSoon = () => Alert.alert("Yakında", "Bu özellik yakında eklenecek!");
+
+  const handleLogoutAll = () => {
+    Alert.alert(
+      "Tüm Cihazlardan Çıkış",
+      "Bütün oturumlarınızı kapatmak istediğinize emin misiniz?",
+      [
+        { text: "İptal", style: "cancel" },
+        { 
+          text: "Çıkış Yap", 
+          style: "destructive",
+          onPress: () => navigation.replace('Transition', { targetRoute: 'Login', message: 'Çıkış Yapılıyor...' })
+        }
+      ]
+    );
+  };
 
   const cycleTheme = () => {
     const modes: ThemeMode[] = ['system', 'light', 'dark'];
@@ -45,9 +135,9 @@ const SettingsScreen = () => {
 
   const getThemeLabel = (mode: ThemeMode) => {
     switch (mode) {
-      case 'system': return 'Sistem';
+      case 'system': return 'Otomatik';
       case 'light': return 'Açık';
-      case 'dark': return 'Koyu';
+      case 'dark': return 'Karanlık';
     }
   };
 
@@ -77,70 +167,256 @@ const SettingsScreen = () => {
         <View style={{ width: 40 }} />
       </View>
 
-      <ScrollView contentContainerStyle={styles.content}>
-        <Text style={[styles.sectionTitle, { color: colors.textLight }]}>BİLDİRİMLER</Text>
+      <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
+        
+        {/* ── BİLDİRİMLER VE HEDEFLER ── */}
+        <Text style={[styles.sectionTitle, { color: colors.textLight }]}>BİLDİRİMLER & HEDEFLER</Text>
         <View style={[styles.sectionGroup, { borderColor: colors.border }]}>
-          {renderItem('Hatırlatıcı Saati', '⏰', () => setShowTimeModal(true), <Text style={[styles.valueText, { color: colors.textLight }]}>{reminderTime}</Text>)}
+          {renderItem('Hatırlatıcı Saati', '⏰', handleOpenTimePicker, <Text style={[styles.valueText, { color: colors.textLight }]}>{reminderTime}</Text>)}
+          {renderItem('Günlük XP Hedefi', '🎯', () => setShowGoalModal(true), <Text style={[styles.valueText, { color: colors.primary }]}>{dailyGoal} XP</Text>)}
         </View>
 
-        <Text style={[styles.sectionTitle, { color: colors.textLight }]}>HESAP</Text>
+        {/* ── TERCİHLER ── */}
+        <Text style={[styles.sectionTitle, { color: colors.textLight }]}>TERCİHLER</Text>
+        <View style={[styles.sectionGroup, { borderColor: colors.border }]}>
+          {renderItem('Uygulama Dili', '🌍', showComingSoon, <Text style={[styles.valueText, { color: colors.textLight }]}>Türkçe</Text>)}
+          {renderItem('Öğrenilen Dil', '📚', () => setShowLangModal(true), <Text style={[styles.valueText, { color: colors.textLight }]}>{LANG_LABELS[activeLanguage]}</Text>)}
+          {renderItem('Tema', '🎨', cycleTheme, <Text style={[styles.valueText, { color: colors.primary }]}>{getThemeLabel(themeMode)}</Text>)}
+          {renderItem('Ses Efektleri', '🔊', () => setSoundEnabled(!soundEnabled), <Switch value={soundEnabled} onValueChange={setSoundEnabled} trackColor={{ true: colors.primary }} />)}
+          {renderItem('Bildirimler', '🔔', () => setNotificationsEnabled(!notificationsEnabled), <Switch value={notificationsEnabled} onValueChange={setNotificationsEnabled} trackColor={{ true: colors.primary }} />)}
+        </View>
+
+        {/* ── LINGUAPLAY+ ── */}
+        <Text style={[styles.sectionTitle, { color: colors.textLight }]}>✨ LINGUAPLAY+</Text>
+        <View style={[styles.sectionGroup, { borderColor: colors.border }]}>
+          {renderItem('Premium Abonelik', '💎', () => navigation.navigate('Premium'))}
+          {renderItem('Satın Alımları Geri Yükle', '🔄', () => navigation.navigate('Premium'))}
+          {renderItem('Premium Avantajları', '⭐', () => navigation.navigate('Premium'))}
+        </View>
+
+        {/* ── LINGO AYARLARI ── */}
+        <Text style={[styles.sectionTitle, { color: colors.textLight }]}>🐬 LINGO AYARLARI</Text>
+        <View style={[styles.sectionGroup, { borderColor: colors.border }]}>
+          {renderItem('Kişilik', '🧠', () => setShowPersonalityModal(true), <Text style={[styles.valueText, { color: colors.primary }]}>{PERSONALITY_LABELS[personality]}</Text>)}
+          {renderItem('İfade Tarzı', '🎭', () => setShowExpressionModal(true), <Text style={[styles.valueText, { color: colors.primary }]}>{EXPRESSION_LABELS[expressionStyle]}</Text>)}
+          {renderItem('Göz Kırpma Animasyonu', '😉', () => setWinkEnabled(!winkEnabled), <Switch value={winkEnabled} onValueChange={setWinkEnabled} trackColor={{ true: colors.primary }} />)}
+          {renderItem('Ses', '🎙️', () => setShowVoiceModal(true), <Text style={[styles.valueText, { color: colors.primary }]}>{VOICE_LABELS[voice]}</Text>)}
+          {renderItem('Asistan Sesi', '🤖', () => setShowAssistantVoiceModal(true), <Text style={[styles.valueText, { color: colors.primary }]}>{VOICE_LABELS[assistantVoice]}</Text>)}
+          {renderItem('Animasyonlar', '🎬', showComingSoon)}
+          {renderItem('Selamlamalar', '👋', showComingSoon)}
+        </View>
+
+        {/* ── HESAP & GÜVENLİK ── */}
+        <Text style={[styles.sectionTitle, { color: colors.textLight }]}>🔒 HESAP & GÜVENLİK</Text>
         <View style={[styles.sectionGroup, { borderColor: colors.border }]}>
           {renderItem('Profil Düzenle', '👤', () => navigation.navigate('EditProfile'))}
           {renderItem('Şifre Değiştir', '🔒', () => navigation.navigate('ChangePassword'))}
           {renderItem('E-posta Değiştir', '📧', () => navigation.navigate('EditProfile'))}
+          {renderItem('İki Faktörlü Doğrulama', '🛡️', () => navigation.navigate('Security'))}
+          {renderItem('Cihazlar', '📱', () => navigation.navigate('Security'))}
+          {renderItem('Oturumlar', '⏱️', () => navigation.navigate('Security'))}
+          {renderItem('Tüm Cihazlardan Çıkış Yap', '🚪', handleLogoutAll)}
         </View>
 
-        <Text style={[styles.sectionTitle, { color: colors.textLight }]}>TERCİHLER</Text>
+        {/* ── HAKKINDA & DESTEK ── */}
+        <Text style={[styles.sectionTitle, { color: colors.textLight }]}>ℹ️ HAKKINDA & DESTEK</Text>
         <View style={[styles.sectionGroup, { borderColor: colors.border }]}>
-          {renderItem(
-            'Karanlık Mod', 
-            '🌙', 
-            cycleTheme,
-            <Text style={[styles.valueText, { color: colors.primary }]}>{getThemeLabel(themeMode)}</Text>
-          )}
-          {renderItem(
-            'Ses Efektleri', 
-            '🔊', 
-            () => setSoundEnabled(!soundEnabled),
-            <Switch value={soundEnabled} onValueChange={setSoundEnabled} trackColor={{ true: colors.primary }} />
-          )}
-          {renderItem(
-            'Bildirimler', 
-            '🔔', 
-            () => setNotificationsEnabled(!notificationsEnabled),
-            <Switch value={notificationsEnabled} onValueChange={setNotificationsEnabled} trackColor={{ true: colors.primary }} />
-          )}
-        </View>
-
-        <Text style={[styles.sectionTitle, { color: colors.textLight }]}>DESTEK</Text>
-        <View style={[styles.sectionGroup, { borderColor: colors.border }]}>
-          {renderItem('Yardım Merkezi', '❓', () => navigation.navigate('Feedback'))}
+          {renderItem('Yardım Merkezi', '❓', () => navigation.navigate('Legal', { type: 'terms' }))}
           {renderItem('Geri Bildirim Gönder', '💬', () => navigation.navigate('Feedback'))}
-          {renderItem('Gizlilik Politikası', '📋', () => navigation.navigate('Legal', { type: 'privacy' }))}
-          {renderItem('Kullanım Koşulları', '📄', () => navigation.navigate('Legal', { type: 'terms' }))}
+          {renderItem('Uygulamayı Değerlendir', '⭐', showComingSoon)}
+          {renderItem('Gizlilik Politikası', '📄', () => navigation.navigate('Legal', { type: 'privacy' }))}
+          {renderItem('Kullanım Koşulları', '📜', () => navigation.navigate('Legal', { type: 'terms' }))}
+          {renderItem('Açık Kaynak Lisansları', '🔓', () => navigation.navigate('OpenSource'))}
+          {renderItem('Sürüm', '📱', () => {}, <Text style={[styles.valueText, { color: colors.textLight }]}>1.0.0 (Build 1)</Text>)}
         </View>
+
         <Text style={[styles.versionText, { color: colors.textLight }]}>LinguaPlay+ v1.0.0</Text>
       </ScrollView>
 
-      {/* Time Modal */}
-      <Modal visible={showTimeModal} transparent animationType="fade">
+      {/* Time Picker (iOS Modal) */}
+      {Platform.OS === 'ios' && showTimeModal && (
+        <Modal visible transparent animationType="fade">
+          <View style={styles.modalOverlay}>
+            <View style={[styles.modalContent, { backgroundColor: colors.surface }]}>
+              <Text style={[styles.modalTitle, { color: colors.text }]}>Saat Seç</Text>
+              <DateTimePicker
+                value={dateValue}
+                mode="time"
+                display="spinner"
+                textColor={colors.text}
+                onChange={onChangeTime}
+              />
+              <TouchableOpacity style={styles.modalCancel} onPress={() => setShowTimeModal(false)}>
+                <Text style={{ color: colors.primary, fontSize: 16, fontWeight: 'bold' }}>Tamam</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </Modal>
+      )}
+
+      {/* Time Picker (Android native) */}
+      {Platform.OS === 'android' && showTimeModal && (
+        <DateTimePicker
+          value={dateValue}
+          mode="time"
+          display="default"
+          onChange={onChangeTime}
+        />
+      )}
+
+      {/* Goal Modal */}
+      <Modal visible={showGoalModal} transparent animationType="fade">
         <View style={styles.modalOverlay}>
           <View style={[styles.modalContent, { backgroundColor: colors.surface }]}>
-            <Text style={[styles.modalTitle, { color: colors.text }]}>Hatırlatıcı Saati</Text>
-            {times.map((t) => (
+            <Text style={[styles.modalTitle, { color: colors.text }]}>Günlük Hedef</Text>
+            {goals.map((g) => (
               <TouchableOpacity 
-                key={t} 
+                key={g} 
                 style={[styles.modalOption, { borderBottomColor: colors.border }]}
-                onPress={() => { setReminderTime(t); setShowTimeModal(false); }}
+                onPress={() => saveDailyGoal(g)}
               >
-                <Text style={[styles.modalOptionText, { color: t === reminderTime ? colors.primary : colors.text }]}>
-                  {t}
+                <Text style={[styles.modalOptionText, { color: g === dailyGoal ? colors.primary : colors.text }]}>
+                  {g} XP
                 </Text>
-                {t === reminderTime && <Text style={{ color: colors.primary, fontSize: 18 }}>✓</Text>}
+                {g === dailyGoal && <Text style={{ color: colors.primary, fontSize: 18 }}>✓</Text>}
               </TouchableOpacity>
             ))}
-            <TouchableOpacity style={styles.modalCancel} onPress={() => setShowTimeModal(false)}>
+            <TouchableOpacity style={styles.modalCancel} onPress={() => setShowGoalModal(false)}>
               <Text style={{ color: colors.textLight, fontSize: 16 }}>İptal</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
+
+      {/* Language Selection Modal */}
+      <Modal visible={showLangModal} transparent animationType="fade">
+        <View style={styles.modalOverlay}>
+          <View style={[styles.modalContent, { backgroundColor: colors.surface }]}>
+            <Text style={[styles.modalTitle, { color: colors.text }]}>Öğrenilecek Dil</Text>
+            {availableLangs.map((lang) => (
+              <TouchableOpacity 
+                key={lang} 
+                style={[styles.modalOption, { borderBottomColor: colors.border }]}
+                onPress={() => {
+                  setActiveLanguage(lang);
+                  setShowLangModal(false);
+                }}
+              >
+                <Text style={[styles.modalOptionText, { color: lang === activeLanguage ? colors.primary : colors.text }]}>
+                  {LANG_LABELS[lang]}
+                </Text>
+                {lang === activeLanguage && <Text style={{ color: colors.primary, fontSize: 18 }}>✓</Text>}
+              </TouchableOpacity>
+            ))}
+            <TouchableOpacity style={styles.modalCancel} onPress={() => setShowLangModal(false)}>
+              <Text style={{ color: colors.textLight, fontSize: 16 }}>Kapat</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
+      {/* Personality Modal */}
+      <Modal visible={showPersonalityModal} transparent animationType="fade">
+        <View style={styles.modalOverlay}>
+          <View style={[styles.modalContent, { backgroundColor: colors.surface }]}>
+            <Text style={[styles.modalTitle, { color: colors.text }]}>Lingo'nun Kişiliği</Text>
+            {personalities.map((p) => (
+              <TouchableOpacity 
+                key={p} 
+                style={[styles.modalOption, { borderBottomColor: colors.border }]}
+                onPress={() => {
+                  setPersonality(p);
+                  setShowPersonalityModal(false);
+                }}
+              >
+                <Text style={[styles.modalOptionText, { color: p === personality ? colors.primary : colors.text }]}>
+                  {PERSONALITY_LABELS[p]}
+                </Text>
+                {p === personality && <Text style={{ color: colors.primary, fontSize: 18 }}>✓</Text>}
+              </TouchableOpacity>
+            ))}
+            <TouchableOpacity style={styles.modalCancel} onPress={() => setShowPersonalityModal(false)}>
+              <Text style={{ color: colors.textLight, fontSize: 16 }}>Kapat</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
+
+      {/* Expression Modal */}
+      <Modal visible={showExpressionModal} transparent animationType="fade">
+        <View style={styles.modalOverlay}>
+          <View style={[styles.modalContent, { backgroundColor: colors.surface }]}>
+            <Text style={[styles.modalTitle, { color: colors.text }]}>İfade Tarzı</Text>
+            {expressions.map((e) => (
+              <TouchableOpacity 
+                key={e} 
+                style={[styles.modalOption, { borderBottomColor: colors.border }]}
+                onPress={() => {
+                  setExpressionStyle(e);
+                  setShowExpressionModal(false);
+                }}
+              >
+                <Text style={[styles.modalOptionText, { color: e === expressionStyle ? colors.primary : colors.text }]}>
+                  {EXPRESSION_LABELS[e]}
+                </Text>
+                {e === expressionStyle && <Text style={{ color: colors.primary, fontSize: 18 }}>✓</Text>}
+              </TouchableOpacity>
+            ))}
+            <TouchableOpacity style={styles.modalCancel} onPress={() => setShowExpressionModal(false)}>
+              <Text style={{ color: colors.textLight, fontSize: 16 }}>Kapat</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
+
+      {/* Voice Modal */}
+      <Modal visible={showVoiceModal} transparent animationType="fade">
+        <View style={styles.modalOverlay}>
+          <View style={[styles.modalContent, { backgroundColor: colors.surface }]}>
+            <Text style={[styles.modalTitle, { color: colors.text }]}>Lingo Sesi</Text>
+            {voices.map((v) => (
+              <TouchableOpacity 
+                key={v} 
+                style={[styles.modalOption, { borderBottomColor: colors.border }]}
+                onPress={() => {
+                  setVoice(v);
+                  setShowVoiceModal(false);
+                }}
+              >
+                <Text style={[styles.modalOptionText, { color: v === voice ? colors.primary : colors.text }]}>
+                  {VOICE_LABELS[v]}
+                </Text>
+                {v === voice && <Text style={{ color: colors.primary, fontSize: 18 }}>✓</Text>}
+              </TouchableOpacity>
+            ))}
+            <TouchableOpacity style={styles.modalCancel} onPress={() => setShowVoiceModal(false)}>
+              <Text style={{ color: colors.textLight, fontSize: 16 }}>Kapat</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
+
+      {/* Assistant Voice Modal */}
+      <Modal visible={showAssistantVoiceModal} transparent animationType="fade">
+        <View style={styles.modalOverlay}>
+          <View style={[styles.modalContent, { backgroundColor: colors.surface }]}>
+            <Text style={[styles.modalTitle, { color: colors.text }]}>Asistan Sesi</Text>
+            {voices.map((v) => (
+              <TouchableOpacity 
+                key={v} 
+                style={[styles.modalOption, { borderBottomColor: colors.border }]}
+                onPress={() => {
+                  setAssistantVoice(v);
+                  setShowAssistantVoiceModal(false);
+                }}
+              >
+                <Text style={[styles.modalOptionText, { color: v === assistantVoice ? colors.primary : colors.text }]}>
+                  {VOICE_LABELS[v]}
+                </Text>
+                {v === assistantVoice && <Text style={{ color: colors.primary, fontSize: 18 }}>✓</Text>}
+              </TouchableOpacity>
+            ))}
+            <TouchableOpacity style={styles.modalCancel} onPress={() => setShowAssistantVoiceModal(false)}>
+              <Text style={{ color: colors.textLight, fontSize: 16 }}>Kapat</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -182,7 +458,7 @@ const styles = StyleSheet.create({
     marginTop: 15,
   },
   sectionGroup: {
-    borderRadius: 14,
+    borderRadius: 18,
     borderWidth: 1,
     overflow: 'hidden',
     marginBottom: 10,
@@ -199,7 +475,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   itemIcon: {
-    fontSize: 20,
+    fontSize: 22,
     marginRight: 15,
   },
   itemTitle: {
@@ -215,25 +491,15 @@ const styles = StyleSheet.create({
     fontWeight: 'bold', fontFamily: 'SpaceGrotesk_700Bold',
   },
   valueText: {
-    fontSize: 16,
-    fontWeight: 'bold', fontFamily: 'SpaceGrotesk_700Bold',
-  },
-  logoutBtn: {
-    marginTop: 30,
-    padding: 18,
-    borderRadius: 14,
-    borderWidth: 2,
-    alignItems: 'center',
-    backgroundColor: 'transparent',
-  },
-  logoutText: {
-    fontSize: 18,
+    fontSize: 15,
     fontWeight: 'bold', fontFamily: 'SpaceGrotesk_700Bold',
   },
   versionText: {
     textAlign: 'center',
-    marginTop: 20,
+    marginTop: 30,
+    marginBottom: 10,
     fontSize: 12,
+    fontWeight: '600'
   },
   modalOverlay: {
     flex: 1,
