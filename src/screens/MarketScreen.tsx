@@ -468,6 +468,7 @@ const MarketScreen = () => {
           <Animated.View style={{ 
             alignItems: 'center', 
             opacity: confettiAnim, 
+            marginTop: 100,
             transform: [
               { scale: confettiAnim.interpolate({ inputRange: [0, 1], outputRange: [0.9, 1] }) },
               { translateY: confettiAnim.interpolate({ inputRange: [0, 1], outputRange: [20, 0] }) }
@@ -476,16 +477,16 @@ const MarketScreen = () => {
             <LinearGradient colors={['rgba(28, 28, 30, 0.95)', 'rgba(10, 10, 12, 0.95)']} style={{
               borderWidth: 1,
               borderColor: 'rgba(255,214,10,0.3)',
-              borderRadius: 36,
-              paddingVertical: 45,
-              paddingHorizontal: 40,
+              borderRadius: 24,
+              paddingVertical: 20,
+              paddingHorizontal: 25,
               alignItems: 'center',
               shadowColor: '#FFD60A',
               shadowOpacity: 0.5,
-              shadowRadius: 40,
+              shadowRadius: 30,
               elevation: 20
             }}>
-              <View style={{ marginBottom: 15, width: 220, height: 220 }}>
+              <View style={{ marginBottom: 5, width: 140, height: 140 }}>
                 <LottieView
                   source={require('../../assets/mascots/kutuacilinca.json')}
                   autoPlay
@@ -494,20 +495,20 @@ const MarketScreen = () => {
                 />
               </View>
               <Text style={{ 
-                fontSize: 32, 
+                fontSize: 24, 
                 color: '#FFD60A', 
                 fontFamily: 'SpaceGrotesk_700Bold', 
-                letterSpacing: 1.5,
+                letterSpacing: 1,
                 textAlign: 'center',
                 textShadowColor: 'rgba(255, 214, 10, 0.4)',
                 textShadowOffset: { width: 0, height: 2 },
                 textShadowRadius: 10,
-                marginBottom: 8
+                marginBottom: 6
               }}>
                 Başarılı
               </Text>
               <Text style={{ 
-                fontSize: 18, 
+                fontSize: 15, 
                 color: 'rgba(255,255,255,0.85)', 
                 textAlign: 'center',
                 fontWeight: '600'
