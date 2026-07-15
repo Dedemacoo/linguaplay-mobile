@@ -468,7 +468,7 @@ const MarketScreen = () => {
           <Animated.View style={{ 
             alignItems: 'center', 
             opacity: confettiAnim, 
-            marginTop: 100,
+            marginTop: 250,
             transform: [
               { scale: confettiAnim.interpolate({ inputRange: [0, 1], outputRange: [0.9, 1] }) },
               { translateY: confettiAnim.interpolate({ inputRange: [0, 1], outputRange: [20, 0] }) }
