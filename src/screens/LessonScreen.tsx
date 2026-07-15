@@ -755,7 +755,7 @@ const LessonScreen: React.FC<Props> = ({ navigation, route }) => {
     return (
       <SafeAreaView style={[styles.container, { backgroundColor: colors.background, justifyContent: 'center', alignItems: 'center' }]}>
         <LottieView
-          source={require('../../assets/mascots/cat.json')}
+          source={require('../../assets/mascots/dersbasibekleyenkadin.json')}
           autoPlay
           loop
           style={{ width: 250, height: 250 }}
