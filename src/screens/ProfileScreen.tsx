@@ -146,7 +146,7 @@ export const ProfileScreen = () => {
               activeOpacity={0.8}
             >
               <View style={styles.avatarCircle}>
-                <Mascot size={55} />
+                <Mascot size={80} />
               </View>
               <View style={styles.editBadge}>
                 <Text style={{ fontSize: 12 }}>✏️</Text>
