@@ -37,6 +37,10 @@ export interface UserProgress {
   languages: {
     [key: string]: LanguageProgress;
   };
+  // League & Duel Stats
+  leaguePoints: number;
+  duelWins: number;
+  duelLosses: number;
 }
 
 const getTodayStr = () => new Date().toISOString().split('T')[0];
@@ -70,6 +74,9 @@ const defaultProgress: UserProgress = {
     turkish: { ...defaultLangProgress },
     french: { ...defaultLangProgress },
   },
+  leaguePoints: 0,
+  duelWins: 0,
+  duelLosses: 0,
 };
 
 interface ProgressState {
@@ -94,6 +101,10 @@ interface ProgressState {
   updateLastReportDate: (date: string, langKey: string) => void;
   saveReportSnapshot: (langKey: string) => void;
   _saveProgress: (newProgress: UserProgress) => Promise<void>;
+  
+  // League & Duel Actions
+  addLeaguePoints: (points: number) => void;
+  recordDuelResult: (isWin: boolean, points: number) => void;
 }
 
 export const useProgressStore = create<ProgressState>((set, get) => ({
@@ -256,14 +267,11 @@ export const useProgressStore = create<ProgressState>((set, get) => ({
     set({ progress: newProgress });
     get()._saveProgress(newProgress);
 
-    // Lig XP'sini otomatik güncelle (fire-and-forget)
+    // Lig Puanını da XP ile birlikte güncelle
     const uid = get().userUid;
     if (uid) {
-      const totalAllXp = Object.values(newProgress.languages).reduce(
-        (sum: number, l: any) => sum + (l?.totalXp || 0), 0
-      );
-      // name/avatar is fetched asynchronously — use stored uid only
-      LeagueService.updateWeeklyXp(uid, '', '', totalAllXp).catch(() => {});
+      // XP eklendiğinde aynı miktarda Lig Puanı da ekliyoruz
+      get().addLeaguePoints(amount);
     }
   },
 
@@ -519,4 +527,33 @@ export const useProgressStore = create<ProgressState>((set, get) => ({
     }
     return false;
   },
+
+  addLeaguePoints: (points: number) => {
+    const prev = get().progress;
+    const newProgress = { ...prev, leaguePoints: (prev.leaguePoints || 0) + points };
+    set({ progress: newProgress });
+    get()._saveProgress(newProgress);
+    
+    const uid = get().userUid;
+    if (uid) {
+      LeagueService.updateWeeklyPoints(uid, '', '', newProgress.leaguePoints).catch(() => {});
+    }
+  },
+
+  recordDuelResult: (isWin: boolean, points: number) => {
+    const prev = get().progress;
+    const newProgress = { 
+      ...prev, 
+      duelWins: (prev.duelWins || 0) + (isWin ? 1 : 0),
+      duelLosses: (prev.duelLosses || 0) + (!isWin ? 1 : 0),
+      leaguePoints: (prev.leaguePoints || 0) + points
+    };
+    set({ progress: newProgress });
+    get()._saveProgress(newProgress);
+
+    const uid = get().userUid;
+    if (uid) {
+      LeagueService.updateWeeklyPoints(uid, '', '', newProgress.leaguePoints).catch(() => {});
+    }
+  }
 }));

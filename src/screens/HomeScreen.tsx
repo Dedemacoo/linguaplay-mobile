@@ -127,6 +127,24 @@ const CHECKPOINT_TYPES = [
   { type: 'Story', emoji: '📜', title: 'Gizli Hikaye' }
 ];
 
+const STREAK_EMOJIS = [
+  '🕯️', // 1. gün: Küçük bir kıvılcım
+  '🪔', // 2. gün: Yanan lamba
+  '🧨', // 3. gün: Isınma (Çatapat)
+  '💥', // 4. gün: Patlama
+  '🎇', // 5. gün: Kıvılcımlar
+  '🎆', // 6. gün: Havai Fişek
+  '🔥', // 7. gün: Ateş (Alev Topu)
+  '☄️', // 8. gün: Kuyruklu Yıldız
+  '🚀', // 9. gün: Roket (Yükseliş)
+  '☀️', // 10. gün: Güneş
+  '🌟', // 11. gün: Parlayan Yıldız
+  '⚡', // 12. gün: Şimşek
+  '🌪️', // 13. gün: Kasırga
+  '🌋', // 14. gün: Yanardağ
+  '🌌', // 15. gün: Galaksi (Zirve)
+];
+
 const HomeScreen: React.FC<any> = () => {
   const insets = useSafeAreaInsets();
   const navigation = useNavigation();
@@ -137,11 +155,17 @@ const HomeScreen: React.FC<any> = () => {
   const [loading, setLoading] = useState(true);
   const [isLangDropdownOpen, setIsLangDropdownOpen] = useState(false);
   const [isAIPanelOpen, setIsAIPanelOpen] = useState(false);
+  const [scrollY, setScrollY] = useState(0);
   
+  // Refs
+  const scrollViewRef = useRef<ScrollView>(null);
+  const activeNodeRef = useRef<View>(null);
+
   // Animations
   const pulseAnim = useRef(new Animated.Value(1)).current;
   const floatAnim = useRef(new Animated.Value(0)).current;
   const xpAnim = useRef(new Animated.Value(0)).current;
+  const fabScale = useRef(new Animated.Value(1)).current;
 
   // Safe Progress Extraction
   const langProgress = progress?.languages?.[activeLanguage] || { totalXp: 0, dailyXp: 0, completedLessons: [], level: 1 };
@@ -208,10 +232,36 @@ const HomeScreen: React.FC<any> = () => {
     return <HomeScreenSkeleton />;
   }
 
-  const handleNodePress = (status: string, title: string) => {
+  const handleNodePress = (status: string, lessonId: string, title: string) => {
     if (status !== 'locked') {
       Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-      navigation.navigate('Lesson' as never, { title } as never);
+      navigation.navigate('Lesson' as never, { lessonId, title } as never);
+    }
+  };
+
+  const scrollToTop = () => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    Animated.sequence([
+      Animated.timing(fabScale, { toValue: 0.8, duration: 100, useNativeDriver: true }),
+      Animated.spring(fabScale, { toValue: 1, friction: 3, useNativeDriver: true })
+    ]).start();
+    
+    scrollViewRef.current?.scrollTo({ y: 0, animated: true });
+  };
+
+  const scrollToActiveNode = () => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+    Animated.sequence([
+      Animated.timing(fabScale, { toValue: 0.8, duration: 100, useNativeDriver: true }),
+      Animated.spring(fabScale, { toValue: 1, friction: 3, useNativeDriver: true })
+    ]).start();
+
+    if (activeNodeRef.current && scrollViewRef.current) {
+      activeNodeRef.current.measure((x, y, width, height, pageX, pageY) => {
+        const screenCenter = Dimensions.get('window').height / 2;
+        const targetScrollY = Math.max(0, scrollY + pageY - screenCenter + 100);
+        scrollViewRef.current?.scrollTo({ y: targetScrollY, animated: true });
+      });
     }
   };
 
@@ -233,33 +283,27 @@ const HomeScreen: React.FC<any> = () => {
           <TouchableOpacity onPress={() => setIsLangDropdownOpen(!isLangDropdownOpen)}>
             <Text style={{ fontSize: 28, marginLeft: 10 }}>🇬🇧</Text>
           </TouchableOpacity>
-          <View style={{ marginLeft: 8, justifyContent: 'center', alignItems: 'center' }}>
+          <View style={{ marginLeft: 1, justifyContent: 'center', alignItems: 'center' }}>
              <Text style={{ color: '#FFF', fontWeight: 'bold', fontSize: 18 }}>{activeUnitIndex + 1}</Text>
           </View>
         </View>
         
-        <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.statsScroll}>
+        <View style={styles.statsContainer}>
           <View style={styles.statPill}>
-            <Text style={{ fontSize: 16 }}>⚡</Text>
+            <Text style={{ fontSize: 16 }}>
+              {streak > 0 ? STREAK_EMOJIS[(streak - 1) % 15] : '🕯️'}
+            </Text>
             <Text style={[styles.statValue, { color: BRAND.streak }]}>{streak}</Text>
           </View>
           <View style={styles.statPill}>
-            <Text style={{ fontSize: 16 }}>🔮</Text>
+            <Text style={{ fontSize: 16 }}>💎</Text>
             <Text style={[styles.statValue, { color: BRAND.accent }]}>{progress?.gems || 0}</Text>
           </View>
           <View style={styles.statPill}>
-            <Text style={{ fontSize: 16 }}>💖</Text>
+            <Text style={{ fontSize: 16 }}>❤️</Text>
             <Text style={[styles.statValue, { color: BRAND.danger }]}>{progress?.hearts || 0}</Text>
           </View>
-          <View style={styles.statPill}>
-            <Text style={{ fontSize: 16 }}>🏆</Text>
-            <Text style={[styles.statValue, { color: BRAND.gold }]}>1.2K</Text>
-          </View>
-          <View style={styles.statPill}>
-            <Text style={{ fontSize: 16 }}>🎯</Text>
-            <View style={styles.notifBadge} />
-          </View>
-        </ScrollView>
+        </View>
       </View>
     </View>
     );
@@ -385,40 +429,48 @@ const HomeScreen: React.FC<any> = () => {
                   nodeContent = <FontAwesome5 name={iconName} size={28} color="#3A4651" />;
                 }
 
-                const ZIGZAG = [0, 50, 100, 130, 90, 20, -40, -100, -130, -70];
+                // Kusursuz bir oval (Sinüs dalgası) görünümü için 6 adımlık tam tur. 
+                // Etap 1 en solda başlıyor.
+                const ZIGZAG = [-120, -60, 30, 100, 30, -60];
                 const zigOffset = ZIGZAG[i % ZIGZAG.length];
 
-                return (
-                  <View key={node.id} style={{ alignItems: 'center', marginVertical: isActive ? 15 : 5, transform: [{ translateX: zigOffset }] }}>
-                    <View style={{ position: 'relative', alignItems: 'center', justifyContent: 'center' }}>
-                      <HexagonNode
-                        size={80}
-                        color={nodeColor}
-                        shadowColor={shadowColor}
-                        isLocked={isLocked}
-                        progress={progressValue}
-                        isActive={isActive}
-                        onPress={() => handleNodePress(isLocked ? 'locked' : isActive ? 'active' : 'completed', node.name)}
-                      >
-                        {nodeContent}
-                      </HexagonNode>
-                      {isActive && (
-                        <TouchableOpacity
-                          style={{ position: 'absolute', top: -45, zIndex: 10, backgroundColor: '#FFF', paddingHorizontal: 12, paddingVertical: 6, borderRadius: 12, borderWidth: 2, borderColor: '#E5E5E5' }}
-                          onPress={() => handleNodePress('active', node.name)}
-                        >
-                          <Text style={{ fontWeight: 'bold', color: unitColor.nodeActive, fontSize: 13 }}>BAŞLAT</Text>
-                          <View style={{ position: 'absolute', bottom: -6, left: '50%', marginLeft: -6, width: 10, height: 10, backgroundColor: '#FFF', transform: [{ rotate: '45deg' }], borderBottomWidth: 2, borderRightWidth: 2, borderColor: '#E5E5E5' }} />
-                        </TouchableOpacity>
-                      )}
-                    </View>
+                        const computedLessonId = `eng_u${globalUnitIndex + 1}_l${i + 1}`;
+                        
+                        return (
+                          <View 
+                            key={node.id} 
+                            ref={isActive ? activeNodeRef : null}
+                            style={{ alignItems: 'center', marginVertical: isActive ? 2 : -2, transform: [{ translateX: zigOffset }] }}
+                          >
+                            <View style={{ position: 'relative', alignItems: 'center', justifyContent: 'center' }}>
+                              <HexagonNode
+                                size={80}
+                                color={nodeColor}
+                                shadowColor={shadowColor}
+                                isLocked={isLocked}
+                                progress={progressValue}
+                                isActive={isActive}
+                                onPress={() => handleNodePress(isLocked ? 'locked' : isActive ? 'active' : 'completed', computedLessonId, displayName)}
+                              >
+                                {nodeContent}
+                              </HexagonNode>
+                              {isActive && (
+                                <TouchableOpacity
+                                  style={{ position: 'absolute', top: -45, zIndex: 10, backgroundColor: '#FFF', paddingHorizontal: 12, paddingVertical: 6, borderRadius: 12, borderWidth: 2, borderColor: '#E5E5E5' }}
+                                  onPress={() => handleNodePress('active', computedLessonId, displayName)}
+                                >
+                                  <Text style={{ fontWeight: 'bold', color: unitColor.nodeActive, fontSize: 13 }}>BAŞLAT</Text>
+                                  <View style={{ position: 'absolute', bottom: -6, left: '50%', marginLeft: -6, width: 10, height: 10, backgroundColor: '#FFF', transform: [{ rotate: '45deg' }], borderBottomWidth: 2, borderRightWidth: 2, borderColor: '#E5E5E5' }} />
+                                </TouchableOpacity>
+                              )}
+                            </View>
                     {!isFinalNode && (
                       <View style={styles.nodeLabelBox}>
                         <Text style={[styles.nodeLabel, isLocked && { color: BRAND.textMuted }]}>{displayName}</Text>
                       </View>
                     )}
                     {i < forcedLevels.length - 1 && (
-                      <View style={{ width: 4, height: 30, backgroundColor: isCompleted ? unitColor.nodeActive : '#1E2D4A', marginVertical: 5, borderRadius: 2 }} />
+                      <View style={{ width: 4, height: 4, backgroundColor: isCompleted ? unitColor.nodeActive : '#1E2D4A', marginVertical: 0, borderRadius: 2 }} />
                     )}
                   </View>
                 );
@@ -465,7 +517,13 @@ const HomeScreen: React.FC<any> = () => {
     <View style={styles.container}>
       <StatusBar barStyle="light-content" backgroundColor={BRAND.bg} translucent={false} />
 
-      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollContent}>
+      <ScrollView 
+        ref={scrollViewRef}
+        showsVerticalScrollIndicator={false} 
+        contentContainerStyle={styles.scrollContent}
+        onScroll={(e) => setScrollY(e.nativeEvent.contentOffset.y)}
+        scrollEventThrottle={16}
+      >
         {/* ─── SCROLLING DASHBOARD ─── */}
         {renderTopDashboard()}
 
@@ -487,6 +545,29 @@ const HomeScreen: React.FC<any> = () => {
            </View>
         </TouchableOpacity>
       )}
+
+      {/* ─── FLOATING ACTION BUTTONS (JUMP TO TOP / JUMP TO ACTIVE) ─── */}
+      <View style={styles.navigationFabContainer}>
+        {scrollY > 400 && (
+          <Animated.View style={{ transform: [{ scale: fabScale }] }}>
+            <TouchableOpacity style={styles.navFabButton} onPress={scrollToTop}>
+              <FontAwesome5 name="arrow-up" size={18} color="#FFF" />
+            </TouchableOpacity>
+          </Animated.View>
+        )}
+        {scrollY > 300 && (
+          <Animated.View style={{ transform: [{ scale: fabScale }] }}>
+            <TouchableOpacity style={[styles.navFabButton, { backgroundColor: BRAND.card, borderWidth: 2, borderColor: BRAND.primary, padding: 0 }]} onPress={scrollToActiveNode}>
+              <LottieView
+                source={require('../../assets/mascots/bulunanders.json')}
+                autoPlay
+                loop
+                style={{ width: 50, height: 50 }}
+              />
+            </TouchableOpacity>
+          </Animated.View>
+        )}
+      </View>
 
       {/* ─── FLOATING AI CRYSTAL BUTTON ─── */}
       <View style={[styles.floatingMascotContainer, { right: 20, bottom: 30 }]}>
@@ -538,29 +619,44 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: BRAND.bg,
   },
+  navigationFabContainer: {
+    position: 'absolute',
+    right: 20,
+    bottom: 130, // Just above the AI Mascot
+    gap: 12,
+    alignItems: 'center',
+    zIndex: 99,
+  },
+  navFabButton: {
+    width: 48,
+    height: 48,
+    borderRadius: 24,
+    backgroundColor: BRAND.card,
+    borderWidth: 2,
+    borderColor: BRAND.border,
+    justifyContent: 'center',
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 5,
+    elevation: 6,
+  },
   dashboard: {
     backgroundColor: BRAND.bg,
     paddingHorizontal: 16,
     paddingBottom: 16,
-    borderBottomWidth: 1,
-    borderBottomColor: BRAND.border,
     zIndex: 10,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 10 },
-    shadowOpacity: 0.5,
-    shadowRadius: 15,
-    elevation: 10,
   },
   topBar: {
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'space-between',
     marginBottom: 16,
   },
   flagAvatarRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 10,
-    marginRight: 16,
   },
   flagCircle: {
     width: 44,
@@ -583,10 +679,10 @@ const styles = StyleSheet.create({
     borderColor: BRAND.secondary,
     overflow: 'hidden',
   },
-  statsScroll: {
+  statsContainer: {
+    flexDirection: 'row',
     alignItems: 'center',
-    gap: 8,
-    paddingRight: 20,
+    gap: 12,
   },
   statPill: {
     flexDirection: 'row',

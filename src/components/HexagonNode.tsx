@@ -25,12 +25,28 @@ export const HexagonNode: React.FC<HexagonNodeProps> = ({
 }) => {
   const w = size;
   const h = size * 0.9;
-  const shadowOffset = 8;
-  
-  // Flat-top Hexagon calculation
-  const hexPoints = `${w*0.25},0 ${w*0.75},0 ${w},${h*0.5} ${w*0.75},${h} ${w*0.25},${h} 0,${h*0.5}`;
+  const depth = 7; // 3D derinlik (kalınlık)
 
-  // 4-part segmented ring around the hexagon
+  // Hafif yukarı bakan perspektif (orta nokta h*0.42)
+  const mid = h * 0.42;
+
+  // Üst yüzey noktaları
+  const facePoints = `${w*0.25},0 ${w*0.75},0 ${w},${mid} ${w*0.75},${h} ${w*0.25},${h} 0,${mid}`;
+
+  // 3D Yan paneller (kenar duvarları) — gölge kopya yerine gerçek derinlik
+  // Alt kenar (bottom-left → bottom-right)
+  const sideBottom = `${w*0.25},${h} ${w*0.75},${h} ${w*0.75},${h+depth} ${w*0.25},${h+depth}`;
+  // Sağ alt kenar (bottom-right → right-mid)
+  const sideRight = `${w*0.75},${h} ${w},${mid} ${w},${mid+depth} ${w*0.75},${h+depth}`;
+  // Sol alt kenar (left-mid → bottom-left)
+  const sideLeft = `0,${mid} ${w*0.25},${h} ${w*0.25},${h+depth} 0,${mid+depth}`;
+
+  // Yan panel renkleri — arka planla karışmayacak kadar görünür
+  const sideColorBottom = shadowColor;             // Alt kenar: ana gölge rengi
+  const sideColorRight = shadowColor;              // Sağ kenar: aynı ton
+  const sideColorLeft = shadowColor;               // Sol kenar: aynı ton
+
+  // 4-part segmented ring
   const strokeW = 6;
   const padding = 10;
   const ringSize = size + padding * 2;
@@ -39,11 +55,11 @@ export const HexagonNode: React.FC<HexagonNodeProps> = ({
 
   const renderSegment = (index: number) => {
     const isFilled = progress > index;
-    if (progress === 4) return null; // hide ring when fully complete
+    if (progress === 4) return null;
 
     const segmentAngle = 90;
-    const startAngle = index * segmentAngle - 45; // Start at top-right
-    const endAngle = startAngle + segmentAngle - 10; // 10 degree gap
+    const startAngle = index * segmentAngle - 45;
+    const endAngle = startAngle + segmentAngle - 10;
 
     const startRad = (startAngle * Math.PI) / 180;
     const endRad = (endAngle * Math.PI) / 180;
@@ -59,7 +75,7 @@ export const HexagonNode: React.FC<HexagonNodeProps> = ({
       <Path
         key={index}
         d={pathData}
-        stroke={isFilled ? '#3B82F6' : 'rgba(255,255,255,0.1)'}
+        stroke={isFilled ? color : 'rgba(255,255,255,0.1)'}
         strokeWidth={strokeW}
         strokeLinecap="round"
         fill="none"
@@ -67,34 +83,41 @@ export const HexagonNode: React.FC<HexagonNodeProps> = ({
     );
   };
 
+  const totalH = h + depth;
+
   return (
-    <View style={{ width: ringSize, height: ringSize, justifyContent: 'center', alignItems: 'center' }}>
-      
+    <View style={{ width: ringSize, height: ringSize + depth, justifyContent: 'center', alignItems: 'center' }}>
+
       {/* 4-Part Progress Ring */}
       {progress < 4 && !isLocked && (
-        <View style={{ position: 'absolute', width: ringSize, height: ringSize }}>
+        <View style={{ position: 'absolute', top: 0, width: ringSize, height: ringSize }}>
           <Svg width={ringSize} height={ringSize}>
             {[0, 1, 2, 3].map((i) => renderSegment(i))}
           </Svg>
         </View>
       )}
 
-      {/* Hexagon Button */}
+      {/* 3D Hexagon */}
       <TouchableOpacity 
         activeOpacity={isLocked ? 1 : 0.8}
         onPress={onPress}
-        style={{ width: size, height: h + shadowOffset, justifyContent: 'center', alignItems: 'center' }}
+        style={{ width: size, height: totalH, justifyContent: 'center', alignItems: 'center' }}
       >
-        <Svg width={size} height={h + shadowOffset} style={{ position: 'absolute' }}>
-          {/* Shadow (Base Polygon) */}
-          <Polygon points={hexPoints} fill={shadowColor} y={shadowOffset} />
-          {/* Face Polygon */}
-          <Polygon points={hexPoints} fill={color} />
-          {/* Premium Highlights */}
-          <Polygon points={hexPoints} fill="none" stroke="rgba(255,255,255,0.3)" strokeWidth={2} />
+        <Svg width={size} height={totalH} style={{ position: 'absolute' }}>
+          {/* YAN PANELLER (3D derinlik) */}
+          <Polygon points={sideBottom} fill={sideColorBottom} />
+          <Polygon points={sideRight} fill={sideColorRight} />
+          <Polygon points={sideLeft} fill={sideColorLeft} />
+
+          {/* ÜST YÜZEY */}
+          <Polygon points={facePoints} fill={color} />
+
+          {/* Üst yüzey kenar ışığı */}
+          <Polygon points={facePoints} fill="none" stroke="rgba(255,255,255,0.25)" strokeWidth={1.5} />
         </Svg>
         
-        <View style={{ position: 'absolute', zIndex: 2, transform: [{ translateY: -shadowOffset/2 }] }}>
+        {/* İçerik (ikon) */}
+        <View style={{ position: 'absolute', zIndex: 2, transform: [{ translateY: -depth/2 }] }}>
           {children}
         </View>
       </TouchableOpacity>

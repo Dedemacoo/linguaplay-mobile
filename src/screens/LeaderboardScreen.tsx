@@ -1,36 +1,27 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import {
   View, Text, StyleSheet, FlatList, Platform, StatusBar,
-  TouchableOpacity, ActivityIndicator, RefreshControl, Modal, TouchableWithoutFeedback, Alert
+  TouchableOpacity, ActivityIndicator, RefreshControl, Modal, TouchableWithoutFeedback, Alert, ScrollView
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useThemeColors } from '../theme/colors';
+import { useThemeColors, BRAND } from '../theme/colors';
 import { useProgressStore } from '../store/useProgressStore';
 import { useAuth } from '../context/AuthContext';
-import { collection, getDocs, doc, updateDoc, arrayUnion } from 'firebase/firestore';
+import { collection, getDocs, doc } from 'firebase/firestore';
 import { db } from '../config/firebase';
 import { FriendService } from '../services/FriendService';
 import { LeagueService, LeagueUserEntry, LEAGUE_CONFIG, LeagueTier } from '../services/LeagueService';
-import * as Haptics from 'expo-haptics';
-const AVATARS = ['👩‍🎓','👨‍💻','👩‍🏫','🧔','👩‍⚕️','👨‍🔬','👩‍💼','👨‍🎨','👩‍🍳','🧑‍🎤','🧑‍🏫','👩‍🎤','👨‍🍳','🧑‍💻'];
+import { LinearGradient } from 'expo-linear-gradient';
+import { FontAwesome5 } from '@expo/vector-icons';
 
-const LANGUAGES = [
-  { id: 'global', label: '🌍 Genel Sıralama', color: '#8B5CF6' },
-  { id: 'english', label: '🇬🇧 English', color: '#1D4ED8' },
-  { id: 'turkish', label: '🇹🇷 Türkçe', color: '#E11D48' },
-  { id: 'french', label: '🇫🇷 Français', color: '#2563EB' },
-  { id: 'kurdish', label: '☀️ Kurmancî', color: '#16A34A' },
-];
-
-type LeaderboardEntry = { id: string; name: string; xp: number; rank: number; avatar: string; isCurrentUser?: boolean };
+type LeaderboardEntry = { id: string; name: string; points: number; rank: number; avatar: string; isCurrentUser?: boolean };
 
 const LeaderboardScreen: React.FC<any> = ({ navigation }) => {
   const colors = useThemeColors();
   const { progress } = useProgressStore();
   const { user } = useAuth();
   
-  const [selectedLanguage, setSelectedLanguage] = useState<string>('global');
-  const [menuVisible, setMenuVisible] = useState(false);
+  const [activeTab, setActiveTab] = useState<'league' | 'duel'>('league');
   const [selectedProfile, setSelectedProfile] = useState<LeaderboardEntry | null>(null);
   
   const [allUsersData, setAllUsersData] = useState<any[]>([]);
@@ -40,6 +31,7 @@ const LeaderboardScreen: React.FC<any> = ({ navigation }) => {
   // --- League State ---
   const [myLeagueData, setMyLeagueData] = useState<LeagueUserEntry | null>(null);
   const [leagueBoard, setLeagueBoard] = useState<LeagueUserEntry[]>([]);
+  const [timeLeft, setTimeLeft] = useState<string>('3 Gün 12 Saat'); // Mocked countdown
 
   const fetchLeaderboard = useCallback(async () => {
     try {
@@ -51,24 +43,18 @@ const LeaderboardScreen: React.FC<any> = ({ navigation }) => {
       });
       setAllUsersData(users);
 
-      // --- Lig verisi yükle ---
       if (user) {
-        const weeklyXp = Object.values(progress.languages || {}).reduce(
-          (sum: number, lang: any) => sum + (lang?.totalXp || 0), 0
-        );
+        const lp = progress.leaguePoints || 0;
         const displayName = users.find(u => u.id === user.uid)?.name || user.email?.split('@')[0] || 'Sen';
         const avatar = progress.avatar || '🙋';
 
-        // Firestore'a haftalık XP yaz
-        await LeagueService.updateWeeklyXp(user.uid, displayName, avatar, weeklyXp);
+        await LeagueService.updateWeeklyPoints(user.uid, displayName, avatar, lp);
 
-        // Kendi lig verisini getir
         const myData = await LeagueService.getUserLeagueData(user.uid);
         setMyLeagueData(myData);
 
-        // Kendi liginin tablosunu getir
-        const tier = myData?.tier || LeagueService.calculateTier(weeklyXp);
-        const board = await LeagueService.getLeagueLeaderboard(tier);
+        const tier = myData?.tier || LeagueService.calculateTier(lp);
+        const board = await LeagueService.getLeagueLeaderboard(tier, 50); // Fetch top 50
         setLeagueBoard(board);
       }
     } catch (err) {
@@ -97,149 +83,220 @@ const LeaderboardScreen: React.FC<any> = ({ navigation }) => {
     }
   };
 
-  const sendDuelRequest = () => {
-    setSelectedProfile(null);
-    navigation.navigate('Matchmaking');
+  const startMatchmaking = (modeName: string) => {
+    // For now, route all to Matchmaking, but you can pass modeName as param later
+    navigation.navigate('Matchmaking', { mode: modeName });
   };
 
-  const currentXp = useMemo(() => {
-    if (selectedLanguage === 'global') {
-      return Object.values(progress.languages || {}).reduce((sum: number, lang: any) => sum + (lang?.totalXp || 0), 0);
-    }
-    return progress.languages?.[selectedLanguage]?.totalXp || 0;
-  }, [progress, selectedLanguage]);
-
-  const leaderboardData = useMemo(() => {
-    if (!allUsersData.length) return [];
-
-    let entries: LeaderboardEntry[] = [];
-    let currentUserIncluded = false;
-
-    allUsersData.forEach((data, i) => {
-      const isMe = data.id === user?.uid;
-      if (isMe) currentUserIncluded = true;
-      
-      let targetXp = 0;
-      if (selectedLanguage === 'global') {
-        targetXp = data.xp || 0;
-        if (isMe) targetXp = Math.max(targetXp, currentXp);
-      } else {
-        targetXp = data.progress?.languages?.[selectedLanguage]?.totalXp || 0;
-        if (isMe) targetXp = Math.max(targetXp, currentXp);
-      }
-      
-      entries.push({
-        id: data.id,
-        name: isMe ? (data.name || user?.email?.split('@')[0] || 'Sen') : (data.name || 'Anonim'),
-        xp: targetXp,
-        rank: 0,
-        avatar: data.avatar || AVATARS[i % AVATARS.length],
-        isCurrentUser: isMe,
-      });
-    });
-
-    if (!currentUserIncluded && user) {
-      entries.push({ 
-        id: user.uid, 
-        name: user.email?.split('@')[0] || 'Sen', 
-        xp: currentXp, 
-        rank: 0, 
-        avatar: progress.avatar || '🙋', 
-        isCurrentUser: true 
-      });
-    }
-
-    entries.sort((a, b) => b.xp - a.xp);
-    entries.forEach((e, i) => { e.rank = i + 1; });
-    return entries;
-  }, [allUsersData, selectedLanguage, user, progress, currentXp]);
-
-  const top3 = leaderboardData.slice(0, 3);
-  const rest = leaderboardData.slice(3);
-  
-  const currentLangLabel = LANGUAGES.find(l => l.id === selectedLanguage)?.label || '🌍 Genel Sıralama';
-
-  return (
-    <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]} edges={['top']}>
-      <StatusBar barStyle="light-content" backgroundColor="#FFC800" />
-      
-      {/* Header — Lig Banner */}
-      {(() => {
-        const tier = (myLeagueData?.tier || 'bronze') as LeagueTier;
-        const cfg = LEAGUE_CONFIG[tier];
-        const myRank = leagueBoard.findIndex(e => e.uid === user?.uid) + 1 || '—';
-        const totalInLeague = leagueBoard.length;
-        const promotionStatus = typeof myRank === 'number'
-          ? LeagueService.getPromotionStatus(myRank, totalInLeague)
-          : 'safe';
-        const statusColor = promotionStatus === 'promotion' ? '#22C55E' : promotionStatus === 'demotion' ? '#EF4444' : '#F59E0B';
-        const statusLabel = promotionStatus === 'promotion' ? '↑ Terfi Bölgesi' : promotionStatus === 'demotion' ? '↓ Düşüş Bölgesi' : '✓ Güvende';
-
-        return (
-          <View style={[styles.header, { backgroundColor: cfg.color }]}>
-            <TouchableOpacity style={styles.menuIcon} onPress={() => setMenuVisible(true)}>
-              <Text style={{ fontSize: 26, color: '#FFF' }}>≡</Text>
-            </TouchableOpacity>
-            <View style={{ alignItems: 'center' }}>
-              <Text style={styles.headerTitle}>{cfg.icon} {cfg.label} Ligi</Text>
-              <Text style={styles.headerSub}>{currentLangLabel}</Text>
-              <View style={[styles.statusBadge, { backgroundColor: statusColor + '33' }]}>
-                <Text style={[styles.statusText, { color: statusColor }]}>
-                  Sıra: {myRank}/{totalInLeague}  •  {statusLabel}
-                </Text>
+  // --- LEAGUE TAB RENDER ---
+  const renderLeagueTab = () => {
+    const tier = (myLeagueData?.tier || 'rookie') as LeagueTier;
+    const cfg = LEAGUE_CONFIG[tier];
+    const myRank = leagueBoard.findIndex(e => e.uid === user?.uid) + 1 || 0;
+    const totalInLeague = leagueBoard.length;
+    
+    // Top 5 promote, Bottom 5 demote
+    const isPromotion = myRank > 0 && myRank <= 5;
+    const isDemotion = myRank > 0 && myRank > totalInLeague - 5 && totalInLeague > 10;
+    
+    return (
+      <View style={{ flex: 1 }}>
+        {/* Premium Dark Hero Banner */}
+        <View style={styles.heroContainer}>
+          <LinearGradient colors={['#141D32', '#0B1022']} style={StyleSheet.absoluteFillObject} />
+          
+          <View style={styles.heroContent}>
+            <View style={[styles.badgeContainer, { borderColor: `${cfg.color}50` }]}>
+              <LinearGradient colors={[`${cfg.color}15`, 'transparent']} style={StyleSheet.absoluteFillObject} />
+              <Text style={styles.badgeIcon}>{cfg.icon}</Text>
+            </View>
+            <Text style={[styles.leagueTitle, { color: '#FFF' }]}>{cfg.label} Ligi</Text>
+            <Text style={styles.timeLeftText}>⏳ Sezonun Bitmesine: {timeLeft}</Text>
+            
+            <View style={styles.heroStatsRow}>
+              <View style={styles.heroStatBox}>
+                <Text style={styles.heroStatLabel}>Sıralama</Text>
+                <Text style={styles.heroStatValue}>#{myRank > 0 ? myRank : '-'}</Text>
+              </View>
+              <View style={styles.heroStatBox}>
+                <Text style={styles.heroStatLabel}>Lig Puanı</Text>
+                <Text style={[styles.heroStatValue, { color: cfg.color }]}>{progress.leaguePoints || 0}</Text>
               </View>
             </View>
-            <View style={{ width: 40 }} />
           </View>
-        );
-      })()}
+        </View>
 
-      {/* Slide/Modal Menu */}
-      <Modal visible={menuVisible} transparent animationType="fade">
-        <TouchableWithoutFeedback onPress={() => setMenuVisible(false)}>
-          <View style={styles.modalOverlay}>
-            <TouchableWithoutFeedback>
-              <View style={[styles.menuContainer, { backgroundColor: colors.surface }]}>
-                <Text style={[styles.menuTitle, { color: colors.text }]}>Lig Filtresi</Text>
-                {LANGUAGES.map(lang => (
-                  <TouchableOpacity
-                    key={lang.id}
-                    style={[
-                      styles.menuItem,
-                      selectedLanguage === lang.id && { backgroundColor: colors.primary + '15' }
-                    ]}
-                    onPress={() => {
-                      setSelectedLanguage(lang.id);
-                      setMenuVisible(false);
-                    }}
-                  >
-                    <Text style={[
-                      styles.menuItemText,
-                      { color: selectedLanguage === lang.id ? colors.primary : colors.text }
-                    ]}>
-                      {lang.label}
-                    </Text>
-                    {selectedLanguage === lang.id && <Text style={{ color: colors.primary, fontSize: 18 }}>✓</Text>}
-                  </TouchableOpacity>
-                ))}
-              </View>
-            </TouchableWithoutFeedback>
+        {/* Profile Stats Mini-Panel */}
+        <View style={styles.statsPanel}>
+          <View style={styles.statMiniBox}>
+            <FontAwesome5 name="fire" size={14} color="#F97316" />
+            <Text style={styles.statMiniText}>Seri: {Object.values(progress.languages)[0]?.streak || 0}</Text>
           </View>
-        </TouchableWithoutFeedback>
-      </Modal>
+          <View style={styles.statMiniBox}>
+            <FontAwesome5 name="trophy" size={14} color="#EAB308" />
+            <Text style={styles.statMiniText}>Kazanma: {progress.duelWins || 0}</Text>
+          </View>
+          <View style={styles.statMiniBox}>
+            <FontAwesome5 name="times-circle" size={14} color="#EF4444" />
+            <Text style={styles.statMiniText}>Kayıp: {progress.duelLosses || 0}</Text>
+          </View>
+        </View>
+
+        {/* Leaderboard List */}
+        <FlatList
+          data={leagueBoard}
+          keyExtractor={(item) => item.uid}
+          contentContainerStyle={styles.listContent}
+          refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={colors.primary} />}
+          renderItem={({ item, index }) => {
+            const rank = index + 1;
+            const isMe = item.uid === user?.uid;
+            
+            const isTop5 = rank <= 5;
+            const isBottom5 = totalInLeague > 10 && rank > totalInLeague - 5;
+            
+            let borderColor = 'transparent';
+            if (isTop5) borderColor = '#22C55E';
+            if (isBottom5) borderColor = '#EF4444';
+            if (isMe) borderColor = colors.primary;
+
+            return (
+              <TouchableOpacity 
+                style={[
+                  styles.userCard, 
+                  { backgroundColor: isMe ? colors.primary + '15' : '#141D32', borderColor: borderColor, borderWidth: 1 }
+                ]}
+                onPress={() => setSelectedProfile({ id: item.uid, name: item.name, points: item.weeklyPoints, rank, avatar: item.avatar, isCurrentUser: isMe })}
+                activeOpacity={0.7}
+              >
+                <View style={[styles.rankBox, isTop5 && { backgroundColor: '#22C55E20' }, isBottom5 && { backgroundColor: '#EF444420' }]}>
+                  <Text style={[styles.rankText, isTop5 && { color: '#22C55E' }, isBottom5 && { color: '#EF4444' }]}>{rank}</Text>
+                </View>
+                <Text style={styles.avatar}>{item.avatar}</Text>
+                <View style={styles.cardInfo}>
+                  <Text style={[styles.name, isMe && { color: colors.primary }]}>{item.name}</Text>
+                  <Text style={styles.points}>{item.weeklyPoints.toLocaleString()} LP</Text>
+                </View>
+                {isTop5 && <FontAwesome5 name="arrow-up" size={14} color="#22C55E" />}
+                {isBottom5 && <FontAwesome5 name="arrow-down" size={14} color="#EF4444" />}
+              </TouchableOpacity>
+            );
+          }}
+        />
+      </View>
+    );
+  };
+
+  // --- DUEL TAB RENDER ---
+  const renderDuelTab = () => {
+    return (
+      <ScrollView style={{ flex: 1 }} contentContainerStyle={{ padding: 20 }}>
+        
+        {/* User Duel Stats */}
+        <View style={styles.duelStatsCard}>
+          <Text style={styles.duelSectionTitle}>Savaş İstatistiklerin</Text>
+          <View style={styles.duelStatsGrid}>
+            <View style={styles.duelStatItem}>
+              <Text style={styles.duelStatValue}>{progress.duelWins || 0}</Text>
+              <Text style={styles.duelStatLabel}>Galibiyet</Text>
+            </View>
+            <View style={styles.duelStatItem}>
+              <Text style={styles.duelStatValue}>{progress.duelLosses || 0}</Text>
+              <Text style={styles.duelStatLabel}>Mağlubiyet</Text>
+            </View>
+            <View style={styles.duelStatItem}>
+              <Text style={[styles.duelStatValue, { color: colors.primary }]}>
+                {((progress.duelWins || 0) + (progress.duelLosses || 0)) > 0 
+                  ? Math.round(((progress.duelWins || 0) / ((progress.duelWins || 0) + (progress.duelLosses || 0))) * 100)
+                  : 0}%
+              </Text>
+              <Text style={styles.duelStatLabel}>Kazanma Oranı</Text>
+            </View>
+          </View>
+        </View>
+
+        <Text style={[styles.duelSectionTitle, { marginTop: 20 }]}>Düello Modları</Text>
+        
+        {/* Speed Duel */}
+        <TouchableOpacity style={[styles.duelModeCard, { borderColor: '#F59E0B' }]} onPress={() => startMatchmaking('speed')}>
+          <LinearGradient colors={['#F59E0B22', 'transparent']} style={StyleSheet.absoluteFillObject} />
+          <View style={styles.duelModeIconBox}><FontAwesome5 name="bolt" size={24} color="#F59E0B" /></View>
+          <View style={{ flex: 1 }}>
+            <Text style={styles.duelModeTitle}>Hız Düellosu</Text>
+            <Text style={styles.duelModeDesc}>En hızlı ve en doğru cevaplayan kazanır.</Text>
+          </View>
+          <FontAwesome5 name="chevron-right" size={16} color="#4B5563" />
+        </TouchableOpacity>
+
+        {/* Word Duel */}
+        <TouchableOpacity style={[styles.duelModeCard, { borderColor: '#8B5CF6' }]} onPress={() => startMatchmaking('word')}>
+          <LinearGradient colors={['#8B5CF622', 'transparent']} style={StyleSheet.absoluteFillObject} />
+          <View style={styles.duelModeIconBox}><FontAwesome5 name="spell-check" size={24} color="#8B5CF6" /></View>
+          <View style={{ flex: 1 }}>
+            <Text style={styles.duelModeTitle}>Kelime Düellosu</Text>
+            <Text style={styles.duelModeDesc}>Kelime bilgisi yarışması. Kim daha fazla biliyor?</Text>
+          </View>
+          <FontAwesome5 name="chevron-right" size={16} color="#4B5563" />
+        </TouchableOpacity>
+
+        {/* Listening Duel */}
+        <TouchableOpacity style={[styles.duelModeCard, { borderColor: '#3B82F6' }]} onPress={() => startMatchmaking('listen')}>
+          <LinearGradient colors={['#3B82F622', 'transparent']} style={StyleSheet.absoluteFillObject} />
+          <View style={styles.duelModeIconBox}><FontAwesome5 name="headphones" size={24} color="#3B82F6" /></View>
+          <View style={{ flex: 1 }}>
+            <Text style={styles.duelModeTitle}>Dinleme Düellosu</Text>
+            <Text style={styles.duelModeDesc}>Aynı ses kayıtlarını dinleyip doğru cevabı bul.</Text>
+          </View>
+          <FontAwesome5 name="chevron-right" size={16} color="#4B5563" />
+        </TouchableOpacity>
+
+        {/* AI Challenge */}
+        <TouchableOpacity style={[styles.duelModeCard, { borderColor: '#EC4899' }]} onPress={() => startMatchmaking('ai')}>
+          <LinearGradient colors={['#EC489922', 'transparent']} style={StyleSheet.absoluteFillObject} />
+          <View style={styles.duelModeIconBox}><FontAwesome5 name="robot" size={24} color="#EC4899" /></View>
+          <View style={{ flex: 1 }}>
+            <Text style={styles.duelModeTitle}>AI Challenge</Text>
+            <Text style={styles.duelModeDesc}>Yapay zekaya karşı zorlu bir mücadele.</Text>
+          </View>
+          <FontAwesome5 name="chevron-right" size={16} color="#4B5563" />
+        </TouchableOpacity>
+
+      </ScrollView>
+    );
+  };
+
+  return (
+    <SafeAreaView style={[styles.container, { backgroundColor: '#0B1022' }]} edges={['top']}>
+      <StatusBar barStyle="light-content" backgroundColor="#0B1022" />
+      
+      {/* Top Navigation Tabs */}
+      <View style={styles.topTabs}>
+        <TouchableOpacity 
+          style={[styles.tabBtn, activeTab === 'league' && styles.tabBtnActive]} 
+          onPress={() => setActiveTab('league')}
+        >
+          <Text style={[styles.tabText, activeTab === 'league' && styles.tabTextActive]}>LİG</Text>
+        </TouchableOpacity>
+        <TouchableOpacity 
+          style={[styles.tabBtn, activeTab === 'duel' && styles.tabBtnActive]} 
+          onPress={() => setActiveTab('duel')}
+        >
+          <Text style={[styles.tabText, activeTab === 'duel' && styles.tabTextActive]}>DÜELLO</Text>
+        </TouchableOpacity>
+      </View>
 
       {/* Profile Info Modal */}
       <Modal visible={!!selectedProfile} transparent animationType="slide">
         <TouchableWithoutFeedback onPress={() => setSelectedProfile(null)}>
           <View style={styles.modalOverlay}>
             <TouchableWithoutFeedback>
-              <View style={[styles.profileModalContainer, { backgroundColor: colors.surface }]}>
+              <View style={[styles.profileModalContainer, { backgroundColor: '#141D32' }]}>
                 <TouchableOpacity onPress={() => setSelectedProfile(null)} style={styles.closeBtn}>
-                  <Text style={{ fontSize: 20, color: colors.textLight }}>✕</Text>
+                  <Text style={{ fontSize: 20, color: '#9CA3AF' }}>✕</Text>
                 </TouchableOpacity>
                 <Text style={styles.profileModalAvatar}>{selectedProfile?.avatar}</Text>
-                <Text style={[styles.profileModalName, { color: colors.text }]}>{selectedProfile?.name}</Text>
-                <Text style={[styles.profileModalXp, { color: colors.primary }]}>{selectedProfile?.xp.toLocaleString()} XP</Text>
+                <Text style={[styles.profileModalName, { color: '#FFF' }]}>{selectedProfile?.name}</Text>
+                <Text style={[styles.profileModalXp, { color: colors.primary }]}>{selectedProfile?.points.toLocaleString()} LP</Text>
                 
                 <View style={styles.profileActionButtons}>
                   {!selectedProfile?.isCurrentUser && (
@@ -247,7 +304,10 @@ const LeaderboardScreen: React.FC<any> = ({ navigation }) => {
                       <TouchableOpacity style={[styles.actionBtn, { backgroundColor: colors.primary }]} onPress={sendFriendRequest}>
                         <Text style={styles.actionBtnText}>👥 Arkadaş Ekle</Text>
                       </TouchableOpacity>
-                      <TouchableOpacity style={[styles.actionBtn, { backgroundColor: '#FF9600' }]} onPress={sendDuelRequest}>
+                      <TouchableOpacity style={[styles.actionBtn, { backgroundColor: '#FF9600' }]} onPress={() => {
+                        setSelectedProfile(null);
+                        startMatchmaking('speed');
+                      }}>
                         <Text style={styles.actionBtnText}>⚔️ Rastgele Düello</Text>
                       </TouchableOpacity>
                     </>
@@ -262,57 +322,10 @@ const LeaderboardScreen: React.FC<any> = ({ navigation }) => {
       {isLoading ? (
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
           <ActivityIndicator size="large" color={colors.primary} />
-          <Text style={{ color: colors.textLight, marginTop: 12, fontSize: 15 }}>Sıralama yükleniyor...</Text>
+          <Text style={{ color: '#9CA3AF', marginTop: 12, fontSize: 15 }}>Yükleniyor...</Text>
         </View>
       ) : (
-        <FlatList
-          data={rest}
-          keyExtractor={(item) => item.id}
-          contentContainerStyle={styles.listContent}
-          refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={colors.primary} />}
-          ListHeaderComponent={() => (
-            <>
-              {top3.length >= 2 && (
-                <View style={[styles.podium, { backgroundColor: colors.surface }]}>
-                  <TouchableOpacity style={styles.podiumItem} onPress={() => setSelectedProfile(top3[1])}>
-                    <Text style={styles.podiumAvatar}>{top3[1]?.avatar}</Text>
-                    <View style={[styles.podiumBar, styles.podiumSecond, { backgroundColor: '#C0C0C0' }]}><Text style={styles.podiumRank}>🥈</Text></View>
-                    <Text style={[styles.podiumName, { color: colors.text }, top3[1]?.isCurrentUser && styles.meText]}>{top3[1]?.name}</Text>
-                    <Text style={[styles.podiumXp, { color: colors.primary }]}>{top3[1]?.xp.toLocaleString()} XP</Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity style={[styles.podiumItem, { zIndex: 10, marginTop: -30 }]} onPress={() => setSelectedProfile(top3[0])}>
-                    <Text style={styles.podiumAvatar}>{top3[0]?.avatar}</Text>
-                    <View style={[styles.podiumBar, styles.podiumFirst, { backgroundColor: '#FFD700' }]}><Text style={styles.podiumRank}>🥇</Text></View>
-                    <Text style={[styles.podiumName, { color: colors.text }, top3[0]?.isCurrentUser && styles.meText]}>{top3[0]?.name}</Text>
-                    <Text style={[styles.podiumXp, { color: colors.primary }]}>{top3[0]?.xp.toLocaleString()} XP</Text>
-                  </TouchableOpacity>
-                  {top3.length >= 3 && (
-                    <TouchableOpacity style={styles.podiumItem} onPress={() => setSelectedProfile(top3[2])}>
-                      <Text style={styles.podiumAvatar}>{top3[2]?.avatar}</Text>
-                      <View style={[styles.podiumBar, styles.podiumThird, { backgroundColor: '#CD7F32' }]}><Text style={styles.podiumRank}>🥉</Text></View>
-                      <Text style={[styles.podiumName, { color: colors.text }, top3[2]?.isCurrentUser && styles.meText]}>{top3[2]?.name}</Text>
-                      <Text style={[styles.podiumXp, { color: colors.primary }]}>{top3[2]?.xp.toLocaleString()} XP</Text>
-                    </TouchableOpacity>
-                  )}
-                </View>
-              )}
-            </>
-          )}
-          renderItem={({ item }) => (
-            <TouchableOpacity 
-              style={[styles.card, { backgroundColor: colors.surface }, item.isCurrentUser && { backgroundColor: colors.primary + '10', borderColor: colors.primary }]}
-              onPress={() => setSelectedProfile(item)}
-              activeOpacity={0.7}
-            >
-              <Text style={[styles.rank, { color: colors.textLight }]}>{item.rank}</Text>
-              <Text style={styles.avatar}>{item.avatar}</Text>
-              <View style={styles.cardInfo}>
-                <Text style={[styles.name, { color: colors.text }, item.isCurrentUser && styles.meText]}>{item.name}</Text>
-                <Text style={[styles.xp, { color: colors.primary }]}>{item.xp.toLocaleString()} XP</Text>
-              </View>
-            </TouchableOpacity>
-          )}
-        />
+        activeTab === 'league' ? renderLeagueTab() : renderDuelTab()
       )}
     </SafeAreaView>
   );
@@ -320,125 +333,231 @@ const LeaderboardScreen: React.FC<any> = ({ navigation }) => {
 
 const styles = StyleSheet.create({
   container: { flex: 1 },
-  header: {
-    paddingHorizontal: 15,
-    paddingVertical: 15,
+  topTabs: {
     flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-  },
-  menuIcon: {
-    width: 40,
-    height: 40,
-    justifyContent: 'center',
-  },
-  headerTitle: {
-    fontSize: 22,
-    fontWeight: 'bold',
-    color: '#FFF',
-    fontFamily: 'SpaceGrotesk_700Bold',
-  },
-  headerSub: {
-    fontSize: 13,
-    color: 'rgba(255,255,255,0.9)',
-    marginTop: 2,
-    fontWeight: '600'
-  },
-  statusBadge: {
-    marginTop: 6,
-    borderRadius: 20,
-    paddingHorizontal: 12,
-    paddingVertical: 3,
-  },
-  statusText: {
-    fontSize: 11,
-    fontWeight: '700',
-    letterSpacing: 0.3,
-  },
-  modalOverlay: {
-    flex: 1,
-    backgroundColor: 'rgba(0,0,0,0.5)',
-    justifyContent: 'flex-start',
-  },
-  menuContainer: {
-    marginTop: Platform.OS === 'ios' ? 100 : 70,
     marginHorizontal: 20,
-    borderRadius: 16,
-    padding: 10,
-    shadowColor: '#000',
-    shadowOpacity: 0.15,
-    shadowRadius: 20,
-    elevation: 10,
-  },
-  menuTitle: {
-    fontSize: 14,
-    fontWeight: 'bold',
+    marginTop: 10,
     marginBottom: 10,
-    paddingHorizontal: 10,
-    paddingTop: 5,
+    backgroundColor: '#141D32',
+    borderRadius: 12,
+    padding: 4,
+  },
+  tabBtn: {
+    flex: 1,
+    paddingVertical: 10,
+    alignItems: 'center',
+    borderRadius: 8,
+  },
+  tabBtnActive: {
+    backgroundColor: '#1E2B4D',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+    elevation: 2,
+  },
+  tabText: {
+    color: '#6B7280',
+    fontWeight: '800',
+    fontSize: 14,
+    letterSpacing: 1,
+  },
+  tabTextActive: {
+    color: '#FFF',
+  },
+  
+  // Hero Section
+  heroContainer: {
+    alignItems: 'center',
+    paddingVertical: 30,
+    borderBottomWidth: 1,
+    borderBottomColor: '#1E2B4D',
+    position: 'relative',
+    overflow: 'hidden',
+  },
+  heroContent: {
+    alignItems: 'center',
+    zIndex: 2,
+  },
+  badgeContainer: {
+    backgroundColor: '#0B1022', // Koyu ve düz arka plan
+    width: 90,
+    height: 90,
+    borderRadius: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 15,
+    borderWidth: 1,
+    transform: [{ rotate: '45deg' }],
+    overflow: 'hidden'
+  },
+  badgeIcon: {
+    fontSize: 40,
+    transform: [{ rotate: '-45deg' }]
+  },
+  leagueTitle: {
+    fontSize: 28,
+    fontWeight: '900',
+    fontFamily: 'SpaceGrotesk_700Bold',
     textTransform: 'uppercase',
     letterSpacing: 1,
-    opacity: 0.5,
+    marginBottom: 5,
   },
-  menuItem: {
+  timeLeftText: {
+    color: '#9CA3AF',
+    fontSize: 13,
+    fontWeight: '600',
+    marginBottom: 20,
+  },
+  heroStatsRow: {
+    flexDirection: 'row',
+    gap: 30,
+  },
+  heroStatBox: {
+    alignItems: 'center',
+  },
+  heroStatLabel: {
+    color: '#6B7280',
+    fontSize: 12,
+    fontWeight: '700',
+    textTransform: 'uppercase',
+    marginBottom: 4,
+  },
+  heroStatValue: {
+    color: '#FFF',
+    fontSize: 20,
+    fontWeight: '800',
+  },
+
+  // Stats Panel
+  statsPanel: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    backgroundColor: '#141D32',
+    marginHorizontal: 20,
+    marginTop: 20,
+    padding: 15,
+    borderRadius: 16,
+    borderWidth: 1,
+    borderColor: '#1E2B4D',
+  },
+  statMiniBox: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingVertical: 14,
-    paddingHorizontal: 15,
-    borderRadius: 12,
+    gap: 6,
   },
-  menuItemText: {
-    fontSize: 16,
-    fontWeight: '600',
+  statMiniText: {
+    color: '#D1D5DB',
+    fontWeight: '700',
+    fontSize: 13,
   },
-  listContent: { padding: 15, paddingBottom: 100 },
-  podium: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'flex-end',
-    marginBottom: 30,
-    paddingTop: 40,
-    paddingBottom: 20,
-    borderRadius: 20,
-    marginTop: 10,
-  },
-  podiumItem: { alignItems: 'center', width: '30%', marginHorizontal: 2 },
-  podiumAvatar: { fontSize: 40, marginBottom: 5 },
-  podiumBar: { width: '100%', borderTopLeftRadius: 10, borderTopRightRadius: 10, justifyContent: 'flex-start', alignItems: 'center', paddingTop: 10 },
-  podiumFirst: { height: 120 },
-  podiumSecond: { height: 90 },
-  podiumThird: { height: 70 },
-  podiumRank: { fontSize: 24 },
-  podiumName: { fontSize: 13, fontWeight: 'bold', marginTop: 8, textAlign: 'center', fontFamily: 'SpaceGrotesk_700Bold' },
-  podiumXp: { fontSize: 12, fontWeight: '700', marginTop: 2 },
-  meText: { color: '#1D4ED8' },
-  card: {
+
+  // List
+  listContent: { padding: 20, paddingBottom: 100 },
+  userCard: {
     flexDirection: 'row',
     alignItems: 'center',
     padding: 15,
     borderRadius: 16,
     marginBottom: 10,
-    borderWidth: 1,
-    borderColor: '#E5E7EB',
   },
-  rank: { width: 30, fontSize: 16, fontWeight: 'bold' },
-  avatar: { fontSize: 36, marginRight: 15 },
+  rankBox: {
+    width: 30,
+    height: 30,
+    borderRadius: 8,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginRight: 12,
+  },
+  rankText: {
+    color: '#9CA3AF',
+    fontWeight: '800',
+    fontSize: 14,
+  },
+  avatar: { fontSize: 32, marginRight: 15 },
   cardInfo: { flex: 1 },
-  name: { fontSize: 16, fontWeight: '700', fontFamily: 'SpaceGrotesk_700Bold' },
-  xp: { fontSize: 14, fontWeight: '600', marginTop: 2 },
+  name: { fontSize: 16, fontWeight: '700', color: '#FFF', fontFamily: 'SpaceGrotesk_700Bold' },
+  points: { fontSize: 13, fontWeight: '600', color: '#9CA3AF', marginTop: 2 },
   
-  // Profile Modal Styles
+  // Duel Tab
+  duelStatsCard: {
+    backgroundColor: '#141D32',
+    padding: 20,
+    borderRadius: 16,
+    borderWidth: 1,
+    borderColor: '#1E2B4D',
+  },
+  duelSectionTitle: {
+    color: '#FFF',
+    fontSize: 18,
+    fontWeight: '800',
+    fontFamily: 'SpaceGrotesk_700Bold',
+    marginBottom: 15,
+  },
+  duelStatsGrid: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  duelStatItem: {
+    alignItems: 'center',
+  },
+  duelStatValue: {
+    color: '#FFF',
+    fontSize: 24,
+    fontWeight: '900',
+    fontFamily: 'SpaceGrotesk_700Bold',
+  },
+  duelStatLabel: {
+    color: '#6B7280',
+    fontSize: 12,
+    fontWeight: '600',
+    marginTop: 4,
+  },
+  duelModeCard: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#141D32',
+    padding: 16,
+    borderRadius: 16,
+    borderWidth: 1,
+    marginBottom: 12,
+    overflow: 'hidden',
+  },
+  duelModeIconBox: {
+    width: 50,
+    height: 50,
+    borderRadius: 12,
+    backgroundColor: '#0B1022',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginRight: 15,
+  },
+  duelModeTitle: {
+    color: '#FFF',
+    fontSize: 16,
+    fontWeight: '800',
+    fontFamily: 'SpaceGrotesk_700Bold',
+    marginBottom: 4,
+  },
+  duelModeDesc: {
+    color: '#9CA3AF',
+    fontSize: 12,
+    lineHeight: 16,
+  },
+
+  // Modal
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.7)',
+    justifyContent: 'flex-end',
+  },
   profileModalContainer: {
-    marginTop: 'auto',
     borderTopLeftRadius: 30,
     borderTopRightRadius: 30,
     padding: 30,
     alignItems: 'center',
-    shadowColor: '#000',
-    shadowOpacity: 0.1,
-    shadowRadius: 10,
-    elevation: 20,
+    borderTopWidth: 1,
+    borderColor: '#1E2B4D',
   },
   closeBtn: {
     position: 'absolute',

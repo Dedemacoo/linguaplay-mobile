@@ -6,6 +6,7 @@ import { LanguageCourse } from '../data/mockData';
 import { LessonContent } from '../data/lessonContent';
 import { languagesData } from '../data/mockData';
 import { englishCurriculumLessons } from '../data/englishCurriculum';
+import { englishContent } from '../data/englishContent';
 
 const CACHE_PREFIX_COURSE = '@course_cache_';
 const CACHE_PREFIX_LESSON = '@lesson_cache_';
@@ -48,9 +49,54 @@ export class ContentService {
     
     try {
       // 1. Check static English Curriculum first
-      if (lang === 'english' && englishCurriculumLessons[lessonId]) {
-        console.log(`[ContentService] Loaded lesson ${lessonId} from static curriculum`);
-        return englishCurriculumLessons[lessonId];
+      if (lang === 'english') {
+        if (englishCurriculumLessons[lessonId]) {
+          console.log(`[ContentService] Loaded lesson ${lessonId} from static curriculum`);
+          return englishCurriculumLessons[lessonId];
+        }
+        
+        // Dynamic generation for Unit 2+ from legacy englishContent.js
+        const match = lessonId.match(/eng_u(\d+)_l(\d+)/);
+        if (match) {
+          const unitIdx = parseInt(match[1], 10) - 1;
+          const lessonIdx = parseInt(match[2], 10) - 1;
+          
+          const legacyLesson = englishContent[unitIdx];
+          if (legacyLesson) {
+             const allQs = legacyLesson.questions || [];
+             
+             // Sort and filter questions based on lesson index
+             let filteredQs = [];
+             if (lessonIdx === 0) { // Etap 1: Vocab
+               filteredQs = allQs.filter(q => q.type === 'flashcard' || q.type === 'imageChoice' || q.type === 'multipleChoice').slice(0, 5);
+             } else if (lessonIdx === 1) { // Etap 2: Sentence
+               filteredQs = allQs.filter(q => q.type === 'constructSentence' || q.type === 'translate').slice(0, 5);
+             } else if (lessonIdx === 2) { // Etap 3: Speaking/Listening
+               filteredQs = allQs.filter(q => q.type === 'speak' || q.type === 'listen').slice(0, 5);
+             } else if (lessonIdx === 3) { // AI Challenge (Harder/Mixed)
+               filteredQs = allQs.sort(() => Math.random() - 0.5).slice(0, 5);
+             } else if (lessonIdx === 4) { // Final Review
+               filteredQs = allQs.sort(() => Math.random() - 0.5).slice(0, 8);
+             } else { // Treasure
+               filteredQs = allQs.slice(0, 2);
+             }
+             
+             // If filter was too strict and returned empty, fallback to random 5
+             if (filteredQs.length === 0) {
+                filteredQs = allQs.sort(() => Math.random() - 0.5).slice(0, 5);
+             }
+
+             console.log(`[ContentService] Generated lesson ${lessonId} dynamically from legacy data`);
+             return {
+                id: lessonId,
+                title: `${legacyLesson.title} - Adım ${lessonIdx + 1}`,
+                description: legacyLesson.description,
+                icon: legacyLesson.icon || '📚',
+                xpReward: 20,
+                questions: filteredQs
+             };
+          }
+        }
       }
 
       // 2. Check cache first

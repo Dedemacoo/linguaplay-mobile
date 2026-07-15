@@ -1,4 +1,4 @@
-﻿/**
+/**
  * LeagueService — Haftalık Lig Sistemi
  *
  * Ligler:
@@ -15,23 +15,27 @@ import {
   query, where, orderBy, limit, getDocs, serverTimestamp,
 } from 'firebase/firestore';
 
-export type LeagueTier = 'bronze' | 'silver' | 'gold' | 'diamond' | 'obsidian';
+export type LeagueTier = 'rookie' | 'bronze' | 'silver' | 'gold' | 'platinum' | 'diamond' | 'master' | 'grandmaster' | 'legend';
 
-export const LEAGUE_CONFIG: Record<LeagueTier, { label: string; color: string; icon: string; minXp: number }> = {
-  bronze:   { label: 'Bronz',    color: '#CD7F32', icon: '🥉', minXp: 0    },
-  silver:   { label: 'Gümüş',   color: '#C0C0C0', icon: '🥈', minXp: 500  },
-  gold:     { label: 'Altın',   color: '#FFD700', icon: '🥇', minXp: 1500 },
-  diamond:  { label: 'Elmas',   color: '#00F0FF', icon: '💎', minXp: 3000 },
-  obsidian: { label: 'Obsidyen', color: '#8B5CF6', icon: '🔮', minXp: 6000 },
+export const LEAGUE_CONFIG: Record<LeagueTier, { label: string; color: string; icon: string; minPoints: number }> = {
+  rookie:      { label: 'Rookie',       color: '#475569', icon: '🥚', minPoints: 0 },
+  bronze:      { label: 'Bronze',       color: '#B45309', icon: '🥉', minPoints: 500 },
+  silver:      { label: 'Silver',       color: '#94A3B8', icon: '🥈', minPoints: 1500 },
+  gold:        { label: 'Gold',         color: '#EAB308', icon: '🥇', minPoints: 3000 },
+  platinum:    { label: 'Platinum',     color: '#06B6D4', icon: '🌟', minPoints: 5000 },
+  diamond:     { label: 'Diamond',      color: '#3B82F6', icon: '💎', minPoints: 8000 },
+  master:      { label: 'Master',       color: '#8B5CF6', icon: '🔮', minPoints: 12000 },
+  grandmaster: { label: 'Grand Master', color: '#BE123C', icon: '👹', minPoints: 20000 },
+  legend:      { label: 'Legend',       color: '#F59E0B', icon: '👑', minPoints: 35000 },
 };
 
-const TIERS: LeagueTier[] = ['bronze', 'silver', 'gold', 'diamond', 'obsidian'];
+const TIERS: LeagueTier[] = ['rookie', 'bronze', 'silver', 'gold', 'platinum', 'diamond', 'master', 'grandmaster', 'legend'];
 
 export interface LeagueUserEntry {
   uid: string;
   name: string;
   avatar: string;
-  weeklyXp: number;
+  weeklyPoints: number; // Changed from weeklyXp to weeklyPoints
   tier: LeagueTier;
   rank?: number;
 }
@@ -53,16 +57,16 @@ export class LeagueService {
   /**
    * Kullanıcının haftalık XP'sini güncelle + lig tier'ını hesapla
    */
-  static async updateWeeklyXp(uid: string, name: string, avatar: string, totalWeeklyXp: number): Promise<void> {
+  static async updateWeeklyPoints(uid: string, name: string, avatar: string, totalWeeklyPoints: number): Promise<void> {
     const weekKey = this.getWeekStartKey();
-    const tier = this.calculateTier(totalWeeklyXp);
+    const tier = this.calculateTier(totalWeeklyPoints);
     const docRef = doc(db, 'leagues', `${weekKey}_${uid}`);
 
     await setDoc(docRef, {
       uid,
       name,
       avatar,
-      weeklyXp: totalWeeklyXp,
+      weeklyXp: totalWeeklyPoints, // Save as weeklyXp for Firebase indexing
       tier,
       weekKey,
       updatedAt: serverTimestamp(),
@@ -70,12 +74,12 @@ export class LeagueService {
   }
 
   /**
-   * XP miktarına göre lig tier'ını hesapla
+   * Puan miktarına göre lig tier'ını hesapla
    */
-  static calculateTier(weeklyXp: number): LeagueTier {
-    let tier: LeagueTier = 'bronze';
+  static calculateTier(weeklyPoints: number): LeagueTier {
+    let tier: LeagueTier = 'rookie';
     for (const t of TIERS) {
-      if (weeklyXp >= LEAGUE_CONFIG[t].minXp) {
+      if (weeklyPoints >= LEAGUE_CONFIG[t].minPoints) {
         tier = t;
       }
     }
@@ -91,15 +95,19 @@ export class LeagueService {
       collection(db, 'leagues'),
       where('weekKey', '==', weekKey),
       where('tier', '==', tier),
-      orderBy('weeklyXp', 'desc'),
+      orderBy('weeklyXp', 'desc'), // Query using weeklyXp due to existing Firebase composite index
       limit(maxResults)
     );
 
     const snapshot = await getDocs(q);
-    return snapshot.docs.map((d, i) => ({
-      ...d.data() as LeagueUserEntry,
-      rank: i + 1,
-    }));
+    return snapshot.docs.map((d, i) => {
+      const data = d.data();
+      return {
+        ...data,
+        weeklyPoints: data.weeklyXp || data.weeklyPoints || 0,
+        rank: i + 1,
+      } as LeagueUserEntry;
+    });
   }
 
   /**
@@ -110,7 +118,11 @@ export class LeagueService {
     const docRef = doc(db, 'leagues', `${weekKey}_${uid}`);
     const snap = await getDoc(docRef);
     if (!snap.exists()) return null;
-    return snap.data() as LeagueUserEntry;
+    const data = snap.data();
+    return {
+      ...data,
+      weeklyPoints: data.weeklyXp || data.weeklyPoints || 0
+    } as LeagueUserEntry;
   }
 
   /**
