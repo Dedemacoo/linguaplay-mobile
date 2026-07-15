@@ -142,6 +142,50 @@ Kurallar:
     };
   }
 
+  static async generateWeaknessQuiz(mistakes: Record<string, any>, language: string): Promise<any[]> {
+    try {
+      const mistakeKeys = Object.keys(mistakes).slice(0, 15); // Take top 15 mistakes
+      if (mistakeKeys.length === 0) return [];
+      
+      const prompt = `Sen uzman bir dil hocasısın. Öğrencinin şu kelime veya kurallarda eksiği var:
+${mistakeKeys.join(', ')}
+
+Bu eksikleri hedef alan 10 soruluk pratik bir quiz oluştur. Hedef dil: ${language}.
+Formatı tam olarak şu JSON array olmalıdır:
+[
+  {
+    "id": "ai_q_1",
+    "type": "multipleChoice",
+    "prompt": "Soru metni (Türkçe veya İngilizce olabilir)",
+    "options": ["A", "B", "C", "D"],
+    "correctIndex": 0
+  }
+]
+Sadece ve sadece JSON formatında yanıt ver, markdown backtick ( \`\`\`json ) GÖNDERME! Sadece köşeli parantezle başlayan array gönder. Soruların hepsi mantıklı ve eğitici olmalı.`;
+
+      const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${GEMINI_API_KEY}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          contents: [{ role: 'user', parts: [{ text: prompt }] }],
+          generationConfig: { temperature: 0.7, maxOutputTokens: 2000 }
+        })
+      });
+
+      const data = await response.json();
+      const textResponse = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
+      
+      const jsonMatch = textResponse.match(/\[[\s\S]*\]/);
+      if (jsonMatch) {
+        return JSON.parse(jsonMatch[0]);
+      }
+      return [];
+    } catch (error) {
+      console.error('Quiz generation error:', error);
+      return [];
+    }
+  }
+
   private static calculateSimilarity(a: string, b: string): number {
     if (a === b) return 1;
     const matrix: number[][] = [];

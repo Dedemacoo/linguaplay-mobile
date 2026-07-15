@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, StatusBar, Dimensions, Animated, Alert } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, StatusBar, Dimensions, Animated, Alert, ActivityIndicator } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons, FontAwesome5, MaterialCommunityIcons, Feather } from '@expo/vector-icons';
@@ -10,6 +10,7 @@ import LottieView from 'lottie-react-native';
 import { useLanguageStore } from '../store/useLanguageStore';
 import { useProgressStore } from '../store/useProgressStore';
 import { ContentService } from '../services/ContentService';
+import { AIService } from '../services/AIService';
 import { LanguageCourse } from '../data/mockData';
 import { Mascot } from '../components/Mascot';
 import { HomeScreenSkeleton } from '../components/SkeletonLoader';
@@ -156,6 +157,7 @@ const HomeScreen: React.FC<any> = () => {
   const [isLangDropdownOpen, setIsLangDropdownOpen] = useState(false);
   const [isAIPanelOpen, setIsAIPanelOpen] = useState(false);
   const [showFabs, setShowFabs] = useState(false);
+  const [isGeneratingQuiz, setIsGeneratingQuiz] = useState(false);
   
   // Refs
   const scrollViewRef = useRef<ScrollView>(null);
@@ -175,6 +177,9 @@ const HomeScreen: React.FC<any> = () => {
   const dailyXp = langProgress.dailyXp || 0;
   const userLevel = langProgress.level || Math.floor(totalXp / 100) + 1;
   const streak = progress?.languages?.[activeLanguage]?.streak || 0;
+  const userMistakes = langProgress.mistakes || {};
+  const mistakeKeys = Object.keys(userMistakes);
+  const hasMistakes = mistakeKeys.length > 0;
 
   useEffect(() => {
     let mounted = true;
@@ -254,11 +259,37 @@ const HomeScreen: React.FC<any> = () => {
     ]).start();
 
     if (activeNodeRef.current && scrollViewRef.current) {
-      activeNodeRef.current.measure((x, y, width, height, pageX, pageY) => {
-        const screenCenter = Dimensions.get('window').height / 2;
-        const targetScrollY = Math.max(0, scrollYRef.current + pageY - screenCenter + 100);
-        scrollViewRef.current?.scrollTo({ y: targetScrollY, animated: true });
+      activeNodeRef.current.measureLayout(
+        scrollViewRef.current.getInnerViewNode(),
+        (left, top, width, height) => {
+          const screenCenter = Dimensions.get('window').height / 2;
+          const targetScrollY = Math.max(0, top - screenCenter + 100);
+          scrollViewRef.current?.scrollTo({ y: targetScrollY, animated: true });
+        },
+        () => {}
+      );
+    }
+  };
+
+  const handleAIPractice = async () => {
+    if (!hasMistakes) {
+      Alert.alert("Harika Gidiyorsun! 🎉", "Şu an üzerinde çalışman gereken belirgin bir zayıf noktan yok. Konulara devam et!");
+      return;
+    }
+    setIsGeneratingQuiz(true);
+    const customQuestions = await AIService.generateWeaknessQuiz(userMistakes, activeLanguage);
+    setIsGeneratingQuiz(false);
+    setIsAIPanelOpen(false);
+    
+    if (customQuestions && customQuestions.length > 0) {
+      // @ts-ignore
+      navigation.navigate('Lesson', { 
+        lessonId: 'ai_practice', 
+        customQuestions,
+        isAIPractice: true
       });
+    } else {
+      Alert.alert("Hata", "Ders oluşturulurken bir hata oluştu. Lütfen bağlantını kontrol et ve tekrar dene.");
     }
   };
 
@@ -630,14 +661,30 @@ const HomeScreen: React.FC<any> = () => {
              <ScrollView>
                <View style={{ backgroundColor: 'rgba(255,255,255,0.05)', padding: 15, borderRadius: 15, marginBottom: 10 }}>
                  <Text style={{ color: '#FFF', fontWeight: 'bold', marginBottom: 5 }}>Zayıf Yönlerin</Text>
-                 <Text style={{ color: '#94A3B8' }}>Past Tense (Geçmiş Zaman) kuralları. Son derslerde %40 başarı gösterdin.</Text>
+                 <Text style={{ color: '#94A3B8' }}>
+                   {hasMistakes 
+                     ? `Şu an ${mistakeKeys.length} farklı kelime veya konuda hatan görünüyor. Özelleştirilmiş bir ders ile bunları hemen telafi edebiliriz.`
+                     : `Şu an harika gidiyorsun, kayıtlı hiçbir hatan yok!`
+                   }
+                 </Text>
                </View>
                <View style={{ backgroundColor: 'rgba(255,255,255,0.05)', padding: 15, borderRadius: 15, marginBottom: 10 }}>
                  <Text style={{ color: '#FFF', fontWeight: 'bold', marginBottom: 5 }}>Güçlü Yönlerin</Text>
-                 <Text style={{ color: '#94A3B8' }}>Vocabulary (Kelime Bilgisi). Tüm kelime sorularını %100 doğru cevapladın!</Text>
+                 <Text style={{ color: '#94A3B8' }}>Genel olarak çözdüğün derslerde çok istikrarlısın. Aynen böyle devam et!</Text>
                </View>
-               <TouchableOpacity style={{ backgroundColor: '#3B82F6', padding: 15, borderRadius: 15, alignItems: 'center', marginTop: 20 }} onPress={() => setIsAIPanelOpen(false)}>
-                 <Text style={{ color: '#FFF', fontWeight: 'bold', fontSize: 16 }}>Zayıf Yönlerimi Çalış</Text>
+               
+               <TouchableOpacity 
+                 style={{ backgroundColor: hasMistakes ? '#3B82F6' : '#1E293B', padding: 15, borderRadius: 15, alignItems: 'center', marginTop: 20, opacity: isGeneratingQuiz ? 0.7 : 1 }} 
+                 onPress={handleAIPractice}
+                 disabled={isGeneratingQuiz}
+               >
+                 {isGeneratingQuiz ? (
+                   <ActivityIndicator color="#FFF" />
+                 ) : (
+                   <Text style={{ color: hasMistakes ? '#FFF' : '#64748B', fontWeight: 'bold', fontSize: 16 }}>
+                     {hasMistakes ? 'Zayıf Yönlerimi Çalış' : 'Zayıf Yön Bulunamadı'}
+                   </Text>
+                 )}
                </TouchableOpacity>
              </ScrollView>
           </View>

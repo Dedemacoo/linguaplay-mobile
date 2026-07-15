@@ -200,6 +200,7 @@ const LessonScreen: React.FC<Props> = ({ navigation, route }) => {
   };
   const fromOnboarding = (route.params as any)?.fromOnboarding;
   const isPlacementTest = (route.params as any)?.isPlacementTest;
+  const isAIPractice = (route.params as any)?.isAIPractice;
   
   const [currentLesson, setCurrentLesson] = useState<any>(null);
   const [allLessons, setAllLessons] = useState<any[]>([]);
@@ -279,6 +280,21 @@ const LessonScreen: React.FC<Props> = ({ navigation, route }) => {
           return q;
         });
       };
+
+      if ((route.params as any)?.customQuestions) {
+        const qs = (route.params as any).customQuestions;
+        setCurrentLesson({
+          id: 'ai_practice',
+          title: (route.params as any)?.title || 'AI Pratik',
+          description: 'Zayıf yönlerini geliştirmek için özel quiz.',
+          icon: 'robot',
+          xpReward: 15,
+          questions: processQuestions(qs)
+        });
+        setQuestions(processQuestions(qs));
+        setLoading(false);
+        return;
+      }
 
       if (isPlacementTest) {
         const difficulty = (route.params as any)?.difficulty || 'easy';
@@ -369,7 +385,7 @@ const LessonScreen: React.FC<Props> = ({ navigation, route }) => {
   
   const langProgress = progress.languages?.[activeLanguage] || { totalXp: 0, level: 1, completedLessons: [] };
   
-  const isLocked = !isPlacementTest && currentLessonIndex > 0 && 
+  const isLocked = !isPlacementTest && !isAIPractice && currentLessonIndex > 0 && 
                    !langProgress.completedLessons.includes(currentLesson?.id || '') && 
                    !langProgress.completedLessons.includes(allLessons[currentLessonIndex - 1]?.id || '');
 
@@ -534,7 +550,7 @@ const LessonScreen: React.FC<Props> = ({ navigation, route }) => {
       ]).start();
       
       if (!isPlacementTest) {
-        setEarnedXp(prev => prev + Math.floor(currentLesson.xpReward / totalQuestions));
+        setEarnedXp(prev => prev + Math.floor((currentLesson.xpReward || 10) / totalQuestions));
       }
       Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
       SoundManager.playCorrect();
@@ -686,7 +702,11 @@ const LessonScreen: React.FC<Props> = ({ navigation, route }) => {
       // Play lesson complete sound if available
       Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
 
-      if (isPlacementTest) {
+      if (isAIPractice) {
+        const bonusXp = hearts === 5 ? 5 : 0;
+        addXp(earnedXp + bonusXp, activeLanguage);
+        SoundManager.playComplete();
+      } else if (isPlacementTest) {
         // Seviye belirleme mantığı: başarı oranına göre ders aç
         const finalCorrect = correctAnswersCount;
         let maxLessons = 10; // easy
@@ -930,6 +950,14 @@ const LessonScreen: React.FC<Props> = ({ navigation, route }) => {
               <Text style={[styles.rewardLabel, { color: colors.textLight }]}>Kalan Can</Text>
             </View>
           </View>
+
+          {currentLesson?.id?.endsWith('_l6') && (
+            <View style={[styles.rewardCard, { backgroundColor: 'rgba(251, 191, 36, 0.1)', borderColor: '#FBBF24', marginTop: 20, width: '90%', paddingVertical: 15 }]}>
+              <Text style={styles.rewardEmoji}>💎</Text>
+              <Text style={[styles.rewardValue, { color: '#B45309', fontSize: 22 }]}>+100 Mücevher</Text>
+              <Text style={[styles.rewardLabel, { color: '#B45309', textAlign: 'center' }]}>Ünite sonu büyük ödülünü kazandın!</Text>
+            </View>
+          )}
 
           {currentLesson?.id === 'e_boss_1' && (
             <View style={[styles.rewardCard, { backgroundColor: colors.surface, borderColor: colors.border, marginTop: 20, width: '90%', paddingVertical: 15 }]}>

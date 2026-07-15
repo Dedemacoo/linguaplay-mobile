@@ -77,22 +77,34 @@ export class ContentService {
                filteredQs = allQs.sort(() => Math.random() - 0.5).slice(0, 5);
              } else if (lessonIdx === 4) { // Final Review
                filteredQs = allQs.sort(() => Math.random() - 0.5).slice(0, 8);
-             } else { // Treasure
-               filteredQs = allQs.slice(0, 2);
+             } else { // Treasure - 10 Mixed Questions (Quiz)
+               // Try to get a good mix of everything
+               const speakQs = allQs.filter(q => q.type === 'speak').slice(0, 2);
+               const listenQs = allQs.filter(q => q.type === 'listen').slice(0, 2);
+               const sentenceQs = allQs.filter(q => q.type === 'constructSentence' || q.type === 'translate').slice(0, 2);
+               const vocabQs = allQs.filter(q => q.type === 'imageChoice' || q.type === 'multipleChoice').slice(0, 2);
+               
+               let mixed = [...speakQs, ...listenQs, ...sentenceQs, ...vocabQs];
+               
+               // Fill the rest up to 10 randomly
+               const usedIds = new Set(mixed.map(q => q.id));
+               const remainingQs = allQs.filter(q => !usedIds.has(q.id)).sort(() => Math.random() - 0.5);
+               
+               filteredQs = [...mixed, ...remainingQs].slice(0, 10).sort(() => Math.random() - 0.5);
              }
              
-             // If filter was too strict and returned empty, fallback to random 5
+             // If filter was too strict and returned empty, fallback to random
              if (filteredQs.length === 0) {
-                filteredQs = allQs.sort(() => Math.random() - 0.5).slice(0, 5);
+                filteredQs = allQs.sort(() => Math.random() - 0.5).slice(0, lessonIdx === 5 ? 10 : 5);
              }
 
              console.log(`[ContentService] Generated lesson ${lessonId} dynamically from legacy data`);
              return {
                 id: lessonId,
-                title: `${legacyLesson.title} - Adım ${lessonIdx + 1}`,
-                description: legacyLesson.description,
-                icon: legacyLesson.icon || '📚',
-                xpReward: 20,
+                title: lessonIdx === 5 ? 'Ünite Sonu Quizi' : `${legacyLesson.title} - Adım ${lessonIdx + 1}`,
+                description: lessonIdx === 5 ? 'Üniteyi tamamlamak için bu testi geç!' : legacyLesson.description,
+                icon: lessonIdx === 5 ? '🎁' : (legacyLesson.icon || '📚'),
+                xpReward: lessonIdx === 5 ? 100 : 20,
                 questions: filteredQs
              };
           }
