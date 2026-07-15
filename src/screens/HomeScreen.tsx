@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, StatusBar, Dimensions, Animated, Alert, ActivityIndicator } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, StatusBar, Dimensions, Animated, Alert, ActivityIndicator, Image } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons, FontAwesome5, MaterialCommunityIcons, Feather } from '@expo/vector-icons';
@@ -324,7 +324,7 @@ const HomeScreen: React.FC<any> = () => {
             <Text style={[styles.statValue, { color: BRAND.streak }]}>{streak}</Text>
           </View>
           <View style={styles.statPill}>
-            <Text style={{ fontSize: 16 }}>💎</Text>
+            <Image source={require('../../assets/icons/lingo_coin.png')} style={{ width: 18, height: 18, resizeMode: 'contain' }} />
             <Text style={[styles.statValue, { color: BRAND.accent }]}>{progress?.gems || 0}</Text>
           </View>
           <View style={styles.statPill}>
