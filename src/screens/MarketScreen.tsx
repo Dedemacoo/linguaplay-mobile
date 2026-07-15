@@ -162,7 +162,8 @@ const MarketScreen = () => {
       await setPremium(true);
       showSuccessConfetti();
     } else if (selectedItem?.type === 'Mystery Box') {
-      const result = openMysteryBox(Object.values(MASCOTS).map(m => m.id));
+      const mysteryThemes = ['wizard', 'astronaut', 'royal', 'cyber'];
+      const result = openMysteryBox(mysteryThemes);
       if (result.success) {
         showSuccessConfetti();
         if (result.type === 'theme') {
@@ -212,7 +213,7 @@ const MarketScreen = () => {
             {pack.bestValue && <View style={[styles.badge, { backgroundColor: '#FFD60A' }]}><Text style={[styles.badgeText, { color: '#000' }]}>BEST VALUE</Text></View>}
             
             <View style={{ marginBottom: 10, shadowColor: '#00c6ff', shadowOpacity: 0.5, shadowRadius: 15, elevation: 5 }}>
-               <Mascot size={60} />
+               <Text style={{ fontSize: 40 }}>💎</Text>
             </View>
             
             <Text style={styles.diamondAmount}>{pack.amount}</Text>
@@ -358,22 +359,7 @@ const MarketScreen = () => {
           <TouchableOpacity onPress={() => navigation.goBack()} style={{ marginRight: 15 }}>
             <Text style={{ fontSize: 24, color: colors.textLight, fontWeight: 'bold' }}>✕</Text>
           </TouchableOpacity>
-          <Text style={styles.headerTitle}>🛍️ Lingo Market</Text>
-        </View>
-      </View>
-
-      <View style={styles.statusRow}>
-        <View style={styles.statusItem}>
-          <Text style={{ fontSize: 18 }}>💎</Text>
-          <Text style={styles.statusText}>28,445</Text>
-        </View>
-        <View style={[styles.statusItem, { backgroundColor: 'rgba(255,214,10,0.1)', borderColor: '#FFD60A' }]}>
-          <Text style={{ fontSize: 16 }}>⭐</Text>
-          <Text style={[styles.statusText, { color: '#FFD60A' }]}>Premium</Text>
-        </View>
-        <View style={styles.statusItem}>
-          <Text style={{ fontSize: 14 }}>⏳</Text>
-          <Text style={styles.statusText}>12h 45m</Text>
+          <Text style={styles.headerTitle}>🌍✨ Lingo Market</Text>
         </View>
       </View>
 
@@ -466,7 +452,9 @@ const MarketScreen = () => {
               paddingHorizontal: 50,
               alignItems: 'center',
             }}>
-              <Text style={{ fontSize: 60, marginBottom: 20 }}>✨</Text>
+              <View style={{ marginBottom: 20 }}>
+                <Mascot size={100} animated={true} />
+              </View>
               <Text style={{ 
                 fontSize: 28, 
                 color: '#FFF', 
@@ -474,7 +462,7 @@ const MarketScreen = () => {
                 letterSpacing: 1,
                 textAlign: 'center'
               }}>
-                İşlem Başarılı
+                Tebrikler! Hayırlı Olsun
               </Text>
               <Text style={{ 
                 fontSize: 16, 
