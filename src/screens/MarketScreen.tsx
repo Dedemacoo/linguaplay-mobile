@@ -12,15 +12,9 @@ import { useProgressStore } from '../store/useProgressStore';
 const { width, height } = Dimensions.get('window');
 
 const TABS = [
-  { id: 'featured', label: 'Featured', icon: '⭐' },
-  { id: 'diamonds', label: 'Diamonds', icon: '💎' },
-  { id: 'outfits', label: 'Outfits', icon: '👕' },
-  { id: 'themes', label: 'Themes', icon: '🎨' },
-  { id: 'cosmetics', label: 'Cosmetics', icon: '✨' },
-  { id: 'bundles', label: 'Bundles', icon: '🎁' },
+  { id: 'featured', label: 'Öne Çıkanlar', icon: '✨' },
+  { id: 'diamonds', label: 'Elmaslar', icon: '💎' },
   { id: 'premium', label: 'Premium', icon: '👑' },
-  { id: 'limited', label: 'Limited', icon: '🔥' },
-  { id: 'league', label: 'Rewards', icon: '🏆' },
 ];
 
 const RARITY_COLORS = {
@@ -126,7 +120,7 @@ const MarketScreen = () => {
   // Confetti Animation Setup
   const confettiAnim = useRef(new Animated.Value(0)).current;
 
-  const { progress, buyMascot } = useProgressStore();
+  const { progress, buyMascot, addGems, setPremium, claimDailyReward, openMysteryBox } = useProgressStore();
 
   const handleOpenPurchase = (item: any) => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
@@ -134,72 +128,80 @@ const MarketScreen = () => {
     setPurchaseModalVisible(true);
   };
 
-  const handleBuy = () => {
+  const showSuccessConfetti = () => {
+    Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+    setPurchaseModalVisible(false);
+    setShowConfetti(true);
+    Animated.sequence([
+      Animated.timing(confettiAnim, { toValue: 1, duration: 600, easing: Easing.elastic(1.2), useNativeDriver: true }),
+      Animated.delay(1200),
+      Animated.timing(confettiAnim, { toValue: 0, duration: 400, easing: Easing.out(Easing.ease), useNativeDriver: true })
+    ]).start(() => setShowConfetti(false));
+  };
+
+  const showError = (title: string, message: string) => {
+    Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
+    Alert.alert(title, message);
+  };
+
+  const handleBuy = async () => {
     if (selectedItem?.type === 'Outfit') {
       const price = parseInt(selectedItem.price);
       if (progress.gems >= price) {
         const success = buyMascot(selectedItem.id, price);
         if (success) {
-          Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
-          setPurchaseModalVisible(false);
-          setShowConfetti(true);
-          
-          Animated.sequence([
-            Animated.timing(confettiAnim, { toValue: 1, duration: 600, easing: Easing.elastic(1.2), useNativeDriver: true }),
-            Animated.delay(1200),
-            Animated.timing(confettiAnim, { toValue: 0, duration: 400, easing: Easing.out(Easing.ease), useNativeDriver: true })
-          ]).start(() => setShowConfetti(false));
+          showSuccessConfetti();
         }
       } else {
-        Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
-        Alert.alert('Yetersiz Elmas', 'Bu ürünü satın almak için yeterli elmasınız yok.');
+        showError('Yetersiz Elmas', 'Bu ürünü satın almak için yeterli elmasınız yok.');
+      }
+    } else if (selectedItem?.type === 'Currency') {
+      addGems(selectedItem.amount);
+      showSuccessConfetti();
+    } else if (selectedItem?.type === 'Subscription') {
+      await setPremium(true);
+      showSuccessConfetti();
+    } else if (selectedItem?.type === 'Mystery Box') {
+      const result = openMysteryBox(Object.values(MASCOTS).map(m => m.id));
+      if (result.success) {
+        showSuccessConfetti();
+        if (result.type === 'theme') {
+          setTimeout(() => Alert.alert('🎉 Tebrikler!', `Sürpriz kutudan yeni bir tema kazandın!`), 1000);
+        } else {
+          setTimeout(() => Alert.alert('🎁 Sürpriz Kutu!', `Kutudan tema çıkmadı ama teselli ödülü olarak ${result.refundAmount} Elmas kazandın. Yeni temayı almak için açmaya devam et!`), 1000);
+        }
+      } else {
+        showError('Yetersiz Elmas', result.error || 'Elmasınız yetersiz.');
       }
     } else {
-      // For other items like bundles, dummy success for now
-      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
-      setPurchaseModalVisible(false);
-      setShowConfetti(true);
-      
-      Animated.sequence([
-        Animated.timing(confettiAnim, { toValue: 1, duration: 600, easing: Easing.elastic(1.2), useNativeDriver: true }),
-        Animated.delay(1200),
-        Animated.timing(confettiAnim, { toValue: 0, duration: 400, easing: Easing.out(Easing.ease), useNativeDriver: true })
-      ]).start(() => setShowConfetti(false));
+      showSuccessConfetti();
+    }
+  };
+
+  const handleFreeReward = () => {
+    const success = claimDailyReward();
+    if (success) {
+      showSuccessConfetti();
+      setTimeout(() => Alert.alert('🎁 Harika!', 'Günlük 50 Elmas ödülünü aldın!'), 1000);
+    } else {
+      Alert.alert('Zaten Alındı', 'Bugünkü ödülünü zaten aldın. Yarın tekrar gel!');
     }
   };
 
   const renderSection = () => {
     switch(activeTab) {
       case 'diamonds': return renderDiamonds();
-      case 'outfits': return renderOutfits();
       case 'premium': return renderPremium();
-      case 'bundles': return renderBundles();
-      case 'limited': return renderLimited();
-      case 'themes': return renderComingSoon('Themes', '🎨');
-      case 'cosmetics': return renderComingSoon('Cosmetics', '✨');
-      case 'league': return renderComingSoon('League Rewards', '🏆');
       case 'featured':
       default:
         return (
           <>
             <FeaturedCarousel />
             {renderDailyShop()}
-            <Text style={styles.sectionHeading}>Limited Offers</Text>
-            {renderLimited()}
-            <Text style={styles.sectionHeading}>Bundles</Text>
-            {renderBundles()}
           </>
         );
     }
   };
-
-  const renderComingSoon = (title: string, icon: string) => (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', padding: 40, marginTop: 40 }}>
-      <Text style={{ fontSize: 60, marginBottom: 20 }}>{icon}</Text>
-      <Text style={{ color: colors.text, fontSize: 24, fontWeight: 'bold', marginBottom: 10, textAlign: 'center' }}>{title}</Text>
-      <Text style={{ color: colors.textLight, fontSize: 16, textAlign: 'center' }}>This section is currently under construction. Check back soon for exciting new items!</Text>
-    </View>
-  );
 
   const renderDiamonds = () => (
     <View style={styles.grid}>
@@ -318,27 +320,28 @@ const MarketScreen = () => {
 
   const renderDailyShop = () => (
     <View style={styles.dailyShop}>
-      <Text style={styles.sectionHeading}>Daily Shop</Text>
+      <Text style={styles.sectionHeading}>Günlük Market</Text>
       <View style={{ flexDirection: 'row', gap: 15, paddingHorizontal: 20 }}>
         
         {/* FREE REWARD */}
-        <TouchableOpacity style={styles.freeRewardCard} onPress={() => handleBuy()}>
+        <TouchableOpacity style={styles.freeRewardCard} onPress={handleFreeReward}>
           <LinearGradient colors={['#1A4325', '#0F2916']} style={styles.freeInner}>
             <Text style={{ fontSize: 32 }}>🎁</Text>
-            <Text style={styles.freeTitle}>Free Reward</Text>
-            <Text style={styles.freeSub}>Claim Now</Text>
+            <Text style={styles.freeTitle}>Ücretsiz Ödül</Text>
+            <Text style={styles.freeSub}>Hemen Al</Text>
           </LinearGradient>
         </TouchableOpacity>
 
         {/* MYSTERY BOX */}
-        <TouchableOpacity style={styles.mysteryCard} onPress={() => handleOpenPurchase({name: 'Epic Chest', price: 300, type: 'Mystery Box', image: '📦', rarity: 'Epic'})}>
+        <TouchableOpacity style={styles.mysteryCard} onPress={() => handleOpenPurchase({name: 'Sürpriz Kutu', price: 500, type: 'Mystery Box', image: '📦', rarity: 'Epic'})}>
           <LinearGradient colors={['#2B1B54', '#150A2E']} style={styles.freeInner}>
             <Text style={{ fontSize: 32 }}>📦</Text>
-            <Text style={styles.freeTitle}>Epic Chest</Text>
+            <Text style={styles.freeTitle}>Sürpriz Kutu</Text>
             <View style={styles.priceRow}>
               <Text style={{ fontSize: 12 }}>💎</Text>
-              <Text style={styles.priceText}>300</Text>
+              <Text style={styles.priceText}>500</Text>
             </View>
+            <Text style={[styles.freeSub, { marginTop: 4, textAlign: 'center', fontSize: 10 }]}>Yeni temayı almak için tıkla</Text>
           </LinearGradient>
         </TouchableOpacity>
       </View>

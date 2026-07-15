@@ -31,6 +31,8 @@ export interface UserProgress {
   lastHeartRefill: string;
   isPremium: boolean;
   speakingDisabledUntil?: number;
+  mysteryBoxCount?: number;
+  lastFreeRewardDate?: string;
   equippedMascot: string;
   unlockedMascots: string[];
   equippedCostumes?: { head?: string; back?: string; body?: string };
@@ -67,6 +69,7 @@ const defaultProgress: UserProgress = {
   isPremium: false,
   equippedMascot: 'classic',
   unlockedMascots: ['classic'],
+  mysteryBoxCount: 0,
   equippedCostumes: {},
   unlockedCostumes: [],
   languages: {
@@ -88,6 +91,8 @@ interface ProgressState {
   addXp: (amount: number, langKey: string) => void;
   disableSpeaking: () => void;
   completeLesson: (lessonId: string, xpEarned: number, langKey: string) => void;
+  claimDailyReward: () => boolean;
+  openMysteryBox: (availableMascotIds: string[]) => { success: boolean, type?: 'refund' | 'theme', refundAmount?: number, themeId?: string, error?: string };
   loseHeart: () => void;
   gainHeart: () => void;
   refillHearts: (cost: number) => boolean; 
@@ -235,6 +240,54 @@ export const useProgressStore = create<ProgressState>((set, get) => ({
     const newProgress = { ...get().progress, speakingDisabledUntil: Date.now() + 15 * 60 * 1000 };
     set({ progress: newProgress });
     get()._saveProgress(newProgress);
+  },
+
+  claimDailyReward: () => {
+    const prev = get().progress;
+    const today = getTodayStr();
+    if (prev.lastFreeRewardDate === today) return false;
+    const newProgress = { ...prev, gems: prev.gems + 50, lastFreeRewardDate: today };
+    set({ progress: newProgress });
+    get()._saveProgress(newProgress);
+    return true;
+  },
+
+  openMysteryBox: (availableMascotIds: string[]) => {
+    const prev = get().progress;
+    if (prev.gems < 500) return { success: false, error: 'Yetersiz elmas' };
+
+    const currentCount = prev.mysteryBoxCount || 0;
+    const newCount = currentCount + 1;
+
+    // Every 5th box gives a theme
+    if (newCount % 5 === 0) {
+      // Give theme
+      const unownedMascots = availableMascotIds.filter(id => !prev.unlockedMascots.includes(id));
+      if (unownedMascots.length > 0) {
+        const randomThemeId = unownedMascots[Math.floor(Math.random() * unownedMascots.length)];
+        const newProgress = { 
+          ...prev, 
+          gems: prev.gems - 500, 
+          mysteryBoxCount: newCount,
+          unlockedMascots: [...prev.unlockedMascots, randomThemeId]
+        };
+        set({ progress: newProgress });
+        get()._saveProgress(newProgress);
+        return { success: true, type: 'theme', themeId: randomThemeId };
+      } else {
+        // If they own all themes, give them 1000 gems instead
+        const newProgress = { ...prev, gems: (prev.gems - 500) + 1000, mysteryBoxCount: newCount };
+        set({ progress: newProgress });
+        get()._saveProgress(newProgress);
+        return { success: true, type: 'refund', refundAmount: 1000 };
+      }
+    } else {
+      // Refund 250 gems
+      const newProgress = { ...prev, gems: (prev.gems - 500) + 250, mysteryBoxCount: newCount };
+      set({ progress: newProgress });
+      get()._saveProgress(newProgress);
+      return { success: true, type: 'refund', refundAmount: 250 };
+    }
   },
 
   addXp: (amount: number, langKey: string) => {
