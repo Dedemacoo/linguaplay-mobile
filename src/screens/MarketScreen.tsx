@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Animated, Modal, Dimensions, Easing, Alert } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Animated, Modal, Dimensions, Easing, Alert, Image } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useThemeColors, BRAND } from '../theme/colors';
@@ -13,7 +13,7 @@ const { width, height } = Dimensions.get('window');
 
 const TABS = [
   { id: 'featured', label: 'Öne Çıkanlar', icon: '✨' },
-  { id: 'diamonds', label: 'Elmaslar', icon: '💎' },
+  { id: 'diamonds', label: 'Elmaslar', iconImage: require('../assets/icons/lingo_coin.png') },
   { id: 'premium', label: 'Premium', icon: '👑' },
 ];
 
@@ -213,7 +213,7 @@ const MarketScreen = () => {
             {pack.bestValue && <View style={[styles.badge, { backgroundColor: '#FFD60A' }]}><Text style={[styles.badgeText, { color: '#000' }]}>BEST VALUE</Text></View>}
             
             <View style={{ marginBottom: 10, shadowColor: '#00c6ff', shadowOpacity: 0.5, shadowRadius: 15, elevation: 5 }}>
-               <Text style={{ fontSize: 40 }}>💎</Text>
+               <Image source={require('../assets/icons/lingo_coin.png')} style={{ width: 60, height: 60 }} />
             </View>
             
             <Text style={styles.diamondAmount}>{pack.amount}</Text>
@@ -339,7 +339,7 @@ const MarketScreen = () => {
             <Text style={{ fontSize: 32 }}>📦</Text>
             <Text style={styles.freeTitle}>Sürpriz Kutu</Text>
             <View style={styles.priceRow}>
-              <Text style={{ fontSize: 12 }}>💎</Text>
+              <Image source={require('../assets/icons/lingo_coin.png')} style={{ width: 14, height: 14, marginRight: 4 }} />
               <Text style={styles.priceText}>500</Text>
             </View>
             <Text style={[styles.freeSub, { marginTop: 4, textAlign: 'center', fontSize: 10 }]}>Yeni temayı almak için tıkla</Text>
@@ -377,7 +377,11 @@ const MarketScreen = () => {
                   setActiveTab(tab.id);
                 }}
               >
-                <Text style={{ fontSize: 18, marginRight: 6 }}>{tab.icon}</Text>
+                {tab.icon ? (
+                  <Text style={{ fontSize: 18, marginRight: 6 }}>{tab.icon}</Text>
+                ) : (
+                  <Image source={tab.iconImage} style={{ width: 20, height: 20, marginRight: 6 }} />
+                )}
                 <Text style={[styles.tabText, { color: isActive ? '#FFF' : colors.textLight, fontWeight: isActive ? '800' : '600' }]}>{tab.label}</Text>
                 {isActive && <View style={[styles.tabIndicator, { backgroundColor: BRAND.primary }]} />}
               </TouchableOpacity>
@@ -416,7 +420,9 @@ const MarketScreen = () => {
               </Text>
 
               <View style={styles.priceTag}>
-                <Text style={{ fontSize: 24, marginRight: 5 }}>{typeof selectedItem?.price === 'number' ? '💎' : ''}</Text>
+                {typeof selectedItem?.price === 'number' && (
+                  <Image source={require('../assets/icons/lingo_coin.png')} style={{ width: 24, height: 24, marginRight: 8 }} />
+                )}
                 <Text style={styles.priceTagText}>{selectedItem?.newPrice || selectedItem?.price}</Text>
               </View>
 
