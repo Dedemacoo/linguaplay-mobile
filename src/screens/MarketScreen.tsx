@@ -359,7 +359,7 @@ const MarketScreen = () => {
           <TouchableOpacity onPress={() => navigation.goBack()} style={{ marginRight: 15 }}>
             <Text style={{ fontSize: 24, color: colors.textLight, fontWeight: 'bold' }}>✕</Text>
           </TouchableOpacity>
-          <Text style={styles.headerTitle}>🌍✨ Lingo Market</Text>
+          <Text style={styles.headerTitle}>🛒 Lingo Market</Text>
         </View>
       </View>
 
