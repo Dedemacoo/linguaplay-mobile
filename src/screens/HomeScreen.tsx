@@ -150,6 +150,8 @@ const HomeScreen: React.FC<any> = () => {
   const navigation = useNavigation();
   const { activeLanguage } = useLanguageStore();
   const { progress } = useProgressStore();
+
+  const kisimLottieRefs = useRef<{ [key: string]: LottieView | null }>({});
   
   const [courseData, setCourseData] = useState<LanguageCourse | null>(null);
   const [loading, setLoading] = useState(true);
@@ -220,10 +222,6 @@ const HomeScreen: React.FC<any> = () => {
       duration: 1000,
       useNativeDriver: false,
     }).start();
-
-    // Play Background Music for Active World
-    // Placeholder: SoundManager.playWorldMusic(WORLDS[activeWorldIndex].musicTrack);
-    console.log(`[Music] Playing ${WORLDS[activeWorldIndex].musicTrack} for ${WORLDS[activeWorldIndex].title}`);
 
   }, [dailyXp, activeWorldIndex]);
 
@@ -475,6 +473,36 @@ const HomeScreen: React.FC<any> = () => {
                   </View>
                 );
               })}
+            </View>
+
+            {/* Kupa / Hazine Sandığı (Ünite Sonu) */}
+            <View style={{ alignItems: 'center', marginTop: 30, marginBottom: 50 }}>
+              <TouchableOpacity 
+                activeOpacity={1}
+                onPress={() => {
+                  const lottie = kisimLottieRefs.current[`${globalUnitIndex}`];
+                  if (lottie) {
+                    lottie.play();
+                    setTimeout(() => {
+                      handleNodePress('active', `eng_u${globalUnitIndex + 1}_l6`, 'Ünite Sonu Quizi');
+                    }, 1500); // Wait for animation
+                  } else {
+                    handleNodePress('active', `eng_u${globalUnitIndex + 1}_l6`, 'Ünite Sonu Quizi');
+                  }
+                }}
+                style={{
+                  width: 120, height: 120,
+                  alignItems: 'center', justifyContent: 'center'
+                }}
+              >
+                <LottieView
+                  ref={ref => { kisimLottieRefs.current[`${globalUnitIndex}`] = ref; }}
+                  source={require('../../assets/mascots/kutuacilinca.json')}
+                  autoPlay={false}
+                  loop={false}
+                  style={{ width: '100%', height: '100%' }}
+                />
+              </TouchableOpacity>
             </View>
           </View>
         );
