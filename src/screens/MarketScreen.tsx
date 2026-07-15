@@ -488,13 +488,13 @@ const MarketScreen = () => {
             }}>
               <View style={{ marginBottom: 5, width: 140, height: 140, justifyContent: 'center', alignItems: 'center' }}>
                 <LottieView
-                  source={require('../../assets/mascots/yeniasamayagecilince.json')}
+                  source={require('../../assets/mascots/kutuacilinca.json')}
                   autoPlay
                   loop={false}
-                  style={{ width: 200, height: 200, position: 'absolute', zIndex: 1 }}
+                  style={{ width: '150%', height: '150%', position: 'absolute', zIndex: 1 }}
                 />
                 <Image 
-                  source={require('../../assets/mascots/pirate/idle.png')} 
+                  source={require('../../assets/mascots/pirate/pirate.gif')} 
                   style={{ width: 75, height: 75, resizeMode: 'contain', zIndex: 2 }} 
                 />
               </View>
