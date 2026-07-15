@@ -413,48 +413,48 @@ const MarketScreen = () => {
       {/* UPGRADED PURCHASE MODAL */}
       <Modal visible={purchaseModalVisible} transparent animationType="fade">
         <View style={[styles.modalOverlay, { backgroundColor: 'rgba(0,0,0,0.85)', justifyContent: 'center' }]}>
-          <View style={{ width: '90%', alignSelf: 'center', backgroundColor: '#1c1c1e', borderRadius: 32, overflow: 'hidden', borderWidth: 1, borderColor: 'rgba(255,255,255,0.1)', shadowColor: BRAND.primary, shadowOpacity: 0.3, shadowRadius: 50, elevation: 20 }}>
-            <LinearGradient colors={selectedItem?.rarity ? (RARITY_COLORS[selectedItem.rarity as keyof typeof RARITY_COLORS] || RARITY_COLORS.Common) : ['#2c2c2e', '#1c1c1e']} style={{ padding: 30, alignItems: 'center' }}>
-              <TouchableOpacity style={{ position: 'absolute', top: 20, right: 20, zIndex: 10 }} onPress={() => setPurchaseModalVisible(false)}>
-                <View style={{ width: 40, height: 40, borderRadius: 20, backgroundColor: 'rgba(0,0,0,0.3)', alignItems: 'center', justifyContent: 'center' }}>
-                  <Text style={{ fontSize: 20, color: '#FFF', fontWeight: 'bold' }}>✕</Text>
+          <View style={{ width: '82%', alignSelf: 'center', backgroundColor: '#1c1c1e', borderRadius: 32, overflow: 'hidden', borderWidth: 1, borderColor: 'rgba(255,255,255,0.1)', shadowColor: BRAND.primary, shadowOpacity: 0.3, shadowRadius: 50, elevation: 20 }}>
+            <LinearGradient colors={selectedItem?.rarity ? (RARITY_COLORS[selectedItem.rarity as keyof typeof RARITY_COLORS] || RARITY_COLORS.Common) : ['#2c2c2e', '#1c1c1e']} style={{ padding: 25, alignItems: 'center' }}>
+              <TouchableOpacity style={{ position: 'absolute', top: 15, right: 15, zIndex: 10 }} onPress={() => setPurchaseModalVisible(false)}>
+                <View style={{ width: 36, height: 36, borderRadius: 18, backgroundColor: 'rgba(0,0,0,0.3)', alignItems: 'center', justifyContent: 'center' }}>
+                  <Text style={{ fontSize: 18, color: '#FFF', fontWeight: 'bold' }}>✕</Text>
                 </View>
               </TouchableOpacity>
               
-              <Animated.View style={{ transform: [{ scale: modalPulseAnim }], marginTop: 20, marginBottom: 20, shadowColor: '#FFD60A', shadowOpacity: 0.8, shadowRadius: 30, elevation: 20 }}>
+              <Animated.View style={{ transform: [{ scale: modalPulseAnim }], marginTop: 15, marginBottom: 15, shadowColor: '#FFD60A', shadowOpacity: 0.8, shadowRadius: 30, elevation: 20 }}>
                 {selectedItem?.type === 'Outfit' ? (
-                  <View style={{ height: 160, justifyContent: 'center', alignItems: 'center' }}>
-                    <Mascot size={150} animated={true} />
+                  <View style={{ height: 120, justifyContent: 'center', alignItems: 'center' }}>
+                    <Mascot size={120} animated={true} />
                   </View>
                 ) : selectedItem?.image === 'lingo_coin' ? (
-                  <Image source={require('../../assets/icons/lingo_coin.png')} style={{ width: 140, height: 140 }} />
+                  <Image source={require('../../assets/icons/lingo_coin.png')} style={{ width: 110, height: 110 }} />
                 ) : (
-                  <Text style={{ fontSize: 120 }}>{selectedItem?.image}</Text>
+                  <Text style={{ fontSize: 100 }}>{selectedItem?.image}</Text>
                 )}
               </Animated.View>
 
-              <Text style={{ fontSize: 32, fontWeight: '900', color: '#FFF', fontFamily: 'SpaceGrotesk_700Bold', textAlign: 'center', textShadowColor: 'rgba(0,0,0,0.5)', textShadowOffset: { width: 0, height: 2 }, textShadowRadius: 4 }}>{selectedItem?.name}</Text>
+              <Text style={{ fontSize: 26, fontWeight: '900', color: '#FFF', fontFamily: 'SpaceGrotesk_700Bold', textAlign: 'center', textShadowColor: 'rgba(0,0,0,0.5)', textShadowOffset: { width: 0, height: 2 }, textShadowRadius: 4 }}>{selectedItem?.name}</Text>
               
-              <View style={{ backgroundColor: 'rgba(255,255,255,0.15)', paddingHorizontal: 16, paddingVertical: 6, borderRadius: 20, marginTop: 10, marginBottom: 25 }}>
-                <Text style={{ color: selectedItem?.rarity ? RARITY_COLORS[selectedItem.rarity as keyof typeof RARITY_COLORS][0] : '#FFF', fontSize: 14, fontWeight: '800', letterSpacing: 1 }}>
+              <View style={{ backgroundColor: 'rgba(255,255,255,0.15)', paddingHorizontal: 14, paddingVertical: 5, borderRadius: 20, marginTop: 8, marginBottom: 15 }}>
+                <Text style={{ color: selectedItem?.rarity ? RARITY_COLORS[selectedItem.rarity as keyof typeof RARITY_COLORS][0] : '#FFF', fontSize: 13, fontWeight: '800', letterSpacing: 1 }}>
                   {selectedItem?.rarity ? `${selectedItem.rarity} ` : ''}{selectedItem?.type}
                 </Text>
               </View>
 
-              <LinearGradient colors={['rgba(0,0,0,0.4)', 'rgba(0,0,0,0.2)']} style={{ flexDirection: 'row', alignItems: 'center', paddingHorizontal: 25, paddingVertical: 15, borderRadius: 20, marginBottom: 30, width: '100%', justifyContent: 'center', borderWidth: 1, borderColor: 'rgba(255,255,255,0.1)' }}>
+              <LinearGradient colors={['rgba(0,0,0,0.4)', 'rgba(0,0,0,0.2)']} style={{ flexDirection: 'row', alignItems: 'center', paddingHorizontal: 20, paddingVertical: 10, borderRadius: 16, marginBottom: 20, width: '100%', justifyContent: 'center', borderWidth: 1, borderColor: 'rgba(255,255,255,0.1)' }}>
                 {typeof selectedItem?.price === 'number' && (
-                  <Image source={require('../../assets/icons/lingo_coin.png')} style={{ width: 28, height: 28, marginRight: 10 }} />
+                  <Image source={require('../../assets/icons/lingo_coin.png')} style={{ width: 24, height: 24, marginRight: 8 }} />
                 )}
-                <Text style={{ fontSize: 32, fontWeight: '900', color: '#FFF' }}>{selectedItem?.newPrice || selectedItem?.price}</Text>
+                <Text style={{ fontSize: 28, fontWeight: '900', color: '#FFF' }}>{selectedItem?.newPrice || selectedItem?.price}</Text>
               </LinearGradient>
 
-              <View style={{ flexDirection: 'row', width: '100%', gap: 15 }}>
-                <TouchableOpacity style={{ width: 70, height: 70, borderRadius: 24, backgroundColor: 'rgba(255,255,255,0.1)', alignItems: 'center', justifyContent: 'center', borderWidth: 1, borderColor: 'rgba(255,255,255,0.2)' }}>
-                  <Text style={{ fontSize: 30 }}>🎁</Text>
+              <View style={{ flexDirection: 'row', width: '100%', gap: 10 }}>
+                <TouchableOpacity style={{ width: 55, height: 55, borderRadius: 18, backgroundColor: 'rgba(255,255,255,0.1)', alignItems: 'center', justifyContent: 'center', borderWidth: 1, borderColor: 'rgba(255,255,255,0.2)' }}>
+                  <Text style={{ fontSize: 24 }}>🎁</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={{ flex: 1, height: 70, borderRadius: 24, overflow: 'hidden', shadowColor: '#FFD60A', shadowOpacity: 0.4, shadowRadius: 15, elevation: 10 }} onPress={handleBuy} activeOpacity={0.8}>
+                <TouchableOpacity style={{ flex: 1, height: 55, borderRadius: 18, overflow: 'hidden', shadowColor: '#FFD60A', shadowOpacity: 0.4, shadowRadius: 15, elevation: 10 }} onPress={handleBuy} activeOpacity={0.8}>
                   <LinearGradient colors={['#FFD60A', '#FF9F0A']} style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-                    <Text style={{ fontSize: 24, fontWeight: '900', color: '#000', fontFamily: 'SpaceGrotesk_700Bold', textTransform: 'uppercase' }}>Satın Al</Text>
+                    <Text style={{ fontSize: 20, fontWeight: '900', color: '#000', fontFamily: 'SpaceGrotesk_700Bold', textTransform: 'uppercase' }}>Satın Al</Text>
                   </LinearGradient>
                 </TouchableOpacity>
               </View>
