@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Animated, Modal, Dimensions, Easing, Alert, Image } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Animated, Modal, Dimensions, Easing, Alert, Image, TouchableWithoutFeedback } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useThemeColors, BRAND } from '../theme/colors';
@@ -412,16 +412,12 @@ const MarketScreen = () => {
 
       {/* UPGRADED PURCHASE MODAL */}
       <Modal visible={purchaseModalVisible} transparent animationType="fade">
-        <View style={[styles.modalOverlay, { backgroundColor: 'rgba(0,0,0,0.85)', justifyContent: 'center' }]}>
-          <View style={{ width: '82%', alignSelf: 'center', backgroundColor: '#1c1c1e', borderRadius: 32, overflow: 'hidden', borderWidth: 1, borderColor: 'rgba(255,255,255,0.1)', shadowColor: BRAND.primary, shadowOpacity: 0.3, shadowRadius: 50, elevation: 20 }}>
-            <LinearGradient colors={selectedItem?.rarity ? (RARITY_COLORS[selectedItem.rarity as keyof typeof RARITY_COLORS] || RARITY_COLORS.Common) : ['#2c2c2e', '#1c1c1e']} style={{ padding: 25, alignItems: 'center' }}>
-              <TouchableOpacity style={{ position: 'absolute', top: 15, right: 15, zIndex: 10 }} onPress={() => setPurchaseModalVisible(false)}>
-                <View style={{ width: 36, height: 36, borderRadius: 18, backgroundColor: 'rgba(0,0,0,0.3)', alignItems: 'center', justifyContent: 'center' }}>
-                  <Text style={{ fontSize: 18, color: '#FFF', fontWeight: 'bold' }}>✕</Text>
-                </View>
-              </TouchableOpacity>
-              
-              <Animated.View style={{ transform: [{ scale: modalPulseAnim }], marginTop: 15, marginBottom: 15, shadowColor: '#FFD60A', shadowOpacity: 0.8, shadowRadius: 30, elevation: 20 }}>
+        <TouchableWithoutFeedback onPress={() => setPurchaseModalVisible(false)}>
+          <View style={[styles.modalOverlay, { backgroundColor: 'rgba(0,0,0,0.85)', justifyContent: 'center' }]}>
+            <TouchableWithoutFeedback onPress={() => {}}>
+              <View style={{ width: '82%', alignSelf: 'center', backgroundColor: '#1c1c1e', borderRadius: 32, overflow: 'hidden', borderWidth: 1, borderColor: 'rgba(255,255,255,0.1)', shadowColor: BRAND.primary, shadowOpacity: 0.3, shadowRadius: 50, elevation: 20 }}>
+                <LinearGradient colors={selectedItem?.rarity ? (RARITY_COLORS[selectedItem.rarity as keyof typeof RARITY_COLORS] || RARITY_COLORS.Common) : ['#2c2c2e', '#1c1c1e']} style={{ padding: 25, alignItems: 'center' }}>
+                  <Animated.View style={{ transform: [{ scale: modalPulseAnim }], marginTop: 15, marginBottom: 15, shadowColor: '#FFD60A', shadowOpacity: 0.8, shadowRadius: 30, elevation: 20 }}>
                 {selectedItem?.type === 'Outfit' ? (
                   <View style={{ height: 120, justifyContent: 'center', alignItems: 'center' }}>
                     <Mascot size={120} animated={true} />
@@ -458,9 +454,11 @@ const MarketScreen = () => {
                   </LinearGradient>
                 </TouchableOpacity>
               </View>
-            </LinearGradient>
+              </LinearGradient>
+            </View>
+            </TouchableWithoutFeedback>
           </View>
-        </View>
+        </TouchableWithoutFeedback>
       </Modal>
 
       {/* PREMIUM SUCCESS OVERLAY */}
