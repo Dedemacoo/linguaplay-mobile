@@ -254,7 +254,7 @@ export const useProgressStore = create<ProgressState>((set, get) => ({
 
   openMysteryBox: (availableMascotIds: string[]) => {
     const prev = get().progress;
-    if (prev.gems < 500) return { success: false, error: 'Yetersiz elmas' };
+    if (prev.gems < 500) return { success: false, error: 'Yetersiz Lingot' };
 
     const currentCount = prev.mysteryBoxCount || 0;
     const newCount = currentCount + 1;

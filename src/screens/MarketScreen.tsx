@@ -13,7 +13,7 @@ const { width, height } = Dimensions.get('window');
 
 const TABS = [
   { id: 'featured', label: 'Öne Çıkanlar', icon: '✨' },
-  { id: 'diamonds', label: 'Elmaslar', iconImage: require('../../assets/icons/lingo_coin.png') },
+  { id: 'diamonds', label: 'Lingotlar', iconImage: require('../../assets/icons/lingo_coin.png') },
   { id: 'premium', label: 'Premium', icon: '👑' },
 ];
 
@@ -153,7 +153,7 @@ const MarketScreen = () => {
           showSuccessConfetti();
         }
       } else {
-        showError('Yetersiz Elmas', 'Bu ürünü satın almak için yeterli elmasınız yok.');
+        showError('Yetersiz Lingot', 'Bu ürünü satın almak için yeterli Lingotunuz yok.');
       }
     } else if (selectedItem?.type === 'Currency') {
       addGems(selectedItem.amount);
@@ -169,10 +169,10 @@ const MarketScreen = () => {
         if (result.type === 'theme') {
           setTimeout(() => Alert.alert('🎉 Tebrikler!', `Sürpriz kutudan yeni bir tema kazandın!`), 1000);
         } else {
-          setTimeout(() => Alert.alert('🎁 Sürpriz Kutu!', `Kutudan tema çıkmadı ama teselli ödülü olarak ${result.refundAmount} Elmas kazandın. Yeni temayı almak için açmaya devam et!`), 1000);
+          setTimeout(() => Alert.alert('🎁 Sürpriz Kutu!', `Kutudan tema çıkmadı ama teselli ödülü olarak ${result.refundAmount} Lingot kazandın. Yeni temayı almak için açmaya devam et!`), 1000);
         }
       } else {
-        showError('Yetersiz Elmas', result.error || 'Elmasınız yetersiz.');
+        showError('Yetersiz Lingot', result.error || 'Lingotunuz yetersiz.');
       }
     } else {
       showSuccessConfetti();
@@ -183,7 +183,7 @@ const MarketScreen = () => {
     const success = claimDailyReward();
     if (success) {
       showSuccessConfetti();
-      setTimeout(() => Alert.alert('🎁 Harika!', 'Günlük 50 Elmas ödülünü aldın!'), 1000);
+      setTimeout(() => Alert.alert('🎁 Harika!', 'Günlük 50 Lingot ödülünü aldın!'), 1000);
     } else {
       Alert.alert('Zaten Alındı', 'Bugünkü ödülünü zaten aldın. Yarın tekrar gel!');
     }
