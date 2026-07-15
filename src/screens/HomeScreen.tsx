@@ -437,7 +437,7 @@ const HomeScreen: React.FC<any> = () => {
                           <View 
                             key={node.id} 
                             ref={isActive ? activeNodeRef : null}
-                            style={{ alignItems: 'center', marginVertical: isActive ? 2 : -2, transform: [{ translateX: zigOffset }] }}
+                            style={{ alignItems: 'center', marginVertical: isActive ? -10 : -16, transform: [{ translateX: zigOffset }] }}
                           >
                             <View style={{ position: 'relative', alignItems: 'center', justifyContent: 'center' }}>
                               <HexagonNode
@@ -933,11 +933,13 @@ const styles = StyleSheet.create({
     borderColor: '#0B1022',
   },
   nodeLabelBox: {
-    marginTop: 12,
+    marginTop: 6,
     backgroundColor: 'rgba(20, 29, 50, 0.7)',
     paddingHorizontal: 14,
     paddingVertical: 6,
     borderRadius: 12,
+    borderWidth: 1,
+    borderColor: BRAND.border,
   },
   nodeLabel: {
     color: BRAND.text,
