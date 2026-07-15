@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, StatusBar, Dimensions, Animated } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, StatusBar, Dimensions, Animated, Alert } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons, FontAwesome5, MaterialCommunityIcons, Feather } from '@expo/vector-icons';
@@ -149,10 +149,8 @@ const HomeScreen: React.FC<any> = () => {
   const insets = useSafeAreaInsets();
   const navigation = useNavigation();
   const { activeLanguage } = useLanguageStore();
-  const { progress } = useProgressStore();
+  const { progress, claimUnitReward } = useProgressStore();
 
-  const kisimLottieRefs = useRef<{ [key: string]: LottieView | null }>({});
-  
   const [courseData, setCourseData] = useState<LanguageCourse | null>(null);
   const [loading, setLoading] = useState(true);
   const [isLangDropdownOpen, setIsLangDropdownOpen] = useState(false);
@@ -412,7 +410,7 @@ const HomeScreen: React.FC<any> = () => {
                 if (isFinalNode) {
                   nodeColor = '#FFC800';
                   shadowColor = '#D29C00';
-                  nodeContent = <FontAwesome5 name="gift" size={28} color="#FFF" />;
+                  nodeContent = <FontAwesome5 name="trophy" size={28} color="#FFF" />;
                 } else if (isCompleted) {
                   nodeColor = unitColor.nodeActive;
                   shadowColor = unitColor.nodeShadow;
@@ -475,33 +473,34 @@ const HomeScreen: React.FC<any> = () => {
               })}
             </View>
 
-            {/* Kupa / Hazine Sandığı (Ünite Sonu) */}
+            {/* Hediye Kutusu Ödülü (Ayrı Buton) */}
             <View style={{ alignItems: 'center', marginTop: 30, marginBottom: 50 }}>
               <TouchableOpacity 
-                activeOpacity={1}
+                activeOpacity={0.8}
                 onPress={() => {
-                  const lottie = kisimLottieRefs.current[`${globalUnitIndex}`];
-                  if (lottie) {
-                    lottie.play();
-                    setTimeout(() => {
-                      handleNodePress('active', `eng_u${globalUnitIndex + 1}_l6`, 'Ünite Sonu Quizi');
-                    }, 1500); // Wait for animation
+                  const isUnitCompleted = activeNodeIndex > (globalUnitIndex * 6 + 5);
+                  if (!isUnitCompleted) {
+                    Alert.alert("Henüz kilitli!", "Bu ödülü almak için önce ünitedeki tüm dersleri tamamlamalısın.");
+                    return;
+                  }
+                  
+                  const rewardId = `eng_u${globalUnitIndex + 1}_reward`;
+                  const isRewardClaimed = progress.languages[activeLanguage]?.completedLessons?.includes(rewardId);
+                  
+                  if (!isRewardClaimed) {
+                    claimUnitReward(globalUnitIndex, activeLanguage);
+                    Alert.alert("Tebrikler! 🎉", "100 Lingo Mücevheri kazandın! 💎");
                   } else {
-                    handleNodePress('active', `eng_u${globalUnitIndex + 1}_l6`, 'Ünite Sonu Quizi');
+                    Alert.alert("Zaten alındı", "Bu ünitenin ödülünü daha önce aldın.");
                   }
                 }}
                 style={{
-                  width: 120, height: 120,
-                  alignItems: 'center', justifyContent: 'center'
+                  width: 80, height: 80,
+                  alignItems: 'center', justifyContent: 'center',
+                  opacity: activeNodeIndex > (globalUnitIndex * 6 + 5) ? (progress.languages[activeLanguage]?.completedLessons?.includes(`eng_u${globalUnitIndex + 1}_reward`) ? 0.6 : 1) : 0.4
                 }}
               >
-                <LottieView
-                  ref={ref => { kisimLottieRefs.current[`${globalUnitIndex}`] = ref; }}
-                  source={require('../../assets/mascots/kutuacilinca.json')}
-                  autoPlay={false}
-                  loop={false}
-                  style={{ width: '100%', height: '100%' }}
-                />
+                <Text style={{ fontSize: 56 }}>{progress.languages[activeLanguage]?.completedLessons?.includes(`eng_u${globalUnitIndex + 1}_reward`) ? '📦' : '🎁'}</Text>
               </TouchableOpacity>
             </View>
           </View>

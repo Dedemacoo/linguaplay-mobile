@@ -90,6 +90,8 @@ interface ProgressState {
   gainHeart: () => void;
   refillHearts: (cost: number) => boolean; 
   addGems: (amount: number) => void;
+  claimUnitReward: (unitIndex: number, langKey: string) => void;
+  removeGems: (amount: number) => boolean;
   setAvatar: (avatar: string) => void;
   setPremium: (value: boolean) => Promise<void>;
   equipMascot: (id: string) => void;
@@ -436,6 +438,30 @@ export const useProgressStore = create<ProgressState>((set, get) => ({
     const newProgress = { ...prev, gems: prev.gems + amount };
     set({ progress: newProgress });
     get()._saveProgress(newProgress);
+  },
+
+  claimUnitReward: (unitIndex: number, langKey: string) => {
+    const { progress, _saveProgress } = get();
+    if (!progress.languages[langKey]) return;
+
+    const rewardId = `eng_u${unitIndex + 1}_reward`;
+    const langData = progress.languages[langKey];
+    
+    if (!(langData.completedLessons || []).includes(rewardId)) {
+      const newProgress = {
+        ...progress,
+        gems: progress.gems + 100,
+        languages: {
+          ...progress.languages,
+          [langKey]: {
+            ...langData,
+            completedLessons: [...(langData.completedLessons || []), rewardId],
+          }
+        }
+      };
+      set({ progress: newProgress });
+      _saveProgress(newProgress);
+    }
   },
 
   setAvatar: (avatar: string) => {
