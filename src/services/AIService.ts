@@ -1,6 +1,6 @@
 import { useLingoStore } from '../store/useLingoStore';
 
-const GEMINI_API_KEY = 'AQ.Ab8RN6KGitvQn_fHAFi-_fNqUA0wpQmQib_zcL9Nfy22deTX3w';
+const GEMINI_API_KEY = process.env.EXPO_PUBLIC_GEMINI_API_KEY;
 
 export interface ChatMessage {
   role: 'user' | 'assistant';
