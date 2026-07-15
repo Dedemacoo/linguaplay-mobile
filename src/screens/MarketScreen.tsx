@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Animated, Modal, Dimensions, Easing, Alert, Image, TouchableWithoutFeedback } from 'react-native';
+import LottieView from 'lottie-react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useThemeColors, BRAND } from '../theme/colors';
@@ -149,7 +150,7 @@ const MarketScreen = () => {
     setShowConfetti(true);
     Animated.sequence([
       Animated.timing(confettiAnim, { toValue: 1, duration: 600, easing: Easing.elastic(1.2), useNativeDriver: true }),
-      Animated.delay(1200),
+      Animated.delay(2500),
       Animated.timing(confettiAnim, { toValue: 0, duration: 400, easing: Easing.out(Easing.ease), useNativeDriver: true })
     ]).start(() => setShowConfetti(false));
   };
@@ -461,7 +462,7 @@ const MarketScreen = () => {
         </TouchableWithoutFeedback>
       </Modal>
 
-      {/* PREMIUM SUCCESS OVERLAY */}
+      {/* SUCCESS OVERLAY */}
       {showConfetti && (
         <View style={[StyleSheet.absoluteFill, { backgroundColor: 'rgba(0,0,0,0.85)', justifyContent: 'center', alignItems: 'center', zIndex: 999 }]} pointerEvents="none">
           <Animated.View style={{ 
@@ -472,32 +473,46 @@ const MarketScreen = () => {
               { translateY: confettiAnim.interpolate({ inputRange: [0, 1], outputRange: [20, 0] }) }
             ] 
           }}>
-            <LinearGradient colors={['rgba(255,255,255,0.1)', 'rgba(255,255,255,0.05)']} style={{
+            <LinearGradient colors={['rgba(28, 28, 30, 0.95)', 'rgba(10, 10, 12, 0.95)']} style={{
               borderWidth: 1,
-              borderColor: 'rgba(255,255,255,0.2)',
-              borderRadius: 30,
-              paddingVertical: 40,
-              paddingHorizontal: 50,
+              borderColor: 'rgba(255,214,10,0.3)',
+              borderRadius: 36,
+              paddingVertical: 45,
+              paddingHorizontal: 40,
               alignItems: 'center',
+              shadowColor: '#FFD60A',
+              shadowOpacity: 0.5,
+              shadowRadius: 40,
+              elevation: 20
             }}>
-              <View style={{ marginBottom: 20 }}>
-                <Mascot size={100} animated={true} />
+              <View style={{ marginBottom: 15, width: 220, height: 220 }}>
+                <LottieView
+                  source={require('../../assets/mascots/kutuacilinca.json')}
+                  autoPlay
+                  loop={false}
+                  style={{ width: '100%', height: '100%' }}
+                />
               </View>
               <Text style={{ 
-                fontSize: 28, 
-                color: '#FFF', 
+                fontSize: 32, 
+                color: '#FFD60A', 
                 fontFamily: 'SpaceGrotesk_700Bold', 
-                letterSpacing: 1,
-                textAlign: 'center'
+                letterSpacing: 1.5,
+                textAlign: 'center',
+                textShadowColor: 'rgba(255, 214, 10, 0.4)',
+                textShadowOffset: { width: 0, height: 2 },
+                textShadowRadius: 10,
+                marginBottom: 8
               }}>
-                Tebrikler! Hayırlı Olsun
+                Başarılı
               </Text>
               <Text style={{ 
-                fontSize: 16, 
-                color: 'rgba(255,255,255,0.7)', 
-                marginTop: 10,
+                fontSize: 18, 
+                color: 'rgba(255,255,255,0.85)', 
+                textAlign: 'center',
+                fontWeight: '600'
               }}>
-                Öğe koleksiyonuna eklendi.
+                Yeni Lingotların hesabına eklendi.
               </Text>
             </LinearGradient>
           </Animated.View>
