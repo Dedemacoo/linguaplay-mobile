@@ -13,7 +13,7 @@ const { width, height } = Dimensions.get('window');
 
 const TABS = [
   { id: 'featured', label: 'Öne Çıkanlar', icon: '✨' },
-  { id: 'diamonds', label: 'Elmaslar', iconImage: require('../assets/icons/lingo_coin.png') },
+  { id: 'diamonds', label: 'Elmaslar', iconImage: require('../../assets/icons/lingo_coin.png') },
   { id: 'premium', label: 'Premium', icon: '👑' },
 ];
 
@@ -213,7 +213,7 @@ const MarketScreen = () => {
             {pack.bestValue && <View style={[styles.badge, { backgroundColor: '#FFD60A' }]}><Text style={[styles.badgeText, { color: '#000' }]}>BEST VALUE</Text></View>}
             
             <View style={{ marginBottom: 10, shadowColor: '#00c6ff', shadowOpacity: 0.5, shadowRadius: 15, elevation: 5 }}>
-               <Image source={require('../assets/icons/lingo_coin.png')} style={{ width: 60, height: 60 }} />
+               <Image source={require('../../assets/icons/lingo_coin.png')} style={{ width: 60, height: 60 }} />
             </View>
             
             <Text style={styles.diamondAmount}>{pack.amount}</Text>
@@ -339,7 +339,7 @@ const MarketScreen = () => {
             <Text style={{ fontSize: 32 }}>📦</Text>
             <Text style={styles.freeTitle}>Sürpriz Kutu</Text>
             <View style={styles.priceRow}>
-              <Image source={require('../assets/icons/lingo_coin.png')} style={{ width: 14, height: 14, marginRight: 4 }} />
+              <Image source={require('../../assets/icons/lingo_coin.png')} style={{ width: 14, height: 14, marginRight: 4 }} />
               <Text style={styles.priceText}>500</Text>
             </View>
             <Text style={[styles.freeSub, { marginTop: 4, textAlign: 'center', fontSize: 10 }]}>Yeni temayı almak için tıkla</Text>
@@ -421,7 +421,7 @@ const MarketScreen = () => {
 
               <View style={styles.priceTag}>
                 {typeof selectedItem?.price === 'number' && (
-                  <Image source={require('../assets/icons/lingo_coin.png')} style={{ width: 24, height: 24, marginRight: 8 }} />
+                  <Image source={require('../../assets/icons/lingo_coin.png')} style={{ width: 24, height: 24, marginRight: 8 }} />
                 )}
                 <Text style={styles.priceTagText}>{selectedItem?.newPrice || selectedItem?.price}</Text>
               </View>
