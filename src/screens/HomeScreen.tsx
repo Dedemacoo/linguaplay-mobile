@@ -155,11 +155,12 @@ const HomeScreen: React.FC<any> = () => {
   const [loading, setLoading] = useState(true);
   const [isLangDropdownOpen, setIsLangDropdownOpen] = useState(false);
   const [isAIPanelOpen, setIsAIPanelOpen] = useState(false);
-  const [scrollY, setScrollY] = useState(0);
+  const [showFabs, setShowFabs] = useState(false);
   
   // Refs
   const scrollViewRef = useRef<ScrollView>(null);
   const activeNodeRef = useRef<View>(null);
+  const scrollYRef = useRef(0);
 
   // Animations
   const pulseAnim = useRef(new Animated.Value(1)).current;
@@ -255,7 +256,7 @@ const HomeScreen: React.FC<any> = () => {
     if (activeNodeRef.current && scrollViewRef.current) {
       activeNodeRef.current.measure((x, y, width, height, pageX, pageY) => {
         const screenCenter = Dimensions.get('window').height / 2;
-        const targetScrollY = Math.max(0, scrollY + pageY - screenCenter + 100);
+        const targetScrollY = Math.max(0, scrollYRef.current + pageY - screenCenter + 100);
         scrollViewRef.current?.scrollTo({ y: targetScrollY, animated: true });
       });
     }
@@ -548,7 +549,12 @@ const HomeScreen: React.FC<any> = () => {
         ref={scrollViewRef}
         showsVerticalScrollIndicator={false} 
         contentContainerStyle={styles.scrollContent}
-        onScroll={(e) => setScrollY(e.nativeEvent.contentOffset.y)}
+        onScroll={(e) => {
+          const y = e.nativeEvent.contentOffset.y;
+          scrollYRef.current = y;
+          if (y > 300 && !showFabs) setShowFabs(true);
+          else if (y <= 300 && showFabs) setShowFabs(false);
+        }}
         scrollEventThrottle={16}
       >
         {/* ─── SCROLLING DASHBOARD ─── */}
@@ -575,24 +581,24 @@ const HomeScreen: React.FC<any> = () => {
 
       {/* ─── FLOATING ACTION BUTTONS (JUMP TO TOP / JUMP TO ACTIVE) ─── */}
       <View style={styles.navigationFabContainer}>
-        {scrollY > 400 && (
-          <Animated.View style={{ transform: [{ scale: fabScale }] }}>
-            <TouchableOpacity style={styles.navFabButton} onPress={scrollToTop}>
-              <FontAwesome5 name="arrow-up" size={18} color="#FFF" />
-            </TouchableOpacity>
-          </Animated.View>
-        )}
-        {scrollY > 300 && (
-          <Animated.View style={{ transform: [{ scale: fabScale }] }}>
-            <TouchableOpacity style={[styles.navFabButton, { backgroundColor: BRAND.card, borderWidth: 2, borderColor: BRAND.primary, padding: 0 }]} onPress={scrollToActiveNode}>
-              <LottieView
-                source={require('../../assets/mascots/bulunanders.json')}
-                autoPlay
-                loop
-                style={{ width: 50, height: 50 }}
-              />
-            </TouchableOpacity>
-          </Animated.View>
+        {showFabs && (
+          <>
+            <Animated.View style={{ transform: [{ scale: fabScale }] }}>
+              <TouchableOpacity style={styles.navFabButton} onPress={scrollToTop}>
+                <FontAwesome5 name="arrow-up" size={18} color="#FFF" />
+              </TouchableOpacity>
+            </Animated.View>
+            <Animated.View style={{ transform: [{ scale: fabScale }] }}>
+              <TouchableOpacity style={[styles.navFabButton, { backgroundColor: '#1E2D4A', borderWidth: 2, borderColor: '#3B82F6', padding: 0 }]} onPress={scrollToActiveNode}>
+                <LottieView
+                  source={require('../../assets/mascots/bulunanders.json')}
+                  autoPlay
+                  loop
+                  style={{ width: 50, height: 50 }}
+                />
+              </TouchableOpacity>
+            </Animated.View>
+          </>
         )}
       </View>
 
