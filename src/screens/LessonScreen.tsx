@@ -177,7 +177,7 @@ const extractPlacementAudio = (prompt: string) => {
 const LessonScreen: React.FC<Props> = ({ navigation, route }) => {
   const colors = useThemeColors();
   const { activeLanguage } = useLanguageStore();
-  const { progress, addXp, completeLesson, loseHeart, gainHeart, refillHearts, trackMistake } = useProgressStore();
+  const { progress, addXp, completeLesson, loseHeart, gainHeart, refillHearts, trackMistake, disableSpeaking } = useProgressStore();
 
   const lessonId = (route.params as any)?.lessonId;
 
@@ -239,6 +239,8 @@ const LessonScreen: React.FC<Props> = ({ navigation, route }) => {
   // Import ContentService dynamically to avoid circular deps if any
   const { ContentService } = require('../services/ContentService');
 
+  const shuffleArray = (array: any[]) => [...array].sort(() => Math.random() - 0.5);
+
   useEffect(() => {
     let mounted = true;
     const loadContent = async () => {
@@ -246,7 +248,7 @@ const LessonScreen: React.FC<Props> = ({ navigation, route }) => {
       const startTime = Date.now();
       
       const processQuestions = (qs: any[]) => {
-        return qs.map(q => {
+        let processed = qs.map(q => {
           if (q.options && q.options.length > 0) {
             // Create pairs to keep options and imageOptions in sync
             let pairs = q.options.map((opt: string, idx: number) => ({
@@ -256,7 +258,7 @@ const LessonScreen: React.FC<Props> = ({ navigation, route }) => {
             }));
             
             // Shuffle
-            pairs = pairs.sort(() => Math.random() - 0.5);
+            pairs = shuffleArray(pairs);
             
             const newOptions = pairs.map(p => p.option);
             const newImageOptions = q.imageOptions ? pairs.map(p => p.imageOption) : undefined;
@@ -279,6 +281,11 @@ const LessonScreen: React.FC<Props> = ({ navigation, route }) => {
           }
           return q;
         });
+
+        if (progress.speakingDisabledUntil && Date.now() < progress.speakingDisabledUntil) {
+          processed = processed.filter(q => q.type !== 'listen');
+        }
+        return processed;
       };
 
       if ((route.params as any)?.customQuestions) {
@@ -345,7 +352,6 @@ const LessonScreen: React.FC<Props> = ({ navigation, route }) => {
                 rawPlacementQs = getQs(lessons);
               }
             }
-          // The slicing is already done in getQs now
           
           const placementQs = processQuestions(rawPlacementQs);
           setAllLessons(lessons);
@@ -505,6 +511,15 @@ const LessonScreen: React.FC<Props> = ({ navigation, route }) => {
   const triggerAchievement = (text: string) => {
     setAchievementText(text);
     setShowAchievement(true);
+  };
+
+  const handleSkipSpeaking = () => {
+    disableSpeaking();
+    setQuestions(prev => prev.filter((q, i) => i <= currentIndex || q.type !== 'listen'));
+    
+    setEarnedXp(prev => prev + Math.floor((currentLesson?.xpReward || 10) / totalQuestions));
+    setIsChecked(true);
+    setIsCorrect(true);
   };
 
   const handleCheck = (instantIndex?: number) => {
@@ -1229,6 +1244,15 @@ const LessonScreen: React.FC<Props> = ({ navigation, route }) => {
                <Text style={[styles.micHelpText, { color: colors.textLight }]}>
                  {isListening ? "Dinleniyor..." : "Konuşmak için basılı tutun"}
                </Text>
+               
+               {!isChecked && (
+                 <TouchableOpacity
+                   style={{ marginTop: 30, padding: 12, borderWidth: 1, borderColor: colors.border, borderRadius: 12 }}
+                   onPress={handleSkipSpeaking}
+                 >
+                   <Text style={{ color: colors.textLight, textAlign: 'center', fontSize: 16 }}>Şu an konuşamam</Text>
+                 </TouchableOpacity>
+               )}
                
                {spokenText ? (
                  <Text style={[styles.spokenText, { color: colors.primary, marginTop: 20 }]}>

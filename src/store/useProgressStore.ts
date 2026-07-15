@@ -30,6 +30,7 @@ export interface UserProgress {
   avatar: string;
   lastHeartRefill: string;
   isPremium: boolean;
+  speakingDisabledUntil?: number;
   equippedMascot: string;
   unlockedMascots: string[];
   equippedCostumes?: { head?: string; back?: string; body?: string };
@@ -85,6 +86,7 @@ interface ProgressState {
   userUid: string | null;
   init: (uid: string | null) => Promise<void>;
   addXp: (amount: number, langKey: string) => void;
+  disableSpeaking: () => void;
   completeLesson: (lessonId: string, xpEarned: number, langKey: string) => void;
   loseHeart: () => void;
   gainHeart: () => void;
@@ -227,6 +229,12 @@ export const useProgressStore = create<ProgressState>((set, get) => ({
         }
       }
     }
+  },
+
+  disableSpeaking: () => {
+    const newProgress = { ...get().progress, speakingDisabledUntil: Date.now() + 15 * 60 * 1000 };
+    set({ progress: newProgress });
+    get()._saveProgress(newProgress);
   },
 
   addXp: (amount: number, langKey: string) => {
