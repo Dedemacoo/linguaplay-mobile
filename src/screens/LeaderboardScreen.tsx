@@ -18,6 +18,7 @@ type LeaderboardEntry = { id: string; name: string; points: number; rank: number
 
 const LeaderboardScreen: React.FC<any> = ({ navigation }) => {
   const colors = useThemeColors();
+  const styles = React.useMemo(() => getStyles(colors), [colors]);
   const { progress } = useProgressStore();
   const { user } = useAuth();
   
@@ -103,14 +104,14 @@ const LeaderboardScreen: React.FC<any> = ({ navigation }) => {
       <View style={{ flex: 1 }}>
         {/* Premium Dark Hero Banner */}
         <View style={styles.heroContainer}>
-          <LinearGradient colors={['#141D32', '#0B1022']} style={StyleSheet.absoluteFillObject} />
+          <LinearGradient colors={[colors.card, colors.background]} style={StyleSheet.absoluteFillObject} />
           
           <View style={styles.heroContent}>
             <View style={[styles.badgeContainer, { borderColor: `${cfg.color}50` }]}>
               <LinearGradient colors={[`${cfg.color}15`, 'transparent']} style={StyleSheet.absoluteFillObject} />
               <Text style={styles.badgeIcon}>{cfg.icon}</Text>
             </View>
-            <Text style={[styles.leagueTitle, { color: '#FFF' }]}>{cfg.label} Ligi</Text>
+            <Text style={[styles.leagueTitle, { color: colors.text }]}>{cfg.label} Ligi</Text>
             <Text style={styles.timeLeftText}>⏳ Sezonun Bitmesine: {timeLeft}</Text>
             
             <View style={styles.heroStatsRow}>
@@ -164,7 +165,7 @@ const LeaderboardScreen: React.FC<any> = ({ navigation }) => {
               <TouchableOpacity 
                 style={[
                   styles.userCard, 
-                  { backgroundColor: isMe ? colors.primary + '15' : '#141D32', borderColor: borderColor, borderWidth: 1 }
+                  { backgroundColor: isMe ? colors.primary + '15' : colors.card, borderColor: borderColor, borderWidth: 1 }
                 ]}
                 onPress={() => setSelectedProfile({ id: item.uid, name: item.name, points: item.weeklyPoints, rank, avatar: item.avatar, isCurrentUser: isMe })}
                 activeOpacity={0.7}
@@ -266,8 +267,8 @@ const LeaderboardScreen: React.FC<any> = ({ navigation }) => {
   };
 
   return (
-    <SafeAreaView style={[styles.container, { backgroundColor: '#0B1022' }]} edges={['top']}>
-      <StatusBar barStyle="light-content" backgroundColor="#0B1022" />
+    <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]} edges={['top']}>
+      <StatusBar barStyle={colors.colorScheme === 'dark' ? 'light-content' : 'dark-content'} backgroundColor={colors.background} />
       
       {/* Top Navigation Tabs */}
       <View style={styles.topTabs}>
@@ -290,12 +291,12 @@ const LeaderboardScreen: React.FC<any> = ({ navigation }) => {
         <TouchableWithoutFeedback onPress={() => setSelectedProfile(null)}>
           <View style={styles.modalOverlay}>
             <TouchableWithoutFeedback>
-              <View style={[styles.profileModalContainer, { backgroundColor: '#141D32' }]}>
+              <View style={[styles.profileModalContainer, { backgroundColor: colors.card }]}>
                 <TouchableOpacity onPress={() => setSelectedProfile(null)} style={styles.closeBtn}>
-                  <Text style={{ fontSize: 20, color: '#9CA3AF' }}>✕</Text>
+                  <Text style={{ fontSize: 20, color: colors.textMuted }}>✕</Text>
                 </TouchableOpacity>
                 <Text style={styles.profileModalAvatar}>{selectedProfile?.avatar}</Text>
-                <Text style={[styles.profileModalName, { color: '#FFF' }]}>{selectedProfile?.name}</Text>
+                <Text style={[styles.profileModalName, { color: colors.text }]}>{selectedProfile?.name}</Text>
                 <Text style={[styles.profileModalXp, { color: colors.primary }]}>{selectedProfile?.points.toLocaleString()} LP</Text>
                 
                 <View style={styles.profileActionButtons}>
@@ -322,7 +323,7 @@ const LeaderboardScreen: React.FC<any> = ({ navigation }) => {
       {isLoading ? (
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
           <ActivityIndicator size="large" color={colors.primary} />
-          <Text style={{ color: '#9CA3AF', marginTop: 12, fontSize: 15 }}>Yükleniyor...</Text>
+          <Text style={{ color: colors.textMuted, marginTop: 12, fontSize: 15 }}>Yükleniyor...</Text>
         </View>
       ) : (
         activeTab === 'league' ? renderLeagueTab() : renderDuelTab()
@@ -331,14 +332,14 @@ const LeaderboardScreen: React.FC<any> = ({ navigation }) => {
   );
 };
 
-const styles = StyleSheet.create({
+const getStyles = (colors: any) => StyleSheet.create({
   container: { flex: 1 },
   topTabs: {
     flexDirection: 'row',
     marginHorizontal: 20,
     marginTop: 10,
     marginBottom: 10,
-    backgroundColor: '#141D32',
+    backgroundColor: colors.card,
     borderRadius: 12,
     padding: 4,
   },
@@ -349,21 +350,21 @@ const styles = StyleSheet.create({
     borderRadius: 8,
   },
   tabBtnActive: {
-    backgroundColor: '#1E2B4D',
-    shadowColor: '#000',
+    backgroundColor: colors.border,
+    shadowColor: colors.background,
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.2,
     shadowRadius: 4,
     elevation: 2,
   },
   tabText: {
-    color: '#6B7280',
+    color: colors.textLight,
     fontWeight: '800',
     fontSize: 14,
     letterSpacing: 1,
   },
   tabTextActive: {
-    color: '#FFF',
+    color: colors.text,
   },
   
   // Hero Section
@@ -371,7 +372,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingVertical: 30,
     borderBottomWidth: 1,
-    borderBottomColor: '#1E2B4D',
+    borderBottomColor: colors.border,
     position: 'relative',
     overflow: 'hidden',
   },
@@ -380,7 +381,7 @@ const styles = StyleSheet.create({
     zIndex: 2,
   },
   badgeContainer: {
-    backgroundColor: '#0B1022', // Koyu ve düz arka plan
+    backgroundColor: colors.background, // Koyu ve düz arka plan
     width: 90,
     height: 90,
     borderRadius: 20,
@@ -404,7 +405,7 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
   timeLeftText: {
-    color: '#9CA3AF',
+    color: colors.textMuted,
     fontSize: 13,
     fontWeight: '600',
     marginBottom: 20,
@@ -417,14 +418,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   heroStatLabel: {
-    color: '#6B7280',
+    color: colors.textLight,
     fontSize: 12,
     fontWeight: '700',
     textTransform: 'uppercase',
     marginBottom: 4,
   },
   heroStatValue: {
-    color: '#FFF',
+    color: colors.text,
     fontSize: 20,
     fontWeight: '800',
   },
@@ -433,13 +434,13 @@ const styles = StyleSheet.create({
   statsPanel: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    backgroundColor: '#141D32',
+    backgroundColor: colors.card,
     marginHorizontal: 20,
     marginTop: 20,
     padding: 15,
     borderRadius: 16,
     borderWidth: 1,
-    borderColor: '#1E2B4D',
+    borderColor: colors.border,
   },
   statMiniBox: {
     flexDirection: 'row',
@@ -447,7 +448,7 @@ const styles = StyleSheet.create({
     gap: 6,
   },
   statMiniText: {
-    color: '#D1D5DB',
+    color: colors.text,
     fontWeight: '700',
     fontSize: 13,
   },
@@ -470,25 +471,25 @@ const styles = StyleSheet.create({
     marginRight: 12,
   },
   rankText: {
-    color: '#9CA3AF',
+    color: colors.textMuted,
     fontWeight: '800',
     fontSize: 14,
   },
   avatar: { fontSize: 32, marginRight: 15 },
   cardInfo: { flex: 1 },
-  name: { fontSize: 16, fontWeight: '700', color: '#FFF', fontFamily: 'SpaceGrotesk_700Bold' },
-  points: { fontSize: 13, fontWeight: '600', color: '#9CA3AF', marginTop: 2 },
+  name: { fontSize: 16, fontWeight: '700', color: colors.text, fontFamily: 'SpaceGrotesk_700Bold' },
+  points: { fontSize: 13, fontWeight: '600', color: colors.textMuted, marginTop: 2 },
   
   // Duel Tab
   duelStatsCard: {
-    backgroundColor: '#141D32',
+    backgroundColor: colors.card,
     padding: 20,
     borderRadius: 16,
     borderWidth: 1,
-    borderColor: '#1E2B4D',
+    borderColor: colors.border,
   },
   duelSectionTitle: {
-    color: '#FFF',
+    color: colors.text,
     fontSize: 18,
     fontWeight: '800',
     fontFamily: 'SpaceGrotesk_700Bold',
@@ -502,13 +503,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   duelStatValue: {
-    color: '#FFF',
+    color: colors.text,
     fontSize: 24,
     fontWeight: '900',
     fontFamily: 'SpaceGrotesk_700Bold',
   },
   duelStatLabel: {
-    color: '#6B7280',
+    color: colors.textLight,
     fontSize: 12,
     fontWeight: '600',
     marginTop: 4,
@@ -516,7 +517,7 @@ const styles = StyleSheet.create({
   duelModeCard: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#141D32',
+    backgroundColor: colors.card,
     padding: 16,
     borderRadius: 16,
     borderWidth: 1,
@@ -527,20 +528,20 @@ const styles = StyleSheet.create({
     width: 50,
     height: 50,
     borderRadius: 12,
-    backgroundColor: '#0B1022',
+    backgroundColor: colors.background,
     alignItems: 'center',
     justifyContent: 'center',
     marginRight: 15,
   },
   duelModeTitle: {
-    color: '#FFF',
+    color: colors.text,
     fontSize: 16,
     fontWeight: '800',
     fontFamily: 'SpaceGrotesk_700Bold',
     marginBottom: 4,
   },
   duelModeDesc: {
-    color: '#9CA3AF',
+    color: colors.textMuted,
     fontSize: 12,
     lineHeight: 16,
   },
@@ -557,7 +558,7 @@ const styles = StyleSheet.create({
     padding: 30,
     alignItems: 'center',
     borderTopWidth: 1,
-    borderColor: '#1E2B4D',
+    borderColor: colors.border,
   },
   closeBtn: {
     position: 'absolute',
@@ -591,7 +592,7 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   actionBtnText: {
-    color: '#FFF',
+    color: colors.text,
     fontSize: 16,
     fontWeight: 'bold',
     fontFamily: 'SpaceGrotesk_700Bold',

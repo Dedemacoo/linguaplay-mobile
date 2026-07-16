@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Modal, Alert, Dimensions, Animated, Pressable } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Modal, Alert, Dimensions, Animated, Pressable, Image } from 'react-native';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { BRAND } from '../theme/colors';
 import { useLanguageStore } from '../store/useLanguageStore';
@@ -13,6 +13,8 @@ import { Mascot } from '../components/Mascot';
 import * as Haptics from 'expo-haptics';
 import { useThemeColors } from '../theme/colors';
 import { MASCOTS } from '../data/MascotData';
+import { ThemeSelectorModal } from '../components/ThemeSelectorModal';
+import { FontAwesome5 } from '@expo/vector-icons';
 
 const { width } = Dimensions.get('window');
 
@@ -40,6 +42,7 @@ export const ProfileScreen = () => {
   const styles = React.useMemo(() => getStyles(colors), [colors]);
   const insets = useSafeAreaInsets();
   const { activeLanguage, setActiveLanguage } = useLanguageStore();
+  const [isThemeModalVisible, setThemeModalVisible] = useState(false);
   const { progress, refillHearts, addGems } = useProgressStore();
   const { user } = useAuth();
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
@@ -146,7 +149,7 @@ export const ProfileScreen = () => {
               activeOpacity={0.8}
             >
               <View style={styles.avatarCircle}>
-                <Mascot size={80} />
+                <Mascot size={60} />
               </View>
               <View style={styles.editBadge}>
                 <Text style={{ fontSize: 12 }}>✏️</Text>
@@ -202,38 +205,50 @@ export const ProfileScreen = () => {
           <LinearGradient colors={['#1c1c1e', '#00c6ff']} style={styles.shopGrad} start={{x:0, y:0}} end={{x:1, y:1}}>
             <View style={styles.glassOverlay} />
             <View style={styles.shopBtnLeft}>
-              <View style={{ marginRight: 8, marginLeft: -4, width: 75, height: 75, justifyContent: 'center', alignItems: 'center' }}>
-                <Mascot size={50} animated={false} />
+              <View style={{ marginRight: 15, width: 50, height: 50, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(255,255,255,0.1)', borderRadius: 15 }}>
+                <Image source={require('../../assets/icons/lingo_coin.png')} style={{ width: 32, height: 32, resizeMode: 'contain' }} />
               </View>
               <View>
                 <Text style={styles.shopBtnTitle}>Lingo Market</Text>
-                <Text style={styles.shopBtnSub}>{progress.gems} Elmasın var</Text>
+                <Text style={styles.shopBtnSub}>{progress.gems} Lingot'un var</Text>
               </View>
             </View>
             <Text style={styles.chevron}>→</Text>
           </LinearGradient>
         </TouchableOpacity>
 
-        {/* ── COLLECTION BANNER ── */}
-        <TouchableOpacity 
-          style={styles.shopBtn}
-          onPress={() => navigation.navigate('Collection')}
-          activeOpacity={0.9}
-        >
-          <LinearGradient colors={['#1c1c1e', '#0A84FF']} style={styles.shopGrad} start={{x:0, y:0}} end={{x:1, y:1}}>
-            <View style={styles.glassOverlay} />
-            <View style={styles.shopBtnLeft}>
-              <View style={{ marginRight: 8, marginLeft: -4, width: 75, height: 75, justifyContent: 'center', alignItems: 'center' }}>
-                <Mascot size={50} animated={false} />
+        {/* ── SQUARE CARDS GRID ── */}
+        <View style={{ flexDirection: 'row', alignItems: 'center', paddingHorizontal: 20, marginTop: 15, gap: 15 }}>
+          {/* COLLECTION SQUARE */}
+          <TouchableOpacity 
+            style={{ width: 130, height: 140, borderRadius: 20, overflow: 'hidden', shadowColor: '#000', shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.15, shadowRadius: 10, elevation: 6 }}
+            onPress={() => navigation.navigate('Collection')}
+            activeOpacity={0.9}
+          >
+            <LinearGradient colors={['#1c1c1e', '#0A84FF']} style={{ flex: 1, padding: 10, justifyContent: 'center', alignItems: 'center' }} start={{x:0, y:0}} end={{x:1, y:1}}>
+              <View style={styles.glassOverlay} />
+              <Mascot size={35} animated={false} />
+              <Text style={[styles.shopBtnTitle, { fontSize: 13, marginTop: 20, textAlign: 'center' }]}>Koleksiyon</Text>
+              <Text style={[styles.shopBtnSub, { fontSize: 10, textAlign: 'center' }]}>{unlockedCount}/{totalMascots} • {percentage}%</Text>
+            </LinearGradient>
+          </TouchableOpacity>
+
+          {/* THEMES SQUARE */}
+          <TouchableOpacity 
+            style={{ flex: 1, height: 140, borderRadius: 20, overflow: 'hidden', shadowColor: '#000', shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.15, shadowRadius: 10, elevation: 6 }}
+            onPress={() => setThemeModalVisible(true)}
+            activeOpacity={0.9}
+          >
+            <LinearGradient colors={['#1c1c1e', colors.secondary]} style={{ flex: 1, padding: 15, justifyContent: 'center', alignItems: 'center' }} start={{x:0, y:0}} end={{x:1, y:1}}>
+              <View style={styles.glassOverlay} />
+              <View style={{ width: 50, height: 50, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(255,255,255,0.1)', borderRadius: 25, marginBottom: 8 }}>
+                <FontAwesome5 name="palette" size={24} color="#FFF" />
               </View>
-              <View>
-                <Text style={styles.shopBtnTitle}>Koleksiyonum</Text>
-                <Text style={styles.shopBtnSub}>{unlockedCount}/{totalMascots} (%{percentage}) • {equippedName}</Text>
-              </View>
-            </View>
-            <Text style={styles.chevron}>→</Text>
-          </LinearGradient>
-        </TouchableOpacity>
+              <Text style={[styles.shopBtnTitle, { fontSize: 14, textAlign: 'center' }]}>Temalarım</Text>
+              <Text style={[styles.shopBtnSub, { fontSize: 11, textAlign: 'center' }]}>Özelleştir</Text>
+            </LinearGradient>
+          </TouchableOpacity>
+        </View>
 
         {/* ── LANGUAGES SECTION ── */}
         <View style={styles.section}>
@@ -250,6 +265,11 @@ export const ProfileScreen = () => {
           <Text style={[styles.logoutText, { color: colors.error }]}>🚪 Çıkış Yap</Text>
         </TouchableOpacity>
       </ScrollView>
+      
+      <ThemeSelectorModal 
+        visible={isThemeModalVisible} 
+        onClose={() => setThemeModalVisible(false)} 
+      />
     </View>
   );
 };

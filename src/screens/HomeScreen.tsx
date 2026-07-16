@@ -15,10 +15,11 @@ import { LanguageCourse } from '../data/mockData';
 import { Mascot } from '../components/Mascot';
 import { HomeScreenSkeleton } from '../components/SkeletonLoader';
 import SoundManager from '../utils/SoundManager';
+import { HexagonNode } from '../components/HexagonNode';
+import { useThemeColors } from '../theme/colors';
+import { useTheme } from '../context/ThemeContext';
 
 const { width } = Dimensions.get('window');
-
-import { HexagonNode } from '../components/HexagonNode';
 
 const SegmentedRing = ({ size = 96, strokeWidth = 8, progress = 0 }) => {
   const radius = (size - strokeWidth) / 2;
@@ -147,6 +148,10 @@ const STREAK_EMOJIS = [
 ];
 
 const HomeScreen: React.FC<any> = () => {
+  const colors = useThemeColors();
+  const { activeTheme } = useTheme();
+  const styles = React.useMemo(() => getStyles(colors), [colors]);
+
   const insets = useSafeAreaInsets();
   const navigation = useNavigation();
   const { activeLanguage } = useLanguageStore();
@@ -161,7 +166,9 @@ const HomeScreen: React.FC<any> = () => {
   
   // Refs
   const scrollViewRef = useRef<ScrollView>(null);
-  const activeNodeRef = useRef<View>(null);
+  const activeNodeY = useRef(0);
+  const activeUnitId = useRef<string>('');
+  const unitYPositions = useRef<{[key: string]: number}>({});
   const scrollYRef = useRef(0);
 
   // Animations
@@ -258,16 +265,11 @@ const HomeScreen: React.FC<any> = () => {
       Animated.spring(fabScale, { toValue: 1, friction: 3, useNativeDriver: true })
     ]).start();
 
-    if (activeNodeRef.current && scrollViewRef.current) {
-      activeNodeRef.current.measureLayout(
-        scrollViewRef.current.getInnerViewNode(),
-        (left, top, width, height) => {
-          const screenCenter = Dimensions.get('window').height / 2;
-          const targetScrollY = Math.max(0, top - screenCenter + 100);
-          scrollViewRef.current?.scrollTo({ y: targetScrollY, animated: true });
-        },
-        () => {}
-      );
+    if (scrollViewRef.current) {
+      const screenCenter = Dimensions.get('window').height / 2;
+      const absoluteY = (unitYPositions.current[activeUnitId.current] || 0) + activeNodeY.current;
+      const targetScrollY = Math.max(0, absoluteY - screenCenter + 100);
+      scrollViewRef.current?.scrollTo({ y: targetScrollY, animated: true });
     }
   };
 
@@ -321,15 +323,15 @@ const HomeScreen: React.FC<any> = () => {
             <Text style={{ fontSize: 16 }}>
               {streak > 0 ? STREAK_EMOJIS[(streak - 1) % 15] : '🕯️'}
             </Text>
-            <Text style={[styles.statValue, { color: BRAND.streak }]}>{streak}</Text>
+            <Text style={[styles.statValue, { color: colors.streak }]}>{streak}</Text>
           </View>
           <View style={styles.statPill}>
             <Image source={require('../../assets/icons/lingo_coin.png')} style={{ width: 18, height: 18, resizeMode: 'contain' }} />
-            <Text style={[styles.statValue, { color: BRAND.accent }]}>{progress?.gems || 0}</Text>
+            <Text style={[styles.statValue, { color: colors.accent }]}>{progress?.gems || 0}</Text>
           </View>
           <View style={styles.statPill}>
             <Text style={{ fontSize: 16 }}>❤️</Text>
-            <Text style={[styles.statValue, { color: BRAND.danger }]}>{progress?.hearts || 0}</Text>
+            <Text style={[styles.statValue, { color: colors.text }]}>{progress?.hearts || 0}</Text>
           </View>
         </View>
       </View>
@@ -352,16 +354,11 @@ const HomeScreen: React.FC<any> = () => {
     </View>
   );
 
-  // ─── UNIT BANNER COLOR PALETTE (rotating per unit) ───
+  // ─── UNIT BANNER COLOR PALETTE ───
   const UNIT_COLORS = [
-    { bannerGrad: ['#3B82F6', '#2563EB'], nodeActive: '#3B82F6', nodeShadow: '#2563EB' },
-    { bannerGrad: ['#8B5CF6', '#7C3AED'], nodeActive: '#8B5CF6', nodeShadow: '#7C3AED' },
-    { bannerGrad: ['#F59E0B', '#D97706'], nodeActive: '#F59E0B', nodeShadow: '#D97706' },
-    { bannerGrad: ['#EF4444', '#DC2626'], nodeActive: '#EF4444', nodeShadow: '#DC2626' },
-    { bannerGrad: ['#06B6D4', '#0891B2'], nodeActive: '#06B6D4', nodeShadow: '#0891B2' },
-    { bannerGrad: ['#EC4899', '#DB2777'], nodeActive: '#EC4899', nodeShadow: '#DB2777' },
-    { bannerGrad: ['#14B8A6', '#0D9488'], nodeActive: '#14B8A6', nodeShadow: '#0D9488' },
-    { bannerGrad: ['#F97316', '#EA580C'], nodeActive: '#F97316', nodeShadow: '#EA580C' },
+    { bannerGrad: [colors.primary, colors.primaryDark], nodeActive: colors.primary, nodeShadow: colors.primaryDark },
+    { bannerGrad: [colors.secondary, colors.secondaryDark], nodeActive: colors.secondary, nodeShadow: colors.secondaryDark },
+    { bannerGrad: [colors.accent, colors.primaryDark], nodeActive: colors.accent, nodeShadow: colors.primaryDark },
   ];
 
   const UNITS_PER_KISIM = 10;
@@ -394,7 +391,7 @@ const HomeScreen: React.FC<any> = () => {
         const isUnitCompleted = activeNodeIndex >= runningNodeIndex;
 
         unitElements.push(
-          <View key={unit.id}>
+          <View key={unit.id} onLayout={(e) => { unitYPositions.current[unit.id] = e.nativeEvent.layout.y; }}>
             {/* ÜNİTE BANNER */}
             <View style={styles.bannerContainer}>
               <LinearGradient colors={unitColor.bannerGrad} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }} style={styles.bannerGradient}>
@@ -420,7 +417,7 @@ const HomeScreen: React.FC<any> = () => {
                 const isLocked = globalIndex > activeNodeIndex;
 
                 let nodeContent;
-                let nodeColor = '#3A4651';
+                let nodeColor = colors.textMuted;
                 let shadowColor = '#1F2937';
                 let progressValue = 0;
 
@@ -440,7 +437,7 @@ const HomeScreen: React.FC<any> = () => {
                 const isFinaleNode = (i % steps.length === 4);
 
                 if (isFinalNode) {
-                  nodeColor = '#FFC800';
+                  nodeColor = colors.gold;
                   shadowColor = '#D29C00';
                   nodeContent = <FontAwesome5 name="trophy" size={28} color="#FFF" />;
                 } else if (isCompleted) {
@@ -454,11 +451,10 @@ const HomeScreen: React.FC<any> = () => {
                   progressValue = 2;
                   nodeContent = <FontAwesome5 name={iconName} size={28} color="#FFF" />;
                 } else {
-                  nodeContent = <FontAwesome5 name={iconName} size={28} color="#3A4651" />;
+                  nodeContent = <FontAwesome5 name={iconName} size={28} color={colors.textMuted} />;
                 }
 
-                // Kusursuz bir oval (Sinüs dalgası) görünümü için 6 adımlık tam tur. 
-                // Etap 1 en solda başlıyor.
+                // ZigZag path
                 const ZIGZAG = [-120, -60, 30, 100, 30, -60];
                 const zigOffset = ZIGZAG[i % ZIGZAG.length];
 
@@ -467,7 +463,12 @@ const HomeScreen: React.FC<any> = () => {
                         return (
                           <View 
                             key={node.id} 
-                            ref={isActive ? activeNodeRef : null}
+                            onLayout={(e) => {
+                              if (isActive) {
+                                activeNodeY.current = e.nativeEvent.layout.y;
+                                activeUnitId.current = unit.id;
+                              }
+                            }}
                             style={{ alignItems: 'center', marginVertical: isActive ? -10 : -16, transform: [{ translateX: zigOffset }] }}
                           >
                             <View style={{ position: 'relative', alignItems: 'center', justifyContent: 'center' }}>
@@ -494,11 +495,11 @@ const HomeScreen: React.FC<any> = () => {
                             </View>
                     {!isFinalNode && (
                       <View style={styles.nodeLabelBox}>
-                        <Text style={[styles.nodeLabel, isLocked && { color: BRAND.textMuted }]}>{displayName}</Text>
+                        <Text style={[styles.nodeLabel, isLocked && { color: colors.textMuted }]}>{displayName}</Text>
                       </View>
                     )}
                     {i < forcedLevels.length - 1 && (
-                      <View style={{ width: 4, height: 4, backgroundColor: isCompleted ? unitColor.nodeActive : '#1E2D4A', marginVertical: 0, borderRadius: 2 }} />
+                      <View style={{ width: 4, height: 4, backgroundColor: isCompleted ? unitColor.nodeActive : colors.border, marginVertical: 0, borderRadius: 2 }} />
                     )}
                   </View>
                 );
@@ -547,19 +548,19 @@ const HomeScreen: React.FC<any> = () => {
           {unitElements}
           {isNextKisim && (
             <View style={{ alignItems: 'center', paddingVertical: 40, paddingHorizontal: 20 }}>
-              <View style={{ backgroundColor: '#141D32', borderRadius: 20, padding: 28, alignItems: 'center', width: '90%', borderWidth: 1, borderColor: '#1E2D4A' }}>
+              <View style={{ backgroundColor: colors.card, borderRadius: 20, padding: 28, alignItems: 'center', width: '90%', borderWidth: 1, borderColor: colors.border }}>
                 <View style={{ backgroundColor: 'rgba(59,130,246,0.15)', paddingHorizontal: 16, paddingVertical: 6, borderRadius: 20, marginBottom: 12 }}>
-                  <Text style={{ color: '#94A3B8', fontSize: 12, fontWeight: '700', letterSpacing: 1 }}>SIRADAKİ</Text>
+                  <Text style={{ color: colors.textSub, fontSize: 12, fontWeight: '700', letterSpacing: 1 }}>SIRADAKİ</Text>
                 </View>
                 <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 8 }}>
-                  <FontAwesome5 name="lock" size={18} color="#5A6A88" style={{ marginRight: 8 }} />
-                  <Text style={{ color: '#FFF', fontSize: 22, fontWeight: '800' }}>{(kisimIdx + 2) + '. Kısım'}</Text>
+                  <FontAwesome5 name="lock" size={18} color={colors.textMuted} style={{ marginRight: 8 }} />
+                  <Text style={{ color: colors.text, fontSize: 22, fontWeight: '800' }}>{(kisimIdx + 2) + '. Kısım'}</Text>
                 </View>
-                <Text style={{ color: '#94A3B8', fontSize: 14, textAlign: 'center', lineHeight: 20, marginBottom: 16 }}>
+                <Text style={{ color: colors.textSub, fontSize: 14, textAlign: 'center', lineHeight: 20, marginBottom: 16 }}>
                   Daha ileri seviye kelime, ifade ve{'\n'}dil bilgisi konseptlerini öğren
                 </Text>
-                <TouchableOpacity style={{ backgroundColor: kisimAllCompleted ? '#3B82F6' : '#1E2D4A', paddingHorizontal: 30, paddingVertical: 12, borderRadius: 12 }}>
-                  <Text style={{ color: kisimAllCompleted ? '#FFF' : '#5A6A88', fontWeight: '800', fontSize: 14 }}>BURAYA ATLA!</Text>
+                <TouchableOpacity style={{ backgroundColor: kisimAllCompleted ? colors.primary : colors.border, paddingHorizontal: 30, paddingVertical: 12, borderRadius: 12 }}>
+                  <Text style={{ color: kisimAllCompleted ? '#FFF' : colors.textMuted, fontWeight: '800', fontSize: 14 }}>BURAYA ATLA!</Text>
                 </TouchableOpacity>
               </View>
             </View>
@@ -574,12 +575,15 @@ const HomeScreen: React.FC<any> = () => {
 
   return (
     <View style={styles.container}>
-      <StatusBar barStyle="light-content" backgroundColor={BRAND.bg} translucent={false} />
+      <StatusBar barStyle="light-content" backgroundColor={colors.bg} translucent={false} />
 
       <ScrollView 
         ref={scrollViewRef}
         showsVerticalScrollIndicator={false} 
         contentContainerStyle={styles.scrollContent}
+        onScrollBeginDrag={() => {
+          if (isLangDropdownOpen) setIsLangDropdownOpen(false);
+        }}
         onScroll={(e) => {
           const y = e.nativeEvent.contentOffset.y;
           scrollYRef.current = y;
@@ -596,18 +600,27 @@ const HomeScreen: React.FC<any> = () => {
         
       </ScrollView>
 
-      {/* Language Dropdown Overlay */}
+      {/* Language Dropdown Full Screen Overlay */}
       {isLangDropdownOpen && (
-        <TouchableOpacity style={{ position: 'absolute', top: 110, left: 16, backgroundColor: BRAND.card, padding: 15, borderRadius: 12, zIndex: 999, borderWidth: 1, borderColor: BRAND.border, width: 150 }} onPress={() => setIsLangDropdownOpen(false)}>
-           <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 12 }}>
+        <TouchableOpacity 
+          style={[StyleSheet.absoluteFill, { zIndex: 998 }]} 
+          activeOpacity={1} 
+          onPress={() => setIsLangDropdownOpen(false)} 
+        />
+      )}
+
+      {/* Language Dropdown Content */}
+      {isLangDropdownOpen && (
+        <View style={{ position: 'absolute', top: 110, left: 16, backgroundColor: colors.card, padding: 15, borderRadius: 12, zIndex: 999, borderWidth: 1, borderColor: colors.border, width: 150, shadowColor: '#000', shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.3, shadowRadius: 10, elevation: 10 }}>
+           <TouchableOpacity style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 16 }} onPress={() => setIsLangDropdownOpen(false)}>
              <Text style={{ fontSize: 20, marginRight: 10 }}>🇬🇧</Text>
-             <Text style={{ color: '#FFF', fontSize: 16, fontWeight: 'bold' }}>English</Text>
-           </View>
-           <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+             <Text style={{ color: colors.text, fontSize: 16, fontWeight: 'bold' }}>English</Text>
+           </TouchableOpacity>
+           <TouchableOpacity style={{ flexDirection: 'row', alignItems: 'center' }} onPress={() => setIsLangDropdownOpen(false)}>
              <Text style={{ fontSize: 20, marginRight: 10 }}>🇹🇷</Text>
-             <Text style={{ color: '#94A3B8', fontSize: 16 }}>Türkçe</Text>
-           </View>
-        </TouchableOpacity>
+             <Text style={{ color: colors.textMuted, fontSize: 16 }}>Türkçe</Text>
+           </TouchableOpacity>
+        </View>
       )}
 
       {/* ─── FLOATING ACTION BUTTONS (JUMP TO TOP / JUMP TO ACTIVE) ─── */}
@@ -694,10 +707,10 @@ const HomeScreen: React.FC<any> = () => {
   );
 };
 
-const styles = StyleSheet.create({
+const getStyles = (colors: any) => StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: BRAND.bg,
+    backgroundColor: colors.bg,
   },
   navigationFabContainer: {
     position: 'absolute',
@@ -711,9 +724,9 @@ const styles = StyleSheet.create({
     width: 48,
     height: 48,
     borderRadius: 24,
-    backgroundColor: BRAND.card,
+    backgroundColor: colors.card,
     borderWidth: 2,
-    borderColor: BRAND.border,
+    borderColor: colors.border,
     justifyContent: 'center',
     alignItems: 'center',
     shadowColor: '#000',
@@ -723,7 +736,7 @@ const styles = StyleSheet.create({
     elevation: 6,
   },
   dashboard: {
-    backgroundColor: BRAND.bg,
+    backgroundColor: colors.bg,
     paddingHorizontal: 16,
     paddingBottom: 16,
     zIndex: 10,
@@ -742,21 +755,21 @@ const styles = StyleSheet.create({
     width: 44,
     height: 44,
     borderRadius: 22,
-    backgroundColor: BRAND.card,
+    backgroundColor: colors.card,
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 1.5,
-    borderColor: BRAND.border,
+    borderColor: colors.border,
   },
   avatarCircle: {
     width: 44,
     height: 44,
     borderRadius: 22,
-    backgroundColor: BRAND.card,
+    backgroundColor: colors.card,
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 1.5,
-    borderColor: BRAND.secondary,
+    borderColor: colors.secondary,
     overflow: 'hidden',
   },
   statsContainer: {
@@ -783,9 +796,9 @@ const styles = StyleSheet.create({
     width: 10,
     height: 10,
     borderRadius: 5,
-    backgroundColor: BRAND.danger,
+    backgroundColor: colors.danger,
     borderWidth: 2,
-    borderColor: BRAND.card,
+    borderColor: colors.card,
   },
   xpSection: {
     gap: 10,
@@ -796,19 +809,19 @@ const styles = StyleSheet.create({
     alignItems: 'flex-end',
   },
   levelTitle: {
-    color: BRAND.text,
+    color: colors.text,
     fontSize: 24,
     fontWeight: '900',
     fontFamily: 'SpaceGrotesk_700Bold',
   },
   levelSubtitle: {
-    color: BRAND.primary,
+    color: colors.primary,
     fontSize: 14,
     fontWeight: '800',
   },
   xpBarBg: {
     height: 8,
-    backgroundColor: BRAND.card,
+    backgroundColor: colors.card,
     borderRadius: 4,
     overflow: 'hidden',
   },
@@ -824,8 +837,8 @@ const styles = StyleSheet.create({
     padding: 16,
     overflow: 'hidden',
     borderWidth: 1,
-    borderColor: BRAND.border,
-    backgroundColor: BRAND.card,
+    borderColor: colors.border,
+    backgroundColor: colors.card,
   },
   cardGradient: {
     position: 'absolute',
@@ -838,14 +851,14 @@ const styles = StyleSheet.create({
     marginBottom: 12,
   },
   cardTitle: {
-    color: BRAND.text,
+    color: colors.text,
     fontSize: 18,
     fontWeight: '800',
     fontFamily: 'SpaceGrotesk_700Bold',
     flex: 1,
   },
   cardReward: {
-    color: BRAND.accent,
+    color: colors.accent,
     fontSize: 15,
     fontWeight: '800',
   },
@@ -858,11 +871,11 @@ const styles = StyleSheet.create({
   },
   cardBarFill: {
     height: '100%',
-    backgroundColor: BRAND.primary,
+    backgroundColor: colors.primary,
     borderRadius: 4,
   },
   cardFooterText: {
-    color: BRAND.textSub,
+    color: colors.textSub,
     fontSize: 13,
     fontWeight: '700',
   },
@@ -970,7 +983,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: -5,
     right: -5,
-    backgroundColor: BRAND.primaryDark,
+    backgroundColor: colors.primaryDark,
     width: 28,
     height: 28,
     borderRadius: 14,
@@ -985,7 +998,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   nodeLabel: {
-    color: BRAND.text,
+    color: colors.text,
     fontSize: 14,
     fontWeight: 'bold',
     fontFamily: 'SpaceGrotesk_700Bold',

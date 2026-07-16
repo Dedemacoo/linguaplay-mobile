@@ -37,6 +37,7 @@ export interface UserProgress {
   unlockedMascots: string[];
   equippedCostumes?: { head?: string; back?: string; body?: string };
   unlockedCostumes?: string[];
+  unlockedThemes?: string[];
   languages: {
     [key: string]: LanguageProgress;
   };
@@ -72,6 +73,7 @@ const defaultProgress: UserProgress = {
   mysteryBoxCount: 0,
   equippedCostumes: {},
   unlockedCostumes: [],
+  unlockedThemes: ['classic', 'cyberpunk', 'ocean', 'crimson', 'forest'],
   languages: {
     kurdish: { ...defaultLangProgress },
     english: { ...defaultLangProgress },
@@ -103,6 +105,7 @@ interface ProgressState {
   setPremium: (value: boolean) => Promise<void>;
   equipMascot: (id: string) => void;
   unlockMascot: (id: string) => void;
+  unlockTheme: (id: string) => void;
   buyMascot: (id: string, cost: number) => boolean;
   equipCostume: (id: string | null, category: 'head' | 'back' | 'body') => void;
   buyCostume: (id: string, cost: number) => boolean;
@@ -501,6 +504,17 @@ export const useProgressStore = create<ProgressState>((set, get) => ({
     get()._saveProgress(newProgress);
   },
 
+  removeGems: (amount: number) => {
+    const prev = get().progress;
+    if (prev.gems >= amount) {
+      const newProgress = { ...prev, gems: prev.gems - amount };
+      set({ progress: newProgress });
+      get()._saveProgress(newProgress);
+      return true;
+    }
+    return false;
+  },
+
   claimUnitReward: (unitIndex: number, langKey: string) => {
     const { progress, _saveProgress } = get();
     if (!progress.languages[langKey]) return;
@@ -565,6 +579,18 @@ export const useProgressStore = create<ProgressState>((set, get) => ({
       const newProgress = { 
         ...prev, 
         unlockedMascots: [...prev.unlockedMascots, id] 
+      };
+      set({ progress: newProgress });
+      get()._saveProgress(newProgress);
+    }
+  },
+
+  unlockTheme: (id: string) => {
+    const prev = get().progress;
+    if (!prev.unlockedThemes?.includes(id)) {
+      const newProgress = { 
+        ...prev, 
+        unlockedThemes: [...(prev.unlockedThemes || []), id] 
       };
       set({ progress: newProgress });
       get()._saveProgress(newProgress);

@@ -95,7 +95,7 @@ const CollectionScreen = () => {
         {/* TOP PREVIEW */}
         <View style={styles.previewArea}>
           <LinearGradient colors={['rgba(255,255,255,0.05)', 'rgba(0,0,0,0.5)']} style={styles.previewGradient}>
-             <Mascot mascotId={progress.equippedMascot || 'classic'} size={90} />
+             <Mascot mascotId={progress.equippedMascot || 'classic'} size={60} />
              <Text style={{ color: '#FFF', fontSize: 18, fontWeight: 'bold', marginTop: 10 }}>Mevcut Görünüm</Text>
           </LinearGradient>
         </View>
