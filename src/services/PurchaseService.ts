@@ -1,4 +1,4 @@
-﻿/**
+/**
  * PurchaseService — RevenueCat Altyapısı
  *
  * Şu an Expo Go ortamında native "react-native-purchases" kütüphanesi
@@ -31,19 +31,28 @@ export const SUBSCRIPTION_PLANS: SubscriptionPlan[] = [
   {
     id: 'monthly',
     title: 'Aylık',
-    price: '₺89,99',
+    price: '₺99,99',
     period: '/ay',
     badge: null,
     color: '#00F0FF',
     productIdentifier: 'linguaplay_premium_monthly',
   },
   {
+    id: 'quarterly',
+    title: '3 Aylık',
+    price: '₺249,99',
+    period: '/3 ay',
+    badge: '%15 TASARRUF',
+    color: '#39FF14',
+    productIdentifier: 'linguaplay_premium_quarterly',
+  },
+  {
     id: 'yearly',
     title: 'Yıllık',
-    price: '₺749,99',
+    price: '₺750,00',
     period: '/yıl',
-    badge: '%30 TASARRUF',
-    color: '#8A2BE2',
+    badge: 'EN İYİ FİYAT',
+    color: '#FFD60A',
     productIdentifier: 'linguaplay_premium_yearly',
   },
 ];

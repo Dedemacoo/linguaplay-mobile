@@ -22,7 +22,7 @@ export interface LanguageCourse {
 
 export const languagesData: Record<string, LanguageCourse> = {
   kurdish: {
-    title: 'Kürtçe (KurmancÃ®)',
+    title: 'Kürtçe (Kurmancî)',
     description: 'Mezopotamya\'nın kadim dili',
     units: [
     {

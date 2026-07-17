@@ -4,6 +4,9 @@ import { View, Text, TextInput, StyleSheet, TouchableOpacity, KeyboardAvoidingVi
 import { useThemeColors } from '../theme/colors';
 import { useNavigation } from '@react-navigation/native';
 import { Mascot } from '../components/Mascot';
+import { useAuth } from '../context/AuthContext';
+import { query, collection, where, getDocs } from 'firebase/firestore';
+import { db } from '../config/firebase';
 
 const ForgotPasswordScreen = () => {
   const colors = useThemeColors();
@@ -11,20 +14,42 @@ const ForgotPasswordScreen = () => {
   const [email, setEmail] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleReset = () => {
-    if (!email.trim() || !email.includes('@')) {
+  const { resetPassword } = useAuth();
+
+  const handleReset = async () => {
+    const formattedEmail = email.trim().toLowerCase();
+    if (!formattedEmail || !formattedEmail.includes('@')) {
       Alert.alert('Hata', 'Lütfen geçerli bir e-posta adresi girin.');
       return;
     }
 
     setIsSubmitting(true);
 
-    setTimeout(() => {
+    try {
+      // Firebase Email Enumeration Protection check: explicitly verify if email exists
+      const q = query(collection(db, 'users'), where('email', '==', formattedEmail));
+      const snapshot = await getDocs(q);
+      if (snapshot.empty) {
+        Alert.alert('Hata', 'Bu e-posta adresine kayıtlı bir hesap bulunamadı. Lütfen e-postanızı kontrol edin.');
+        setIsSubmitting(false);
+        return;
+      }
+
+      await resetPassword(formattedEmail);
+      Alert.alert(
+        'E-posta Gönderildi', 
+        'Şifre sıfırlama bağlantısı gönderildi. Lütfen Gereksiz/Spam kutunuzu da kontrol etmeyi unutmayın.', 
+        [{ text: 'Tamam', onPress: () => navigation.goBack() }]
+      );
+    } catch (error: any) {
+      if (error?.code === 'auth/user-not-found') {
+         Alert.alert('Hata', 'Bu e-posta adresine kayıtlı bir kullanıcı bulunamadı.');
+      } else {
+         Alert.alert('Hata', 'Bir sorun oluştu. Lütfen daha sonra tekrar deneyin.');
+      }
+    } finally {
       setIsSubmitting(false);
-      Alert.alert('E-posta Gönderildi', 'Şifre sıfırlama bağlantısı e-posta adresinize gönderildi.', [
-        { text: 'Tamam', onPress: () => navigation.goBack() }
-      ]);
-    }, 1500);
+    }
   };
 
   return (

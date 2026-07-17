@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, Modal, TouchableOpacity, ScrollView, Animated } from 'react-native';
+import { View, Text, StyleSheet, Modal, TouchableOpacity, ScrollView, Animated, Alert } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Feather } from '@expo/vector-icons';
 import { useThemeColors, THEMES } from '../theme/colors';
 import { useTheme } from '../context/ThemeContext';
 import { useProgressStore } from '../store/useProgressStore';
 import { Mascot } from './Mascot';
+import { useNavigation } from '@react-navigation/native';
+import * as Haptics from 'expo-haptics';
 
 interface ThemeSelectorModalProps {
   visible: boolean;
@@ -32,6 +34,7 @@ export const ThemeSelectorModal: React.FC<ThemeSelectorModalProps> = ({ visible,
   const colors = useThemeColors();
   const { activeTheme, setActiveTheme } = useTheme();
   const { progress, equipMascot, unlockMascot } = useProgressStore();
+  const navigation = useNavigation<any>();
   const [slideAnim] = useState(new Animated.Value(300));
   const [fadeAnim] = useState(new Animated.Value(0));
 
@@ -66,13 +69,29 @@ export const ThemeSelectorModal: React.FC<ThemeSelectorModalProps> = ({ visible,
   }, [visible]);
 
   const handleSelectTheme = (themeKey: string) => {
-    const isUnlocked = progress.unlockedThemes?.includes(themeKey) || themeKey === 'classic';
-    if (!isUnlocked) return; // Normally show alert, but we unlocked all for testing
+    const isUnlocked = (progress.unlockedThemes || ['classic']).includes(themeKey);
+    if (!isUnlocked) {
+      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Warning);
+      Alert.alert(
+        '🔒 Tema Kilitli',
+        'Bu temayı açmak için Lingo Market\'e git ve 2500 💎 ile satın al ya da Sürpriz Kutu aç!',
+        [
+          { text: 'İptal', style: 'cancel' },
+          {
+            text: 'Market\'e Git',
+            onPress: () => {
+              onClose();
+              setTimeout(() => navigation.navigate('Market'), 300);
+            }
+          }
+        ]
+      );
+      return;
+    }
 
     setActiveTheme(themeKey);
     const mascotForTheme = themeMascots[themeKey];
     
-    // Automatically equip and unlock the matching mascot if they don't have it equipped or unlocked
     if (mascotForTheme && mascotForTheme !== progress.equippedMascot) {
       if (!progress.unlockedMascots.includes(mascotForTheme)) {
         unlockMascot(mascotForTheme);
@@ -80,8 +99,16 @@ export const ThemeSelectorModal: React.FC<ThemeSelectorModalProps> = ({ visible,
       equipMascot(mascotForTheme);
     }
     
+    Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
     setTimeout(() => onClose(), 250);
   };
+
+  // Sadece açık temaları göster
+  const unlockedThemeKeys = Object.keys(THEMES).filter(key =>
+    (progress.unlockedThemes || ['classic']).includes(key)
+  );
+
+  const hasOnlyClassic = unlockedThemeKeys.length <= 1;
 
   if (!visible && slideAnim.applyAsValue === 500) return null;
 
@@ -99,9 +126,29 @@ export const ThemeSelectorModal: React.FC<ThemeSelectorModalProps> = ({ visible,
           </View>
           
           <ScrollView contentContainerStyle={styles.scrollContent}>
-            {Object.keys(THEMES).map((key) => {
+            {/* Eğer sadece klasik tema varsa bilgilendirme */}
+            {hasOnlyClassic && (
+              <View style={[styles.infoBox, { backgroundColor: colors.card, borderColor: colors.border }]}>
+                <Text style={{ fontSize: 32, marginBottom: 10 }}>🎨</Text>
+                <Text style={[styles.infoTitle, { color: colors.text }]}>Daha Fazla Tema Keşfet</Text>
+                <Text style={[styles.infoSub, { color: colors.textLight }]}>
+                  Yeni temalar Lingo Market'te 2500 💎 karşılığında satın alınabilir veya Sürpriz Kutu'dan kazanılabilir!
+                </Text>
+                <TouchableOpacity
+                  style={[styles.marketBtn, { backgroundColor: colors.primary }]}
+                  onPress={() => {
+                    onClose();
+                    setTimeout(() => navigation.navigate('Market'), 300);
+                  }}
+                >
+                  <Text style={styles.marketBtnText}>🛒 Lingo Market'e Git</Text>
+                </TouchableOpacity>
+              </View>
+            )}
+
+            {/* Açık temalar */}
+            {unlockedThemeKeys.map((key) => {
               const themeData = THEMES[key as keyof typeof THEMES];
-              const isUnlocked = progress.unlockedThemes?.includes(key) || key === 'classic';
               const isActive = activeTheme === key;
 
               return (
@@ -111,7 +158,7 @@ export const ThemeSelectorModal: React.FC<ThemeSelectorModalProps> = ({ visible,
                   onPress={() => handleSelectTheme(key)}
                   style={[
                     styles.themeCard,
-                    { borderColor: isActive ? colors.primary : colors.border, backgroundColor: themeData.card }
+                    { borderColor: isActive ? themeData.primary : colors.border, backgroundColor: themeData.card }
                   ]}
                 >
                   <LinearGradient
@@ -126,15 +173,26 @@ export const ThemeSelectorModal: React.FC<ThemeSelectorModalProps> = ({ visible,
                     <View>
                       <Text style={[styles.themeName, { color: '#FFFFFF' }]}>{themeNames[key]}</Text>
                       {isActive && <Text style={[styles.activeText, { color: themeData.primary }]}>Şu an Kullanılıyor</Text>}
-                      {!isUnlocked && <Text style={styles.lockedText}>Kilitli</Text>}
                     </View>
                   </View>
                   
                   {isActive && <Feather name="check-circle" size={24} color={themeData.primary} />}
-                  {!isUnlocked && <Feather name="lock" size={20} color="#5A6A88" />}
                 </TouchableOpacity>
               );
             })}
+
+            {/* Market'e git butonu (temalar varsa da göster) */}
+            {!hasOnlyClassic && (
+              <TouchableOpacity
+                style={[styles.marketBtn, { backgroundColor: colors.primary, marginTop: 8 }]}
+                onPress={() => {
+                  onClose();
+                  setTimeout(() => navigation.navigate('Market'), 300);
+                }}
+              >
+                <Text style={styles.marketBtnText}>🛒 Daha Fazla Tema Keşfet</Text>
+              </TouchableOpacity>
+            )}
           </ScrollView>
         </Animated.View>
       </Animated.View>
@@ -176,6 +234,25 @@ const styles = StyleSheet.create({
   scrollContent: {
     paddingBottom: 20,
   },
+  infoBox: {
+    borderRadius: 20,
+    borderWidth: 1,
+    padding: 20,
+    alignItems: 'center',
+    marginBottom: 16,
+  },
+  infoTitle: {
+    fontSize: 17,
+    fontWeight: '800',
+    marginBottom: 8,
+    textAlign: 'center',
+  },
+  infoSub: {
+    fontSize: 13,
+    textAlign: 'center',
+    lineHeight: 20,
+    marginBottom: 16,
+  },
   themeCard: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -200,8 +277,15 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontWeight: '600',
   },
-  lockedText: {
-    fontSize: 12,
-    color: '#5A6A88',
-  }
+  marketBtn: {
+    width: '100%',
+    paddingVertical: 14,
+    borderRadius: 16,
+    alignItems: 'center',
+  },
+  marketBtnText: {
+    color: '#FFF',
+    fontWeight: '800',
+    fontSize: 15,
+  },
 });

@@ -72,34 +72,7 @@ export class NotificationService {
   static async scheduleDailyReminder(hour: number, minute: number): Promise<void> {
     await this.cancelAllScheduled();
 
-    // The very next reminder date (Today or Tomorrow depending on current time)
-    const nextTrigger = new Date();
-    nextTrigger.setHours(hour, minute, 0, 0);
-    if (nextTrigger.getTime() <= Date.now()) {
-      nextTrigger.setDate(nextTrigger.getDate() + 1); // move to tomorrow if already passed today
-    }
-
-    // 1. 10-15 min pre-reminder
-    const preDate = new Date(nextTrigger.getTime() - 15 * 60000);
-    if (preDate.getTime() > Date.now()) {
-      await Notifications.scheduleNotificationAsync({
-        content: {
-          title: 'Süsleniyorum... 🐬',
-          body: 'Lingo seni bekliyor, derse hazır mısın?',
-          sound: 'default',
-        },
-        trigger: {
-          type: Notifications.SchedulableTriggerInputTypes.CALENDAR,
-          year: preDate.getFullYear(),
-          month: preDate.getMonth() + 1,
-          day: preDate.getDate(),
-          hour: preDate.getHours(),
-          minute: preDate.getMinutes(),
-        },
-      });
-    }
-
-    // 2. Exact lesson time reminder (Flirtatious)
+    // 1. Daily repeating reminder (Flirtatious)
     const flirtMsg = REMINDER_MESSAGES[Math.floor(Math.random() * REMINDER_MESSAGES.length)];
     await Notifications.scheduleNotificationAsync({
       content: {
@@ -108,36 +81,11 @@ export class NotificationService {
         sound: 'default',
       },
       trigger: {
-        type: Notifications.SchedulableTriggerInputTypes.CALENDAR,
-        year: nextTrigger.getFullYear(),
-        month: nextTrigger.getMonth() + 1,
-        day: nextTrigger.getDate(),
-        hour: nextTrigger.getHours(),
-        minute: nextTrigger.getMinutes(),
+        hour,
+        minute,
+        repeats: true,
       },
     });
-
-    // 3. Inactivity reminders every 24h for 14 days (Fragile/Broken-hearted)
-    for (let i = 1; i <= 14; i++) {
-      const fragileDate = new Date(nextTrigger.getTime() + i * 24 * 3600000);
-      const fragileMsg = INACTIVITY_MESSAGES[i % INACTIVITY_MESSAGES.length];
-      
-      await Notifications.scheduleNotificationAsync({
-        content: {
-          title: fragileMsg.title,
-          body: fragileMsg.body,
-          sound: 'default',
-        },
-        trigger: {
-          type: Notifications.SchedulableTriggerInputTypes.CALENDAR,
-          year: fragileDate.getFullYear(),
-          month: fragileDate.getMonth() + 1,
-          day: fragileDate.getDate(),
-          hour: fragileDate.getHours(),
-          minute: fragileDate.getMinutes(),
-        },
-      });
-    }
 
     await AsyncStorage.setItem(REMINDER_KEY, JSON.stringify({ hour, minute }));
   }

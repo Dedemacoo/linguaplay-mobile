@@ -37,7 +37,7 @@ const LoginScreen: React.FC<Props> = ({ navigation }) => {
   const [errorMsg, setErrorMsg] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const colors = useThemeColors();
-  const { login } = useAuth();
+  const { login, signInWithGoogle } = useAuth();
 
   const handleLogin = async () => {
     if (!email || !password) {
@@ -47,8 +47,12 @@ const LoginScreen: React.FC<Props> = ({ navigation }) => {
     try {
       setErrorMsg('');
       setIsLoading(true);
-      await login(email, password);
-      navigation.replace('Transition', { targetRoute: 'MainTabs', message: 'Öğrenmeye Dönülüyor...' });
+      const { requires2FA } = await login(email, password);
+      if (requires2FA) {
+        navigation.replace('TwoFactorVerify');
+      } else {
+        navigation.replace('Transition', { targetRoute: 'MainTabs', message: 'Öğrenmeye Dönülüyor...' });
+      }
     } catch (e: any) {
       const code = e?.code || '';
       setErrorMsg(firebaseErrorToTurkish(code));
@@ -110,6 +114,31 @@ const LoginScreen: React.FC<Props> = ({ navigation }) => {
             onPress={() => navigation.navigate('ForgotPassword')}
           >
             <Text style={[styles.forgotPasswordText, { color: colors.textLight }]}>Şifremi Unuttum</Text>
+          </TouchableOpacity>
+
+          <View style={{ flexDirection: 'row', alignItems: 'center', width: '100%', marginVertical: 20 }}>
+            <View style={{ flex: 1, height: 1, backgroundColor: colors.border }} />
+            <Text style={{ marginHorizontal: 10, color: colors.textLight, fontSize: 14 }}>Veya şununla devam et</Text>
+            <View style={{ flex: 1, height: 1, backgroundColor: colors.border }} />
+          </View>
+
+          <TouchableOpacity 
+            style={[styles.googleButton, { backgroundColor: colors.surface, borderColor: colors.border }]}
+            onPress={async () => {
+              try {
+                setIsLoading(true);
+                await signInWithGoogle();
+                navigation.replace('Transition', { targetRoute: 'MainTabs', message: 'Google ile Giriş Yapıldı!' });
+              } catch (e) {
+                Alert.alert('Hata', 'Google ile giriş başarısız oldu.');
+                setIsLoading(false);
+              }
+            }}
+            disabled={isLoading}
+            activeOpacity={0.7}
+          >
+            <Text style={{ fontSize: 24, marginRight: 10 }}>G</Text>
+            <Text style={[styles.googleButtonText, { color: colors.text }]}>Google ile Giriş Yap</Text>
           </TouchableOpacity>
 
           <TouchableOpacity 
@@ -220,6 +249,20 @@ const styles = StyleSheet.create({
   forgotPasswordText: {
     fontSize: 14,
     fontWeight: '600',
+  },
+  googleButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '100%',
+    paddingVertical: 15,
+    borderWidth: 1,
+    borderRadius: 15,
+    marginBottom: 20,
+  },
+  googleButtonText: {
+    fontSize: 16,
+    fontWeight: 'bold', fontFamily: 'SpaceGrotesk_700Bold',
   },
   registerLink: {
     marginTop: 25,

@@ -5,7 +5,7 @@ import { db } from '../config/firebase';
 import NetInfo from '@react-native-community/netinfo';
 import { LeagueService } from '../services/LeagueService';
 
-const STORAGE_KEY = '@linguaplay_progress_v2';
+const STORAGE_KEY = '@linguaplay_progress_v3';
 
 export interface LanguageProgress {
   totalXp: number;
@@ -31,13 +31,20 @@ export interface UserProgress {
   lastHeartRefill: string;
   isPremium: boolean;
   speakingDisabledUntil?: number;
+  // mysteryBoxCount: genel açılma sayısı (tüm döngüler boyunca toplam)
   mysteryBoxCount?: number;
+  // themeMysteryCount: mevcut döngüdeki sayaç (tema çıktıktan sonra sıfırlanır)
+  themeMysteryCount?: number;
+  // mysteryBoxPhase: hangi aşamada olduğumuz
+  // 0 = ilk aşama (4-5'te tema), 1 = 10'da kesin, 2 = 15'te kesin, 3 = 20'de kesin, 4 = 25'te kesin
+  mysteryBoxPhase?: number;
   lastFreeRewardDate?: string;
   equippedMascot: string;
   unlockedMascots: string[];
   equippedCostumes?: { head?: string; back?: string; body?: string };
   unlockedCostumes?: string[];
   unlockedThemes?: string[];
+  equippedTheme?: string;
   languages: {
     [key: string]: LanguageProgress;
   };
@@ -71,9 +78,13 @@ const defaultProgress: UserProgress = {
   equippedMascot: 'classic',
   unlockedMascots: ['classic'],
   mysteryBoxCount: 0,
+  themeMysteryCount: 0,
+  mysteryBoxPhase: 0,
   equippedCostumes: {},
   unlockedCostumes: [],
-  unlockedThemes: ['classic', 'cyberpunk', 'ocean', 'crimson', 'forest'],
+  // Başlangıçta sadece 'classic' tema açık, diğerleri kilitli
+  unlockedThemes: ['classic'],
+  equippedTheme: 'classic',
   languages: {
     kurdish: { ...defaultLangProgress },
     english: { ...defaultLangProgress },
@@ -94,7 +105,8 @@ interface ProgressState {
   disableSpeaking: () => void;
   completeLesson: (lessonId: string, xpEarned: number, langKey: string) => void;
   claimDailyReward: () => boolean;
-  openMysteryBox: (availableMascotIds: string[]) => { success: boolean, type?: 'refund' | 'theme', refundAmount?: number, themeId?: string, error?: string };
+  openMysteryBox: (availableThemeIds: string[]) => { success: boolean, type?: 'refund' | 'gems' | 'theme', refundAmount?: number, themeId?: string, error?: string };
+  buyTheme: (themeId: string) => boolean;
   loseHeart: () => void;
   gainHeart: () => void;
   refillHearts: (cost: number) => boolean; 
@@ -255,42 +267,93 @@ export const useProgressStore = create<ProgressState>((set, get) => ({
     return true;
   },
 
-  openMysteryBox: (availableMascotIds: string[]) => {
+  openMysteryBox: (availableThemeIds: string[]) => {
     const prev = get().progress;
-    if (prev.gems < 500) return { success: false, error: 'Yetersiz Lingot' };
+    if (prev.gems < 500) return { success: false, error: 'Yetersiz Elmas' };
 
-    const currentCount = prev.mysteryBoxCount || 0;
-    const newCount = currentCount + 1;
+    const totalCount = (prev.mysteryBoxCount || 0) + 1;
+    const phase = prev.mysteryBoxPhase || 0;
+    const cycleCount = (prev.themeMysteryCount || 0) + 1;
 
-    // Every 5th box gives a theme
-    if (newCount % 5 === 0) {
-      // Give theme
-      const unownedMascots = availableMascotIds.filter(id => !prev.unlockedMascots.includes(id));
-      if (unownedMascots.length > 0) {
-        const randomThemeId = unownedMascots[Math.floor(Math.random() * unownedMascots.length)];
-        const newProgress = { 
-          ...prev, 
-          gems: prev.gems - 500, 
-          mysteryBoxCount: newCount,
-          unlockedMascots: [...prev.unlockedMascots, randomThemeId]
+    let isGuaranteed = false;
+    let hasChance = false;
+    let nextPhase = phase;
+
+    if (phase === 0) {
+      // 4. veya 5. kutuda tema
+      isGuaranteed = cycleCount >= 5;
+      hasChance = cycleCount === 4 && Math.random() < 0.5;
+      if (isGuaranteed || hasChance) nextPhase = 1;
+    } else {
+      // Phase 1 -> threshold 10
+      // Phase 2 -> threshold 15
+      // Phase 3 -> threshold 20
+      // Phase 4 -> threshold 25 vs.
+      const currentThreshold = 10 + (phase - 1) * 5; 
+      isGuaranteed = cycleCount >= currentThreshold;
+      // %10 şans (eğer kutu sonuncu değilse)
+      hasChance = Math.random() < 0.10;
+
+      if (isGuaranteed || hasChance) nextPhase = phase + 1;
+    }
+
+    const isThemeBox = isGuaranteed || hasChance;
+
+    if (isThemeBox) {
+      const lockedThemes = availableThemeIds.filter(id => !(prev.unlockedThemes || []).includes(id));
+      if (lockedThemes.length > 0) {
+        const randomTheme = lockedThemes[Math.floor(Math.random() * lockedThemes.length)];
+        const newProgress = {
+          ...prev,
+          gems: prev.gems - 500,
+          mysteryBoxCount: totalCount,
+          themeMysteryCount: 0,      // Sıfırla
+          mysteryBoxPhase: nextPhase,
+          unlockedThemes: [...(prev.unlockedThemes || ['classic']), randomTheme],
         };
         set({ progress: newProgress });
         get()._saveProgress(newProgress);
-        return { success: true, type: 'theme', themeId: randomThemeId };
+        return { success: true, type: 'theme', themeId: randomTheme };
       } else {
-        // If they own all themes, give them 1000 gems instead
-        const newProgress = { ...prev, gems: (prev.gems - 500) + 1000, mysteryBoxCount: newCount };
+        // Tüm temalar açık, 1500 elmas ver
+        const newProgress = { 
+          ...prev, 
+          gems: (prev.gems - 500) + 1500, 
+          mysteryBoxCount: totalCount, 
+          themeMysteryCount: 0, 
+          mysteryBoxPhase: nextPhase 
+        };
         set({ progress: newProgress });
         get()._saveProgress(newProgress);
-        return { success: true, type: 'refund', refundAmount: 1000 };
+        return { success: true, type: 'gems', refundAmount: 1500 };
       }
     } else {
-      // Refund 250 gems
-      const newProgress = { ...prev, gems: (prev.gems - 500) + 250, mysteryBoxCount: newCount };
+      // Tema çıkmadı, 250 elmas geri ver
+      const newProgress = { 
+        ...prev, 
+        gems: (prev.gems - 500) + 250, 
+        mysteryBoxCount: totalCount, 
+        themeMysteryCount: cycleCount 
+      };
       set({ progress: newProgress });
       get()._saveProgress(newProgress);
-      return { success: true, type: 'refund', refundAmount: 250 };
+      return { success: true, type: 'gems', refundAmount: 250 };
     }
+  },
+
+  buyTheme: (themeId: string) => {
+    const prev = get().progress;
+    const THEME_COST = 2500;
+    if (prev.gems < THEME_COST) return false;
+    if ((prev.unlockedThemes || []).includes(themeId)) return false; // Zaten var
+    const newProgress = {
+      ...prev,
+      gems: prev.gems - THEME_COST,
+      unlockedThemes: [...(prev.unlockedThemes || ['classic']), themeId],
+    };
+    set({ progress: newProgress });
+    get()._saveProgress(newProgress);
+    return true;
   },
 
   addXp: (amount: number, langKey: string) => {

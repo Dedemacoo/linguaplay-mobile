@@ -15,6 +15,7 @@ const { width, height } = Dimensions.get('window');
 const TABS = [
   { id: 'featured', label: 'Öne Çıkanlar', icon: '✨' },
   { id: 'diamonds', label: 'Lingotlar', iconImage: require('../../assets/icons/lingo_coin.png') },
+  { id: 'themes', label: 'Temalar', icon: '🎨' },
   { id: 'premium', label: 'Premium', icon: '👑' },
 ];
 
@@ -59,9 +60,16 @@ const BUNDLES = [
   { id: 'b2', name: 'Legend Pack', oldPrice: '₺499.99', newPrice: '₺299.99', discount: '-40%', time: '2d 14h', image: '👑' },
 ];
 
-const LIMITED_OFFERS = [
-  { id: 'l1', name: 'Neon Wings', qty: '42/500 Left', price: 800, image: '🪽', glow: '#0A84FF' },
-  { id: 'l2', name: 'Golden Crown', qty: '12/100 Left', price: 3000, image: '👑', glow: '#FFD60A' },
+const APP_THEMES = [
+  { id: 'cyberpunk', name: 'Siberpunk Tema', price: 2500, type: 'AppTheme', rarity: 'Legendary', image: '🤖' },
+  { id: 'ocean', name: 'Karanlık Okyanus', price: 2500, type: 'AppTheme', rarity: 'Rare', image: '🌊' },
+  { id: 'crimson', name: 'Kızıl Şafak Tema', price: 2500, type: 'AppTheme', rarity: 'Epic', image: '🔥' },
+  { id: 'forest', name: 'Gece Ormanı', price: 2500, type: 'AppTheme', rarity: 'Rare', image: '🌲' },
+];
+
+const FEATURED_ITEMS = [
+  { id: 'crimson', name: 'Kızıl Şafak Tema', oldPrice: 3500, price: 2500, type: 'AppTheme', rarity: 'Epic', image: '🔥', discount: '%28 İndirim' },
+  { id: 'astronaut', name: 'Uzaylı Lingo', oldPrice: 3500, price: 2500, type: 'Outfit', rarity: 'Legendary', image: '👽', discount: '%28 İndirim' },
 ];
 
 // Carousel Component
@@ -117,6 +125,7 @@ const MarketScreen = () => {
   const [selectedItem, setSelectedItem] = useState<any>(null);
   const [purchaseModalVisible, setPurchaseModalVisible] = useState(false);
   const [showConfetti, setShowConfetti] = useState(false);
+  const [successMessage, setSuccessMessage] = useState('Yeni Lingotların hesabına eklendi.');
   
   // Confetti Animation Setup
   const confettiAnim = useRef(new Animated.Value(0)).current;
@@ -136,7 +145,7 @@ const MarketScreen = () => {
     }
   }, [purchaseModalVisible]);
 
-  const { progress, buyMascot, addGems, setPremium, claimDailyReward, openMysteryBox } = useProgressStore();
+  const { progress, buyMascot, buyTheme, addGems, setPremium, claimDailyReward, openMysteryBox } = useProgressStore();
 
   const handleOpenPurchase = (item: any) => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
@@ -144,7 +153,10 @@ const MarketScreen = () => {
     setPurchaseModalVisible(true);
   };
 
-  const showSuccessConfetti = () => {
+  const showSuccessConfetti = (msg?: string) => {
+    if (msg) setSuccessMessage(msg);
+    else setSuccessMessage('Yeni Lingotların hesabına eklendi.');
+    
     Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
     setPurchaseModalVisible(false);
     setShowConfetti(true);
@@ -166,22 +178,34 @@ const MarketScreen = () => {
       if (progress.gems >= price) {
         const success = buyMascot(selectedItem.id, price);
         if (success) {
-          showSuccessConfetti();
+          showSuccessConfetti(`${selectedItem.name} koleksiyonuna eklendi!`);
         }
       } else {
         showError('Yetersiz Lingot', 'Bu ürünü satın almak için yeterli Lingotunuz yok.');
       }
+    } else if (selectedItem?.type === 'AppTheme') {
+      const price = parseInt(selectedItem.price);
+      if (progress.gems >= price) {
+        const success = buyTheme(selectedItem.id);
+        if (success) {
+          showSuccessConfetti(`${selectedItem.name} başarıyla açıldı!`);
+        } else {
+          showError('Hata', 'Bu temaya zaten sahipsiniz.');
+        }
+      } else {
+        showError('Yetersiz Lingot', 'Bu temayı satın almak için yeterli Lingotunuz yok.');
+      }
     } else if (selectedItem?.type === 'Currency') {
       addGems(selectedItem.amount);
-      showSuccessConfetti();
+      showSuccessConfetti(`${selectedItem.amount} Lingot hesabına eklendi!`);
     } else if (selectedItem?.type === 'Subscription') {
       await setPremium(true);
-      showSuccessConfetti();
+      showSuccessConfetti('Premium üyeliğe hoş geldin!');
     } else if (selectedItem?.type === 'Mystery Box') {
       const mysteryThemes = ['wizard', 'astronaut', 'royal', 'cyber'];
       const result = openMysteryBox(mysteryThemes);
       if (result.success) {
-        showSuccessConfetti();
+        showSuccessConfetti('Sürpriz Kutu Açıldı!');
         if (result.type === 'theme') {
           setTimeout(() => Alert.alert('🎉 Tebrikler!', `Sürpriz kutudan yeni bir tema kazandın!`), 1000);
         } else {
@@ -209,12 +233,14 @@ const MarketScreen = () => {
     switch(activeTab) {
       case 'diamonds': return renderDiamonds();
       case 'premium': return renderPremium();
+      case 'themes': return renderThemes();
       case 'featured':
       default:
         return (
           <>
             <FeaturedCarousel />
             {renderDailyShop()}
+            {renderFeaturedItems()}
           </>
         );
     }
@@ -280,23 +306,58 @@ const MarketScreen = () => {
 
   const renderPremium = () => (
     <View style={styles.premiumContainer}>
-      <LinearGradient colors={['#B27900', '#FFD60A']} style={styles.premiumCard} start={{x:0, y:0}} end={{x:1, y:1}}>
-        <Text style={styles.premiumIcon}>👑</Text>
-        <Text style={styles.premiumTitle}>Lingo Premium</Text>
-        <Text style={styles.premiumSub}>Unlock the ultimate experience</Text>
-        
-        <View style={styles.benefitsList}>
-          <Text style={styles.benefitText}>✨ Double XP on all lessons</Text>
-          <Text style={styles.benefitText}>❤️ Unlimited Hearts</Text>
-          <Text style={styles.benefitText}>👕 Exclusive Outfits & Themes</Text>
-          <Text style={styles.benefitText}>💎 500 Diamonds Monthly</Text>
-          <Text style={styles.benefitText}>🏆 Premium League Rewards</Text>
-        </View>
+      <Text style={styles.premiumMainTitle}>Lingo Premium</Text>
+      <Text style={styles.premiumMainSub}>Tüm özellikleri aç ve sınırsız öğren!</Text>
 
-        <TouchableOpacity style={styles.premiumBtn} onPress={() => handleOpenPurchase({name: 'Premium Pass', price: '₺199.99/mo', type: 'Subscription', image: '👑', rarity: 'Mythic'})}>
-          <Text style={styles.premiumBtnText}>Get Premium - ₺199.99/mo</Text>
+      <View style={{ gap: 15 }}>
+        {/* Yıllık */}
+        <TouchableOpacity activeOpacity={0.8} onPress={() => handleOpenPurchase({name: 'Yıllık Premium', price: '₺750.00', type: 'Subscription', image: '👑', rarity: 'Mythic'})}>
+          <LinearGradient colors={['#FFD60A', '#B27900']} style={[styles.premiumCard, { paddingVertical: 20 }]} start={{x:0, y:0}} end={{x:1, y:1}}>
+            <View style={{ position: 'absolute', right: 0, top: 0, width: 80, height: 80, opacity: 0.6 }}>
+              <LottieView source={require('../../assets/mascots/yildizbirsonrakiseviye.json')} autoPlay={false} loop={false} style={{ width: '100%', height: '100%' }} />
+            </View>
+            <View style={[styles.badge, { backgroundColor: '#FF453A', top: -12, left: 20 }]}><Text style={styles.badgeText}>POPÜLER - %48 İNDİRİM</Text></View>
+            <Text style={{ fontSize: 32, marginBottom: 5 }}>👑</Text>
+            <Text style={[styles.premiumTitle, { color: '#000' }]}>12 Aylık</Text>
+            <Text style={[styles.premiumSub, { color: 'rgba(0,0,0,0.7)' }]}>Sadece ₺62.50 / Ay</Text>
+            <Text style={{ fontSize: 24, fontWeight: '900', color: '#000' }}>₺750.00</Text>
+          </LinearGradient>
         </TouchableOpacity>
-      </LinearGradient>
+
+        {/* 3 Aylık */}
+        <TouchableOpacity activeOpacity={0.8} onPress={() => handleOpenPurchase({name: '3 Aylık Premium', price: '₺300.00', type: 'Subscription', image: '👑', rarity: 'Legendary'})}>
+          <LinearGradient colors={['#2c2c2e', '#1c1c1e']} style={[styles.premiumCard, { paddingVertical: 20, borderWidth: 1, borderColor: '#FFD60A' }]} start={{x:0, y:0}} end={{x:1, y:1}}>
+            <View style={{ position: 'absolute', right: 0, top: 0, width: 80, height: 80, opacity: 0.5 }}>
+              <LottieView source={require('../../assets/mascots/yildizbirsonrakiseviye.json')} autoPlay={false} loop={false} style={{ width: '100%', height: '100%' }} />
+            </View>
+            <View style={[styles.badge, { backgroundColor: BRAND.primary, top: -12, left: 20 }]}><Text style={styles.badgeText}>EKONOMİK</Text></View>
+            <Text style={{ fontSize: 28, marginBottom: 5 }}>✨</Text>
+            <Text style={styles.premiumTitle}>3 Aylık</Text>
+            <Text style={styles.premiumSub}>Sadece ₺100.00 / Ay</Text>
+            <Text style={{ fontSize: 24, fontWeight: '900', color: '#FFD60A' }}>₺300.00</Text>
+          </LinearGradient>
+        </TouchableOpacity>
+
+        {/* Aylık */}
+        <TouchableOpacity activeOpacity={0.8} onPress={() => handleOpenPurchase({name: 'Aylık Premium', price: '₺120.00', type: 'Subscription', image: '👑', rarity: 'Epic'})}>
+          <LinearGradient colors={['rgba(255,255,255,0.05)', 'rgba(255,255,255,0.02)']} style={[styles.premiumCard, { paddingVertical: 20, borderWidth: 1, borderColor: 'rgba(255,255,255,0.1)' }]} start={{x:0, y:0}} end={{x:1, y:1}}>
+            <View style={{ position: 'absolute', right: 0, top: 0, width: 80, height: 80, opacity: 0.4 }}>
+              <LottieView source={require('../../assets/mascots/yildizbirsonrakiseviye.json')} autoPlay={false} loop={false} style={{ width: '100%', height: '100%' }} />
+            </View>
+            <Text style={{ fontSize: 24, marginBottom: 5 }}>⭐</Text>
+            <Text style={[styles.premiumTitle, { fontSize: 22 }]}>1 Aylık</Text>
+            <Text style={styles.premiumSub}>Esnek abonelik</Text>
+            <Text style={{ fontSize: 20, fontWeight: '900', color: '#FFF' }}>₺120.00</Text>
+          </LinearGradient>
+        </TouchableOpacity>
+      </View>
+
+      <View style={[styles.benefitsList, { marginTop: 20 }]}>
+        <Text style={styles.benefitText}>✨ Tüm derslerde 2x XP</Text>
+        <Text style={styles.benefitText}>❤️ Sınırsız Can hakkı</Text>
+        <Text style={styles.benefitText}>👕 Özel Maskotlar ve Temalar</Text>
+        <Text style={styles.benefitText}>💎 Her ay 500 bedava Lingot</Text>
+      </View>
     </View>
   );
 
@@ -319,19 +380,76 @@ const MarketScreen = () => {
     </View>
   );
 
-  const renderLimited = () => (
+  const renderThemes = () => (
     <View style={styles.grid}>
-      {LIMITED_OFFERS.map(item => (
-        <TouchableOpacity key={item.id} style={[styles.limitedCard, { shadowColor: item.glow }]} onPress={() => handleOpenPurchase({...item, type: 'Limited', rarity: 'Mythic'})}>
-          <Text style={styles.limitedIcon}>{item.image}</Text>
-          <Text style={styles.limitedName}>{item.name}</Text>
-          <View style={styles.qtyBadge}><Text style={styles.qtyText}>{item.qty}</Text></View>
-          <View style={[styles.priceRow, { marginTop: 10 }]}>
-            <Text style={{ fontSize: 14 }}>💎</Text>
-            <Text style={[styles.priceText, { fontSize: 16 }]}>{item.price}</Text>
-          </View>
-        </TouchableOpacity>
-      ))}
+      {APP_THEMES.map(item => {
+        const glow = RARITY_COLORS[item.rarity as keyof typeof RARITY_COLORS] || RARITY_COLORS.Common;
+        const isOwned = (progress.unlockedThemes || []).includes(item.id);
+
+        return (
+          <TouchableOpacity 
+            key={item.id} 
+            style={[styles.outfitCardWrap, isOwned && { opacity: 0.7 }]} 
+            onPress={() => !isOwned && handleOpenPurchase(item)}
+            activeOpacity={isOwned ? 1 : 0.7}
+          >
+            <View style={[styles.outfitCard, { borderColor: isOwned ? '#4CAF50' : glow[0], justifyContent: 'center', alignItems: 'center' }]}>
+              <LinearGradient colors={['rgba(255,255,255,0.05)', 'rgba(0,0,0,0.6)']} style={styles.outfitInner}>
+                <Text style={{ fontSize: 50 }}>{item.image}</Text>
+              </LinearGradient>
+              {isOwned && (
+                <View style={{ position: 'absolute', top: 5, right: 5, backgroundColor: '#4CAF50', paddingHorizontal: 6, paddingVertical: 2, borderRadius: 10 }}>
+                  <Text style={{ color: 'white', fontSize: 10, fontWeight: 'bold' }}>✓ ALINDI</Text>
+                </View>
+              )}
+            </View>
+            <Text style={styles.outfitName}>{item.name}</Text>
+            <Text style={[styles.outfitRarity, { color: isOwned ? '#4CAF50' : glow[0] }]}>{isOwned ? 'Sende Var' : item.rarity}</Text>
+            <View style={[styles.priceRow, isOwned && { backgroundColor: '#2E7D32', paddingHorizontal: 10, borderRadius: 10, marginTop: 4 }]}>
+              {!isOwned && <Text style={{ fontSize: 12 }}>💎</Text>}
+              <Text style={[styles.priceText, isOwned && { color: 'white', fontSize: 14 }]}>{isOwned ? 'Koleksiyonda' : item.price}</Text>
+            </View>
+          </TouchableOpacity>
+        );
+      })}
+    </View>
+  );
+
+  const renderFeaturedItems = () => (
+    <View style={styles.dailyShop}>
+      <Text style={[styles.sectionHeading, { color: '#FFD60A' }]}>🔥 İndirimli & Öne Çıkanlar</Text>
+      <View style={styles.grid}>
+        {FEATURED_ITEMS.map(item => {
+          const isOwned = item.type === 'AppTheme' 
+            ? (progress.unlockedThemes || []).includes(item.id) 
+            : progress.unlockedMascots.includes(item.id);
+
+          return (
+            <TouchableOpacity 
+              key={item.id} 
+              style={[styles.limitedCard, { shadowColor: '#FFD60A', opacity: isOwned ? 0.7 : 1 }]} 
+              onPress={() => !isOwned && handleOpenPurchase(item)}
+              activeOpacity={isOwned ? 1 : 0.7}
+            >
+              <Text style={styles.limitedIcon}>{item.image}</Text>
+              <Text style={styles.limitedName}>{item.name}</Text>
+              
+              <View style={styles.qtyBadge}>
+                <Text style={styles.qtyText}>{isOwned ? 'ALINDI' : item.discount}</Text>
+              </View>
+              
+              <View style={[styles.priceRow, { marginTop: 10, backgroundColor: isOwned ? '#2E7D32' : 'rgba(0,0,0,0.5)' }]}>
+                {!isOwned && <Text style={{ fontSize: 14 }}>💎</Text>}
+                <Text style={[styles.priceText, { fontSize: 16, color: isOwned ? 'white' : '#FFF' }]}>{isOwned ? 'Sahipsin' : item.price}</Text>
+              </View>
+              
+              {!isOwned && (
+                <Text style={{ fontSize: 12, color: 'gray', textDecorationLine: 'line-through', marginTop: 4 }}>💎 {item.oldPrice}</Text>
+              )}
+            </TouchableOpacity>
+          );
+        })}
+      </View>
     </View>
   );
 
@@ -417,6 +535,11 @@ const MarketScreen = () => {
           <View style={[styles.modalOverlay, { backgroundColor: 'rgba(0,0,0,0.85)', justifyContent: 'center' }]}>
             <TouchableWithoutFeedback onPress={() => {}}>
               <View style={{ width: '82%', alignSelf: 'center', backgroundColor: '#1c1c1e', borderRadius: 32, overflow: 'hidden', borderWidth: 1, borderColor: 'rgba(255,255,255,0.1)', shadowColor: BRAND.primary, shadowOpacity: 0.3, shadowRadius: 50, elevation: 20 }}>
+                {selectedItem?.type === 'Subscription' && (
+                  <View style={{ position: 'absolute', right: -15, top: -15, width: 120, height: 120, zIndex: 10, opacity: 0.8 }} pointerEvents="none">
+                    <LottieView source={require('../../assets/mascots/yildizbirsonrakiseviye.json')} autoPlay loop style={{ width: '100%', height: '100%' }} />
+                  </View>
+                )}
                 <LinearGradient colors={selectedItem?.rarity ? (RARITY_COLORS[selectedItem.rarity as keyof typeof RARITY_COLORS] || RARITY_COLORS.Common) : ['#2c2c2e', '#1c1c1e']} style={{ padding: 25, alignItems: 'center' }}>
                   <Animated.View style={{ transform: [{ scale: modalPulseAnim }], marginTop: 15, marginBottom: 15, shadowColor: '#FFD60A', shadowOpacity: 0.8, shadowRadius: 30, elevation: 20 }}>
                 {selectedItem?.type === 'Outfit' ? (
@@ -517,7 +640,7 @@ const MarketScreen = () => {
                 textAlign: 'center',
                 fontWeight: '600'
               }}>
-                Yeni Lingotların hesabına eklendi.
+                {successMessage}
               </Text>
             </LinearGradient>
           </Animated.View>
@@ -573,15 +696,14 @@ const styles = StyleSheet.create({
   priceRow: { flexDirection: 'row', alignItems: 'center', gap: 4, backgroundColor: 'rgba(0,0,0,0.5)', paddingHorizontal: 10, paddingVertical: 4, borderRadius: 10, marginTop: 10 },
   priceText: { color: '#FFF', fontWeight: 'bold', fontSize: 13 },
 
-  premiumContainer: { paddingHorizontal: 20 },
-  premiumCard: { padding: 25, borderRadius: 30, alignItems: 'center' },
-  premiumIcon: { fontSize: 60, marginBottom: 10 },
-  premiumTitle: { fontSize: 28, fontWeight: '900', color: '#FFF', fontFamily: 'SpaceGrotesk_700Bold' },
-  premiumSub: { fontSize: 14, color: 'rgba(255,255,255,0.9)', fontWeight: 'bold', marginBottom: 20 },
-  benefitsList: { width: '100%', backgroundColor: 'rgba(0,0,0,0.3)', padding: 20, borderRadius: 20, gap: 12 },
+  premiumContainer: { paddingHorizontal: 20, paddingTop: 10 },
+  premiumMainTitle: { fontSize: 28, fontWeight: '900', color: '#FFF', fontFamily: 'SpaceGrotesk_700Bold', textAlign: 'center' },
+  premiumMainSub: { fontSize: 14, color: 'rgba(255,255,255,0.7)', fontWeight: 'bold', marginBottom: 20, textAlign: 'center' },
+  premiumCard: { padding: 25, borderRadius: 24, alignItems: 'center', overflow: 'hidden' },
+  premiumTitle: { fontSize: 24, fontWeight: '900', color: '#FFF', fontFamily: 'SpaceGrotesk_700Bold' },
+  premiumSub: { fontSize: 13, color: 'rgba(255,255,255,0.9)', fontWeight: 'bold', marginBottom: 8 },
+  benefitsList: { width: '100%', backgroundColor: 'rgba(255,255,255,0.05)', padding: 20, borderRadius: 24, gap: 12, borderWidth: 1, borderColor: 'rgba(255,255,255,0.1)' },
   benefitText: { fontSize: 15, color: '#FFF', fontWeight: '600' },
-  premiumBtn: { backgroundColor: '#000', width: '100%', paddingVertical: 16, borderRadius: 16, alignItems: 'center', marginTop: 20 },
-  premiumBtnText: { color: '#FFD60A', fontSize: 18, fontWeight: '900', fontFamily: 'SpaceGrotesk_700Bold' },
 
   bundleList: { paddingHorizontal: 20, gap: 15 },
   bundleCard: { flexDirection: 'row', backgroundColor: 'rgba(255,255,255,0.05)', borderRadius: 20, padding: 15, alignItems: 'center', borderWidth: 1, borderColor: 'rgba(255,255,255,0.1)' },

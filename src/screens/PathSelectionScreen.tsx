@@ -27,7 +27,7 @@ const PathSelectionScreen: React.FC<Props> = ({ navigation }) => {
   }, []);
 
   const handleStartBeginner = () => {
-    navigation.navigate('Lesson' as never, { lessonId: 'intro', fromOnboarding: true, isPlacementTest: false } as never);
+    navigation.replace('MainTabs' as never);
   };
 
   const handleFindLevel = (difficulty: 'easy' | 'medium' | 'hard') => {

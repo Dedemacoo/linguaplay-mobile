@@ -34,6 +34,7 @@ import CollectionScreen from '../screens/CollectionScreen';
 import MarketScreen from '../screens/MarketScreen';
 import AITutorScreen from '../screens/AITutorScreen';
 import TreasureChestScreen from '../screens/TreasureChestScreen';
+import TwoFactorVerifyScreen from '../screens/TwoFactorVerifyScreen';
 
 import { MainTabNavigator } from './MainTabNavigator';
 
@@ -72,6 +73,7 @@ export type RootStackParamList = {
   Market: undefined;
   AITutor: undefined;
   TreasureChest: { mascotId: string };
+  TwoFactorVerify: undefined;
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -129,6 +131,7 @@ export const AppNavigator = () => {
             <Stack.Screen name="Friends" component={FriendsScreen} />
             <Stack.Screen name="Speaking" component={SpeakingScreen} />
             <Stack.Screen name="SpeakingResult" component={SpeakingResultScreen} />
+            <Stack.Screen name="TwoFactorVerify" component={TwoFactorVerifyScreen} />
           </Stack.Navigator>
         </NavigationContainer>
       </View>

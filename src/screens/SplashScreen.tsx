@@ -11,8 +11,17 @@ type Props = NativeStackScreenProps<RootStackParamList, 'Splash'>;
 const { width, height } = Dimensions.get('window');
 
 const SplashScreen: React.FC<Props> = ({ navigation }) => {
-  const { user, isLoading } = useAuth();
+  const { user, isLoading, is2FAVerified } = useAuth();
   const [animationDone, setAnimationDone] = useState(false);
+  const [hasSeenOnboarding, setHasSeenOnboarding] = useState(false);
+  
+  useEffect(() => {
+    import('@react-native-async-storage/async-storage').then(({ default: AsyncStorage }) => {
+      AsyncStorage.getItem('@has_seen_onboarding').then(val => {
+        if (val === 'true') setHasSeenOnboarding(true);
+      });
+    });
+  }, []);
 
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const progressAnim = useRef(new Animated.Value(0)).current;
@@ -44,12 +53,20 @@ const SplashScreen: React.FC<Props> = ({ navigation }) => {
   useEffect(() => {
     if (animationDone && !isLoading) {
       if (user) {
-        navigation.replace('MainTabs');
+        if (!is2FAVerified) {
+          navigation.replace('TwoFactorVerify');
+        } else {
+          navigation.replace('MainTabs');
+        }
       } else {
-        navigation.replace('Onboarding');
+        if (hasSeenOnboarding) {
+          navigation.replace('Login');
+        } else {
+          navigation.replace('Onboarding');
+        }
       }
     }
-  }, [animationDone, isLoading, user, navigation]);
+  }, [animationDone, isLoading, user, is2FAVerified, navigation, hasSeenOnboarding]);
 
   const progressWidth = progressAnim.interpolate({
     inputRange: [0, 100],

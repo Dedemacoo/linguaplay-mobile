@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Switch, Alert, Platform, StatusBar, Modal } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Switch, Alert, Platform, StatusBar, Modal, TextInput, KeyboardAvoidingView } from 'react-native';
 import { useThemeColors } from '../theme/colors';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
@@ -18,6 +18,7 @@ const LANG_LABELS: Record<LanguageKey, string> = {
 };
 
 import { useLingoStore, AIPersonality, AIExpressionStyle, VoiceType } from '../store/useLingoStore';
+import { useAuth } from '../context/AuthContext';
 
 const PERSONALITY_LABELS: Record<AIPersonality, string> = {
   friendly: 'Dostane', strict: 'Disiplinli', funny: 'Eğlenceli', academic: 'Akademik'
@@ -37,10 +38,19 @@ const SettingsScreen = () => {
   const { themeMode, setThemeMode } = useTheme();
   const { activeLanguage, setActiveLanguage } = useLanguageStore();
   const { personality, expressionStyle, voice, assistantVoice, setPersonality, setExpressionStyle, setVoice, setAssistantVoice } = useLingoStore();
+  const { user, deleteAccount, logout, reauthenticateAndDelete, sendVerificationEmail, reloadUser } = useAuth();
 
   const [soundEnabled, setSoundEnabled] = useState(true);
   const [notificationsEnabled, setNotificationsEnabled] = useState(true);
   const [winkEnabled, setWinkEnabled] = useState(true);
+
+  // States for Re-authentication Modal
+  const [showReauthModal, setShowReauthModal] = useState(false);
+  const [password, setPassword] = useState('');
+  const [isDeleting, setIsDeleting] = useState(false);
+
+  // States for Email Verification
+  const [isVerifyingEmail, setIsVerifyingEmail] = useState(false);
 
   // States for Reminder Time Modal
   const [showTimeModal, setShowTimeModal] = useState(false);
@@ -121,10 +131,83 @@ const SettingsScreen = () => {
         { 
           text: "Çıkış Yap", 
           style: "destructive",
-          onPress: () => navigation.replace('Transition', { targetRoute: 'Login', message: 'Çıkış Yapılıyor...' })
+          onPress: async () => {
+            await logout();
+            navigation.replace('Transition', { targetRoute: 'Login', message: 'Çıkış Yapılıyor...' })
+          }
         }
       ]
     );
+  };
+
+  const handleDeleteAccount = () => {
+    Alert.alert(
+      "Hesabı Sil",
+      "Hesabınızı kalıcı olarak silmek istediğinize emin misiniz? Bu işlem geri alınamaz ve tüm ilerlemeniz silinir.",
+      [
+        { text: "İptal", style: "cancel" },
+        { 
+          text: "Devam Et", 
+          style: "destructive",
+          onPress: () => {
+             setPassword('');
+             setShowReauthModal(true);
+          }
+        }
+      ]
+    );
+  };
+
+  const confirmDeleteAccount = async () => {
+    if (!password.trim()) {
+      Alert.alert("Hata", "Lütfen şifrenizi girin.");
+      return;
+    }
+    
+    setIsDeleting(true);
+    try {
+      await reauthenticateAndDelete(password);
+      setShowReauthModal(false);
+      navigation.replace('Transition', { targetRoute: 'Login', message: 'Hesap Silindi...' });
+    } catch (error: any) {
+      if (error?.code === 'auth/wrong-password' || error?.code === 'auth/invalid-credential') {
+        Alert.alert("Hata", "Girdiğiniz şifre hatalı.");
+      } else {
+        Alert.alert("Hata", "Hesap silinirken bir sorun oluştu.");
+      }
+    } finally {
+      setIsDeleting(false);
+    }
+  };
+
+  const handleSendVerificationEmail = async () => {
+    if (user?.emailVerified) {
+      Alert.alert("Bilgi", "E-posta adresiniz zaten doğrulanmış.");
+      return;
+    }
+    
+    setIsVerifyingEmail(true);
+    try {
+      await sendVerificationEmail();
+      Alert.alert("Başarılı", "Doğrulama e-postası gönderildi. Lütfen e-postanızı kontrol edin.");
+    } catch (error: any) {
+      if (error?.code === 'auth/too-many-requests') {
+         Alert.alert("Hata", "Çok fazla istek gönderdiniz. Lütfen daha sonra tekrar deneyin.");
+      } else {
+         Alert.alert("Hata", "Doğrulama e-postası gönderilirken bir hata oluştu.");
+      }
+    } finally {
+      setIsVerifyingEmail(false);
+    }
+  };
+
+  const checkEmailVerification = async () => {
+    await reloadUser();
+    if (user?.emailVerified) {
+       Alert.alert("Başarılı", "E-posta adresiniz doğrulandı!");
+    } else {
+       Alert.alert("Bilgi", "E-posta adresiniz henüz doğrulanmamış. Lütfen e-postanızı kontrol edin.");
+    }
   };
 
   const cycleTheme = () => {
@@ -141,7 +224,7 @@ const SettingsScreen = () => {
     }
   };
 
-  const renderItem = (title: string, icon: string, onPress: () => void, rightElement?: React.ReactNode) => (
+  const renderItem = (title: string, icon: string, onPress: () => void, rightElement?: React.ReactNode, isDestructive?: boolean) => (
     <TouchableOpacity 
       style={[styles.item, { backgroundColor: colors.surface, borderBottomColor: colors.border }]}
       onPress={onPress}
@@ -149,7 +232,7 @@ const SettingsScreen = () => {
     >
       <View style={styles.itemLeft}>
         <Text style={styles.itemIcon}>{icon}</Text>
-        <Text style={[styles.itemTitle, { color: colors.text }]}>{title}</Text>
+        <Text style={[styles.itemTitle, { color: isDestructive ? colors.error : colors.text }]}>{title}</Text>
       </View>
       <View style={styles.itemRight}>
         {rightElement || <Text style={[styles.chevron, { color: colors.textLight }]}>›</Text>}
@@ -212,10 +295,18 @@ const SettingsScreen = () => {
           {renderItem('Profil Düzenle', '👤', () => navigation.navigate('EditProfile'))}
           {renderItem('Şifre Değiştir', '🔒', () => navigation.navigate('ChangePassword'))}
           {renderItem('E-posta Değiştir', '📧', () => navigation.navigate('EditProfile'))}
-          {renderItem('İki Faktörlü Doğrulama', '🛡️', () => navigation.navigate('Security'))}
+          {renderItem('E-posta Doğrulaması', user?.emailVerified ? '✅' : '✉️', user?.emailVerified ? checkEmailVerification : handleSendVerificationEmail, <Text style={[styles.valueText, { color: user?.emailVerified ? colors.success || '#4CAF50' : colors.textLight }]}>{user?.emailVerified ? 'Doğrulandı' : (isVerifyingEmail ? 'Gönderiliyor...' : 'Doğrula')}</Text>)}
+          {renderItem('İki Faktörlü Doğrulama', '🛡️', () => {
+             if (!user?.emailVerified) {
+               Alert.alert("Hata", "İki faktörlü doğrulamayı açmak için önce e-posta adresinizi doğrulamalısınız.");
+               return;
+             }
+             navigation.navigate('Security');
+          })}
           {renderItem('Cihazlar', '📱', () => navigation.navigate('Security'))}
           {renderItem('Oturumlar', '⏱️', () => navigation.navigate('Security'))}
           {renderItem('Tüm Cihazlardan Çıkış Yap', '🚪', handleLogoutAll)}
+          {renderItem('Hesabı Sil', '🗑️', handleDeleteAccount, undefined, true)}
         </View>
 
         {/* ── HAKKINDA & DESTEK ── */}
@@ -420,6 +511,46 @@ const SettingsScreen = () => {
             </TouchableOpacity>
           </View>
         </View>
+      </Modal>
+
+      {/* Re-authentication Modal */}
+      <Modal visible={showReauthModal} animationType="slide" transparent={true}>
+        <KeyboardAvoidingView 
+          style={styles.modalContainer}
+          behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+        >
+          <View style={[styles.modalContent, { backgroundColor: colors.surface, borderColor: colors.border }]}>
+            <View style={styles.modalHeader}>
+              <Text style={[styles.modalTitle, { color: colors.text }]}>Kimlik Doğrulama</Text>
+              <TouchableOpacity onPress={() => setShowReauthModal(false)}>
+                <Text style={[styles.closeModalText, { color: colors.textLight }]}>✕</Text>
+              </TouchableOpacity>
+            </View>
+            
+            <Text style={[styles.modalSubtitle, { color: colors.textLight }]}>
+              Hesabınızı silmek için lütfen şifrenizi girin.
+            </Text>
+
+            <TextInput
+              style={[styles.input, { backgroundColor: colors.background, color: colors.text, borderColor: colors.border }]}
+              placeholder="Şifreniz"
+              placeholderTextColor={colors.textLight}
+              secureTextEntry
+              value={password}
+              onChangeText={setPassword}
+            />
+
+            <TouchableOpacity 
+              style={[styles.saveButton, { backgroundColor: '#FF3B30' }, isDeleting && { opacity: 0.7 }]}
+              onPress={confirmDeleteAccount}
+              disabled={isDeleting}
+            >
+              <Text style={styles.saveButtonText}>
+                {isDeleting ? 'Siliniyor...' : 'Hesabı Kalıcı Olarak Sil'}
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </KeyboardAvoidingView>
       </Modal>
     </View>
   );

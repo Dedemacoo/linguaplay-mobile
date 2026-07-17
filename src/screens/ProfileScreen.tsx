@@ -221,7 +221,7 @@ export const ProfileScreen = () => {
         <View style={{ flexDirection: 'row', alignItems: 'center', paddingHorizontal: 20, marginTop: 15, gap: 15 }}>
           {/* COLLECTION SQUARE */}
           <TouchableOpacity 
-            style={{ width: 130, height: 140, borderRadius: 20, overflow: 'hidden', shadowColor: '#000', shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.15, shadowRadius: 10, elevation: 6 }}
+            style={{ flex: 1, height: 140, borderRadius: 20, overflow: 'hidden', shadowColor: '#000', shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.15, shadowRadius: 10, elevation: 6 }}
             onPress={() => navigation.navigate('Collection')}
             activeOpacity={0.9}
           >

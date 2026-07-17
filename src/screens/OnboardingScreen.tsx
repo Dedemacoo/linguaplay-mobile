@@ -86,6 +86,14 @@ const OnboardingScreen: React.FC<Props> = ({ navigation }) => {
           >
             <Text style={styles.finalBtnTextPri}>Başla</Text>
           </TouchableOpacity>
+
+          <TouchableOpacity 
+            style={styles.finalBtnSecondary}
+            onPress={() => navigation.replace('Login' as any)}
+            activeOpacity={0.8}
+          >
+            <Text style={styles.finalBtnTextSec}>Zaten Hesabım Var</Text>
+          </TouchableOpacity>
         </View>
       );
     }
@@ -153,6 +161,8 @@ const getStyles = (colors: any) => StyleSheet.create({
   
   finalBtnPrimary: { width: '100%', backgroundColor: colors.primary, paddingVertical: 18, borderRadius: 20, alignItems: 'center', marginBottom: 16, shadowColor: colors.primary, shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.3, shadowRadius: 10, elevation: 8 },
   finalBtnTextPri: { color: '#FFF', fontSize: 18, fontWeight: '800' },
+  finalBtnSecondary: { width: '100%', backgroundColor: 'transparent', paddingVertical: 18, borderRadius: 20, alignItems: 'center', marginBottom: 16, borderWidth: 2, borderColor: colors.primary },
+  finalBtnTextSec: { color: colors.primary, fontSize: 18, fontWeight: '800' },
 
   footer: { paddingHorizontal: 20, paddingTop: 16, backgroundColor: colors.background },
   nextBtn: { backgroundColor: colors.primary, paddingVertical: 18, borderRadius: 20, alignItems: 'center', shadowColor: colors.primary, shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.3, shadowRadius: 10, elevation: 5 },

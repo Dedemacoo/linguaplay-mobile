@@ -41,7 +41,7 @@ const RegisterScreen: React.FC<Props> = ({ navigation }) => {
   const [errorMsg, setErrorMsg] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const colors = useThemeColors();
-  const { register } = useAuth();
+  const { register, signInWithGoogle } = useAuth();
 
   const getPasswordStrength = (pass: string) => {
     if (!pass) return null;
@@ -209,6 +209,31 @@ const RegisterScreen: React.FC<Props> = ({ navigation }) => {
             />
           </View>
 
+          <View style={{ flexDirection: 'row', alignItems: 'center', width: '100%', marginVertical: 10 }}>
+            <View style={{ flex: 1, height: 1, backgroundColor: colors.border }} />
+            <Text style={{ marginHorizontal: 10, color: colors.textLight, fontSize: 14 }}>Veya şununla devam et</Text>
+            <View style={{ flex: 1, height: 1, backgroundColor: colors.border }} />
+          </View>
+
+          <TouchableOpacity 
+            style={[styles.googleButton, { backgroundColor: colors.surface, borderColor: colors.border }]}
+            onPress={async () => {
+              try {
+                setIsLoading(true);
+                await signInWithGoogle();
+                navigation.replace('Transition', { targetRoute: 'MainTabs', message: 'Google ile Kayıt Olundu!' });
+              } catch (e) {
+                Alert.alert('Hata', 'Google ile kayıt başarısız oldu.');
+                setIsLoading(false);
+              }
+            }}
+            disabled={isLoading}
+            activeOpacity={0.7}
+          >
+            <Text style={{ fontSize: 24, marginRight: 10 }}>G</Text>
+            <Text style={[styles.googleButtonText, { color: colors.text }]}>Google ile Kayıt Ol</Text>
+          </TouchableOpacity>
+
           <TouchableOpacity 
             style={{ width: '100%', marginTop: 10 }}
             onPress={handleRegister}
@@ -343,6 +368,20 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderBottomWidth: 5,
     marginTop: 10,
+  },
+  googleButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '100%',
+    paddingVertical: 15,
+    borderWidth: 1,
+    borderRadius: 15,
+    marginBottom: 10,
+  },
+  googleButtonText: {
+    fontSize: 16,
+    fontWeight: 'bold', fontFamily: 'SpaceGrotesk_700Bold',
   },
   buttonText: {
     fontSize: 18,
