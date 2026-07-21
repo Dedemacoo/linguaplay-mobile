@@ -83,7 +83,7 @@ const RegisterScreen: React.FC<Props> = ({ navigation }) => {
       if (gender === 'male') avatar = '👨‍🦱';
       if (gender === 'female') avatar = '👩‍🦰';
       
-      await register(email.trim(), password, name.trim(), username.trim(), avatar);
+      await register(email.trim(), password, name.trim(), username.trim(), avatar, gender);
       // Navigate to main app - Transition screen shows loading animation
       navigation.replace('Transition', { targetRoute: 'MainTabs', message: 'Hoş Geldin! 🎉' });
     } catch (e: any) {
@@ -209,6 +209,7 @@ const RegisterScreen: React.FC<Props> = ({ navigation }) => {
             />
           </View>
 
+{/*
           <View style={{ flexDirection: 'row', alignItems: 'center', width: '100%', marginVertical: 10 }}>
             <View style={{ flex: 1, height: 1, backgroundColor: colors.border }} />
             <Text style={{ marginHorizontal: 10, color: colors.textLight, fontSize: 14 }}>Veya şununla devam et</Text>
@@ -233,6 +234,7 @@ const RegisterScreen: React.FC<Props> = ({ navigation }) => {
             <Text style={{ fontSize: 24, marginRight: 10 }}>G</Text>
             <Text style={[styles.googleButtonText, { color: colors.text }]}>Google ile Kayıt Ol</Text>
           </TouchableOpacity>
+*/}
 
           <TouchableOpacity 
             style={{ width: '100%', marginTop: 10 }}

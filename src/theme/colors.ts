@@ -83,7 +83,8 @@ const getSharedColors = (themeKey: keyof typeof THEMES) => {
 
 export const getThemeColors = (themeKey: keyof typeof THEMES, isDark: boolean) => {
   const t = THEMES[themeKey] || THEMES.classic;
-  
+  const shared = getSharedColors(themeKey);
+
   if (!isDark) {
     let lightBg = '#F8FAFC';
     let lightSurface = '#FFFFFF';
@@ -113,29 +114,31 @@ export const getThemeColors = (themeKey: keyof typeof THEMES, isDark: boolean) =
     }
 
     return {
-      ...getSharedColors(themeKey),
+      ...shared,
+      ...t,
       colorScheme: 'light' as const,
       background: lightBg, 
+      bg: lightBg, // OVERRIDE t.bg!
       surface: lightSurface,
       card: lightCard,
-      text: '#0F172A',       
+      border: lightBorder,
+      text: '#0F172A',
       textLight: '#475569',  
       textMuted: '#94A3B8',  
-      border: lightBorder,     
     };
   }
 
   return {
-    ...getSharedColors(themeKey),
+    ...shared,
+    ...t,
     colorScheme: 'dark' as const,
     background: t.bg,
     surface: t.surface,
     card: t.card,
+    border: t.border,
     text: BRAND.text,
     textLight: BRAND.textSub,
     textMuted: BRAND.textMuted,
-    border: t.border,
-    ...t, 
   };
 };
 

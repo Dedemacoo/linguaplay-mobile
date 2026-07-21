@@ -1,5 +1,5 @@
-import React from 'react';
-import { View, TouchableOpacity, StyleSheet } from 'react-native';
+import React, { useRef, useEffect } from 'react';
+import { View, TouchableOpacity, StyleSheet, Animated } from 'react-native';
 import Svg, { Polygon, Path } from 'react-native-svg';
 
 interface HexagonNodeProps {
@@ -23,6 +23,22 @@ export const HexagonNode: React.FC<HexagonNodeProps> = ({
   children,
   isActive = false,
 }) => {
+  const breathAnim = useRef(new Animated.Value(1)).current;
+
+  useEffect(() => {
+    if (isActive) {
+      Animated.loop(
+        Animated.sequence([
+          Animated.timing(breathAnim, { toValue: 1.15, duration: 1200, useNativeDriver: true }),
+          Animated.timing(breathAnim, { toValue: 1, duration: 1200, useNativeDriver: true })
+        ])
+      ).start();
+    } else {
+      breathAnim.setValue(1);
+    }
+  }, [isActive]);
+
+
   const w = size;
   const h = size * 0.9;
   const depth = 7; // 3D derinlik (kalınlık)
@@ -75,7 +91,7 @@ export const HexagonNode: React.FC<HexagonNodeProps> = ({
       <Path
         key={index}
         d={pathData}
-        stroke={isFilled ? color : 'rgba(255,255,255,0.1)'}
+        stroke={isFilled ? color : (isActive ? 'rgba(255,255,255,0.3)' : 'rgba(255,255,255,0.1)')}
         strokeWidth={strokeW}
         strokeLinecap="round"
         fill="none"
@@ -90,11 +106,14 @@ export const HexagonNode: React.FC<HexagonNodeProps> = ({
 
       {/* 4-Part Progress Ring */}
       {progress < 4 && !isLocked && (
-        <View style={{ position: 'absolute', top: 0, width: ringSize, height: ringSize }}>
+        <Animated.View style={{ 
+          position: 'absolute', top: 0, width: ringSize, height: ringSize,
+          transform: isActive ? [{ scale: breathAnim }] : []
+        }}>
           <Svg width={ringSize} height={ringSize}>
             {[0, 1, 2, 3].map((i) => renderSegment(i))}
           </Svg>
-        </View>
+        </Animated.View>
       )}
 
       {/* 3D Hexagon */}

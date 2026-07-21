@@ -1,4 +1,5 @@
 import * as Speech from 'expo-speech';
+import { useLingoStore } from '../store/useLingoStore';
 
 /**
  * AudioService — TTS playback via expo-speech (native, offline, reliable).
@@ -46,10 +47,19 @@ class AudioService {
 
       const language = LANG_CODES[lang] || lang;
       
+      const { voice } = useLingoStore.getState();
+      let basePitch = 1.0;
+      let baseRate = 0.9;
+      
+      if (voice === 'male_1') { basePitch = 0.6; baseRate = 0.85; }
+      else if (voice === 'male_2') { basePitch = 0.85; baseRate = 0.95; }
+      else if (voice === 'female_1') { basePitch = 1.3; baseRate = 0.95; }
+      else if (voice === 'female_2') { basePitch = 1.1; baseRate = 0.9; }
+      
       Speech.speak(text, {
         language,
-        pitch: options?.pitch ?? 1.0,
-        rate: options?.rate ?? 0.9,
+        pitch: options?.pitch ?? basePitch,
+        rate: options?.rate ?? baseRate,
         onDone: () => {
           if (options?.onDone) options.onDone();
         },

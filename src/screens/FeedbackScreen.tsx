@@ -1,6 +1,6 @@
-﻿import { SafeAreaView } from 'react-native-safe-area-context';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TextInput, TouchableOpacity, KeyboardAvoidingView, Platform, Alert, Dimensions } from 'react-native';
+import { View, Text, StyleSheet, TextInput, TouchableOpacity, KeyboardAvoidingView, Platform, Alert, Dimensions, Linking, ScrollView } from 'react-native';
 import { useThemeColors } from '../theme/colors';
 import { useNavigation } from '@react-navigation/native';
 
@@ -12,7 +12,7 @@ const FeedbackScreen = () => {
   const [feedback, setFeedback] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (feedback.trim().length < 10) {
       Alert.alert('Hata', 'Lütfen en az 10 karakterlik bir mesaj yazın.');
       return;
@@ -20,13 +20,26 @@ const FeedbackScreen = () => {
 
     setIsSubmitting(true);
 
-    // Simulate network request
-    setTimeout(() => {
+    const email = 'linguaplaysupport@gmail.com';
+    const subject = encodeURIComponent('LinguaPlay Geri Bildirim ve Destek Talebi');
+    const body = encodeURIComponent(feedback.trim());
+    const mailtoUrl = `mailto:${email}?subject=${subject}&body=${body}`;
+
+    try {
+      const canOpen = await Linking.canOpenURL(mailtoUrl);
+      if (canOpen) {
+        await Linking.openURL(mailtoUrl);
+        setFeedback('');
+        navigation.goBack();
+      } else {
+        Alert.alert('Hata', 'Telefonunuzda bir mail uygulaması bulunamadı. Lütfen mailinizi doğrudan linguaplaysupport@gmail.com adresine gönderin.');
+      }
+    } catch (error) {
+      console.error("Mail opening error:", error);
+      Alert.alert('Hata', 'Mail uygulaması açılırken bir sorun oluştu.');
+    } finally {
       setIsSubmitting(false);
-      Alert.alert('Teşekkürler!', 'Geri bildiriminiz başarıyla alındı. Ekibimiz en kısa sürede inceleyecektir.', [
-        { text: 'Tamam', onPress: () => navigation.goBack() }
-      ]);
-    }, 1500);
+    }
   };
 
   return (
@@ -40,10 +53,15 @@ const FeedbackScreen = () => {
           <View style={{ width: 40 }} />
         </View>
 
-        <View style={styles.content}>
+        <ScrollView 
+          style={{ flex: 1 }} 
+          contentContainerStyle={[styles.content, { flexGrow: 1, flex: undefined }]} 
+          keyboardShouldPersistTaps="handled"
+          showsVerticalScrollIndicator={false}
+        >
           <Text style={[styles.title, { color: colors.text }]}>Nasıl Gidiyor?</Text>
           <Text style={[styles.subtitle, { color: colors.textLight }]}>
-            LinguaPlay+ uygulamasını nasıl geliştirebileceğimizi bize anlatın. Fikirleriniz bizim için çok değerli!
+            LinguaPlay uygulamasını nasıl geliştirebileceğimizi bize anlatın. Fikirleriniz bizim için çok değerli!
           </Text>
 
           <View style={[styles.inputContainer, { backgroundColor: colors.surface, borderColor: colors.border }]}>
@@ -60,6 +78,8 @@ const FeedbackScreen = () => {
             <Text style={[styles.charCount, { color: colors.textLight }]}>{feedback.length}/500</Text>
           </View>
 
+          <View style={{ flex: 1 }} />
+
           <TouchableOpacity
             style={[
               styles.submitBtn,
@@ -75,7 +95,7 @@ const FeedbackScreen = () => {
               {isSubmitting ? 'GÖNDERİLİYOR...' : 'GÖNDER'}
             </Text>
           </TouchableOpacity>
-        </View>
+        </ScrollView>
       </KeyboardAvoidingView>
     </SafeAreaView>
   );

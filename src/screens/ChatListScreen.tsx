@@ -221,7 +221,7 @@ const ChatListScreen: React.FC<any> = ({ navigation }) => {
                 </Text>
                 <TouchableOpacity
                   style={[styles.goLeagueBtn, { backgroundColor: colors.primary }]}
-                  onPress={() => navigation.navigate('Lig' as any)}
+                  onPress={() => navigation.navigate('MainTabs' as any, { screen: 'Lig' })}
                 >
                   <Text style={styles.goLeagueBtnText}>🏆 Lig'e Git</Text>
                 </TouchableOpacity>

@@ -29,13 +29,18 @@ export class AIService {
       const { personality, expressionStyle } = useLingoStore.getState();
       
       let personalityStr = "arkadaş canlısı ve motive edici";
-      if (personality === 'strict') personalityStr = "disiplinli ve kuralcı";
-      if (personality === 'funny') personalityStr = "komik ve esprili";
-      if (personality === 'academic') personalityStr = "akademik ve ciddi";
+      let personalityRule = "- Sıcak, esprili ve cesaretlendirici ol, yunus olduğunu belli eden tatlı göndermeler yap (su sıçratmak, balık ısmarlamak vb.).";
       
-      let expressionStr = "Günlük bir dille";
-      if (expressionStyle === 'formal') expressionStr = "Resmi ve saygılı bir dille";
-      if (expressionStyle === 'encouraging') expressionStr = "Çok destekleyici ve cesaret verici bir dille";
+      if (personality === 'strict') {
+         personalityStr = "disiplinli ve kuralcı";
+         personalityRule = "- Disiplinli ol, yunus olduğunu belli eden tatlı göndermeler yapma. Öğrencinin hatalarına odaklan ve ciddiyetini koru.";
+      } else if (personality === 'funny') {
+         personalityStr = "komik ve esprili";
+         personalityRule = "- Çok komik ol, şakalar ve espriler yap, yunus olduğunu bol bol belli et (su sıçratmak, balık fırlatmak vb.). Ciddi olma.";
+      } else if (personality === 'academic') {
+         personalityStr = "akademik ve ciddi";
+         personalityRule = "- Akademik, resmi ve saygılı bir dil kullan. Yunus olduğunu belli eden çocuksu veya eğlenceli göndermeler yapma.";
+      }
 
       const systemPrompt = `Sen ${personalityStr} bir dil öğretmenisin ve yapay zeka asistanısın. Adın Lingo. Öğrencinin seviyesi: ${userLevel}. Hedef dil: ${targetLanguage}.
 Kurallar:
@@ -44,7 +49,7 @@ Kurallar:
   Örnek Format: "Hello! How are you today? (Merhaba! Bugün nasılsın?)"
 - Sohbet kısımlarını KISA tut (en fazla 2-3 cümle).
 - Öğrencinin gramer hataları varsa nazikçe düzelt.
-- Sıcak, esprili ve cesaretlendirici ol, yunus olduğunu belli eden tatlı göndermeler yap (su sıçratmak, balık ısmarlamak vb.).`;
+${personalityRule}`;
 
       const formattedMessages: { role: string, parts: { text: string }[] }[] = [];
       messages.forEach(msg => {

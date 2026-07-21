@@ -1,7 +1,9 @@
 import { Audio } from 'expo-av';
+import { usePreferencesStore } from '../store/usePreferencesStore';
 
 class SoundManager {
   private isInitialized = false;
+  private isLoading = false;
   private correctSound: Audio.Sound | null = null;
   private wrongSound: Audio.Sound | null = null;
   private completeSound: Audio.Sound | null = null;
@@ -10,7 +12,8 @@ class SoundManager {
   private startupSound: Audio.Sound | null = null;
 
   async init() {
-    if (this.isInitialized) return;
+    if (this.isInitialized || this.isLoading) return;
+    this.isLoading = true;
 
     try {
       await Audio.setAudioModeAsync({
@@ -20,113 +23,116 @@ class SoundManager {
       });
 
       // Load each sound individually so one failure doesn't block others
-      try {
-        const { sound } = await Audio.Sound.createAsync(require('../../sound/doğru_bildirim_sesi.mp3'));
-        this.correctSound = sound;
-      } catch (e) { console.log('Error loading correctSound:', e); }
+      const sounds = [
+        { key: 'correctSound', path: require('../../sound/doğru_bildirim_sesi.mp3') },
+        { key: 'wrongSound', path: require('../../sound/yanlış.mp3') },
+        { key: 'completeSound', path: require('../../sound/seviye tamamlama.mp3') },
+        { key: 'countdownSound', path: require('../../sound/gerisayım.mp3') },
+        { key: 'notificationSound', path: require('../../sound/ikinci bildirim sesi.mp3') },
+        { key: 'startupSound', path: require('../../sound/uygulama açılış müziği.mp3') },
+      ];
 
-      try {
-        const { sound } = await Audio.Sound.createAsync(require('../../sound/yanlış.mp3'));
-        this.wrongSound = sound;
-      } catch (e) { console.log('Error loading wrongSound:', e); }
-
-      try {
-        const { sound } = await Audio.Sound.createAsync(require('../../sound/seviye tamamlama.mp3'));
-        this.completeSound = sound;
-      } catch (e) { console.log('Error loading completeSound:', e); }
-
-      try {
-        const { sound } = await Audio.Sound.createAsync(require('../../sound/gerisayım.mp3'));
-        this.countdownSound = sound;
-      } catch (e) { console.log('Error loading countdownSound:', e); }
-
-      try {
-        const { sound } = await Audio.Sound.createAsync(require('../../sound/ikinci bildirim sesi.mp3'));
-        this.notificationSound = sound;
-      } catch (e) { console.log('Error loading notificationSound:', e); }
-
-      try {
-        const { sound } = await Audio.Sound.createAsync(require('../../sound/uygulama açılış müziği.mp3'));
-        this.startupSound = sound;
-      } catch (e) { console.log('Error loading startupSound:', e); }
+      for (const s of sounds) {
+        try {
+          const { sound } = await Audio.Sound.createAsync(s.path);
+          (this as any)[s.key] = sound;
+        } catch (e) {
+          console.warn(`[SoundManager] Error loading ${s.key}:`, e);
+        }
+      }
 
       this.isInitialized = true;
     } catch (error) {
-      console.log('Error configuring audio mode:', error);
+      console.error('[SoundManager] Error configuring audio mode:', error);
+    } finally {
+      this.isLoading = false;
+    }
+  }
+
+  private async safePlay(sound: Audio.Sound | null, name: string) {
+    const { soundEnabled } = usePreferencesStore.getState();
+    if (!soundEnabled) return;
+
+    if (!sound) {
+      console.log(`🎵 [SFX]: ${name} (sound not loaded)`);
+      return;
+    }
+    try {
+      const status = await sound.getStatusAsync();
+      if (status.isLoaded) {
+        await sound.replayAsync();
+      }
+    } catch (e) {
+      console.warn(`[SoundManager] Play error (${name}):`, e);
     }
   }
 
   async playCorrect() {
-    try {
-      if (this.correctSound) {
-        await this.correctSound.replayAsync();
-      } else {
-        console.log('🎵 [SFX]: Correct');
-      }
-    } catch (e) { console.log('Audio play error', e); }
+    await this.safePlay(this.correctSound, 'Correct');
   }
 
   async playWrong() {
-    try {
-      if (this.wrongSound) {
-        await this.wrongSound.replayAsync();
-      } else {
-        console.log('🎵 [SFX]: Wrong');
-      }
-    } catch (e) { console.log('Audio play error', e); }
+    await this.safePlay(this.wrongSound, 'Wrong');
   }
 
   async playComplete() {
-    try {
-      if (this.completeSound) {
-        await this.completeSound.replayAsync();
-      } else {
-        console.log('🎵 [SFX]: Lesson Complete');
-      }
-    } catch (e) { console.log('Audio play error', e); }
+    await this.safePlay(this.completeSound, 'Lesson Complete');
   }
 
   async playCountdown() {
-    try {
-      if (this.countdownSound) {
-        await this.countdownSound.replayAsync();
-      } else {
-        console.log('🎵 [SFX]: Countdown');
-      }
-    } catch (e) { console.log('Audio play error', e); }
+    await this.safePlay(this.countdownSound, 'Countdown');
   }
 
   async stopCountdown() {
     try {
       if (this.countdownSound) {
-        await this.countdownSound.stopAsync();
+        const status = await this.countdownSound.getStatusAsync();
+        if (status.isLoaded) {
+          await this.countdownSound.stopAsync();
+        }
       }
-    } catch (e) { console.log('Audio stop error', e); }
+    } catch (e) {
+      console.warn('[SoundManager] Audio stop error:', e);
+    }
   }
 
   async playNotification() {
-    try {
-      if (this.notificationSound) {
-        await this.notificationSound.replayAsync();
-      }
-    } catch (e) { console.log('Audio play error', e); }
+    await this.safePlay(this.notificationSound, 'Notification');
   }
 
   async playStartup() {
-    try {
-      if (this.startupSound) {
-        await this.startupSound.replayAsync();
-      }
-    } catch (e) { console.log('Audio play error', e); }
+    await this.safePlay(this.startupSound, 'Startup');
   }
 
   async unload() {
-    if (this.correctSound) await this.correctSound.unloadAsync();
-    if (this.wrongSound) await this.wrongSound.unloadAsync();
-    if (this.completeSound) await this.completeSound.unloadAsync();
-    if (this.countdownSound) await this.countdownSound.unloadAsync();
-    if (this.notificationSound) await this.notificationSound.unloadAsync();
-    if (this.startupSound) await this.startupSound.unloadAsync();
+    const sounds = [
+      this.correctSound,
+      this.wrongSound,
+      this.completeSound,
+      this.countdownSound,
+      this.notificationSound,
+      this.startupSound
+    ];
+
+    for (const sound of sounds) {
+      try {
+        if (sound) {
+          const status = await sound.getStatusAsync();
+          if (status.isLoaded) {
+            await sound.unloadAsync();
+          }
+        }
+      } catch (e) {
+        console.warn('[SoundManager] Unload error:', e);
+      }
+    }
+
+    this.correctSound = null;
+    this.wrongSound = null;
+    this.completeSound = null;
+    this.countdownSound = null;
+    this.notificationSound = null;
+    this.startupSound = null;
     this.isInitialized = false;
   }
 }

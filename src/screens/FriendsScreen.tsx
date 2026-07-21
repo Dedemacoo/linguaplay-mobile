@@ -4,6 +4,7 @@ import {
   TouchableOpacity, ActivityIndicator, RefreshControl, Alert,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+
 import { BRAND } from '../theme/colors';
 import { useAuth } from '../context/AuthContext';
 import { FriendService, FriendProfile, FriendRequest } from '../services/FriendService';
@@ -13,6 +14,7 @@ import { doc, getDoc } from 'firebase/firestore';
 import { db } from '../config/firebase';
 import { Mascot } from '../components/Mascot';
 import { useThemeColors } from '../theme/colors';
+import { FontAwesome5 } from '@expo/vector-icons';
 
 const FriendsScreen: React.FC<any> = ({ navigation }) => {
   const colors = useThemeColors();
@@ -130,7 +132,10 @@ const FriendsScreen: React.FC<any> = ({ navigation }) => {
     <SafeAreaView style={styles.container}>
       <StatusBar barStyle="light-content" backgroundColor={colors.surface} />
       
-      <View style={styles.header}>
+      <View style={[styles.header, { flexDirection: 'row', alignItems: 'center' }]}>
+        <TouchableOpacity onPress={() => navigation.goBack()} style={{ padding: 10, marginRight: 10 }}>
+          <FontAwesome5 name="arrow-left" size={20} color="#FFF" />
+        </TouchableOpacity>
         <Text style={styles.headerTitle}>👥 Arkadaşlar</Text>
       </View>
 
@@ -155,7 +160,7 @@ const FriendsScreen: React.FC<any> = ({ navigation }) => {
               </Text>
               <TouchableOpacity
                 style={styles.addBtn}
-                onPress={() => navigation.navigate('Lig' as any)}
+                onPress={() => navigation.navigate('MainTabs' as any, { screen: 'Lig' })}
                 activeOpacity={0.8}
               >
                 <Text style={styles.addBtnText}>🏆 Lig'e Bak</Text>

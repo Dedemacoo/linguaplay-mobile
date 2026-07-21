@@ -7,14 +7,25 @@ import * as Haptics from 'expo-haptics';
 import { Feather } from '@expo/vector-icons';
 import { Audio } from 'expo-av';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import * as Speech from 'expo-speech';
+
+// Safe import for ExpoSpeechRecognition (not available in Expo Go)
+let ExpoSpeechRecognitionModule: any = { requestPermissionsAsync: async () => ({ granted: false }), start: () => {}, stop: () => {} };
+let useSpeechRecognitionEvent: any = (_e: string, _cb: any) => {};
+let hasSpeechRecognition = false;
+try {
+  const mod = require('expo-speech-recognition');
+  ExpoSpeechRecognitionModule = mod.ExpoSpeechRecognitionModule;
+  useSpeechRecognitionEvent = mod.useSpeechRecognitionEvent;
+  hasSpeechRecognition = true;
+} catch (e) {
+  console.log('[AITutor] expo-speech-recognition not available, using text fallback');
+}
 import { useThemeColors, BRAND } from '../theme/colors';
 import { useLanguageStore } from '../store/useLanguageStore';
 import { useProgressStore } from '../store/useProgressStore';
 import { AIService, ChatMessage } from '../services/AIService';
 import { Mascot } from '../components/Mascot';
-
-const ExpoSpeechRecognitionModule = { requestPermissionsAsync: async () => ({ granted: true }), start: () => {}, stop: () => {} };
-const useSpeechRecognitionEvent = (e: any, cb: any) => {};
 
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 
@@ -40,44 +51,43 @@ const AITutorScreen = ({ route }: any) => {
   const colors = useThemeColors();
   const { activeLanguage } = useLanguageStore();
   const { progress } = useProgressStore();
+  const chatScrollRef = useRef<ScrollView>(null);
 
   const checkpointId = route?.params?.checkpointId;
   const isCheckpoint = !!checkpointId;
 
   const langProg = progress.languages[activeLanguage] || {};
   
-  // Set initial state for checkpoint
   const [viewState, setViewState] = useState<'menu' | 'chat'>(isCheckpoint ? 'chat' : 'menu');
   const [activeScenario, setActiveScenario] = useState<{id: string, title: string, desc: string, icon: string} | null>(
     isCheckpoint ? { id: checkpointId, title: 'Aşama Sonu Sınavı', desc: 'Öğrendiklerini kullanarak görevleri tamamla.', icon: '🤖' } : null
   );
-  const totalMistakes = Object.values(langProg.mistakes || {}).reduce((sum, m) => sum + m.count, 0);
+  const totalMistakes = Object.values(langProg.mistakes || {}).reduce((sum: number, m: any) => sum + m.count, 0);
   const weakWordsList = Object.entries(langProg.weakWords || {})
-    .sort((a, b) => b[1] - a[1])
+    .sort((a: any, b: any) => b[1] - a[1])
     .slice(0, 3)
-    .map(w => w[0]);
+    .map((w: any) => w[0]);
   const weakWordsStr = weakWordsList.length > 0 ? weakWordsList.join(', ') : 'Henüz tespit edilmedi';
-  
-  // Completed lessons serve as "Strong Topics" conceptually
   const strongCount = (langProg.completedLessons || []).length;
   const strongStr = strongCount > 0 ? `${strongCount} Tamamlanan Ders` : 'Henüz veri yok';
 
-  // State
-  const [chatMessages, setChatMessages] = useState<ChatMessage[]>(
-    isCheckpoint ? [{ id: '1', role: 'ai', text: 'Merhaba! Aşama sonu sınavına hoş geldin. Öğrendiğin kelimeleri kullanarak benimle konuşmalısın. Hazırsan başlayalım. (Hello! Welcome to the milestone test. Let us begin if you are ready.)' }] : []
+  // Chat State
+  const [chatMessages, setChatMessages] = useState<any[]>(
+    isCheckpoint ? [{ id: '1', role: 'ai', text: 'Merhaba! Aşama sonu sınavına hoş geldin. Öğrendiğin kelimeleri kullanarak benimle konuşmalısın. Hazırsan başlayalım.' }] : []
   );
   const [inputText, setInputText] = useState('');
   const [isTyping, setIsTyping] = useState(false);
-  const [isRecording, setIsRecording] = useState(false);
-  const [micTranscript, setMicTranscript] = useState('');
 
-  useSpeechRecognitionEvent('result', (event: any) => {
-    const transcript = event.results[0]?.transcript;
-    if (transcript) {
-      setMicTranscript(transcript);
-    }
-  });
-  
+  // Voice Chat Mode
+  const [isVoiceMode, setIsVoiceMode] = useState(false);
+  const [voiceListening, setVoiceListening] = useState(false);
+  const [voiceSubtitle, setVoiceSubtitle] = useState('');
+  const [voiceUserText, setVoiceUserText] = useState('');
+  const [isSpeaking, setIsSpeaking] = useState(false);
+  const [voiceMascotState, setVoiceMascotState] = useState<'idle' | 'happy' | 'thinking'>('idle');
+  const voicePulseAnim = useRef(new Animated.Value(1)).current;
+  const voiceTranscriptRef = useRef('');
+
   // Modals
   const [showRolePlay, setShowRolePlay] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
@@ -85,7 +95,31 @@ const AITutorScreen = ({ route }: any) => {
   // Animations
   const lingoFloat = useRef(new Animated.Value(0)).current;
   const lingoScale = useRef(new Animated.Value(1)).current;
-  const waveAnim = useRef(new Animated.Value(0)).current;
+
+  // Speech Recognition Events (safe - noop if module not available)
+  if (hasSpeechRecognition) {
+    useSpeechRecognitionEvent('result', (event: any) => {
+      const transcript = event.results[0]?.transcript;
+      if (transcript) {
+        voiceTranscriptRef.current = transcript;
+        if (isVoiceMode) {
+          setVoiceUserText(transcript);
+        }
+      }
+    });
+
+    useSpeechRecognitionEvent('end', () => {
+      setVoiceListening(false);
+      if (voiceTranscriptRef.current.trim()) {
+        handleVoiceSend(voiceTranscriptRef.current.trim());
+        voiceTranscriptRef.current = '';
+      }
+    });
+
+    useSpeechRecognitionEvent('error', () => {
+      setVoiceListening(false);
+    });
+  }
 
   // Lingo Breathing & Floating Animation
   useEffect(() => {
@@ -104,30 +138,111 @@ const AITutorScreen = ({ route }: any) => {
     ).start();
   }, []);
 
-  // Initialize checkpoint mode if active (Handled by initial state now)
   // Voice Pulse Animation
   useEffect(() => {
-    if (isRecording) {
+    if (voiceListening) {
       Animated.loop(
         Animated.sequence([
-          Animated.timing(waveAnim, { toValue: 1, duration: 600, useNativeDriver: true }),
-          Animated.timing(waveAnim, { toValue: 0, duration: 600, useNativeDriver: true })
+          Animated.timing(voicePulseAnim, { toValue: 1.4, duration: 800, useNativeDriver: true }),
+          Animated.timing(voicePulseAnim, { toValue: 1, duration: 800, useNativeDriver: true })
         ])
       ).start();
     } else {
-      waveAnim.setValue(0);
-      Animated.timing(waveAnim, { toValue: 0, duration: 200, useNativeDriver: true }).start();
+      voicePulseAnim.setValue(1);
     }
-  }, [isRecording]);
+  }, [voiceListening]);
 
+  // --- Voice Chat Functions ---
+  const toggleMicListening = async () => {
+    if (voiceListening) {
+      // Stop listening
+      setVoiceListening(false);
+      if (hasSpeechRecognition) {
+        ExpoSpeechRecognitionModule.stop();
+      }
+      // If we have transcript, send it
+      if (voiceTranscriptRef.current.trim()) {
+        const text = voiceTranscriptRef.current.trim();
+        voiceTranscriptRef.current = '';
+        handleVoiceSend(text);
+      }
+    } else {
+      // Start listening
+      if (!hasSpeechRecognition) {
+        // No mic available — won't start, user uses text input
+        return;
+      }
+      setVoiceListening(true);
+      setVoiceUserText('');
+      setVoiceMascotState('idle');
+      voiceTranscriptRef.current = '';
+      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
+      try {
+        await ExpoSpeechRecognitionModule.requestPermissionsAsync();
+        ExpoSpeechRecognitionModule.start({ lang: 'en-US', interimResults: true });
+      } catch (e) {
+        console.log('Voice listen error:', e);
+        setVoiceListening(false);
+      }
+    }
+  };
+
+  const handleVoiceSend = async (text: string) => {
+    setVoiceMascotState('thinking');
+    setVoiceSubtitle('Düşünüyor...');
+    setIsTyping(true);
+    try {
+      const history: ChatMessage[] = [
+        ...chatMessages.map((m: any) => ({ role: m.role === 'user' ? 'user' as const : 'assistant' as const, content: m.text })),
+        { role: 'user' as const, content: text }
+      ];
+      const userMsg = { id: Date.now().toString(), role: 'user' as const, text };
+      setChatMessages(prev => [...prev, userMsg]);
+
+      const reply = await AIService.chat(history, activeLanguage);
+
+      const aiMsg = { id: (Date.now() + 1).toString(), role: 'ai' as const, text: reply };
+      setChatMessages(prev => [...prev, aiMsg]);
+      setVoiceSubtitle(reply);
+      setVoiceMascotState('happy');
+
+      // Speak the reply with TTS
+      setIsSpeaking(true);
+      Speech.speak(reply, {
+        language: 'en-US',
+        rate: 0.85,
+        onDone: () => { setIsSpeaking(false); setVoiceMascotState('idle'); },
+        onError: () => { setIsSpeaking(false); setVoiceMascotState('idle'); }
+      });
+    } catch (error) {
+      setVoiceSubtitle('Bağlantı hatası. Tekrar dene!');
+      setVoiceMascotState('idle');
+    } finally {
+      setIsTyping(false);
+    }
+  };
+
+  const toggleVoiceMode = () => {
+    if (isVoiceMode) {
+      Speech.stop();
+      setIsSpeaking(false);
+      setVoiceListening(false);
+      setVoiceSubtitle('');
+      setVoiceUserText('');
+    } else {
+      setViewState('chat');
+      setVoiceSubtitle('Mikrofona basılı tut ve İngilizce konuş!');
+    }
+    setIsVoiceMode(!isVoiceMode);
+  };
+
+  // --- Text Chat Functions ---
   const handleAction = (actionId: string, text: string) => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
     if (actionId === 'roleplay') {
       setShowRolePlay(true);
       return;
     }
-    
-    // Start chat
     setViewState('chat');
     const newUserMsg = { id: Date.now().toString(), role: 'user' as const, text };
     setChatMessages([newUserMsg]);
@@ -141,21 +256,11 @@ const AITutorScreen = ({ route }: any) => {
         role: m.role === 'user' ? 'user' : 'assistant',
         content: m.text
       }));
-      
       const reply = await AIService.chat(history, activeLanguage);
-      
       Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
-      setChatMessages(prev => [...prev, { 
-        id: Date.now().toString(), 
-        role: 'ai', 
-        text: reply 
-      }]);
+      setChatMessages(prev => [...prev, { id: Date.now().toString(), role: 'ai', text: reply }]);
     } catch (error) {
-      setChatMessages(prev => [...prev, { 
-        id: Date.now().toString(), 
-        role: 'ai', 
-        text: "Üzgünüm, şu an bağlantı kuramıyorum. Lütfen daha sonra tekrar dene! 🐬" 
-      }]);
+      setChatMessages(prev => [...prev, { id: Date.now().toString(), role: 'ai', text: "Üzgünüm, şu an bağlantı kuramıyorum. Lütfen daha sonra tekrar dene! 🐬" }]);
     } finally {
       setIsTyping(false);
     }
@@ -172,7 +277,6 @@ const AITutorScreen = ({ route }: any) => {
     const text = inputText;
     setInputText('');
     if (viewState === 'menu') setViewState('chat');
-    
     const newUserMsg = { id: Date.now().toString(), role: 'user' as const, text };
     setChatMessages(prev => {
       const newMessages = [...prev, newUserMsg];
@@ -181,9 +285,9 @@ const AITutorScreen = ({ route }: any) => {
     });
   };
 
+  // --- Render Functions ---
   const renderHome = () => (
     <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ padding: 20, paddingBottom: 120 }}>
-      {/* Animated Lingo */}
       <View style={styles.lingoContainer}>
         <Animated.View style={[styles.lingoWrap, { transform: [{ translateY: lingoFloat }, { scale: lingoScale }] }]}>
           <Mascot mascotId="classic" size={120} animated={true} animationState="happy" />
@@ -192,7 +296,6 @@ const AITutorScreen = ({ route }: any) => {
         <Text style={styles.lingoSubtitle}>Bugün ne öğrenmek istersin?</Text>
       </View>
 
-      {/* Adaptive Learning Recommends */}
       <View style={styles.adaptiveCard}>
         <LinearGradient colors={['rgba(10,132,255,0.2)', 'rgba(0,0,0,0.5)']} style={styles.adaptiveInner}>
           <Text style={{ fontSize: 24, marginBottom: 5 }}>✨</Text>
@@ -204,15 +307,10 @@ const AITutorScreen = ({ route }: any) => {
         </LinearGradient>
       </View>
 
-      {/* Quick Actions Grid */}
       <Text style={styles.sectionTitle}>Hızlı İşlemler</Text>
       <View style={styles.grid}>
         {QUICK_ACTIONS.map(action => (
-          <TouchableOpacity 
-            key={action.id} 
-            style={styles.actionCard}
-            onPress={() => handleAction(action.id, `Hadi ${action.label} pratiği yapalım`)}
-          >
+          <TouchableOpacity key={action.id} style={styles.actionCard} onPress={() => handleAction(action.id, `Hadi ${action.label} pratiği yapalım`)}>
             <View style={[styles.iconWrap, { backgroundColor: action.color + '22' }]}>
               <Text style={{ fontSize: 24 }}>{action.icon}</Text>
             </View>
@@ -221,27 +319,23 @@ const AITutorScreen = ({ route }: any) => {
         ))}
       </View>
 
-      {/* Memory Visualization */}
       <Text style={styles.sectionTitle}>Yapay Zeka Hafızası</Text>
       <View style={styles.memoryContainer}>
-        <View style={styles.memoryRow}>
-          <Text style={styles.memoryLabel}>Güçlü Yönler</Text>
-          <Text style={styles.memoryGood}>{strongStr}</Text>
-        </View>
-        <View style={styles.memoryRow}>
-          <Text style={styles.memoryLabel}>Zayıf Kelimeler</Text>
-          <Text style={styles.memoryBad}>{weakWordsStr}</Text>
-        </View>
-        <View style={styles.memoryRow}>
-          <Text style={styles.memoryLabel}>Toplam Hata</Text>
-          <Text style={styles.memoryNeutral}>{totalMistakes} adet</Text>
-        </View>
+        <View style={styles.memoryRow}><Text style={styles.memoryLabel}>Güçlü Yönler</Text><Text style={styles.memoryGood}>{strongStr}</Text></View>
+        <View style={styles.memoryRow}><Text style={styles.memoryLabel}>Zayıf Kelimeler</Text><Text style={styles.memoryBad}>{weakWordsStr}</Text></View>
+        <View style={styles.memoryRow}><Text style={styles.memoryLabel}>Toplam Hata</Text><Text style={styles.memoryNeutral}>{totalMistakes} adet</Text></View>
       </View>
     </ScrollView>
   );
 
   const renderChat = () => (
-    <ScrollView style={styles.chatScroll} contentContainerStyle={{ padding: 20, paddingBottom: 150 }}>
+    <ScrollView 
+      ref={chatScrollRef}
+      style={styles.chatScroll} 
+      contentContainerStyle={{ padding: 20, paddingBottom: 150 }}
+      onContentSizeChange={() => chatScrollRef.current?.scrollToEnd({ animated: true })}
+      onLayout={() => chatScrollRef.current?.scrollToEnd({ animated: true })}
+    >
       {chatMessages.length === 0 ? (
         <View style={{ alignItems: 'center', marginTop: 40, opacity: 0.8 }}>
           <Mascot mascotId="classic" size={100} animated={true} animationState="idle" />
@@ -251,7 +345,7 @@ const AITutorScreen = ({ route }: any) => {
         <Text style={styles.chatDate}>Bugün</Text>
       )}
       
-      {chatMessages.map(msg => {
+      {chatMessages.map((msg: any) => {
         const isUser = msg.role === 'user';
         return (
           <View key={msg.id} style={[styles.msgRow, isUser ? styles.msgUserRow : styles.msgAiRow]}>
@@ -280,6 +374,45 @@ const AITutorScreen = ({ route }: any) => {
     </ScrollView>
   );
 
+  const renderVoiceMode = () => (
+    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', paddingHorizontal: 30 }}>
+      {/* Mascot */}
+      <Animated.View style={[styles.lingoWrap, { 
+        width: 140, height: 140, borderRadius: 70,
+        transform: [{ translateY: lingoFloat }, { scale: lingoScale }],
+        borderColor: isSpeaking ? '#28a745' : voiceListening ? '#FF453A' : '#0A84FF',
+        shadowColor: isSpeaking ? '#28a745' : voiceListening ? '#FF453A' : '#0A84FF',
+        marginBottom: 20
+      }]}>
+        <Mascot mascotId="classic" size={100} animated={true} animationState={voiceMascotState === 'thinking' ? 'thinking' : voiceMascotState === 'happy' ? 'happy' : 'idle'} />
+      </Animated.View>
+
+      {/* Status */}
+      <Text style={{ color: '#FFF', fontSize: 18, fontWeight: 'bold', marginBottom: 5, textAlign: 'center' }}>
+        {voiceListening ? '🎙️ Dinliyorum...' : isSpeaking ? '🔊 Konuşuyorum...' : isTyping ? '🤔 Düşünüyorum...' : '🎧 Sesli Sohbet'}
+      </Text>
+      <Text style={{ color: '#64748B', fontSize: 13, textAlign: 'center', marginBottom: 15 }}>
+        {hasSpeechRecognition ? 'Mikrofona bas ve İngilizce konuş' : 'Aşağıya yaz, Lingo sesli yanıtlasın'}
+      </Text>
+
+      {/* User's spoken text */}
+      {voiceUserText ? (
+        <View style={{ backgroundColor: 'rgba(10,132,255,0.2)', borderRadius: 16, padding: 12, marginTop: 10, width: '100%' }}>
+          <Text style={{ color: '#0A84FF', fontSize: 12, fontWeight: '600', marginBottom: 4 }}>Sen:</Text>
+          <Text style={{ color: '#FFF', fontSize: 16, lineHeight: 22 }}>{voiceUserText}</Text>
+        </View>
+      ) : null}
+
+      {/* AI Subtitle */}
+      {voiceSubtitle ? (
+        <View style={{ backgroundColor: 'rgba(255,255,255,0.08)', borderRadius: 16, padding: 15, marginTop: 15, width: '100%', borderWidth: 1, borderColor: 'rgba(255,255,255,0.1)' }}>
+          <Text style={{ color: '#28a745', fontSize: 12, fontWeight: '600', marginBottom: 4 }}>Lingo:</Text>
+          <Text style={{ color: '#E2E8F0', fontSize: 16, lineHeight: 24 }}>{voiceSubtitle}</Text>
+        </View>
+      ) : null}
+    </View>
+  );
+
   return (
     <KeyboardAvoidingView style={styles.container} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
       <LinearGradient colors={['#0F172A', '#020617']} style={StyleSheet.absoluteFillObject} />
@@ -288,7 +421,9 @@ const AITutorScreen = ({ route }: any) => {
       <View style={[styles.header, { paddingTop: insets.top }]}>
         <TouchableOpacity 
           onPress={() => {
-            if (isCheckpoint) {
+            if (isVoiceMode) {
+              toggleVoiceMode();
+            } else if (isCheckpoint) {
               navigation.goBack();
             } else {
               viewState === 'chat' ? setViewState('menu') : navigation.goBack();
@@ -298,20 +433,20 @@ const AITutorScreen = ({ route }: any) => {
         >
           <Text style={{ fontSize: 24, color: '#FFF' }}>❌</Text>
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>{isCheckpoint ? 'Sınav' : 'Lingo AI'}</Text>
+        <Text style={styles.headerTitle}>{isVoiceMode ? '🎧 Sesli Sohbet' : isCheckpoint ? 'Sınav' : 'Lingo AI'}</Text>
         {isCheckpoint ? (
           <TouchableOpacity 
             onPress={() => {
               const { completeLesson, addGems } = useProgressStore.getState();
               completeLesson(activeLanguage, checkpointId);
-              addGems(50); // Boss fight reward
+              addGems(50);
               navigation.navigate('MainTabs' as never);
             }} 
             style={styles.headerBtn}
           >
             <Text style={{ fontSize: 16, color: '#0A84FF', fontWeight: 'bold' }}>Sınavı Bitir</Text>
           </TouchableOpacity>
-        ) : viewState === 'chat' ? (
+        ) : viewState === 'chat' && !isVoiceMode ? (
           <TouchableOpacity onPress={clearChat} style={styles.headerBtn}>
             <Text style={{ fontSize: 20, color: '#FF453A' }}>🗑️</Text>
           </TouchableOpacity>
@@ -330,6 +465,68 @@ const AITutorScreen = ({ route }: any) => {
           <Text style={{ fontSize: 28, color: '#FFF', fontWeight: 'bold', textAlign: 'center', marginBottom: 10 }}>Çok Yakında!</Text>
           <Text style={{ fontSize: 16, color: '#94A3B8', textAlign: 'center', lineHeight: 24 }}>Lingo AI şu an sadece İngilizce için aktif. Diğer diller üzerinde çalışıyoruz!</Text>
         </View>
+      ) : isVoiceMode ? (
+        <>
+          {renderVoiceMode()}
+
+           {/* Voice Bottom Bar */}
+          <View style={[styles.inputBar, { paddingBottom: insets.bottom || 20, justifyContent: 'center', gap: 15, flexWrap: 'wrap' }]}>
+            {/* Exit voice mode */}
+            <TouchableOpacity
+              style={{ width: 50, height: 50, borderRadius: 25, backgroundColor: 'rgba(255,69,58,0.2)', justifyContent: 'center', alignItems: 'center' }}
+              onPress={toggleVoiceMode}
+            >
+              <Feather name="x" size={24} color="#FF453A" />
+            </TouchableOpacity>
+
+            {/* Big Mic Button - tap to toggle */}
+            {hasSpeechRecognition && (
+              <TouchableOpacity
+                style={{ width: 80, height: 80, borderRadius: 40, backgroundColor: voiceListening ? '#FF453A' : '#0A84FF', justifyContent: 'center', alignItems: 'center', shadowColor: voiceListening ? '#FF453A' : '#0A84FF', shadowOpacity: 0.5, shadowRadius: 15, elevation: 10 }}
+                onPress={toggleMicListening}
+                disabled={isSpeaking || isTyping}
+              >
+                {voiceListening && (
+                  <Animated.View style={{ position: 'absolute', width: 80, height: 80, borderRadius: 40, backgroundColor: '#FF453A', transform: [{ scale: voicePulseAnim }], opacity: 0.3 }} />
+                )}
+                <Feather name={voiceListening ? 'square' : 'mic'} size={36} color="#FFF" />
+              </TouchableOpacity>
+            )}
+
+            {/* Switch to text mode */}
+            <TouchableOpacity
+              style={{ width: 50, height: 50, borderRadius: 25, backgroundColor: 'rgba(255,255,255,0.1)', justifyContent: 'center', alignItems: 'center' }}
+              onPress={toggleVoiceMode}
+            >
+              <Feather name="message-square" size={22} color="#A0AEC0" />
+            </TouchableOpacity>
+          </View>
+
+          {/* Text input fallback for voice mode (Expo Go or preference) */}
+          <View style={[styles.inputBar, { paddingBottom: 5, paddingTop: 5 }]}>
+            <View style={[styles.inputWrap, { borderColor: voiceUserText ? '#0A84FF' : 'rgba(255,255,255,0.1)' }]}>
+              <TextInput
+                style={styles.input}
+                placeholder={hasSpeechRecognition ? 'Veya yazarak sor...' : 'İngilizce yaz, Lingo sesli cevaplasın...'}
+                placeholderTextColor="#64748B"
+                value={voiceUserText}
+                onChangeText={setVoiceUserText}
+              />
+              <TouchableOpacity 
+                style={[styles.sendBtn, { backgroundColor: voiceUserText.trim() ? '#0A84FF' : 'rgba(255,255,255,0.1)' }]} 
+                onPress={() => {
+                  if (voiceUserText.trim()) {
+                    const text = voiceUserText.trim();
+                    handleVoiceSend(text);
+                  }
+                }}
+                disabled={!voiceUserText.trim() || isTyping || isSpeaking}
+              >
+                <Feather name="arrow-up" size={20} color={voiceUserText.trim() ? "#FFF" : "#64748B"} />
+              </TouchableOpacity>
+            </View>
+          </View>
+        </>
       ) : (
         <>
           {/* MAIN CONTENT */}
@@ -337,42 +534,20 @@ const AITutorScreen = ({ route }: any) => {
 
           {/* BOTTOM INPUT BAR */}
           <View style={[styles.inputBar, { paddingBottom: insets.bottom || 20 }]}>
-            <TouchableOpacity 
-              style={[styles.micBtn, isRecording && styles.micBtnActive]}
-              onPressIn={() => { 
-                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy); 
-                setMicTranscript('');
-                // ExpoSpeechRecognitionModule.start({ 
-                //   lang: activeLanguage === 'kurdish' ? 'tr-TR' : 'en-US',
-                //   interimResults: true,
-                //   maxAlternatives: 1
-                // });
-                setIsRecording(true); 
-              }}
-              onPressOut={() => { 
-                setIsRecording(false); 
-                // ExpoSpeechRecognitionModule.stop();
-                if (micTranscript.trim()) {
-                  setInputText(prev => (prev ? prev + ' ' + micTranscript.trim() : micTranscript.trim()));
-                  setMicTranscript('');
-                }
-              }}
+            {/* Voice Mode Toggle */}
+            <TouchableOpacity
+              style={{ width: 50, height: 50, borderRadius: 25, backgroundColor: 'rgba(40,167,69,0.2)', justifyContent: 'center', alignItems: 'center', marginRight: 10 }}
+              onPress={toggleVoiceMode}
             >
-              {isRecording && (
-                <Animated.View style={[styles.waveAnim, { 
-                  transform: [{ scale: waveAnim.interpolate({ inputRange: [0, 1], outputRange: [1, 2] }) }],
-                  opacity: waveAnim.interpolate({ inputRange: [0, 1], outputRange: [0.5, 0] })
-                }]} />
-              )}
-              <Feather name="mic" size={24} color={isRecording ? "#FF453A" : "#A0AEC0"} />
+              <Feather name="headphones" size={22} color="#28a745" />
             </TouchableOpacity>
             
-            <View style={[styles.inputWrap, { borderColor: inputText.trim() || micTranscript ? '#0A84FF' : 'rgba(255,255,255,0.1)' }]}>
+            <View style={[styles.inputWrap, { borderColor: inputText.trim() ? '#0A84FF' : 'rgba(255,255,255,0.1)' }]}>
               <TextInput
                 style={styles.input}
                 placeholder="Lingo'ya yaz..."
                 placeholderTextColor="#64748B"
-                value={isRecording && micTranscript ? micTranscript : inputText}
+                value={inputText}
                 onChangeText={setInputText}
                 multiline
               />
@@ -381,7 +556,7 @@ const AITutorScreen = ({ route }: any) => {
                 onPress={sendMessage}
                 disabled={!inputText.trim()}
               >
-                <Feather name="arrow-up" size={20} color={inputText.trim() ? "#FFF" : "#64748B"} style={{ fontWeight: 'bold' }} />
+                <Feather name="arrow-up" size={20} color={inputText.trim() ? "#FFF" : "#64748B"} />
               </TouchableOpacity>
             </View>
           </View>
@@ -431,22 +606,10 @@ const AITutorScreen = ({ route }: any) => {
               </TouchableOpacity>
             </View>
             <View style={{ gap: 20 }}>
-              <View style={styles.settingRow}>
-                <Text style={styles.settingLabel}>Kişilik</Text>
-                <Text style={styles.settingValue}>Arkadaş Canlısı ✨</Text>
-              </View>
-              <View style={styles.settingRow}>
-                <Text style={styles.settingLabel}>Ses</Text>
-                <Text style={styles.settingValue}>Kadın 🗣️</Text>
-              </View>
-              <View style={styles.settingRow}>
-                <Text style={styles.settingLabel}>Öğrenme Hızı</Text>
-                <Text style={styles.settingValue}>Uyarlanabilir 🚀</Text>
-              </View>
-              <View style={styles.settingRow}>
-                <Text style={styles.settingLabel}>Yapay Zeka Hafızası</Text>
-                <Text style={[styles.settingValue, { color: '#28a745' }]}>Açık</Text>
-              </View>
+              <View style={styles.settingRow}><Text style={styles.settingLabel}>Kişilik</Text><Text style={styles.settingValue}>Arkadaş Canlısı ✨</Text></View>
+              <View style={styles.settingRow}><Text style={styles.settingLabel}>Ses</Text><Text style={styles.settingValue}>Kadın 🗣️</Text></View>
+              <View style={styles.settingRow}><Text style={styles.settingLabel}>Öğrenme Hızı</Text><Text style={styles.settingValue}>Uyarlanabilir 🚀</Text></View>
+              <View style={styles.settingRow}><Text style={styles.settingLabel}>Yapay Zeka Hafızası</Text><Text style={[styles.settingValue, { color: '#28a745' }]}>Açık</Text></View>
             </View>
           </View>
         </View>
@@ -464,7 +627,6 @@ const styles = StyleSheet.create({
 
   lingoContainer: { alignItems: 'center', marginVertical: 30 },
   lingoWrap: { width: 120, height: 120, borderRadius: 60, backgroundColor: 'rgba(10,132,255,0.2)', justifyContent: 'center', alignItems: 'center', borderWidth: 2, borderColor: '#0A84FF', shadowColor: '#0A84FF', shadowOpacity: 0.5, shadowRadius: 20, elevation: 10 },
-  lingoMascot: { fontSize: 60 },
   lingoTitle: { fontSize: 24, fontWeight: '900', color: '#FFF', fontFamily: 'SpaceGrotesk_700Bold', marginTop: 20 },
   lingoSubtitle: { fontSize: 16, color: '#94A3B8', marginTop: 5 },
 
@@ -493,16 +655,12 @@ const styles = StyleSheet.create({
   msgRow: { flexDirection: 'row', alignItems: 'flex-end', marginBottom: 15 },
   msgUserRow: { justifyContent: 'flex-end' },
   msgAiRow: { justifyContent: 'flex-start' },
-  msgAvatar: { fontSize: 24, marginRight: 8, marginBottom: 5 },
   msgBubble: { maxWidth: '75%', padding: 15, borderRadius: 24 },
   msgBubbleUser: { backgroundColor: '#0A84FF', borderBottomRightRadius: 5 },
   msgBubbleAi: { backgroundColor: 'rgba(255,255,255,0.1)', borderBottomLeftRadius: 5, borderWidth: 1, borderColor: 'rgba(255,255,255,0.05)' },
   msgText: { fontSize: 16, lineHeight: 24 },
 
   inputBar: { flexDirection: 'row', alignItems: 'center', paddingHorizontal: 15, paddingTop: 10, backgroundColor: '#020617', borderTopWidth: 1, borderTopColor: 'rgba(255,255,255,0.05)' },
-  micBtn: { width: 50, height: 50, borderRadius: 25, backgroundColor: 'rgba(255,255,255,0.1)', justifyContent: 'center', alignItems: 'center', marginRight: 10 },
-  micBtnActive: { backgroundColor: 'rgba(255,69,58,0.3)' },
-  waveAnim: { position: 'absolute', width: 50, height: 50, borderRadius: 25, backgroundColor: '#FF453A' },
   inputWrap: { flex: 1, flexDirection: 'row', alignItems: 'center', backgroundColor: 'rgba(255,255,255,0.05)', borderRadius: 25, paddingLeft: 18, paddingRight: 6, paddingVertical: 4, borderWidth: 1, borderColor: 'rgba(255,255,255,0.1)' },
   input: { flex: 1, color: '#FFF', fontSize: 16, paddingVertical: 10, maxHeight: 100 },
   sendBtn: { width: 38, height: 38, borderRadius: 19, justifyContent: 'center', alignItems: 'center', marginLeft: 8 },

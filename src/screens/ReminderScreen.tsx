@@ -8,6 +8,7 @@ import { Mascot } from '../components/Mascot';
 import * as Haptics from 'expo-haptics';
 import { NotificationService } from '../services/NotificationService';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { usePreferencesStore } from '../store/usePreferencesStore';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Reminder'>;
 
@@ -50,7 +51,7 @@ const ReminderScreen: React.FC<Props> = ({ navigation, route }) => {
 
   const handleNext = async () => {
     try {
-      await AsyncStorage.setItem('@reminder_time', `${reminderHour}:${reminderMinute}`);
+      usePreferencesStore.getState().setReminderTime(`${reminderHour}:${reminderMinute}`);
     } catch (e) {}
     
     navigation.navigate('Register' as never);

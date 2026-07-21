@@ -9,6 +9,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { NotificationService } from '../services/NotificationService';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { useLanguageStore, LanguageKey } from '../store/useLanguageStore';
+import { FontAwesome5 } from '@expo/vector-icons';
 
 const LANG_LABELS: Record<LanguageKey, string> = {
   kurdish: 'Kürtçe', turkish: 'Türkçe', english: 'İngilizce', french: 'Fransızca',
@@ -19,6 +20,8 @@ const LANG_LABELS: Record<LanguageKey, string> = {
 
 import { useLingoStore, AIPersonality, AIExpressionStyle, VoiceType } from '../store/useLingoStore';
 import { useAuth } from '../context/AuthContext';
+import { useProgressStore } from '../store/useProgressStore';
+import { usePreferencesStore } from '../store/usePreferencesStore';
 
 const PERSONALITY_LABELS: Record<AIPersonality, string> = {
   friendly: 'Dostane', strict: 'Disiplinli', funny: 'Eğlenceli', academic: 'Akademik'
@@ -39,10 +42,8 @@ const SettingsScreen = () => {
   const { activeLanguage, setActiveLanguage } = useLanguageStore();
   const { personality, expressionStyle, voice, assistantVoice, setPersonality, setExpressionStyle, setVoice, setAssistantVoice } = useLingoStore();
   const { user, deleteAccount, logout, reauthenticateAndDelete, sendVerificationEmail, reloadUser } = useAuth();
-
-  const [soundEnabled, setSoundEnabled] = useState(true);
-  const [notificationsEnabled, setNotificationsEnabled] = useState(true);
-  const [winkEnabled, setWinkEnabled] = useState(true);
+  const { progress } = useProgressStore();
+  const { soundEnabled, setSoundEnabled, notificationsEnabled, setNotificationsEnabled, appLanguage, setAppLanguage, dailyGoal, setDailyGoal, reminderTime, setReminderTime } = usePreferencesStore();
 
   // States for Re-authentication Modal
   const [showReauthModal, setShowReauthModal] = useState(false);
@@ -54,13 +55,11 @@ const SettingsScreen = () => {
 
   // States for Reminder Time Modal
   const [showTimeModal, setShowTimeModal] = useState(false);
-  const [reminderTime, setReminderTime] = useState('20:00');
   const [dateValue, setDateValue] = useState(new Date());
 
-  // States for Daily XP Goal Modal
+  // Goal Modal State
   const [showGoalModal, setShowGoalModal] = useState(false);
-  const [dailyGoal, setDailyGoal] = useState('500');
-  const goals = ['500', '1000', '1500', '2000', '5000'];
+  const goals = [50, 100, 250, 500, 1000];
 
   // States for Language Modal
   const [showLangModal, setShowLangModal] = useState(false);
@@ -75,18 +74,8 @@ const SettingsScreen = () => {
   const expressions: AIExpressionStyle[] = ['casual', 'formal', 'encouraging'];
   const voices: VoiceType[] = ['male_1', 'male_2', 'female_1', 'female_2'];
 
-  useEffect(() => {
-    AsyncStorage.getItem('@reminder_time').then(val => {
-      if (val) setReminderTime(val);
-    });
-    AsyncStorage.getItem('@daily_goal').then(val => {
-      if (val) setDailyGoal(val);
-    });
-  }, []);
-
   const saveReminderTime = async (t: string) => {
     setReminderTime(t);
-    await AsyncStorage.setItem('@reminder_time', t);
     const [h, m] = t.split(':').map(Number);
     await NotificationService.scheduleDailyReminder(h, m);
   };
@@ -114,9 +103,8 @@ const SettingsScreen = () => {
     }
   };
 
-  const saveDailyGoal = async (g: string) => {
+  const saveDailyGoal = async (g: number) => {
     setDailyGoal(g);
-    await AsyncStorage.setItem('@daily_goal', g);
     setShowGoalModal(false);
   };
 
@@ -141,21 +129,8 @@ const SettingsScreen = () => {
   };
 
   const handleDeleteAccount = () => {
-    Alert.alert(
-      "Hesabı Sil",
-      "Hesabınızı kalıcı olarak silmek istediğinize emin misiniz? Bu işlem geri alınamaz ve tüm ilerlemeniz silinir.",
-      [
-        { text: "İptal", style: "cancel" },
-        { 
-          text: "Devam Et", 
-          style: "destructive",
-          onPress: () => {
-             setPassword('');
-             setShowReauthModal(true);
-          }
-        }
-      ]
-    );
+    setPassword('');
+    setShowReauthModal(true);
   };
 
   const confirmDeleteAccount = async () => {
@@ -262,49 +237,46 @@ const SettingsScreen = () => {
         {/* ── TERCİHLER ── */}
         <Text style={[styles.sectionTitle, { color: colors.textLight }]}>TERCİHLER</Text>
         <View style={[styles.sectionGroup, { borderColor: colors.border }]}>
-          {renderItem('Uygulama Dili', '🌍', showComingSoon, <Text style={[styles.valueText, { color: colors.textLight }]}>Türkçe</Text>)}
-          {renderItem('Öğrenilen Dil', '📚', () => setShowLangModal(true), <Text style={[styles.valueText, { color: colors.textLight }]}>{LANG_LABELS[activeLanguage]}</Text>)}
+          {renderItem('Uygulama Dili', '🌍', () => setShowLangModal(true), <Text style={[styles.valueText, { color: colors.textLight }]}>{LANG_LABELS[appLanguage]}</Text>)}
           {renderItem('Tema', '🎨', cycleTheme, <Text style={[styles.valueText, { color: colors.primary }]}>{getThemeLabel(themeMode)}</Text>)}
           {renderItem('Ses Efektleri', '🔊', () => setSoundEnabled(!soundEnabled), <Switch value={soundEnabled} onValueChange={setSoundEnabled} trackColor={{ true: colors.primary }} />)}
           {renderItem('Bildirimler', '🔔', () => setNotificationsEnabled(!notificationsEnabled), <Switch value={notificationsEnabled} onValueChange={setNotificationsEnabled} trackColor={{ true: colors.primary }} />)}
         </View>
 
-        {/* ── LINGUAPLAY+ ── */}
-        <Text style={[styles.sectionTitle, { color: colors.textLight }]}>✨ LINGUAPLAY+</Text>
+        {/* ── LINGUAPLAY ── */}
+        <Text style={[styles.sectionTitle, { color: colors.textLight }]}>✨ LINGUAPLAY</Text>
         <View style={[styles.sectionGroup, { borderColor: colors.border }]}>
-          {renderItem('Premium Abonelik', '💎', () => navigation.navigate('Premium'))}
-          {renderItem('Satın Alımları Geri Yükle', '🔄', () => navigation.navigate('Premium'))}
-          {renderItem('Premium Avantajları', '⭐', () => navigation.navigate('Premium'))}
+          {progress.isPremium ? (
+            renderItem('Premium Avantajları', '👑', () => navigation.navigate('Premium'))
+          ) : (
+            <>
+              {renderItem('Premium Abonelik', '💎', () => navigation.navigate('Premium'))}
+              {renderItem('Satın Alımları Geri Yükle', '🔄', () => navigation.navigate('Premium'))}
+              {renderItem('Premium Avantajları', '⭐', () => navigation.navigate('Premium'))}
+            </>
+          )}
         </View>
 
         {/* ── LINGO AYARLARI ── */}
         <Text style={[styles.sectionTitle, { color: colors.textLight }]}>🐬 LINGO AYARLARI</Text>
         <View style={[styles.sectionGroup, { borderColor: colors.border }]}>
           {renderItem('Kişilik', '🧠', () => setShowPersonalityModal(true), <Text style={[styles.valueText, { color: colors.primary }]}>{PERSONALITY_LABELS[personality]}</Text>)}
-          {renderItem('İfade Tarzı', '🎭', () => setShowExpressionModal(true), <Text style={[styles.valueText, { color: colors.primary }]}>{EXPRESSION_LABELS[expressionStyle]}</Text>)}
-          {renderItem('Göz Kırpma Animasyonu', '😉', () => setWinkEnabled(!winkEnabled), <Switch value={winkEnabled} onValueChange={setWinkEnabled} trackColor={{ true: colors.primary }} />)}
           {renderItem('Ses', '🎙️', () => setShowVoiceModal(true), <Text style={[styles.valueText, { color: colors.primary }]}>{VOICE_LABELS[voice]}</Text>)}
-          {renderItem('Asistan Sesi', '🤖', () => setShowAssistantVoiceModal(true), <Text style={[styles.valueText, { color: colors.primary }]}>{VOICE_LABELS[assistantVoice]}</Text>)}
-          {renderItem('Animasyonlar', '🎬', showComingSoon)}
-          {renderItem('Selamlamalar', '👋', showComingSoon)}
         </View>
 
         {/* ── HESAP & GÜVENLİK ── */}
         <Text style={[styles.sectionTitle, { color: colors.textLight }]}>🔒 HESAP & GÜVENLİK</Text>
         <View style={[styles.sectionGroup, { borderColor: colors.border }]}>
-          {renderItem('Profil Düzenle', '👤', () => navigation.navigate('EditProfile'))}
+          {renderItem('Profil ve E-posta', '👤', () => navigation.navigate('EditProfile'))}
           {renderItem('Şifre Değiştir', '🔒', () => navigation.navigate('ChangePassword'))}
-          {renderItem('E-posta Değiştir', '📧', () => navigation.navigate('EditProfile'))}
           {renderItem('E-posta Doğrulaması', user?.emailVerified ? '✅' : '✉️', user?.emailVerified ? checkEmailVerification : handleSendVerificationEmail, <Text style={[styles.valueText, { color: user?.emailVerified ? colors.success || '#4CAF50' : colors.textLight }]}>{user?.emailVerified ? 'Doğrulandı' : (isVerifyingEmail ? 'Gönderiliyor...' : 'Doğrula')}</Text>)}
-          {renderItem('İki Faktörlü Doğrulama', '🛡️', () => {
+          {renderItem('Güvenlik ve Cihazlar', '🛡️', () => {
              if (!user?.emailVerified) {
-               Alert.alert("Hata", "İki faktörlü doğrulamayı açmak için önce e-posta adresinizi doğrulamalısınız.");
+               Alert.alert("Hata", "Güvenlik ayarlarına erişmek için önce e-posta adresinizi doğrulamalısınız.");
                return;
              }
              navigation.navigate('Security');
           })}
-          {renderItem('Cihazlar', '📱', () => navigation.navigate('Security'))}
-          {renderItem('Oturumlar', '⏱️', () => navigation.navigate('Security'))}
           {renderItem('Tüm Cihazlardan Çıkış Yap', '🚪', handleLogoutAll)}
           {renderItem('Hesabı Sil', '🗑️', handleDeleteAccount, undefined, true)}
         </View>
@@ -312,7 +284,7 @@ const SettingsScreen = () => {
         {/* ── HAKKINDA & DESTEK ── */}
         <Text style={[styles.sectionTitle, { color: colors.textLight }]}>ℹ️ HAKKINDA & DESTEK</Text>
         <View style={[styles.sectionGroup, { borderColor: colors.border }]}>
-          {renderItem('Yardım Merkezi', '❓', () => navigation.navigate('Legal', { type: 'terms' }))}
+          {renderItem('Yardım Merkezi', '❓', () => navigation.navigate('Feedback'))}
           {renderItem('Geri Bildirim Gönder', '💬', () => navigation.navigate('Feedback'))}
           {renderItem('Uygulamayı Değerlendir', '⭐', showComingSoon)}
           {renderItem('Gizlilik Politikası', '📄', () => navigation.navigate('Legal', { type: 'privacy' }))}
@@ -321,7 +293,7 @@ const SettingsScreen = () => {
           {renderItem('Sürüm', '📱', () => {}, <Text style={[styles.valueText, { color: colors.textLight }]}>1.0.0 (Build 1)</Text>)}
         </View>
 
-        <Text style={[styles.versionText, { color: colors.textLight }]}>LinguaPlay+ v1.0.0</Text>
+        <Text style={[styles.versionText, { color: colors.textLight }]}>LinguaPlay v1.0.0</Text>
       </ScrollView>
 
       {/* Time Picker (iOS Modal) */}
@@ -359,7 +331,7 @@ const SettingsScreen = () => {
       <Modal visible={showGoalModal} transparent animationType="fade">
         <View style={styles.modalOverlay}>
           <View style={[styles.modalContent, { backgroundColor: colors.surface }]}>
-            <Text style={[styles.modalTitle, { color: colors.text }]}>Günlük Hedef</Text>
+            <Text style={[styles.modalTitle, { color: colors.text }]}>Günlük XP Hedefi</Text>
             {goals.map((g) => (
               <TouchableOpacity 
                 key={g} 
@@ -383,22 +355,24 @@ const SettingsScreen = () => {
       <Modal visible={showLangModal} transparent animationType="fade">
         <View style={styles.modalOverlay}>
           <View style={[styles.modalContent, { backgroundColor: colors.surface }]}>
-            <Text style={[styles.modalTitle, { color: colors.text }]}>Öğrenilecek Dil</Text>
-            {availableLangs.map((lang) => (
-              <TouchableOpacity 
-                key={lang} 
-                style={[styles.modalOption, { borderBottomColor: colors.border }]}
-                onPress={() => {
-                  setActiveLanguage(lang);
-                  setShowLangModal(false);
-                }}
-              >
-                <Text style={[styles.modalOptionText, { color: lang === activeLanguage ? colors.primary : colors.text }]}>
-                  {LANG_LABELS[lang]}
-                </Text>
-                {lang === activeLanguage && <Text style={{ color: colors.primary, fontSize: 18 }}>✓</Text>}
-              </TouchableOpacity>
-            ))}
+            <Text style={[styles.modalTitle, { color: colors.text }]}>Uygulama Dili</Text>
+            <ScrollView style={{ maxHeight: 300, width: '100%' }}>
+              {(Object.keys(LANG_LABELS) as LanguageKey[]).map((lang) => (
+                <TouchableOpacity 
+                  key={lang} 
+                  style={[styles.modalOption, { borderBottomColor: colors.border }]}
+                  onPress={() => {
+                    setAppLanguage(lang);
+                    setShowLangModal(false);
+                  }}
+                >
+                  <Text style={[styles.modalOptionText, { color: lang === appLanguage ? colors.primary : colors.text }]}>
+                    {LANG_LABELS[lang]}
+                  </Text>
+                  {lang === appLanguage && <Text style={{ color: colors.primary, fontSize: 18 }}>✓</Text>}
+                </TouchableOpacity>
+              ))}
+            </ScrollView>
             <TouchableOpacity style={styles.modalCancel} onPress={() => setShowLangModal(false)}>
               <Text style={{ color: colors.textLight, fontSize: 16 }}>Kapat</Text>
             </TouchableOpacity>
@@ -514,39 +488,101 @@ const SettingsScreen = () => {
       </Modal>
 
       {/* Re-authentication Modal */}
-      <Modal visible={showReauthModal} animationType="slide" transparent={true}>
+      <Modal visible={showReauthModal} animationType="fade" transparent={true}>
         <KeyboardAvoidingView 
-          style={styles.modalContainer}
+          style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0,0,0,0.6)' }}
           behavior={Platform.OS === 'ios' ? 'padding' : undefined}
         >
-          <View style={[styles.modalContent, { backgroundColor: colors.surface, borderColor: colors.border }]}>
-            <View style={styles.modalHeader}>
-              <Text style={[styles.modalTitle, { color: colors.text }]}>Kimlik Doğrulama</Text>
-              <TouchableOpacity onPress={() => setShowReauthModal(false)}>
-                <Text style={[styles.closeModalText, { color: colors.textLight }]}>✕</Text>
-              </TouchableOpacity>
+          <View style={{
+            width: '85%',
+            backgroundColor: colors.surface,
+            borderRadius: 20,
+            padding: 24,
+            borderWidth: 2,
+            borderColor: '#FF3B30',
+            shadowColor: '#FF3B30',
+            shadowOpacity: 0.4,
+            shadowRadius: 20,
+            shadowOffset: { width: 0, height: 4 },
+            elevation: 10,
+          }}>
+            {/* Warning Icon */}
+            <View style={{ alignItems: 'center', marginBottom: 16 }}>
+              <View style={{
+                width: 60, height: 60, borderRadius: 30,
+                backgroundColor: '#FF3B3015',
+                justifyContent: 'center', alignItems: 'center',
+              }}>
+                <FontAwesome5 name="exclamation-triangle" size={28} color="#FF3B30" />
+              </View>
             </View>
-            
-            <Text style={[styles.modalSubtitle, { color: colors.textLight }]}>
-              Hesabınızı silmek için lütfen şifrenizi girin.
+
+            {/* Title */}
+            <Text style={{
+              fontSize: 20, fontWeight: 'bold', fontFamily: 'SpaceGrotesk_700Bold',
+              color: '#FF3B30', textAlign: 'center', marginBottom: 8,
+            }}>
+              Hesabını Silmek İstediğine Emin Misin?
             </Text>
 
+            {/* Warning Text */}
+            <Text style={{
+              fontSize: 14, color: colors.textLight, textAlign: 'center',
+              marginBottom: 20, lineHeight: 20,
+            }}>
+              Tüm ilerlemen, XP'lerin, elmasların ve başarıların kalıcı olarak silinecek. Bu işlem geri alınamaz.
+            </Text>
+
+            {/* Password Input */}
             <TextInput
-              style={[styles.input, { backgroundColor: colors.background, color: colors.text, borderColor: colors.border }]}
-              placeholder="Şifreniz"
+              style={{
+                backgroundColor: colors.background,
+                color: colors.text,
+                borderColor: '#FF3B3050',
+                borderWidth: 1,
+                borderRadius: 12,
+                padding: 14,
+                fontSize: 16,
+                marginBottom: 16,
+              }}
+              placeholder="Şifreni gir"
               placeholderTextColor={colors.textLight}
               secureTextEntry
               value={password}
               onChangeText={setPassword}
             />
 
+            {/* Delete Button */}
             <TouchableOpacity 
-              style={[styles.saveButton, { backgroundColor: '#FF3B30' }, isDeleting && { opacity: 0.7 }]}
+              style={{
+                backgroundColor: '#FF3B30',
+                borderRadius: 12,
+                padding: 16,
+                alignItems: 'center',
+                marginBottom: 10,
+                opacity: isDeleting ? 0.7 : 1,
+              }}
               onPress={confirmDeleteAccount}
               disabled={isDeleting}
             >
-              <Text style={styles.saveButtonText}>
-                {isDeleting ? 'Siliniyor...' : 'Hesabı Kalıcı Olarak Sil'}
+              <Text style={{ color: '#fff', fontSize: 16, fontWeight: 'bold', fontFamily: 'SpaceGrotesk_700Bold' }}>
+                {isDeleting ? 'Siliniyor...' : '🗑️ Hesabı Kalıcı Olarak Sil'}
+              </Text>
+            </TouchableOpacity>
+
+            {/* Cancel Button */}
+            <TouchableOpacity 
+              style={{
+                borderRadius: 12,
+                padding: 14,
+                alignItems: 'center',
+                borderWidth: 1,
+                borderColor: colors.border,
+              }}
+              onPress={() => setShowReauthModal(false)}
+            >
+              <Text style={{ color: colors.text, fontSize: 15, fontWeight: '600' }}>
+                Vazgeç
               </Text>
             </TouchableOpacity>
           </View>

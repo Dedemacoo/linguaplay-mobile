@@ -232,7 +232,8 @@ const LessonScreen: React.FC<Props> = ({ navigation, route }) => {
     }
   };
 
-  const stopListening = () => { setIsListening(false); setSpokenText(currentQuestion.audioText || '');
+  const stopListening = () => { 
+    setIsListening(false);
     ExpoSpeechRecognitionModule.stop();
   };
 
@@ -391,9 +392,8 @@ const LessonScreen: React.FC<Props> = ({ navigation, route }) => {
   
   const langProgress = progress.languages?.[activeLanguage] || { totalXp: 0, level: 1, completedLessons: [] };
   
-  const isLocked = !isPlacementTest && !isAIPractice && currentLessonIndex > 0 && 
-                   !langProgress.completedLessons.includes(currentLesson?.id || '') && 
-                   !langProgress.completedLessons.includes(allLessons[currentLessonIndex - 1]?.id || '');
+  // Locking is handled by the roadmap's activeNodeIndex; no need to double-check here
+  const isLocked = false;
 
   const [questions, setQuestions] = useState<Question[]>([]);
   const totalQuestions = questions.length;
@@ -684,7 +684,11 @@ const LessonScreen: React.FC<Props> = ({ navigation, route }) => {
           // Sort remaining questions based on correctness to adapt difficulty
           remaining.sort((a, b) => {
              // Extract lesson number as difficulty proxy (e.g. e_lesson_5 -> 5)
-             const getDiff = (q: any) => parseInt((q as any).id?.match(/\d+/)?.pop() || '1') || 1;
+             const getDiff = (q: any) => {
+               if (!q || !q.id) return 1;
+               const m = q.id.match(/\d+/);
+               return m ? parseInt(m.pop() || '1') : 1;
+             };
              const diffA = getDiff(a);
              const diffB = getDiff(b);
              // If correct, put harder first. If wrong, put easier first.
@@ -1294,11 +1298,13 @@ const LessonScreen: React.FC<Props> = ({ navigation, route }) => {
                 if (currentQuestion.type === 'imageChoice') {
                   const imageSrc = currentQuestion.imageOptions?.[index] || '';
                   const isUrl = imageSrc.startsWith('http');
+                  const isThree = currentQuestion.options.length === 3;
+                  const dynamicWidth = isThree ? (width - 60) / 3 : undefined;
                   
                   return (
                     <TouchableOpacity
                       key={index}
-                      style={[styles.imageOptionBtn, btnStyle, !isUrl && { padding: 15, justifyContent: 'space-between' }]}
+                      style={[styles.imageOptionBtn, dynamicWidth ? { width: dynamicWidth } : {}, btnStyle, !isUrl && { padding: 15, justifyContent: 'space-between' }]}
                       onPress={() => { if (!isChecked) handleCheck(index); }}
                       disabled={isChecked}
                     >
@@ -1388,14 +1394,17 @@ const LessonScreen: React.FC<Props> = ({ navigation, route }) => {
                 handleCheck(); 
               } 
             }}
-            disabled={currentQuestion?.type === 'constructSentence' && selectedWords.length === 0 && !isChecked}
+            disabled={
+              (currentQuestion?.type === 'constructSentence' && selectedWords.length === 0 && !isChecked) ||
+              (currentQuestion?.type === 'speak' && !spokenText && !isChecked)
+            }
             activeOpacity={0.8}
           >
             <LinearGradient
               colors={
                 isChecked
                   ? (isCorrect ? [colors.primary, '#00B8CC'] : [colors.error, '#CC0044'])
-                  : (selectedWords.length > 0 || currentQuestion?.type === 'flashcard' ? [colors.primary, '#00B8CC'] : [colors.border, colors.border])
+                  : (selectedWords.length > 0 || currentQuestion?.type === 'flashcard' || (currentQuestion?.type === 'speak' && spokenText) ? [colors.primary, '#00B8CC'] : [colors.border, colors.border])
               }
               start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 1 }}
@@ -1404,7 +1413,7 @@ const LessonScreen: React.FC<Props> = ({ navigation, route }) => {
                 {
                   borderBottomColor: isChecked
                     ? (isCorrect ? '#00A3B5' : '#AA0033')
-                    : (selectedWords.length > 0 || currentQuestion?.type === 'flashcard' ? '#00A3B5' : 'rgba(0,0,0,0.1)'),
+                    : (selectedWords.length > 0 || currentQuestion?.type === 'flashcard' || (currentQuestion?.type === 'speak' && spokenText) ? '#00A3B5' : 'rgba(0,0,0,0.1)'),
                 },
               ]}
             >

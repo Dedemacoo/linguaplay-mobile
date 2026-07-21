@@ -356,7 +356,7 @@ export const useProgressStore = create<ProgressState>((set, get) => ({
     return true;
   },
 
-  addXp: (amount: number, langKey: string) => {
+  addXp: (amount: number, langKey: string, skipSave = false) => {
     const prev = get().progress;
     const today = getTodayStr();
     const langData = prev.languages[langKey] || { ...defaultLangProgress };
@@ -381,6 +381,7 @@ export const useProgressStore = create<ProgressState>((set, get) => ({
 
     const newProgress = {
       ...prev,
+      leaguePoints: (prev.leaguePoints || 0) + amount, // Integrated league points update
       languages: {
         ...prev.languages,
         [langKey]: {
@@ -393,27 +394,28 @@ export const useProgressStore = create<ProgressState>((set, get) => ({
         }
       }
     };
-    set({ progress: newProgress });
-    get()._saveProgress(newProgress);
 
-    // Lig Puanını da XP ile birlikte güncelle
-    const uid = get().userUid;
-    if (uid) {
-      // XP eklendiğinde aynı miktarda Lig Puanı da ekliyoruz
-      get().addLeaguePoints(amount);
+    set({ progress: newProgress });
+    if (!skipSave) {
+      get()._saveProgress(newProgress);
+      const uid = get().userUid;
+      if (uid) {
+        LeagueService.updateWeeklyPoints(uid, '', '', newProgress.leaguePoints).catch(() => {});
+      }
     }
   },
 
   completeLesson: (lessonId: string, xpEarned: number, langKey: string) => {
     const prev = get().progress;
     const langData = prev.languages[langKey] || { ...defaultLangProgress };
+
     if (!(langData.completedLessons || []).includes(lessonId)) {
-      
       const newUnlockedMascots = [...(prev.unlockedMascots || ['classic'])];
       if (lessonId === 'e_boss_1' && !newUnlockedMascots.includes('professor')) {
         newUnlockedMascots.push('professor');
       }
 
+      // Update state internally but skip saving to avoid double/triple write
       const newProgress = {
         ...prev,
         gems: prev.gems + 5,
@@ -427,10 +429,12 @@ export const useProgressStore = create<ProgressState>((set, get) => ({
         }
       };
       set({ progress: newProgress });
-      get()._saveProgress(newProgress);
+      // Now call addXp which will handle the final state merge and save
+      get().addXp(xpEarned, langKey);
+    } else {
+      // Already completed, just add XP
+      get().addXp(xpEarned, langKey);
     }
-    // Then call addXp to handle xp logic and saving again
-    get().addXp(xpEarned, langKey);
   },
 
   trackMistake: (item: string, category: string, langKey: string) => {

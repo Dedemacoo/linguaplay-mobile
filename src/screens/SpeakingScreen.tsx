@@ -13,10 +13,7 @@ import * as Speech from 'expo-speech';
 import * as Haptics from 'expo-haptics';
 import { Mascot } from '../components/Mascot';
 
-const ExpoSpeechRecognitionModule = { requestPermissionsAsync: async () => ({ granted: true }), start: () => {}, stop: () => {} };
-const useSpeechRecognitionEvent = (e: any, cb: any) => {};
-
-
+import { ExpoSpeechRecognitionModule, useSpeechRecognitionEvent } from 'expo-speech-recognition';
 const { width } = Dimensions.get('window');
 
 const LANG_LABELS: Record<string, string> = {
@@ -133,20 +130,12 @@ const SpeakingScreen: React.FC<any> = ({ navigation }) => {
   const startRecording = async () => {
     if (!currentWord) return;
     
-    // EAS build veya web değilse ve dev modundaysak fallback:
-    if (__DEV__ && Platform.OS !== 'ios' && Platform.OS !== 'android') {
+    const hasPermission = await requestMicrophone();
+    if (!hasPermission) {
       simulatePronunciation();
       return;
     }
 
-    const hasPermission = await requestMicrophone();
-    if (!hasPermission) {
-      simulatePronunciation(); // Fallback
-      return;
-    }
-
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-    setTranscript('');
     try {
       ExpoSpeechRecognitionModule.start({
         lang: langCode,
@@ -154,7 +143,7 @@ const SpeakingScreen: React.FC<any> = ({ navigation }) => {
         maxAlternatives: 1,
       });
     } catch (e) {
-      console.log('STT start failed, falling back', e);
+      console.log('STT Error', e);
       simulatePronunciation();
     }
   };

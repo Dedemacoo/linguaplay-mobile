@@ -24,7 +24,7 @@
         "foregroundImage": "./assets/icon.png"
       },
       "predictiveBackGestureEnabled": false,
-      "package": "com.linguaplay.app",
+      "package": "com.linguaplay",
       "permissions": [
         "android.permission.RECORD_AUDIO",
         "android.permission.INTERNET"

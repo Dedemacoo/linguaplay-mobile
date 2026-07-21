@@ -1,0 +1,64 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Yardımcı fonksiyonlar
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    // Kullanıcı verileri: Okumaya herkes (login için username sorgusu), yazmaya sadece sahibi izinli
+    match /users/{userId} {
+      allow read: if true;
+      allow write: if isOwner(userId);
+
+      // Alt koleksiyonlar için (ör. oturumlar vs.) okuma/yazma sahibi için
+      match /{allPaths=**} {
+        allow read, write: if isOwner(userId);
+      }
+    }
+
+    // Kurs verileri: Herkes okuyabilir, kimse yazamaz (sadece admin)
+    match /courses/{courseId} {
+      allow read: if isSignedIn();
+      allow write: if false;
+    }
+
+    // Global içerikler
+    match /content/{contentId} {
+      allow read: if isSignedIn();
+      allow write: if false;
+    }
+
+    // Liderlik tablosu: Herkes okuyabilir, sadece sistem günceller
+    match /leaderboard/{document=**} {
+      allow read: if isSignedIn();
+      allow write: if false;
+    }
+
+    match /battles/{document=**} {
+      allow read, write: if isSignedIn();
+    }
+
+    match /chats/{document=**} {
+      allow read, write: if isSignedIn();
+    }
+
+    match /duelRequests/{document=**} {
+      allow read, write: if isSignedIn();
+    }
+
+    match /friendRequests/{document=**} {
+      allow read, write: if isSignedIn();
+    }
+
+    match /leagues/{document=**} {
+      allow read, write: if isSignedIn();
+    }
+  }
+}

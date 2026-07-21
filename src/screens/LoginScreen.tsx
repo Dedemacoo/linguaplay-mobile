@@ -20,13 +20,13 @@ const firebaseErrorToTurkish = (code: string): string => {
     case 'auth/wrong-password':
       return 'Şifre yanlış. Tekrar dene veya şifreni sıfırla.';
     case 'auth/invalid-credential':
-      return 'E-posta veya şifre hatalı. Lütfen kontrol et.';
+      return 'Bu bilgilere ait bir hesap bulunamadı veya şifre hatalı. Hesabın yoksa kayıt ol.';
     case 'auth/network-request-failed':
       return 'İnternet bağlantın yok. Lütfen kontrol et.';
     case 'auth/too-many-requests':
       return 'Çok fazla deneme yaptın. Biraz bekle ve tekrar dene.';
     default:
-      return 'Giriş başarısız. Lütfen tekrar dene.';
+      return `Giriş başarısız. Lütfen tekrar dene. (${code || 'Bilinmeyen Hata'})`;
   }
 };
 
@@ -116,6 +116,7 @@ const LoginScreen: React.FC<Props> = ({ navigation }) => {
             <Text style={[styles.forgotPasswordText, { color: colors.textLight }]}>Şifremi Unuttum</Text>
           </TouchableOpacity>
 
+{/* 
           <View style={{ flexDirection: 'row', alignItems: 'center', width: '100%', marginVertical: 20 }}>
             <View style={{ flex: 1, height: 1, backgroundColor: colors.border }} />
             <Text style={{ marginHorizontal: 10, color: colors.textLight, fontSize: 14 }}>Veya şununla devam et</Text>
@@ -140,6 +141,7 @@ const LoginScreen: React.FC<Props> = ({ navigation }) => {
             <Text style={{ fontSize: 24, marginRight: 10 }}>G</Text>
             <Text style={[styles.googleButtonText, { color: colors.text }]}>Google ile Giriş Yap</Text>
           </TouchableOpacity>
+*/}
 
           <TouchableOpacity 
             style={{ width: '100%', marginTop: 10 }}

@@ -92,7 +92,7 @@ const LeaderboardScreen: React.FC<any> = ({ navigation }) => {
   // --- LEAGUE TAB RENDER ---
   const renderLeagueTab = () => {
     const tier = (myLeagueData?.tier || 'rookie') as LeagueTier;
-    const cfg = LEAGUE_CONFIG[tier];
+    const cfg = LEAGUE_CONFIG[tier] || LEAGUE_CONFIG.rookie;
     const myRank = leagueBoard.findIndex(e => e.uid === user?.uid) + 1 || 0;
     const totalInLeague = leagueBoard.length;
     

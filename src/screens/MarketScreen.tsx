@@ -13,7 +13,7 @@ import { useProgressStore } from '../store/useProgressStore';
 const { width, height } = Dimensions.get('window');
 
 const TABS = [
-  { id: 'featured', label: 'Öne Çıkanlar', icon: '✨' },
+  { id: 'featured', label: 'Öne Çıkanlar', icon: '🔥' },
   { id: 'diamonds', label: 'Lingotlar', iconImage: require('../../assets/icons/lingo_coin.png') },
   { id: 'themes', label: 'Temalar', icon: '🎨' },
   { id: 'premium', label: 'Premium', icon: '👑' },
@@ -68,35 +68,70 @@ const APP_THEMES = [
 ];
 
 const FEATURED_ITEMS = [
-  { id: 'crimson', name: 'Kızıl Şafak Tema', oldPrice: 3500, price: 2500, type: 'AppTheme', rarity: 'Epic', image: '🔥', discount: '%28 İndirim' },
   { id: 'astronaut', name: 'Uzaylı Lingo', oldPrice: 3500, price: 2500, type: 'Outfit', rarity: 'Legendary', image: '👽', discount: '%28 İndirim' },
+  { id: 'cyberpunk', name: 'Siberpunk Tema', oldPrice: 3500, price: 2500, type: 'AppTheme', rarity: 'Legendary', image: '🤖', discount: '%28 İndirim' },
+  { id: 'd3', name: '500 Lingot Paketi', amount: 500, oldPrice: '₺120', price: '₺89.99', type: 'Currency', rarity: 'Epic', image: 'lingo_coin', discount: '%25 İndirim' },
 ];
 
 // Carousel Component
 const FeaturedCarousel = () => {
   const scrollX = useRef(new Animated.Value(0)).current;
+  const scrollViewRef = useRef<ScrollView>(null);
+  const currentIndex = useRef(0);
+
   const banners = [
-    { title: 'New Collection', sub: 'Cyberpunk 2026', color: ['#BF5AF2', '#5E1B8F'], icon: '🚀' },
-    { title: 'Premium Pass', sub: 'Unlock exclusive rewards', color: ['#FFD60A', '#B27900'], icon: '👑' },
-    { title: 'Double XP', sub: 'Weekend Event Active', color: ['#FF453A', '#8B0000'], icon: '⚡' },
+    { title: 'Astronot Lingo', sub: 'Kısa Süreli İndirim!', color: ['#1E1E2E', '#11111A'], icon: 'mascot', mascotId: 'astronaut', oldPrice: 1500, newPrice: 999 },
+    { title: 'Premium Pass', sub: 'Özel ödüllerin kilidini aç', color: ['#FFD60A', '#B27900'], icon: '👑' },
+    { title: '2x XP Etkinliği', sub: 'Hafta Sonu Aktif', color: ['#FF453A', '#8B0000'], icon: '⚡' },
   ];
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      currentIndex.current = (currentIndex.current + 1) % banners.length;
+      if (scrollViewRef.current) {
+        scrollViewRef.current.scrollTo({ x: currentIndex.current * width, animated: true });
+      }
+    }, 4000);
+    return () => clearInterval(timer);
+  }, []);
 
   return (
     <View style={styles.carouselWrap}>
       <ScrollView
+        ref={scrollViewRef}
         horizontal
         pagingEnabled
         showsHorizontalScrollIndicator={false}
         onScroll={Animated.event([{ nativeEvent: { contentOffset: { x: scrollX } } }], { useNativeDriver: false })}
+        onMomentumScrollEnd={(event) => {
+          currentIndex.current = Math.round(event.nativeEvent.contentOffset.x / width);
+        }}
         scrollEventThrottle={16}
       >
         {banners.map((b, i) => (
           <View key={i} style={styles.bannerItem}>
-            <LinearGradient colors={b.title === 'New Collection' ? ['#1E1E2E', '#11111A'] : b.color as any} style={[styles.bannerGradient, b.title === 'New Collection' && { borderWidth: 1, borderColor: 'rgba(255,255,255,0.1)' }]} start={{x:0, y:0}} end={{x:1, y:1}}>
-              <Text style={styles.bannerIcon}>{b.icon}</Text>
-              <View>
+            <LinearGradient colors={b.color as any} style={[styles.bannerGradient, b.icon === 'mascot' && { borderWidth: 1, borderColor: 'rgba(255,255,255,0.1)' }]} start={{x:0, y:0}} end={{x:1, y:1}}>
+              {b.icon === 'mascot' ? (
+                <View style={{ position: 'absolute', right: 5, bottom: -10 }}>
+                  <Mascot mascotId={b.mascotId} size={110} animated={false} />
+                </View>
+              ) : (
+                <Text style={styles.bannerIcon}>{b.icon}</Text>
+              )}
+              
+              <View style={{ maxWidth: '65%' }}>
                 <Text style={styles.bannerTitle}>{b.title}</Text>
                 <Text style={styles.bannerSub}>{b.sub}</Text>
+                
+                {b.oldPrice && b.newPrice && (
+                   <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 10, gap: 8 }}>
+                      <Text style={{ fontSize: 15, color: 'gray', textDecorationLine: 'line-through', fontWeight: 'bold' }}>{b.oldPrice}</Text>
+                      <View style={{ flexDirection: 'row', alignItems: 'center', backgroundColor: '#FF453A', paddingHorizontal: 10, paddingVertical: 4, borderRadius: 12 }}>
+                         <Image source={require('../../assets/icons/lingo_coin.png')} style={{ width: 14, height: 14, marginRight: 4 }} />
+                         <Text style={{ fontSize: 16, fontWeight: '900', color: '#FFF' }}>{b.newPrice}</Text>
+                      </View>
+                   </View>
+                )}
               </View>
             </LinearGradient>
           </View>
@@ -205,11 +240,13 @@ const MarketScreen = () => {
       const mysteryThemes = ['wizard', 'astronaut', 'royal', 'cyber'];
       const result = openMysteryBox(mysteryThemes);
       if (result.success) {
-        showSuccessConfetti('Sürpriz Kutu Açıldı!');
         if (result.type === 'theme') {
+          showSuccessConfetti('Sürpriz Kutu Açıldı!');
           setTimeout(() => Alert.alert('🎉 Tebrikler!', `Sürpriz kutudan yeni bir tema kazandın!`), 1000);
         } else {
-          setTimeout(() => Alert.alert('🎁 Sürpriz Kutu!', `Kutudan tema çıkmadı ama teselli ödülü olarak ${result.refundAmount} Lingot kazandın. Yeni temayı almak için açmaya devam et!`), 1000);
+          setPurchaseModalVisible(false);
+          Haptics.notificationAsync(Haptics.NotificationFeedbackType.Warning);
+          Alert.alert('🎁 Sürpriz Kutu!', `Kutudan tema çıkmadı ama teselli ödülü olarak ${result.refundAmount} Lingot kazandın. Şansını tekrar dene!`);
         }
       } else {
         showError('Yetersiz Lingot', result.error || 'Lingotunuz yetersiz.');
@@ -295,7 +332,7 @@ const MarketScreen = () => {
             <Text style={styles.outfitName}>{item.name}</Text>
             <Text style={[styles.outfitRarity, { color: isOwned ? '#4CAF50' : glow[0] }]}>{isOwned ? 'Sende Var' : item.rarity}</Text>
             <View style={[styles.priceRow, isOwned && { backgroundColor: '#2E7D32', paddingHorizontal: 10, borderRadius: 10, marginTop: 4 }]}>
-              {!isOwned && <Text style={{ fontSize: 12 }}>💎</Text>}
+              {!isOwned && <Image source={require('../../assets/icons/lingo_coin.png')} style={{ width: 14, height: 14, marginRight: 4 }} />}
               <Text style={[styles.priceText, isOwned && { color: 'white', fontSize: 14 }]}>{isOwned ? 'Koleksiyonda' : item.price}</Text>
             </View>
           </TouchableOpacity>
@@ -406,7 +443,7 @@ const MarketScreen = () => {
             <Text style={styles.outfitName}>{item.name}</Text>
             <Text style={[styles.outfitRarity, { color: isOwned ? '#4CAF50' : glow[0] }]}>{isOwned ? 'Sende Var' : item.rarity}</Text>
             <View style={[styles.priceRow, isOwned && { backgroundColor: '#2E7D32', paddingHorizontal: 10, borderRadius: 10, marginTop: 4 }]}>
-              {!isOwned && <Text style={{ fontSize: 12 }}>💎</Text>}
+              {!isOwned && <Image source={require('../../assets/icons/lingo_coin.png')} style={{ width: 14, height: 14, marginRight: 4 }} />}
               <Text style={[styles.priceText, isOwned && { color: 'white', fontSize: 14 }]}>{isOwned ? 'Koleksiyonda' : item.price}</Text>
             </View>
           </TouchableOpacity>
@@ -422,7 +459,9 @@ const MarketScreen = () => {
         {FEATURED_ITEMS.map(item => {
           const isOwned = item.type === 'AppTheme' 
             ? (progress.unlockedThemes || []).includes(item.id) 
-            : progress.unlockedMascots.includes(item.id);
+            : item.type === 'Outfit'
+              ? progress.unlockedMascots.includes(item.id)
+              : false;
 
           return (
             <TouchableOpacity 
@@ -431,7 +470,11 @@ const MarketScreen = () => {
               onPress={() => !isOwned && handleOpenPurchase(item)}
               activeOpacity={isOwned ? 1 : 0.7}
             >
-              <Text style={styles.limitedIcon}>{item.image}</Text>
+              {item.image === 'lingo_coin' ? (
+                <Image source={require('../../assets/icons/lingo_coin.png')} style={{ width: 50, height: 50, marginBottom: 10 }} />
+              ) : (
+                <Text style={styles.limitedIcon}>{item.image}</Text>
+              )}
               <Text style={styles.limitedName}>{item.name}</Text>
               
               <View style={styles.qtyBadge}>
@@ -439,12 +482,15 @@ const MarketScreen = () => {
               </View>
               
               <View style={[styles.priceRow, { marginTop: 10, backgroundColor: isOwned ? '#2E7D32' : 'rgba(0,0,0,0.5)' }]}>
-                {!isOwned && <Text style={{ fontSize: 14 }}>💎</Text>}
+                {!isOwned && item.type !== 'Currency' && <Image source={require('../../assets/icons/lingo_coin.png')} style={{ width: 16, height: 16, marginRight: 4 }} />}
                 <Text style={[styles.priceText, { fontSize: 16, color: isOwned ? 'white' : '#FFF' }]}>{isOwned ? 'Sahipsin' : item.price}</Text>
               </View>
               
               {!isOwned && (
-                <Text style={{ fontSize: 12, color: 'gray', textDecorationLine: 'line-through', marginTop: 4 }}>💎 {item.oldPrice}</Text>
+                <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 4 }}>
+                  {item.type !== 'Currency' && <Image source={require('../../assets/icons/lingo_coin.png')} style={{ width: 12, height: 12, marginRight: 4, opacity: 0.5 }} />}
+                  <Text style={{ fontSize: 12, color: 'gray', textDecorationLine: 'line-through' }}>{item.oldPrice}</Text>
+                </View>
               )}
             </TouchableOpacity>
           );

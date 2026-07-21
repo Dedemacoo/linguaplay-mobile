@@ -74,21 +74,6 @@ const PremiumScreen = () => {
     setLoading(false);
   };
 
-  if (progress.isPremium) {
-    return (
-      <SafeAreaView style={[styles.container, { backgroundColor: '#1A1A1A' }]}>
-        <TouchableOpacity style={styles.closeBtn} onPress={() => (navigation as any).goBack()}>
-          <Text style={{ color: '#FFF', fontSize: 24 }}>✕</Text>
-        </TouchableOpacity>
-        <View style={styles.premiumActive}>
-          <Text style={{ fontSize: 80 }}>👑</Text>
-          <Text style={styles.activeTitle}>Premium Aktif!</Text>
-          <Text style={styles.activeSub}>Tüm özelliklerden yararlanıyorsun.</Text>
-        </View>
-      </SafeAreaView>
-    );
-  }
-
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: '#1A1A1A' }]}>
       <ScrollView contentContainerStyle={styles.scroll} showsVerticalScrollIndicator={false}>
@@ -100,8 +85,8 @@ const PremiumScreen = () => {
 
         <View style={styles.heroSection}>
           <Text style={styles.crown}>👑</Text>
-          <Text style={styles.title}>LinguaPlay Premium</Text>
-          <Text style={styles.subtitle}>Sınırları kaldır, daha hızlı öğren</Text>
+          <Text style={styles.title}>{progress.isPremium ? 'Premium Aktif!' : 'LinguaPlay Premium'}</Text>
+          <Text style={styles.subtitle}>{progress.isPremium ? 'Tüm özelliklerden yararlanıyorsun.' : 'Sınırları kaldır, daha hızlı öğren'}</Text>
         </View>
 
         {/* Features */}
@@ -123,58 +108,62 @@ const PremiumScreen = () => {
           ))}
         </View>
 
-        {/* Plans */}
-        <View style={styles.plans}>
-          {SUBSCRIPTION_PLANS.map(plan => (
-            <TouchableOpacity
-              key={plan.id}
-              style={[
-                styles.planCard,
-                selectedPlan === plan.id && { borderColor: plan.color, borderWidth: 2.5 },
-              ]}
-              onPress={() => {
-                Haptics.selectionAsync();
-                setSelectedPlan(plan.id);
-              }}
-              activeOpacity={0.85}
-            >
-              {plan.badge && (
-                <View style={[styles.badge, { backgroundColor: plan.color }]}>
-                  <Text style={styles.badgeText}>{plan.badge}</Text>
-                </View>
-              )}
-              <Text style={styles.planTitle}>{plan.title}</Text>
-              <Text style={[styles.planPrice, { color: plan.color }]}>
-                {plan.price}
-                <Text style={styles.planPeriod}>{plan.period}</Text>
+        {!progress.isPremium && (
+          <>
+            {/* Plans */}
+            <View style={styles.plans}>
+              {SUBSCRIPTION_PLANS.map(plan => (
+                <TouchableOpacity
+                  key={plan.id}
+                  style={[
+                    styles.planCard,
+                    selectedPlan === plan.id && { borderColor: plan.color, borderWidth: 2.5 },
+                  ]}
+                  onPress={() => {
+                    Haptics.selectionAsync();
+                    setSelectedPlan(plan.id);
+                  }}
+                  activeOpacity={0.85}
+                >
+                  {plan.badge && (
+                    <View style={[styles.badge, { backgroundColor: plan.color }]}>
+                      <Text style={styles.badgeText}>{plan.badge}</Text>
+                    </View>
+                  )}
+                  <Text style={styles.planTitle}>{plan.title}</Text>
+                  <Text style={[styles.planPrice, { color: plan.color }]}>
+                    {plan.price}
+                    <Text style={styles.planPeriod}>{plan.period}</Text>
+                  </Text>
+                </TouchableOpacity>
+              ))}
+            </View>
+
+            {/* Buy Button */}
+            <View style={styles.footer}>
+              <TouchableOpacity
+                style={[styles.buyBtn, loading && { opacity: 0.7 }]}
+                onPress={handlePurchase}
+                disabled={loading}
+                activeOpacity={0.85}
+              >
+                {loading ? (
+                  <ActivityIndicator color="#000" />
+                ) : (
+                  <Text style={styles.buyBtnText}>SATIN AL</Text>
+                )}
+              </TouchableOpacity>
+
+              <TouchableOpacity onPress={handleRestore} style={styles.restoreBtn}>
+                <Text style={styles.restoreText}>Satın almaları geri yükle</Text>
+              </TouchableOpacity>
+
+              <Text style={styles.legalText}>
+                Abonelik her dönemde otomatik yenilenir. İstediğin zaman iptal edebilirsin.
               </Text>
-            </TouchableOpacity>
-          ))}
-        </View>
-
-        {/* Buy Button */}
-        <View style={styles.footer}>
-          <TouchableOpacity
-            style={[styles.buyBtn, loading && { opacity: 0.7 }]}
-            onPress={handlePurchase}
-            disabled={loading}
-            activeOpacity={0.85}
-          >
-            {loading ? (
-              <ActivityIndicator color="#000" />
-            ) : (
-              <Text style={styles.buyBtnText}>SATIN AL</Text>
-            )}
-          </TouchableOpacity>
-
-          <TouchableOpacity onPress={handleRestore} style={styles.restoreBtn}>
-            <Text style={styles.restoreText}>Satın almaları geri yükle</Text>
-          </TouchableOpacity>
-
-          <Text style={styles.legalText}>
-            Abonelik her dönemde otomatik yenilenir. İstediğin zaman iptal edebilirsin.
-          </Text>
-        </View>
+            </View>
+          </>
+        )}
       </ScrollView>
     </SafeAreaView>
   );

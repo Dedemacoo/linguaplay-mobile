@@ -29,7 +29,7 @@ interface AuthContextType {
   isLoading: boolean;
   is2FAVerified: boolean;
   login: (emailOrUsername: string, pass: string) => Promise<{ requires2FA: boolean }>;
-  register: (email: string, pass: string, name: string, username: string, avatar: string) => Promise<void>;
+  register: (email: string, pass: string, name: string, username: string, avatar: string, gender: string) => Promise<void>;
   logout: () => Promise<void>;
   deleteAccount: () => Promise<void>;
   resetPassword: (email: string) => Promise<void>;
@@ -151,7 +151,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     return { requires2FA };
   };
 
-  const register = async (email: string, pass: string, name: string, username: string, avatar: string) => {
+  const register = async (email: string, pass: string, name: string, username: string, avatar: string, gender: string) => {
     const trimmedUsername = username.trim().toLowerCase();
 
     const q = query(collection(db, 'users'), where('username', '==', trimmedUsername));
@@ -172,6 +172,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         email,
         username: trimmedUsername,
         avatar,
+        gender,
         xp: 0,
         streak: 0,
         league: 'Bronze',
@@ -213,15 +214,27 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const deleteAccount = async () => {
     if (!auth.currentUser) return;
+    const uid = auth.currentUser.uid;
     
     const sessionId = await AsyncStorage.getItem(SESSION_ID_KEY);
     if (sessionId) {
-      await deleteDoc(doc(db, 'users', auth.currentUser.uid, 'sessions', sessionId)).catch(() => {});
+      await deleteDoc(doc(db, 'users', uid, 'sessions', sessionId)).catch(() => {});
     }
     
+    // YENİ: Firestore'daki asıl kullanıcı dokümanını da sil
+    await deleteDoc(doc(db, 'users', uid)).catch(() => {});
+    
     await deleteUser(auth.currentUser);
+    
+    // YENİ: AsyncStorage'ı tamamen temizle ki eski veriler geri gelmesin
+    const keysToKeep = ['@has_seen_onboarding']; // Sadece onboarding'i tekrar göstermemek için tutabiliriz
+    try {
+       const allKeys = await AsyncStorage.getAllKeys();
+       const keysToRemove = allKeys.filter(k => !keysToKeep.includes(k));
+       await AsyncStorage.multiRemove(keysToRemove);
+    } catch (e) {}
+    
     await AsyncStorage.setItem(MANUAL_LOGOUT_KEY, 'true');
-    await AsyncStorage.removeItem(TWO_FA_PASSED_KEY);
     setUser(null);
   };
 
