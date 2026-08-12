@@ -16,6 +16,7 @@ import { useProgressStore } from '../store/useProgressStore';
 import { Question, LessonContent } from '../data/lessonContent';
 import SoundManager from '../utils/SoundManager';
 import { advancedQuestions } from '../data/advancedPlacement';
+import { AdService } from '../services/AdService';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Lesson'>;
 
@@ -586,12 +587,8 @@ const LessonScreen: React.FC<Props> = ({ navigation, route }) => {
       if (!isPlacementTest) {
         setEarnedXp(prev => prev + comboBonus);
         
-        // 4 Doğru seri yapınca +1 Can!
         if (newCombo > 0 && newCombo % 4 === 0) {
-          gainHeart();
-          setHearts(prev => Math.min(20, prev + 1));
-          // Gösterişli bildirim veya Mascot pop-up yapabiliriz ama şimdilik alert/toast yerine triggerAchievement kullanabiliriz:
-          triggerAchievement("4 Doğru Seri! +1 Can ❤️");
+          triggerAchievement("Harika gidiyorsun! Ateş ediyorsun! 🔥");
         }
       }
 
@@ -1089,6 +1086,19 @@ const LessonScreen: React.FC<Props> = ({ navigation, route }) => {
               }}
             >
               <Text style={[styles.modalBtnOutlineText, { color: colors.textLight }]}>Dersi Kapat</Text>
+            </TouchableOpacity>
+            
+            <TouchableOpacity
+              style={[styles.modalBtnOutline, { borderColor: colors.primary, marginTop: 10 }]}
+              onPress={() => {
+                AdService.showRewarded(() => {
+                  setHearts(prev => prev + 1);
+                  setShowHeartModal(false);
+                  Alert.alert('Tebrikler!', '1 Can kazandın, derse devam edebilirsin!');
+                }, () => {});
+              }}
+            >
+              <Text style={[styles.modalBtnOutlineText, { color: colors.primary }]}>📺 Reklam İzle (1 Can)</Text>
             </TouchableOpacity>
           </View>
         </View>

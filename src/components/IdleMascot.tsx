@@ -7,12 +7,19 @@ import { useThemeColors } from '../theme/colors';
 const { width } = Dimensions.get('window');
 const IDLE_TIMEOUT = 20000; // 20 seconds
 
+export let setIdleMascotEnabled = (enabled: boolean) => {};
+
 export const IdleMascot: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const colors = useThemeColors();
   const isIdleRef = useRef(false);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
   const insets = useSafeAreaInsets();
   const slideAnim = useRef(new Animated.Value(-200)).current;
+  const [isEnabled, setIsEnabled] = useState(true);
+
+  useEffect(() => {
+    setIdleMascotEnabled = setIsEnabled;
+  }, []);
 
   const resetTimer = () => {
     if (isIdleRef.current) {
@@ -24,6 +31,7 @@ export const IdleMascot: React.FC<{ children: React.ReactNode }> = ({ children }
         useNativeDriver: true,
       }).start();
     }
+
     
     if (timerRef.current) {
       clearTimeout(timerRef.current);
@@ -47,14 +55,25 @@ export const IdleMascot: React.FC<{ children: React.ReactNode }> = ({ children }
   }, [insets.top]);
 
   const handleTouch = () => {
-    resetTimer();
+    if (isEnabled) resetTimer();
     return false;
   };
+
+  useEffect(() => {
+    if (!isEnabled) {
+      if (timerRef.current) clearTimeout(timerRef.current);
+      Animated.timing(slideAnim, { toValue: -200, duration: 500, useNativeDriver: true }).start();
+      isIdleRef.current = false;
+    } else {
+      resetTimer();
+    }
+  }, [isEnabled]);
 
   return (
     <View style={styles.container} onStartShouldSetResponderCapture={handleTouch}>
       {children}
       
+      {isEnabled && (
       <Animated.View style={[styles.mascotContainer, { transform: [{ translateY: slideAnim }] }]} pointerEvents="box-none">
         <View style={styles.content}>
           <LottieView
@@ -69,6 +88,7 @@ export const IdleMascot: React.FC<{ children: React.ReactNode }> = ({ children }
           </View>
         </View>
       </Animated.View>
+      )}
     </View>
   );
 };

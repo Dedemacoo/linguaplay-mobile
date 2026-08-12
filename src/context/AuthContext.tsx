@@ -114,6 +114,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     
     // Sign in to Firebase
     const cred = await signInWithEmailAndPassword(auth, actualEmail, pass);
+
+    // E-posta doğrulama kontrolü
+    if (!cred.user.emailVerified) {
+      await auth.signOut(); // Hemen çıkış yap
+      throw { code: 'auth/email-not-verified' };
+    }
     
     let requires2FA = false;
     // Check 2FA

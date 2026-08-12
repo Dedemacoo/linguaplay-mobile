@@ -13,6 +13,8 @@ const firebaseErrorToTurkish = (code: string): string => {
   switch (code) {
     case 'auth/invalid-email':
       return 'Geçersiz e-posta adresi. Lütfen kontrol et.';
+    case 'auth/email-not-verified':
+      return 'Giriş yapmak için e-posta adresinizi doğrulamanız gerekmektedir. Lütfen gelen kutunuzu kontrol edin.';
     case 'auth/user-disabled':
       return 'Bu hesap devre dışı bırakılmış.';
     case 'auth/user-not-found':

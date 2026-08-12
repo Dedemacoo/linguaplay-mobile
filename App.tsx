@@ -8,6 +8,7 @@ import { ThemeProvider } from './src/context/ThemeContext';
 import SoundManager from './src/utils/SoundManager';
 import { NotificationService } from './src/services/NotificationService';
 import { IdleMascot } from './src/components/IdleMascot';
+import RevenueCatService from './src/services/RevenueCatService';
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -17,6 +18,9 @@ export default function App() {
 
   useEffect(() => {
     SoundManager.init();
+    
+    // RevenueCat Setup (In-App Purchases)
+    RevenueCatService.setup();
     
     // Refresh notifications to push back the "absence" nudges
     const refreshNotifications = async () => {

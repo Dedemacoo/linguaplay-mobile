@@ -89,6 +89,10 @@ export const ProfileScreen = () => {
     { key: 'japanese', label: 'Japonca', flag: '🇯🇵' },
     { key: 'korean', label: 'Korece', flag: '🇰🇷' },
     { key: 'arabic', label: 'Arapça', flag: '🇸🇦' },
+    { key: 'russian', label: 'Rusça', flag: '🇷🇺' },
+    { key: 'chinese', label: 'Çince', flag: '🇨🇳' },
+    { key: 'portuguese', label: 'Portekizce', flag: '🇵🇹' },
+    { key: 'dutch', label: 'Felemenkçe', flag: '🇳🇱' },
   ] as const;
 
   const renderLangCard = (lang: typeof allLanguages[number]) => {
@@ -110,7 +114,11 @@ export const ProfileScreen = () => {
         }}
         activeOpacity={0.7}
       >
-        <Text style={styles.langCardFlag}>{lang.flag}</Text>
+        {lang.key === 'kurdish' ? (
+          <Image source={require('../../assets/icons/kurdish_flag.png')} style={{ width: 44, height: 32, marginBottom: 8, borderRadius: 4 }} />
+        ) : (
+          <Text style={styles.langCardFlag}>{lang.flag}</Text>
+        )}
         <Text style={[styles.langCardName, isActive && { color: colors.primary }]}>{lang.label}</Text>
         <Text style={styles.langCardStats}>Sv. {langProg.level} • {langProg.totalXp} XP</Text>
         <View style={styles.langCardProgressBg}>

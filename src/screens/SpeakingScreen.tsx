@@ -13,7 +13,9 @@ import * as Speech from 'expo-speech';
 import * as Haptics from 'expo-haptics';
 import { Mascot } from '../components/Mascot';
 
-import { ExpoSpeechRecognitionModule, useSpeechRecognitionEvent } from 'expo-speech-recognition';
+// Speech Recognition disabled for Expo Go compatibility
+const ExpoSpeechRecognitionModule: any = { requestPermissionsAsync: async () => ({ granted: false }), start: () => {}, stop: () => {} };
+const useSpeechRecognitionEvent: any = (_e: string, _cb: any) => {};
 const { width } = Dimensions.get('window');
 
 const LANG_LABELS: Record<string, string> = {

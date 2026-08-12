@@ -9,6 +9,7 @@ import * as Haptics from 'expo-haptics';
 import { MASCOTS } from '../data/MascotData';
 import { Mascot } from '../components/Mascot';
 import { useProgressStore } from '../store/useProgressStore';
+import RevenueCatService from '../services/RevenueCatService';
 
 const { width, height } = Dimensions.get('window');
 
@@ -231,11 +232,37 @@ const MarketScreen = () => {
         showError('Yetersiz Lingot', 'Bu temayı satın almak için yeterli Lingotunuz yok.');
       }
     } else if (selectedItem?.type === 'Currency') {
-      addGems(selectedItem.amount);
-      showSuccessConfetti(`${selectedItem.amount} Lingot hesabına eklendi!`);
+      // REVENUECAT INTEGRATION
+      try {
+        // const packages = await RevenueCatService.getPackages();
+        // const packToBuy = packages.find(p => p.identifier === selectedItem.rcIdentifier);
+        // if (packToBuy) {
+        //   const success = await RevenueCatService.purchasePackage(packToBuy);
+        //   if (success) { addGems(selectedItem.amount); showSuccessConfetti(...); }
+        // }
+
+        // Fallback / Sandbox Test Logic:
+        addGems(selectedItem.amount);
+        showSuccessConfetti(`${selectedItem.amount} Lingot hesabına eklendi!`);
+      } catch (e) {
+        showError('Hata', 'Satın alma işlemi başarısız oldu.');
+      }
     } else if (selectedItem?.type === 'Subscription') {
-      await setPremium(true);
-      showSuccessConfetti('Premium üyeliğe hoş geldin!');
+      // REVENUECAT INTEGRATION
+      try {
+        // const packages = await RevenueCatService.getPackages();
+        // const packToBuy = packages.find(p => p.identifier === selectedItem.rcIdentifier);
+        // if (packToBuy) {
+        //   const success = await RevenueCatService.purchasePackage(packToBuy);
+        //   if (success) { await setPremium(true); showSuccessConfetti(...); }
+        // }
+
+        // Fallback / Sandbox Test Logic:
+        await setPremium(true);
+        showSuccessConfetti('Premium Üyeliğe hoş geldin!');
+      } catch (e) {
+        showError('Hata', 'Abonelik işlemi başarısız oldu.');
+      }
     } else if (selectedItem?.type === 'Mystery Box') {
       const mysteryThemes = ['wizard', 'astronaut', 'royal', 'cyber'];
       const result = openMysteryBox(mysteryThemes);

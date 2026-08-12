@@ -1,5 +1,5 @@
 import React, { useRef, useEffect } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Animated } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Animated, Image } from 'react-native';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import * as Haptics from 'expo-haptics';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
@@ -33,12 +33,20 @@ const LanguageSelectionScreen: React.FC<Props> = ({ navigation }) => {
 
   const getFlagEmoji = (langKey: string) => {
     switch (langKey) {
-      case 'english': return '🇺🇸';
+      case 'kurdish': return '☀️';
+      case 'english': return '🇬🇧';
       case 'spanish': return '🇪🇸';
-      case 'turkish': return '🇹🇷';
-      case 'kurdish': return '☀️'; // Generic representation for Kurdish since no official flag emoji
-      case 'german': return '🇩🇪';
       case 'french': return '🇫🇷';
+      case 'german': return '🇩🇪';
+      case 'italian': return '🇮🇹';
+      case 'turkish': return '🇹🇷';
+      case 'japanese': return '🇯🇵';
+      case 'korean': return '🇰🇷';
+      case 'arabic': return '🇸🇦';
+      case 'russian': return '🇷🇺';
+      case 'chinese': return '🇨🇳';
+      case 'portuguese': return '🇵🇹';
+      case 'dutch': return '🇳🇱';
       default: return '🌍';
     }
   };
@@ -64,7 +72,11 @@ const LanguageSelectionScreen: React.FC<Props> = ({ navigation }) => {
                 onPress={() => handleSelectLanguage(langKey)}
                 activeOpacity={0.8}
               >
-                <Text style={styles.flagEmoji}>{getFlagEmoji(langKey)}</Text>
+                {langKey === 'kurdish' ? (
+                  <Image source={require('../../assets/icons/kurdish_flag.png')} style={{ width: 44, height: 32, marginRight: 16, borderRadius: 4 }} />
+                ) : (
+                  <Text style={styles.flagEmoji}>{getFlagEmoji(langKey)}</Text>
+                )}
                 <View style={styles.langInfo}>
                   <Text style={[styles.langTitle, { color: colors.text }]}>{lang.title}</Text>
                   <Text style={[styles.langDesc, { color: colors.textLight }]}>{lang.description}</Text>
