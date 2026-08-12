@@ -1,4 +1,4 @@
-﻿import { db, auth } from '../config/firebase';
+import { db, auth } from '../config/firebase';
 import { collection, doc, setDoc, getDoc, updateDoc, onSnapshot, query, where, getDocs, limit, deleteDoc, serverTimestamp, increment } from 'firebase/firestore';
 
 export type BattleStatus = 'waiting' | 'playing' | 'finished';
@@ -131,5 +131,20 @@ export class BattleService {
    */
   static async finishBattle(battleId: string) {
     await updateDoc(doc(db, 'battles', battleId), { status: 'finished' });
+  }
+
+  /**
+   * Cancel a waiting match (cleanup)
+   */
+  static async cancelMatch(battleId: string) {
+    try {
+      const docRef = doc(db, 'battles', battleId);
+      const checkDoc = await getDoc(docRef);
+      if (checkDoc.exists() && checkDoc.data()?.status === 'waiting') {
+        await deleteDoc(docRef);
+      }
+    } catch (e) {
+      console.error('Cancel match error:', e);
+    }
   }
 }

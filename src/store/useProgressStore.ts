@@ -1,8 +1,6 @@
 import { create } from 'zustand';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
-import { db } from '../config/firebase';
-import NetInfo from '@react-native-community/netinfo';
+import { ProgressService } from '../services/ProgressService';
 import { LeagueService } from '../services/LeagueService';
 
 const STORAGE_KEY = '@linguaplay_progress_v3';
@@ -70,7 +68,7 @@ const defaultLangProgress: LanguageProgress = {
 };
 
 const defaultProgress: UserProgress = {
-  hearts: 20,
+  hearts: 5,
   gems: 150,
   avatar: '👤',
   lastHeartRefill: new Date().toISOString(),
@@ -141,14 +139,7 @@ export const useProgressStore = create<ProgressState>((set, get) => ({
       await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(newProgress));
       const uid = get().userUid;
       if (uid) {
-        const netState = await NetInfo.fetch();
-        if (netState.isConnected) {
-          const docRef = doc(db, 'users', uid);
-          await setDoc(docRef, { progress: newProgress }, { merge: true });
-        } else {
-          await AsyncStorage.setItem('@offline_progress_queue', JSON.stringify(newProgress));
-          console.log('[ProgressStore] Queued progress for offline sync');
-        }
+        await ProgressService.saveProgress(uid, newProgress);
       }
     } catch (e) {
       console.log('Failed to save progress:', e);
@@ -162,6 +153,8 @@ export const useProgressStore = create<ProgressState>((set, get) => ({
 
       if (uid) {
         try {
+          const { db } = require('../config/firebase');
+          const { doc, getDoc } = require('firebase/firestore');
           const docRef = doc(db, 'users', uid);
           const docSnap = await getDoc(docRef);
           if (docSnap.exists() && docSnap.data().progress) {
@@ -180,11 +173,11 @@ export const useProgressStore = create<ProgressState>((set, get) => ({
       if (parsed !== null) {
         const today = getTodayStr();
         // Auto-refill hearts
-        if (parsed.hearts < 20) {
+        if (parsed.hearts < 5) {
           const lastRefill = new Date(parsed.lastHeartRefill);
           const now = new Date();
           const hoursDiff = (now.getTime() - lastRefill.getTime()) / (1000 * 60 * 60);
-          const heartsToAdd = Math.min(20, parsed.hearts + Math.floor(hoursDiff / 5));
+          const heartsToAdd = Math.min(5, parsed.hearts + Math.floor(hoursDiff / 4)); // 1 heart every 4 hours
           if (heartsToAdd > parsed.hearts) {
             parsed.hearts = heartsToAdd;
             parsed.lastHeartRefill = now.toISOString();
@@ -233,21 +226,7 @@ export const useProgressStore = create<ProgressState>((set, get) => ({
 
     // Process offline queue if we have network and user
     if (uid) {
-      const netState = await NetInfo.fetch();
-      if (netState.isConnected) {
-        try {
-          const q = await AsyncStorage.getItem('@offline_progress_queue');
-          if (q) {
-            const queuedProgress = JSON.parse(q);
-            const docRef = doc(db, 'users', uid);
-            await setDoc(docRef, { progress: queuedProgress }, { merge: true });
-            await AsyncStorage.removeItem('@offline_progress_queue');
-            console.log('[ProgressStore] Offline progress synced to Firebase');
-          }
-        } catch (e) {
-          console.log('Failed to process offline queue', e);
-        }
-      }
+      await ProgressService.syncOfflineProgress(uid);
     }
   },
 
@@ -623,6 +602,8 @@ export const useProgressStore = create<ProgressState>((set, get) => ({
     const uid = get().userUid;
     if (uid) {
       try {
+        const { db } = require('../config/firebase');
+        const { doc, updateDoc } = require('firebase/firestore');
         await updateDoc(doc(db, 'users', uid), { isPremium: value });
       } catch (e) {
         console.log('Could not sync premium status to Firestore', e);

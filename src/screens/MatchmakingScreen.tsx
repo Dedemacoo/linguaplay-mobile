@@ -10,6 +10,9 @@ import { useLanguageStore } from '../store/useLanguageStore';
 import { ContentService } from '../services/ContentService';
 import { Mascot } from '../components/Mascot';
 import { useThemeColors } from '../theme/colors';
+import { useProgressStore } from '../store/useProgressStore';
+import { Alert } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Matchmaking'>;
 
@@ -18,16 +21,55 @@ export const MatchmakingScreen: React.FC<Props> = ({ navigation }) => {
   const styles = React.useMemo(() => getStyles(colors), [colors]);
   const { user } = useAuth();
   const { activeLanguage } = useLanguageStore();
+  const { progress } = useProgressStore();
   
   const [statusText, setStatusText] = useState('Rakip Aranıyor...');
   const [isCanceled, setIsCanceled] = useState(false);
   const [matchFailed, setMatchFailed] = useState(false);
+  const activeBattleId = React.useRef<string | null>(null);
 
   useEffect(() => {
     let mounted = true;
 
     const startMatchmaking = async () => {
       if (!user) return;
+      
+      if (!progress.isPremium) {
+        const today = new Date().toISOString().split('T')[0];
+        const key = `@quiz_battle_usage_${today}`;
+        const usedStr = await AsyncStorage.getItem(key);
+        const used = usedStr ? parseInt(usedStr, 10) : 0;
+        if (used >= 3) {
+          Alert.alert(
+            'Günlük Limit Doldu',
+            'Bugünlük ücretsiz savaş hakkınız bitti. Sınırsız savaş için Premium\'a geçebilir veya haklarınızı yenilemek için 2 reklam izleyebilirsiniz.',
+            [
+              { text: 'Vazgeç', style: 'cancel', onPress: () => navigation.goBack() },
+              { text: 'Reklam İzle (Hak Sıfırla)', onPress: () => {
+                  import('../services/AdService').then(({ AdService }) => {
+                    AdService.showRewarded(async () => {
+                      const adKey = `@quiz_ad_reset_${today}`;
+                      const cStr = await AsyncStorage.getItem(adKey);
+                      let c = cStr ? parseInt(cStr, 10) : 0;
+                      c += 1;
+                      if (c >= 2) {
+                        await AsyncStorage.setItem(key, '0');
+                        await AsyncStorage.setItem(adKey, '0');
+                        Alert.alert('Tebrikler!', 'Savaş hakkınız sıfırlandı, yeniden eşleşme arayabilirsiniz!', [{ text: 'Tamam', onPress: () => navigation.goBack() }]);
+                      } else {
+                        await AsyncStorage.setItem(adKey, c.toString());
+                        Alert.alert('Harika!', `Sıfırlama için son ${2 - c} reklam kaldı. Yeniden tıklayınız.`, [{ text: 'Tamam', onPress: () => navigation.goBack() }]);
+                      }
+                    }, () => navigation.goBack());
+                  });
+              }},
+              { text: 'Premium\'a Geç', onPress: () => { navigation.goBack(); navigation.navigate('Premium' as never); } }
+            ]
+          );
+          return;
+        }
+        await AsyncStorage.setItem(key, (used + 1).toString());
+      }
       
       try {
         const lessons = await ContentService.getAllLessonsData(activeLanguage);
@@ -57,6 +99,8 @@ export const MatchmakingScreen: React.FC<Props> = ({ navigation }) => {
             }
           }
         );
+        
+        activeBattleId.current = battleId;
 
       } catch (e) {
         console.error('Matchmaking error:', e);
@@ -72,6 +116,9 @@ export const MatchmakingScreen: React.FC<Props> = ({ navigation }) => {
     return () => {
       mounted = false;
       setIsCanceled(true);
+      if (activeBattleId.current) {
+        BattleService.cancelMatch(activeBattleId.current);
+      }
     };
   }, []);
 
@@ -94,6 +141,9 @@ export const MatchmakingScreen: React.FC<Props> = ({ navigation }) => {
           style={styles.cancelBtn} 
           onPress={() => {
             setIsCanceled(true);
+            if (activeBattleId.current) {
+              BattleService.cancelMatch(activeBattleId.current);
+            }
             navigation.goBack();
           }}
           activeOpacity={0.8}
