@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import {
-  View, Text, StyleSheet, FlatList, TouchableOpacity, Image,
+  View, Text, StyleSheet, FlatList, TouchableOpacity,
   Animated, Platform, StatusBar, Dimensions, TextInput,
   ActivityIndicator, ScrollView, KeyboardAvoidingView,
 } from 'react-native';
@@ -453,6 +453,401 @@ const SpeakingGame: React.FC<{ lang: string; category: string; colors: any; onEx
   const startRecording = async () => {
     if (isRecording || resultState) return;
     const permResult = await ExpoSpeechRecognitionModule.requestPermissionsAsync();
+    const status = (permResult as any).status ?? (permResult.granted ? 'granted' : 'denied');
+    if (status !== 'granted') return;
+    setTranscript('');
+    setIsRecording(true);
+    ExpoSpeechRecognitionModule.start({
+      lang: LANG_CODES[lang] || 'en-US',
+      interimResults: false,
+    });
+  };
+
+  const stopRecording = () => {
+    if (!isRecording) return;
+    ExpoSpeechRecognitionModule.stop();
+    setIsRecording(false);
+  };
+
+  if (isLoading) return (
+    <View style={[styles.loadingBox, { backgroundColor: colors.background }]}>
+      <ActivityIndicator size="large" color={colors.primary} />
+    </View>
+  );
+
+  if (gameOver) return (
+    <View style={[styles.gameOver, { backgroundColor: colors.background }]}>
+      <Text style={{ fontSize: 60 }}>🗣️</Text>
+      <Text style={[styles.gameOverTitle, { color: colors.text }]}>Süre Doldu!</Text>
+      <Text style={[styles.gameOverSub, { color: colors.textLight }]}>{score} kelime bildin!</Text>
+      <TouchableOpacity style={[styles.exitBtn, { backgroundColor: colors.primary }]} onPress={onExit}>
+        <Text style={styles.exitBtnText}>Oyunlara Dön</Text>
+      </TouchableOpacity>
+    </View>
+  );
+
+  if (!current) return null;
+
+  return (
+    <View style={{ flex: 1, backgroundColor: colors.background, padding: 22, alignItems: 'center' }}>
+      <View style={[styles.statPill, {
+        backgroundColor: timeLeft <= 5 ? colors.error + '20' : timeLeft <= 15 ? '#FFC80020' : colors.surface,
+        alignSelf: 'center', marginBottom: 20,
+      }]}>
+        <Text style={[styles.statPillText, { color: timeLeft <= 5 ? colors.error : timeLeft <= 15 ? '#FFC800' : colors.text, fontSize: 20, fontWeight: '800' }]}>⏱ {timeLeft}s</Text>
+      </View>
+
+      <Text style={{ fontSize: 14, color: colors.textLight, marginBottom: 10, textAlign: 'center' }}>Bu kelimeyi {LANG_LABELS[lang]} söyle:</Text>
+      <View style={[styles.listenHintBox, { backgroundColor: colors.surface, borderColor: colors.border, paddingVertical: 40, width: '100%' }]}>
+        <Text style={[styles.listenHintWord, { color: colors.text, fontSize: 32, textAlign: 'center' }]}>{current.turkish}</Text>
+        <TouchableOpacity
+          onPress={() => Speech.speak(current.turkish, { language: 'tr-TR', rate: 0.85 })}
+          style={{ marginTop: 14, alignSelf: 'center', padding: 8, backgroundColor: colors.primary + '20', borderRadius: 20 }}
+        >
+          <Text style={{ fontSize: 14, color: colors.primary }}>🔊 Türkçe telaffuzu duy</Text>
+        </TouchableOpacity>
+      </View>
+
+      {/* Sonuç göstergesi */}
+      {resultState && (
+        <View style={{ alignItems: 'center', marginTop: 16 }}>
+          <Text style={{ fontSize: 42 }}>{resultState === 'correct' ? '✅' : '❌'}</Text>
+          <Text style={{ fontSize: 22, fontWeight: 'bold', color: resultState === 'correct' ? colors.success : colors.error, marginTop: 4 }}>
+            {resultState === 'correct' ? 'Harika!' : current.foreign}
+          </Text>
+        </View>
+      )}
+
+      {/* Mikrofon butonu */}
+      {!resultState && (
+        <View style={{ marginTop: 'auto', width: '100%', alignItems: 'center', gap: 12 }}>
+          {transcript !== '' && (
+            <Text style={{ color: colors.textLight, fontSize: 14 }}>🎤 "{transcript}"</Text>
+          )}
+          <TouchableOpacity
+            onPressIn={startRecording}
+            onPressOut={stopRecording}
+            style={{
+              width: 80, height: 80, borderRadius: 40,
+              backgroundColor: isRecording ? colors.error : colors.primary,
+              justifyContent: 'center', alignItems: 'center',
+              shadowColor: isRecording ? colors.error : colors.primary,
+              shadowOffset: { width: 0, height: 0 }, shadowOpacity: 0.6, shadowRadius: 16,
+              elevation: 12,
+            }}
+          >
+            <Text style={{ fontSize: 32 }}>{isRecording ? '⏹' : '🎤'}</Text>
+          </TouchableOpacity>
+          <Text style={{ color: colors.textLight, fontSize: 12 }}>
+            {isRecording ? 'Dinliyorum... Bırak' : 'Bas & Söyle'}
+          </Text>
+        </View>
+      )}
+    </View>
+  );
+};
+
+// Levenshtein benzerlik skoru (0-1)
+function levenshteinSimilarity(a: string, b: string): number {
+  if (a === b) return 1;
+  const matrix: number[][] = [];
+  for (let i = 0; i <= b.length; i++) matrix[i] = [i];
+  for (let j = 0; j <= a.length; j++) matrix[0][j] = j;
+  for (let i = 1; i <= b.length; i++) {
+    for (let j = 1; j <= a.length; j++) {
+      matrix[i][j] = b[i-1] === a[j-1]
+        ? matrix[i-1][j-1]
+        : Math.min(matrix[i-1][j-1]+1, matrix[i][j-1]+1, matrix[i-1][j]+1);
+    }
+  }
+  return 1 - matrix[b.length][a.length] / Math.max(a.length, b.length, 1);
+}
+
+// ─── Haftalık Quiz ────────────────────────────────────────────────────────────
+const WeeklyQuiz: React.FC<{ lang: string; colors: any; onExit: () => void }> = ({ lang, colors, onExit }) => {
+  const [lastWeek, setLastWeek] = useState<string | null>(null);
+  const [questions, setQuestions] = useState<{ q: string; options: string[]; correct: number }[]>([]);
+  const [currentIdx, setCurrentIdx] = useState(0);
+  const [score, setScore] = useState(0);
+  const [selected, setSelected] = useState<number | null>(null);
+  const [isFinished, setIsFinished] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [timeLeft, setTimeLeft] = useState(60);
+  const [canPlayState, setCanPlayState] = useState(true);
+  const timerRef = useRef<any>(null);
+
+  const thisWeek = () => {
+    const d = new Date();
+    const week = Math.floor(d.getTime() / (7 * 24 * 60 * 60 * 1000));
+    return `${d.getFullYear()}_w${week}`;
+  };
+
+  useEffect(() => {
+    (async () => {
+      const saved = await AsyncStorage.getItem(`${WEEK_QUIZ_KEY}${lang}`);
+      setLastWeek(saved);
+      if (saved === thisWeek()) {
+        setCanPlayState(false);
+        setIsLoading(false);
+        return;
+      }
+
+      // API'den karışık kelimeler getir ve quiz oluştur
+      const pairs = await VocabularyService.getMixedPairs(lang, 20);
+      const quiz: { q: string; options: string[]; correct: number }[] = [];
+
+      for (const pair of pairs.slice(0, 15)) {
+        // Yanlış seçenekler için diğer çevirilerden al
+        const wrongOptions = pairs
+          .filter(p => p.foreign !== pair.foreign)
+          .map(p => p.foreign)
+          .sort(() => Math.random() - 0.5)
+          .slice(0, 3);
+
+        const options = VocabularyService.shuffle([pair.foreign, ...wrongOptions]);
+        const correct = options.indexOf(pair.foreign);
+
+        quiz.push({
+          q: `"${pair.turkish}" kelimesinin ${LANG_LABELS[lang]} karşılığı nedir?`,
+          options,
+          correct,
+        });
+      }
+
+      setQuestions(quiz);
+      setIsLoading(false);
+    })();
+  }, [lang]);
+
+  useEffect(() => {
+    if (isLoading || isFinished || !canPlayState) return;
+    timerRef.current = setInterval(() => setTimeLeft(t => {
+      if (t <= 1) {
+        clearInterval(timerRef.current);
+        AsyncStorage.setItem(`${WEEK_QUIZ_KEY}${lang}`, thisWeek());
+        setIsFinished(true);
+        return 0;
+      }
+      return t - 1;
+    }), 1000);
+    return () => clearInterval(timerRef.current);
+  }, [isLoading, isFinished, canPlayState]);
+
+  const canPlay = canPlayState;
+
+  const handleAnswer = (idx: number) => {
+    if (selected !== null) return;
+    setSelected(idx);
+    if (idx === questions[currentIdx].correct) {
+      setScore(s => s + 1);
+      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+    } else {
+      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
+    }
+    setTimeout(() => {
+      if (currentIdx + 1 >= questions.length) {
+        AsyncStorage.setItem(`${WEEK_QUIZ_KEY}${lang}`, thisWeek());
+        setIsFinished(true);
+      } else {
+        setCurrentIdx(i => i + 1);
+        setSelected(null);
+      }
+    }, 1100);
+  };
+
+  if (isLoading) return (
+    <View style={[styles.loadingBox, { backgroundColor: colors.background }]}>
+      <ActivityIndicator size="large" color={colors.primary} />
+      <Text style={[styles.loadingText, { color: colors.textLight }]}>Quiz hazırlanıyor...</Text>
+    </View>
+  );
+
+  if (!canPlay) return (
+    <View style={[styles.gameOver, { backgroundColor: colors.background }]}>
+      <Text style={{ fontSize: 60 }}>📅</Text>
+      <Text style={[styles.gameOverTitle, { color: colors.text }]}>Bu Hafta Tamamlandı!</Text>
+      <Text style={[styles.gameOverSub, { color: colors.textLight }]}>Haftalık quiz'i zaten tamamladın.{'\n'}Gelecek hafta tekrar gel! 💪</Text>
+      <TouchableOpacity style={[styles.exitBtn, { backgroundColor: colors.primary }]} onPress={onExit}>
+        <Text style={styles.exitBtnText}>Geri Dön</Text>
+      </TouchableOpacity>
+    </View>
+  );
+
+  if (isFinished) {
+    const pct = Math.round((score / questions.length) * 100);
+    return (
+      <View style={[styles.gameOver, { backgroundColor: colors.background }]}>
+        <Text style={{ fontSize: 60 }}>{pct >= 80 ? '🏆' : pct >= 50 ? '📚' : '💪'}</Text>
+        <Text style={[styles.gameOverTitle, { color: colors.text }]}>Haftalık Quiz!</Text>
+        <View style={[styles.quizResultBadge, { backgroundColor: pct >= 70 ? colors.success + '20' : colors.error + '20', borderColor: pct >= 70 ? colors.success : colors.error }]}>
+          <Text style={[styles.quizResultScore, { color: pct >= 70 ? colors.success : colors.error }]}>{score}/{questions.length}</Text>
+          <Text style={[styles.quizResultPct, { color: pct >= 70 ? colors.success : colors.error }]}>%{pct}</Text>
+        </View>
+        <TouchableOpacity style={[styles.exitBtn, { backgroundColor: colors.primary }]} onPress={onExit}>
+          <Text style={styles.exitBtnText}>Oyunlara Dön</Text>
+        </TouchableOpacity>
+      </View>
+    );
+  }
+
+  const q = questions[currentIdx];
+  return (
+    <View style={[styles.quizScreen, { backgroundColor: colors.background }]}>
+      <View style={[styles.quizProgressBar, { backgroundColor: colors.border }]}>
+        <View style={[styles.quizProgressFill, { backgroundColor: colors.primary, width: `${(currentIdx / questions.length) * 100}%` as any }]} />
+      </View>
+      <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
+        <Text style={[styles.quizCounter, { color: colors.textLight, marginBottom: 0 }]}>{currentIdx + 1} / {questions.length}</Text>
+        <View style={[styles.statPill, { backgroundColor: timeLeft <= 30 ? colors.error + '20' : colors.surface, paddingHorizontal: 12, paddingVertical: 4, borderRadius: 20 }]}>
+          <Text style={{ color: timeLeft <= 30 ? colors.error : colors.text, fontWeight: 'bold' }}>⏱ {timeLeft}s</Text>
+        </View>
+      </View>
+
+      <View style={[styles.quizQuestionBox, { backgroundColor: colors.surface, borderColor: colors.border }]}>
+        <Text style={[styles.quizQuestion, { color: colors.text }]}>{q.q}</Text>
+      </View>
+
+      <View style={styles.quizOptions}>
+        {q.options.map((opt, idx) => {
+          let bg = colors.surface;
+          let border = colors.border;
+          let textColor = colors.text;
+          if (selected !== null) {
+            if (idx === q.correct) { bg = colors.success + '25'; border = colors.success; textColor = colors.success; }
+            else if (idx === selected) { bg = colors.error + '25'; border = colors.error; textColor = colors.error; }
+          }
+          return (
+            <TouchableOpacity
+              key={idx}
+              style={[styles.quizOption, { backgroundColor: bg, borderColor: border }]}
+              onPress={() => handleAnswer(idx)}
+              disabled={selected !== null}
+            >
+              <View style={[styles.quizOptionBadge, { backgroundColor: idx === q.correct && selected !== null ? colors.success : colors.border }]}>
+                <Text style={{ color: '#FFF', fontWeight: 'bold', fontSize: 13 }}>{idx + 1}</Text>
+              </View>
+              <Text style={[styles.quizOptionText, { color: textColor }]}>{opt}</Text>
+            </TouchableOpacity>
+          );
+        })}
+      </View>
+    </View>
+  );
+};
+
+// ─── Ana Oyunlar Ekranı ───────────────────────────────────────────────────────
+type GameId = 'menu' | 'cardmatch' | 'listening' | 'speaking' | 'weeklyquiz';
+
+const GamesScreen: React.FC<any> = () => {
+  const colors = useThemeColors();
+  const { activeLanguage } = useLanguageStore();
+  const navigation = useNavigation<any>();
+  const insets = useSafeAreaInsets();
+  const [activeGame, setActiveGame] = useState<GameId>('menu');
+  const [selectedCategory, setSelectedCategory] = useState<string>('animals');
+  const [fadeAnim] = useState(new Animated.Value(1));
+
+  const langLabel = LANG_LABELS[activeLanguage] || activeLanguage;
+  const langFlag = LANG_FLAGS[activeLanguage] || '🌍';
+
+  // Tema uyumlu tab bar stili — MainTabNavigator'daki stil ile aynı
+  const themedTabBarStyle = {
+    borderTopWidth: 1,
+    borderTopColor: colors.border,
+    backgroundColor: colors.surface,
+    height: 60 + (insets.bottom > 0 ? insets.bottom : 10),
+    paddingBottom: insets.bottom > 0 ? insets.bottom : 10,
+    paddingTop: 8,
+    elevation: 15,
+    shadowColor: '#000',
+    shadowOpacity: 0.10,
+    shadowRadius: 12,
+    shadowOffset: { width: 0, height: -3 },
+  };
+
+  // Tab bar'ı gizle/göster
+  useEffect(() => {
+    if (activeGame !== 'menu') {
+      navigation.setOptions({ tabBarStyle: { display: 'none' } });
+    } else {
+      navigation.setOptions({ tabBarStyle: themedTabBarStyle });
+    }
+  }, [activeGame, colors.surface, colors.border, insets.bottom]);
+
+  // Ekran unmount olunca tab bar'ı geri getir
+  useEffect(() => {
+    return () => {
+      navigation.setOptions({ tabBarStyle: themedTabBarStyle });
+    };
+  }, []);
+
+  const launchGame = (gameId: GameId) => {
+    Animated.timing(fadeAnim, { toValue: 0, duration: 150, useNativeDriver: true }).start(() => {
+      setActiveGame(gameId);
+      Animated.timing(fadeAnim, { toValue: 1, duration: 250, useNativeDriver: true }).start();
+    });
+  };
+
+  const exitGame = () => {
+    Animated.timing(fadeAnim, { toValue: 0, duration: 150, useNativeDriver: true }).start(() => {
+      setActiveGame('menu');
+      Animated.timing(fadeAnim, { toValue: 1, duration: 250, useNativeDriver: true }).start();
+    });
+  };
+
+  const games = [
+    { id: 'cardmatch' as GameId, icon: '🃏', title: 'Kart Eşleştirme', desc: 'Türkçe ve yabancı kelimeleri eşleştir', color: '#00D2FF', hasCat: true },
+    { id: 'speaking' as GameId, icon: '🗣️', title: 'Duyduğunu Söyle', desc: 'Pratik yap ve doğru telaffuz et (+2s kazan)', color: '#FF9F43', hasCat: true },
+    { id: 'listening' as GameId, icon: '🎧', title: 'Duyduğunu Yaz', desc: 'Sesi duy ve doğru yaz', color: '#FF6B6B', hasCat: true },
+    { id: 'weeklyquiz' as GameId, icon: '📝', title: 'Haftalık Quiz', desc: '15 sorudan oluşan haftalık sınav', color: '#FFC800', hasCat: false, badge: 'HAFTALIK' },
+  ];
+
+  const gameTitle = activeGame === 'cardmatch' ? '🃏 Kart Eşleştirme'
+    : activeGame === 'speaking' ? '🗣️ Duyduğunu Söyle'
+    : activeGame === 'listening' ? '🎧 Duyduğunu Yaz'
+    : '📝 Haftalık Quiz';
+
+  return (
+    <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]}>
+      <StatusBar barStyle="light-content" />
+
+      <Animated.View style={{ flex: 1, opacity: fadeAnim }}>
+        {activeGame === 'menu' ? (
+          <>
+            {/* Header */}
+            <View style={[styles.gamesHeader, { backgroundColor: colors.surface, borderBottomWidth: 1, borderBottomColor: colors.border }]}>
+              <View>
+                <Text style={[styles.gamesHeaderTitle, { color: colors.text }]}>🎮 Oyunlar</Text>
+                <Text style={[styles.gamesHeaderSub, { color: colors.textLight }]}>{langFlag} {langLabel} · Aktif dil</Text>
+              </View>
+            </View>
+
+            <FlatList
+              data={games}
+              keyExtractor={g => g.id}
+              contentContainerStyle={styles.gamesListContent}
+              ListHeaderComponent={() => (
+                <>
+                  <Text style={[styles.sectionLabel, { color: colors.textLight }]}>KATEGORİ SEÇ</Text>
+                  <CategoryPicker selected={selectedCategory} onSelect={setSelectedCategory} colors={colors} />
+
+                  {/* AI Destekli Özellikler */}
+                  <Text style={[styles.sectionLabel, { color: colors.textLight, marginTop: 20 }]}>🤖 AI DESTEKLİ EĞİTMEN</Text>
+                  <TouchableOpacity
+                    style={[styles.gameCard, { backgroundColor: '#0A84FF20', borderColor: '#0A84FF', paddingVertical: 25 }]}
+                    onPress={() => (navigation as any).navigate('AITutor')}
+                    activeOpacity={0.82}
+                  >
+                    <View style={[styles.gameCardIconBox, { backgroundColor: '#0A84FF30', width: 80, height: 80 }]}>
+                      <Mascot mascotId="classic" size={85} style={{ marginLeft: 8 }} />
+                    </View>
+                    <View style={styles.gameCardInfo}>
+                      <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
+                        <Text style={[styles.gameCardTitle, { color: colors.text, fontSize: 20 }]}>Lingo AI Eğitmen</Text>
+                        <View style={[styles.gameBadge, { backgroundColor: '#0A84FF' }]}>
+                          <Text style={styles.gameBadgeText}>PREMIUM</Text>
+                        </View>
+                      </View>
                       <Text style={[styles.gameCardDesc, { color: colors.textLight, fontSize: 13, marginTop: 6 }]}>Konuşma pratikleri, role-play sahneleri ve tamamen sana özel akıllı bir öğretmen.</Text>
                     </View>
                     <Text style={[styles.gameArrow, { color: '#0A84FF' }]}>▶</Text>
