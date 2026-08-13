@@ -48,15 +48,15 @@ export const kurdishContent = [
         "prompt": "Hangisi 'Merhaba' demektir?",
         "options": [
           "Silav",
+          "Alakasız",
           "Yanlış cevap",
-          "Hatalı",
-          "Alakasız"
+          "Hatalı"
         ],
         "imageOptions": [
           "❓",
           "❓",
-          "❓",
-          "👋"
+          "👋",
+          "❓"
         ],
         "correctIndex": 0,
         "audioText": "Silav",
@@ -68,10 +68,10 @@ export const kurdishContent = [
         "prompt": "Şu cümleyi çevir: Bir kahve istiyorum",
         "options": [
           "fake1",
-          "fake2",
+          "Ez",
           "dixwazim",
-          "qehweyek",
-          "Ez"
+          "fake2",
+          "qehweyek"
         ],
         "correctAnswer": [
           "Ez",
@@ -87,12 +87,12 @@ export const kurdishContent = [
         "type": "translate",
         "prompt": "Çevir: Ez qehweyek dixwazim",
         "options": [
-          "Yanlış çeviri 2",
-          "Yanlış çeviri 1",
           "Yanlış çeviri 3",
-          "Bir kahve istiyorum"
+          "Bir kahve istiyorum",
+          "Yanlış çeviri 2",
+          "Yanlış çeviri 1"
         ],
-        "correctIndex": 3,
+        "correctIndex": 1,
         "audioText": "Ez qehweyek dixwazim",
         "audioLang": "ku"
       },
@@ -102,10 +102,10 @@ export const kurdishContent = [
         "prompt": "Şu cümleyi çevir: Nasılsın?",
         "options": [
           "Tu",
-          "çawa",
-          "fake1",
+          "yî?",
           "fake2",
-          "yî?"
+          "fake1",
+          "çawa"
         ],
         "correctAnswer": [
           "Tu",
@@ -121,12 +121,12 @@ export const kurdishContent = [
         "type": "translate",
         "prompt": "Çevir: Tu çawa yî?",
         "options": [
-          "Yanlış çeviri 2",
-          "Yanlış çeviri 3",
+          "Nasılsın?",
           "Yanlış çeviri 1",
-          "Nasılsın?"
+          "Yanlış çeviri 2",
+          "Yanlış çeviri 3"
         ],
-        "correctIndex": 3,
+        "correctIndex": 0,
         "audioText": "Tu çawa yî?",
         "audioLang": "ku"
       },
@@ -135,12 +135,12 @@ export const kurdishContent = [
         "type": "listen",
         "prompt": "Duyduğun cümleyi seç",
         "options": [
-          "Yanlış cümle 2",
           "Ez qehweyek dixwazim",
           "Yanlış cümle 1",
+          "Yanlış cümle 2",
           "Yanlış cümle 3"
         ],
-        "correctIndex": 1,
+        "correctIndex": 0,
         "audioText": "Ez qehweyek dixwazim",
         "audioLang": "ku"
       },
@@ -158,12 +158,12 @@ export const kurdishContent = [
         "type": "listen",
         "prompt": "Duyduğun cümleyi seç",
         "options": [
-          "Yanlış cümle 3",
-          "Yanlış cümle 2",
           "Yanlış cümle 1",
-          "Tu çawa yî?"
+          "Tu çawa yî?",
+          "Yanlış cümle 3",
+          "Yanlış cümle 2"
         ],
-        "correctIndex": 3,
+        "correctIndex": 1,
         "audioText": "Tu çawa yî?",
         "audioLang": "ku"
       },
@@ -226,10 +226,10 @@ export const kurdishContent = [
         "type": "imageChoice",
         "prompt": "Hangisi 'Merhaba' demektir?",
         "options": [
-          "Yanlış cevap",
           "Silav",
-          "Alakasız",
-          "Hatalı"
+          "Yanlış cevap",
+          "Hatalı",
+          "Alakasız"
         ],
         "imageOptions": [
           "👋",
@@ -237,7 +237,7 @@ export const kurdishContent = [
           "❓",
           "❓"
         ],
-        "correctIndex": 1,
+        "correctIndex": 0,
         "audioText": "Silav",
         "audioLang": "ku"
       },
@@ -246,11 +246,11 @@ export const kurdishContent = [
         "type": "constructSentence",
         "prompt": "Şu cümleyi çevir: Bir kahve istiyorum",
         "options": [
-          "dixwazim",
-          "fake1",
-          "Ez",
           "fake2",
-          "qehweyek"
+          "fake1",
+          "dixwazim",
+          "qehweyek",
+          "Ez"
         ],
         "correctAnswer": [
           "Ez",
@@ -280,10 +280,10 @@ export const kurdishContent = [
         "type": "constructSentence",
         "prompt": "Şu cümleyi çevir: Nasılsın?",
         "options": [
-          "yî?",
-          "Tu",
           "fake2",
+          "yî?",
           "çawa",
+          "Tu",
           "fake1"
         ],
         "correctAnswer": [
@@ -300,9 +300,9 @@ export const kurdishContent = [
         "type": "translate",
         "prompt": "Çevir: Tu çawa yî?",
         "options": [
-          "Yanlış çeviri 3",
-          "Yanlış çeviri 2",
           "Yanlış çeviri 1",
+          "Yanlış çeviri 2",
+          "Yanlış çeviri 3",
           "Nasılsın?"
         ],
         "correctIndex": 3,
@@ -314,12 +314,12 @@ export const kurdishContent = [
         "type": "listen",
         "prompt": "Duyduğun cümleyi seç",
         "options": [
-          "Yanlış cümle 3",
           "Yanlış cümle 2",
-          "Yanlış cümle 1",
-          "Ez qehweyek dixwazim"
+          "Ez qehweyek dixwazim",
+          "Yanlış cümle 3",
+          "Yanlış cümle 1"
         ],
-        "correctIndex": 3,
+        "correctIndex": 1,
         "audioText": "Ez qehweyek dixwazim",
         "audioLang": "ku"
       },
@@ -337,12 +337,12 @@ export const kurdishContent = [
         "type": "listen",
         "prompt": "Duyduğun cümleyi seç",
         "options": [
-          "Yanlış cümle 2",
-          "Yanlış cümle 3",
+          "Tu çawa yî?",
           "Yanlış cümle 1",
-          "Tu çawa yî?"
+          "Yanlış cümle 3",
+          "Yanlış cümle 2"
         ],
-        "correctIndex": 3,
+        "correctIndex": 0,
         "audioText": "Tu çawa yî?",
         "audioLang": "ku"
       },
@@ -405,16 +405,16 @@ export const kurdishContent = [
         "type": "imageChoice",
         "prompt": "Hangisi 'Merhaba' demektir?",
         "options": [
-          "Alakasız",
+          "Hatalı",
           "Yanlış cevap",
           "Silav",
-          "Hatalı"
+          "Alakasız"
         ],
         "imageOptions": [
           "❓",
           "❓",
-          "❓",
-          "👋"
+          "👋",
+          "❓"
         ],
         "correctIndex": 2,
         "audioText": "Silav",
@@ -425,10 +425,10 @@ export const kurdishContent = [
         "type": "constructSentence",
         "prompt": "Şu cümleyi çevir: Bir kahve istiyorum",
         "options": [
-          "qehweyek",
           "dixwazim",
-          "fake1",
           "fake2",
+          "qehweyek",
+          "fake1",
           "Ez"
         ],
         "correctAnswer": [
@@ -445,9 +445,9 @@ export const kurdishContent = [
         "type": "translate",
         "prompt": "Çevir: Ez qehweyek dixwazim",
         "options": [
-          "Yanlış çeviri 1",
-          "Bir kahve istiyorum",
           "Yanlış çeviri 3",
+          "Bir kahve istiyorum",
+          "Yanlış çeviri 1",
           "Yanlış çeviri 2"
         ],
         "correctIndex": 1,
@@ -459,11 +459,11 @@ export const kurdishContent = [
         "type": "constructSentence",
         "prompt": "Şu cümleyi çevir: Nasılsın?",
         "options": [
-          "çawa",
           "Tu",
+          "fake2",
+          "çawa",
           "yî?",
-          "fake1",
-          "fake2"
+          "fake1"
         ],
         "correctAnswer": [
           "Tu",
@@ -479,12 +479,12 @@ export const kurdishContent = [
         "type": "translate",
         "prompt": "Çevir: Tu çawa yî?",
         "options": [
-          "Yanlış çeviri 3",
           "Nasılsın?",
           "Yanlış çeviri 1",
-          "Yanlış çeviri 2"
+          "Yanlış çeviri 2",
+          "Yanlış çeviri 3"
         ],
-        "correctIndex": 1,
+        "correctIndex": 0,
         "audioText": "Tu çawa yî?",
         "audioLang": "ku"
       },
@@ -493,12 +493,12 @@ export const kurdishContent = [
         "type": "listen",
         "prompt": "Duyduğun cümleyi seç",
         "options": [
-          "Yanlış cümle 2",
-          "Yanlış cümle 3",
+          "Yanlış cümle 1",
           "Ez qehweyek dixwazim",
-          "Yanlış cümle 1"
+          "Yanlış cümle 3",
+          "Yanlış cümle 2"
         ],
-        "correctIndex": 2,
+        "correctIndex": 1,
         "audioText": "Ez qehweyek dixwazim",
         "audioLang": "ku"
       },
@@ -585,14 +585,14 @@ export const kurdishContent = [
         "prompt": "Hangisi 'Merhaba' demektir?",
         "options": [
           "Silav",
-          "Alakasız",
           "Yanlış cevap",
-          "Hatalı"
+          "Hatalı",
+          "Alakasız"
         ],
         "imageOptions": [
-          "❓",
-          "❓",
           "👋",
+          "❓",
+          "❓",
           "❓"
         ],
         "correctIndex": 0,
@@ -605,8 +605,8 @@ export const kurdishContent = [
         "prompt": "Şu cümleyi çevir: Bir kahve istiyorum",
         "options": [
           "Ez",
-          "qehweyek",
           "fake1",
+          "qehweyek",
           "fake2",
           "dixwazim"
         ],
@@ -624,12 +624,12 @@ export const kurdishContent = [
         "type": "translate",
         "prompt": "Çevir: Ez qehweyek dixwazim",
         "options": [
-          "Yanlış çeviri 3",
-          "Yanlış çeviri 2",
+          "Bir kahve istiyorum",
           "Yanlış çeviri 1",
-          "Bir kahve istiyorum"
+          "Yanlış çeviri 2",
+          "Yanlış çeviri 3"
         ],
-        "correctIndex": 3,
+        "correctIndex": 0,
         "audioText": "Ez qehweyek dixwazim",
         "audioLang": "ku"
       },
@@ -639,10 +639,10 @@ export const kurdishContent = [
         "prompt": "Şu cümleyi çevir: Nasılsın?",
         "options": [
           "çawa",
-          "Tu",
+          "fake1",
           "yî?",
-          "fake2",
-          "fake1"
+          "Tu",
+          "fake2"
         ],
         "correctAnswer": [
           "Tu",
@@ -658,12 +658,12 @@ export const kurdishContent = [
         "type": "translate",
         "prompt": "Çevir: Tu çawa yî?",
         "options": [
-          "Yanlış çeviri 1",
-          "Yanlış çeviri 2",
+          "Yanlış çeviri 3",
           "Nasılsın?",
-          "Yanlış çeviri 3"
+          "Yanlış çeviri 2",
+          "Yanlış çeviri 1"
         ],
-        "correctIndex": 2,
+        "correctIndex": 1,
         "audioText": "Tu çawa yî?",
         "audioLang": "ku"
       },
@@ -672,12 +672,12 @@ export const kurdishContent = [
         "type": "listen",
         "prompt": "Duyduğun cümleyi seç",
         "options": [
-          "Ez qehweyek dixwazim",
           "Yanlış cümle 3",
           "Yanlış cümle 2",
+          "Ez qehweyek dixwazim",
           "Yanlış cümle 1"
         ],
-        "correctIndex": 0,
+        "correctIndex": 2,
         "audioText": "Ez qehweyek dixwazim",
         "audioLang": "ku"
       },
@@ -695,12 +695,12 @@ export const kurdishContent = [
         "type": "listen",
         "prompt": "Duyduğun cümleyi seç",
         "options": [
-          "Tu çawa yî?",
-          "Yanlış cümle 1",
           "Yanlış cümle 3",
-          "Yanlış cümle 2"
+          "Yanlış cümle 1",
+          "Yanlış cümle 2",
+          "Tu çawa yî?"
         ],
-        "correctIndex": 0,
+        "correctIndex": 3,
         "audioText": "Tu çawa yî?",
         "audioLang": "ku"
       },
@@ -763,18 +763,18 @@ export const kurdishContent = [
         "type": "imageChoice",
         "prompt": "Hangisi 'Merhaba' demektir?",
         "options": [
+          "Hatalı",
           "Yanlış cevap",
           "Silav",
-          "Hatalı",
           "Alakasız"
         ],
         "imageOptions": [
+          "👋",
           "❓",
           "❓",
-          "❓",
-          "👋"
+          "❓"
         ],
-        "correctIndex": 1,
+        "correctIndex": 2,
         "audioText": "Silav",
         "audioLang": "ku"
       },
@@ -783,11 +783,11 @@ export const kurdishContent = [
         "type": "constructSentence",
         "prompt": "Şu cümleyi çevir: Bir kahve istiyorum",
         "options": [
-          "dixwazim",
-          "qehweyek",
           "fake2",
           "fake1",
-          "Ez"
+          "Ez",
+          "qehweyek",
+          "dixwazim"
         ],
         "correctAnswer": [
           "Ez",
@@ -803,12 +803,12 @@ export const kurdishContent = [
         "type": "translate",
         "prompt": "Çevir: Ez qehweyek dixwazim",
         "options": [
-          "Bir kahve istiyorum",
           "Yanlış çeviri 3",
+          "Yanlış çeviri 2",
           "Yanlış çeviri 1",
-          "Yanlış çeviri 2"
+          "Bir kahve istiyorum"
         ],
-        "correctIndex": 0,
+        "correctIndex": 3,
         "audioText": "Ez qehweyek dixwazim",
         "audioLang": "ku"
       },
@@ -818,10 +818,10 @@ export const kurdishContent = [
         "prompt": "Şu cümleyi çevir: Nasılsın?",
         "options": [
           "Tu",
-          "yî?",
+          "çawa",
           "fake1",
-          "fake2",
-          "çawa"
+          "yî?",
+          "fake2"
         ],
         "correctAnswer": [
           "Tu",
@@ -837,12 +837,12 @@ export const kurdishContent = [
         "type": "translate",
         "prompt": "Çevir: Tu çawa yî?",
         "options": [
-          "Yanlış çeviri 2",
           "Yanlış çeviri 3",
           "Yanlış çeviri 1",
-          "Nasılsın?"
+          "Nasılsın?",
+          "Yanlış çeviri 2"
         ],
-        "correctIndex": 3,
+        "correctIndex": 2,
         "audioText": "Tu çawa yî?",
         "audioLang": "ku"
       },
@@ -851,12 +851,12 @@ export const kurdishContent = [
         "type": "listen",
         "prompt": "Duyduğun cümleyi seç",
         "options": [
-          "Ez qehweyek dixwazim",
-          "Yanlış cümle 3",
           "Yanlış cümle 1",
-          "Yanlış cümle 2"
+          "Yanlış cümle 2",
+          "Ez qehweyek dixwazim",
+          "Yanlış cümle 3"
         ],
-        "correctIndex": 0,
+        "correctIndex": 2,
         "audioText": "Ez qehweyek dixwazim",
         "audioLang": "ku"
       },
@@ -874,12 +874,12 @@ export const kurdishContent = [
         "type": "listen",
         "prompt": "Duyduğun cümleyi seç",
         "options": [
-          "Tu çawa yî?",
-          "Yanlış cümle 1",
+          "Yanlış cümle 3",
           "Yanlış cümle 2",
-          "Yanlış cümle 3"
+          "Yanlış cümle 1",
+          "Tu çawa yî?"
         ],
-        "correctIndex": 0,
+        "correctIndex": 3,
         "audioText": "Tu çawa yî?",
         "audioLang": "ku"
       },
@@ -944,16 +944,16 @@ export const kurdishContent = [
         "options": [
           "Hatalı",
           "Yanlış cevap",
-          "Alakasız",
-          "Silav"
+          "Silav",
+          "Alakasız"
         ],
         "imageOptions": [
+          "👋",
           "❓",
           "❓",
-          "❓",
-          "👋"
+          "❓"
         ],
-        "correctIndex": 3,
+        "correctIndex": 2,
         "audioText": "Silav",
         "audioLang": "ku"
       },
@@ -962,10 +962,10 @@ export const kurdishContent = [
         "type": "constructSentence",
         "prompt": "Şu cümleyi çevir: Bir kahve istiyorum",
         "options": [
-          "dixwazim",
           "qehweyek",
-          "fake1",
           "fake2",
+          "fake1",
+          "dixwazim",
           "Ez"
         ],
         "correctAnswer": [
@@ -982,12 +982,12 @@ export const kurdishContent = [
         "type": "translate",
         "prompt": "Çevir: Ez qehweyek dixwazim",
         "options": [
-          "Bir kahve istiyorum",
           "Yanlış çeviri 1",
           "Yanlış çeviri 3",
+          "Bir kahve istiyorum",
           "Yanlış çeviri 2"
         ],
-        "correctIndex": 0,
+        "correctIndex": 2,
         "audioText": "Ez qehweyek dixwazim",
         "audioLang": "ku"
       },
@@ -996,10 +996,10 @@ export const kurdishContent = [
         "type": "constructSentence",
         "prompt": "Şu cümleyi çevir: Nasılsın?",
         "options": [
-          "fake1",
           "Tu",
           "çawa",
           "yî?",
+          "fake1",
           "fake2"
         ],
         "correctAnswer": [
@@ -1016,12 +1016,12 @@ export const kurdishContent = [
         "type": "translate",
         "prompt": "Çevir: Tu çawa yî?",
         "options": [
-          "Nasılsın?",
-          "Yanlış çeviri 3",
           "Yanlış çeviri 1",
-          "Yanlış çeviri 2"
+          "Yanlış çeviri 2",
+          "Nasılsın?",
+          "Yanlış çeviri 3"
         ],
-        "correctIndex": 0,
+        "correctIndex": 2,
         "audioText": "Tu çawa yî?",
         "audioLang": "ku"
       },
@@ -1030,12 +1030,12 @@ export const kurdishContent = [
         "type": "listen",
         "prompt": "Duyduğun cümleyi seç",
         "options": [
-          "Yanlış cümle 2",
-          "Yanlış cümle 3",
+          "Ez qehweyek dixwazim",
           "Yanlış cümle 1",
-          "Ez qehweyek dixwazim"
+          "Yanlış cümle 2",
+          "Yanlış cümle 3"
         ],
-        "correctIndex": 3,
+        "correctIndex": 0,
         "audioText": "Ez qehweyek dixwazim",
         "audioLang": "ku"
       },
@@ -1053,12 +1053,12 @@ export const kurdishContent = [
         "type": "listen",
         "prompt": "Duyduğun cümleyi seç",
         "options": [
-          "Yanlış cümle 3",
-          "Yanlış cümle 2",
           "Yanlış cümle 1",
-          "Tu çawa yî?"
+          "Yanlış cümle 2",
+          "Tu çawa yî?",
+          "Yanlış cümle 3"
         ],
-        "correctIndex": 3,
+        "correctIndex": 2,
         "audioText": "Tu çawa yî?",
         "audioLang": "ku"
       },
@@ -1123,14 +1123,14 @@ export const kurdishContent = [
         "options": [
           "Balafirgeh",
           "Yanlış cevap",
-          "Hatalı",
-          "Alakasız"
+          "Alakasız",
+          "Hatalı"
         ],
         "imageOptions": [
           "❓",
           "❓",
-          "❓",
-          "✈️"
+          "✈️",
+          "❓"
         ],
         "correctIndex": 0,
         "audioText": "Balafirgeh",
@@ -1141,12 +1141,12 @@ export const kurdishContent = [
         "type": "constructSentence",
         "prompt": "Şu cümleyi çevir: Biletimi kaybettim",
         "options": [
-          "fake1",
-          "xwe",
-          "kir",
-          "winda",
           "bilêta",
           "Min",
+          "winda",
+          "kir",
+          "xwe",
+          "fake1",
           "fake2"
         ],
         "correctAnswer": [
@@ -1165,12 +1165,12 @@ export const kurdishContent = [
         "type": "translate",
         "prompt": "Çevir: Min bilêta xwe winda kir",
         "options": [
-          "Biletimi kaybettim",
-          "Yanlış çeviri 1",
+          "Yanlış çeviri 3",
           "Yanlış çeviri 2",
-          "Yanlış çeviri 3"
+          "Yanlış çeviri 1",
+          "Biletimi kaybettim"
         ],
-        "correctIndex": 0,
+        "correctIndex": 3,
         "audioText": "Min bilêta xwe winda kir",
         "audioLang": "ku"
       },
@@ -1179,11 +1179,11 @@ export const kurdishContent = [
         "type": "constructSentence",
         "prompt": "Şu cümleyi çevir: Nereye gidiyorsun?",
         "options": [
-          "fake2",
-          "ku?",
+          "Tu",
           "diçî",
           "fake1",
-          "Tu"
+          "fake2",
+          "ku?"
         ],
         "correctAnswer": [
           "Tu",
@@ -1199,12 +1199,12 @@ export const kurdishContent = [
         "type": "translate",
         "prompt": "Çevir: Tu diçî ku?",
         "options": [
-          "Yanlış çeviri 2",
+          "Nereye gidiyorsun?",
           "Yanlış çeviri 1",
-          "Yanlış çeviri 3",
-          "Nereye gidiyorsun?"
+          "Yanlış çeviri 2",
+          "Yanlış çeviri 3"
         ],
-        "correctIndex": 3,
+        "correctIndex": 0,
         "audioText": "Tu diçî ku?",
         "audioLang": "ku"
       },
@@ -1213,12 +1213,12 @@ export const kurdishContent = [
         "type": "listen",
         "prompt": "Duyduğun cümleyi seç",
         "options": [
-          "Yanlış cümle 1",
-          "Min bilêta xwe winda kir",
           "Yanlış cümle 3",
-          "Yanlış cümle 2"
+          "Yanlış cümle 1",
+          "Yanlış cümle 2",
+          "Min bilêta xwe winda kir"
         ],
-        "correctIndex": 1,
+        "correctIndex": 3,
         "audioText": "Min bilêta xwe winda kir",
         "audioLang": "ku"
       },
@@ -1236,12 +1236,12 @@ export const kurdishContent = [
         "type": "listen",
         "prompt": "Duyduğun cümleyi seç",
         "options": [
+          "Tu diçî ku?",
           "Yanlış cümle 3",
           "Yanlış cümle 2",
-          "Yanlış cümle 1",
-          "Tu diçî ku?"
+          "Yanlış cümle 1"
         ],
-        "correctIndex": 3,
+        "correctIndex": 0,
         "audioText": "Tu diçî ku?",
         "audioLang": "ku"
       },
@@ -1304,18 +1304,18 @@ export const kurdishContent = [
         "type": "imageChoice",
         "prompt": "Hangisi 'Havalimanı' demektir?",
         "options": [
-          "Balafirgeh",
-          "Yanlış cevap",
           "Hatalı",
-          "Alakasız"
+          "Yanlış cevap",
+          "Alakasız",
+          "Balafirgeh"
         ],
         "imageOptions": [
+          "✈️",
           "❓",
           "❓",
-          "❓",
-          "✈️"
+          "❓"
         ],
-        "correctIndex": 0,
+        "correctIndex": 3,
         "audioText": "Balafirgeh",
         "audioLang": "ku"
       },
@@ -1324,13 +1324,13 @@ export const kurdishContent = [
         "type": "constructSentence",
         "prompt": "Şu cümleyi çevir: Biletimi kaybettim",
         "options": [
-          "fake1",
-          "fake2",
-          "xwe",
-          "kir",
-          "bilêta",
           "Min",
-          "winda"
+          "winda",
+          "fake2",
+          "fake1",
+          "bilêta",
+          "xwe",
+          "kir"
         ],
         "correctAnswer": [
           "Min",
@@ -1350,8 +1350,8 @@ export const kurdishContent = [
         "options": [
           "Biletimi kaybettim",
           "Yanlış çeviri 1",
-          "Yanlış çeviri 2",
-          "Yanlış çeviri 3"
+          "Yanlış çeviri 3",
+          "Yanlış çeviri 2"
         ],
         "correctIndex": 0,
         "audioText": "Min bilêta xwe winda kir",
@@ -1362,11 +1362,11 @@ export const kurdishContent = [
         "type": "constructSentence",
         "prompt": "Şu cümleyi çevir: Nereye gidiyorsun?",
         "options": [
-          "fake2",
           "fake1",
+          "fake2",
+          "Tu",
           "ku?",
-          "diçî",
-          "Tu"
+          "diçî"
         ],
         "correctAnswer": [
           "Tu",
@@ -1382,12 +1382,12 @@ export const kurdishContent = [
         "type": "translate",
         "prompt": "Çevir: Tu diçî ku?",
         "options": [
-          "Nereye gidiyorsun?",
-          "Yanlış çeviri 3",
           "Yanlış çeviri 1",
+          "Yanlış çeviri 3",
+          "Nereye gidiyorsun?",
           "Yanlış çeviri 2"
         ],
-        "correctIndex": 0,
+        "correctIndex": 2,
         "audioText": "Tu diçî ku?",
         "audioLang": "ku"
       },
@@ -1396,9 +1396,9 @@ export const kurdishContent = [
         "type": "listen",
         "prompt": "Duyduğun cümleyi seç",
         "options": [
-          "Yanlış cümle 3",
-          "Yanlış cümle 2",
           "Yanlış cümle 1",
+          "Yanlış cümle 2",
+          "Yanlış cümle 3",
           "Min bilêta xwe winda kir"
         ],
         "correctIndex": 3,
@@ -1419,12 +1419,12 @@ export const kurdishContent = [
         "type": "listen",
         "prompt": "Duyduğun cümleyi seç",
         "options": [
-          "Yanlış cümle 3",
-          "Yanlış cümle 2",
           "Tu diçî ku?",
-          "Yanlış cümle 1"
+          "Yanlış cümle 1",
+          "Yanlış cümle 2",
+          "Yanlış cümle 3"
         ],
-        "correctIndex": 2,
+        "correctIndex": 0,
         "audioText": "Tu diçî ku?",
         "audioLang": "ku"
       },
@@ -1487,10 +1487,10 @@ export const kurdishContent = [
         "type": "imageChoice",
         "prompt": "Hangisi 'Havalimanı' demektir?",
         "options": [
-          "Alakasız",
-          "Hatalı",
+          "Balafirgeh",
           "Yanlış cevap",
-          "Balafirgeh"
+          "Hatalı",
+          "Alakasız"
         ],
         "imageOptions": [
           "❓",
@@ -1498,7 +1498,7 @@ export const kurdishContent = [
           "❓",
           "✈️"
         ],
-        "correctIndex": 3,
+        "correctIndex": 0,
         "audioText": "Balafirgeh",
         "audioLang": "ku"
       },
@@ -1508,12 +1508,12 @@ export const kurdishContent = [
         "prompt": "Şu cümleyi çevir: Biletimi kaybettim",
         "options": [
           "fake1",
-          "kir",
-          "fake2",
-          "winda",
-          "xwe",
           "bilêta",
-          "Min"
+          "Min",
+          "winda",
+          "fake2",
+          "xwe",
+          "kir"
         ],
         "correctAnswer": [
           "Min",
@@ -1546,10 +1546,10 @@ export const kurdishContent = [
         "prompt": "Şu cümleyi çevir: Nereye gidiyorsun?",
         "options": [
           "fake1",
-          "fake2",
-          "ku?",
+          "Tu",
           "diçî",
-          "Tu"
+          "ku?",
+          "fake2"
         ],
         "correctAnswer": [
           "Tu",
@@ -1565,12 +1565,12 @@ export const kurdishContent = [
         "type": "translate",
         "prompt": "Çevir: Tu diçî ku?",
         "options": [
+          "Yanlış çeviri 2",
           "Yanlış çeviri 1",
           "Nereye gidiyorsun?",
-          "Yanlış çeviri 3",
-          "Yanlış çeviri 2"
+          "Yanlış çeviri 3"
         ],
-        "correctIndex": 1,
+        "correctIndex": 2,
         "audioText": "Tu diçî ku?",
         "audioLang": "ku"
       },
@@ -1579,12 +1579,12 @@ export const kurdishContent = [
         "type": "listen",
         "prompt": "Duyduğun cümleyi seç",
         "options": [
-          "Yanlış cümle 1",
+          "Yanlış cümle 3",
           "Yanlış cümle 2",
-          "Min bilêta xwe winda kir",
-          "Yanlış cümle 3"
+          "Yanlış cümle 1",
+          "Min bilêta xwe winda kir"
         ],
-        "correctIndex": 2,
+        "correctIndex": 3,
         "audioText": "Min bilêta xwe winda kir",
         "audioLang": "ku"
       },
@@ -1602,12 +1602,12 @@ export const kurdishContent = [
         "type": "listen",
         "prompt": "Duyduğun cümleyi seç",
         "options": [
+          "Yanlış cümle 3",
           "Tu diçî ku?",
           "Yanlış cümle 1",
-          "Yanlış cümle 2",
-          "Yanlış cümle 3"
+          "Yanlış cümle 2"
         ],
-        "correctIndex": 0,
+        "correctIndex": 1,
         "audioText": "Tu diçî ku?",
         "audioLang": "ku"
       },
@@ -1670,18 +1670,18 @@ export const kurdishContent = [
         "type": "imageChoice",
         "prompt": "Hangisi 'Havalimanı' demektir?",
         "options": [
-          "Yanlış cevap",
           "Alakasız",
           "Balafirgeh",
+          "Yanlış cevap",
           "Hatalı"
         ],
         "imageOptions": [
           "❓",
+          "✈️",
           "❓",
-          "❓",
-          "✈️"
+          "❓"
         ],
-        "correctIndex": 2,
+        "correctIndex": 1,
         "audioText": "Balafirgeh",
         "audioLang": "ku"
       },
@@ -1690,13 +1690,13 @@ export const kurdishContent = [
         "type": "constructSentence",
         "prompt": "Şu cümleyi çevir: Biletimi kaybettim",
         "options": [
-          "kir",
-          "fake2",
-          "bilêta",
-          "winda",
           "Min",
+          "bilêta",
+          "xwe",
           "fake1",
-          "xwe"
+          "winda",
+          "kir",
+          "fake2"
         ],
         "correctAnswer": [
           "Min",
@@ -1714,12 +1714,12 @@ export const kurdishContent = [
         "type": "translate",
         "prompt": "Çevir: Min bilêta xwe winda kir",
         "options": [
-          "Yanlış çeviri 1",
-          "Biletimi kaybettim",
+          "Yanlış çeviri 3",
           "Yanlış çeviri 2",
-          "Yanlış çeviri 3"
+          "Yanlış çeviri 1",
+          "Biletimi kaybettim"
         ],
-        "correctIndex": 1,
+        "correctIndex": 3,
         "audioText": "Min bilêta xwe winda kir",
         "audioLang": "ku"
       },
@@ -1730,9 +1730,9 @@ export const kurdishContent = [
         "options": [
           "fake1",
           "ku?",
-          "Tu",
+          "diçî",
           "fake2",
-          "diçî"
+          "Tu"
         ],
         "correctAnswer": [
           "Tu",
@@ -1748,12 +1748,12 @@ export const kurdishContent = [
         "type": "translate",
         "prompt": "Çevir: Tu diçî ku?",
         "options": [
-          "Yanlış çeviri 1",
-          "Yanlış çeviri 3",
           "Nereye gidiyorsun?",
-          "Yanlış çeviri 2"
+          "Yanlış çeviri 1",
+          "Yanlış çeviri 2",
+          "Yanlış çeviri 3"
         ],
-        "correctIndex": 2,
+        "correctIndex": 0,
         "audioText": "Tu diçî ku?",
         "audioLang": "ku"
       },
@@ -1763,9 +1763,9 @@ export const kurdishContent = [
         "prompt": "Duyduğun cümleyi seç",
         "options": [
           "Min bilêta xwe winda kir",
+          "Yanlış cümle 3",
           "Yanlış cümle 1",
-          "Yanlış cümle 2",
-          "Yanlış cümle 3"
+          "Yanlış cümle 2"
         ],
         "correctIndex": 0,
         "audioText": "Min bilêta xwe winda kir",
@@ -1853,18 +1853,18 @@ export const kurdishContent = [
         "type": "imageChoice",
         "prompt": "Hangisi 'Havalimanı' demektir?",
         "options": [
-          "Balafirgeh",
           "Yanlış cevap",
-          "Hatalı",
-          "Alakasız"
+          "Alakasız",
+          "Balafirgeh",
+          "Hatalı"
         ],
         "imageOptions": [
           "❓",
           "❓",
-          "✈️",
-          "❓"
+          "❓",
+          "✈️"
         ],
-        "correctIndex": 0,
+        "correctIndex": 2,
         "audioText": "Balafirgeh",
         "audioLang": "ku"
       },
@@ -1873,13 +1873,13 @@ export const kurdishContent = [
         "type": "constructSentence",
         "prompt": "Şu cümleyi çevir: Biletimi kaybettim",
         "options": [
-          "kir",
-          "fake2",
-          "winda",
-          "xwe",
-          "bilêta",
           "Min",
-          "fake1"
+          "bilêta",
+          "fake1",
+          "xwe",
+          "winda",
+          "fake2",
+          "kir"
         ],
         "correctAnswer": [
           "Min",
@@ -1897,8 +1897,8 @@ export const kurdishContent = [
         "type": "translate",
         "prompt": "Çevir: Min bilêta xwe winda kir",
         "options": [
-          "Yanlış çeviri 3",
           "Yanlış çeviri 2",
+          "Yanlış çeviri 3",
           "Yanlış çeviri 1",
           "Biletimi kaybettim"
         ],
@@ -1912,10 +1912,10 @@ export const kurdishContent = [
         "prompt": "Şu cümleyi çevir: Nereye gidiyorsun?",
         "options": [
           "ku?",
-          "fake1",
-          "Tu",
           "diçî",
-          "fake2"
+          "fake2",
+          "fake1",
+          "Tu"
         ],
         "correctAnswer": [
           "Tu",
@@ -1931,12 +1931,12 @@ export const kurdishContent = [
         "type": "translate",
         "prompt": "Çevir: Tu diçî ku?",
         "options": [
-          "Yanlış çeviri 3",
-          "Yanlış çeviri 2",
+          "Nereye gidiyorsun?",
           "Yanlış çeviri 1",
-          "Nereye gidiyorsun?"
+          "Yanlış çeviri 2",
+          "Yanlış çeviri 3"
         ],
-        "correctIndex": 3,
+        "correctIndex": 0,
         "audioText": "Tu diçî ku?",
         "audioLang": "ku"
       },
@@ -1945,12 +1945,12 @@ export const kurdishContent = [
         "type": "listen",
         "prompt": "Duyduğun cümleyi seç",
         "options": [
-          "Yanlış cümle 3",
-          "Yanlış cümle 2",
           "Yanlış cümle 1",
-          "Min bilêta xwe winda kir"
+          "Yanlış cümle 3",
+          "Min bilêta xwe winda kir",
+          "Yanlış cümle 2"
         ],
-        "correctIndex": 3,
+        "correctIndex": 2,
         "audioText": "Min bilêta xwe winda kir",
         "audioLang": "ku"
       },
@@ -1969,11 +1969,11 @@ export const kurdishContent = [
         "prompt": "Duyduğun cümleyi seç",
         "options": [
           "Yanlış cümle 3",
-          "Yanlış cümle 2",
+          "Tu diçî ku?",
           "Yanlış cümle 1",
-          "Tu diçî ku?"
+          "Yanlış cümle 2"
         ],
-        "correctIndex": 3,
+        "correctIndex": 1,
         "audioText": "Tu diçî ku?",
         "audioLang": "ku"
       },
@@ -2036,8 +2036,8 @@ export const kurdishContent = [
         "type": "imageChoice",
         "prompt": "Hangisi 'Havalimanı' demektir?",
         "options": [
-          "Hatalı",
           "Alakasız",
+          "Hatalı",
           "Yanlış cevap",
           "Balafirgeh"
         ],
@@ -2056,13 +2056,13 @@ export const kurdishContent = [
         "type": "constructSentence",
         "prompt": "Şu cümleyi çevir: Biletimi kaybettim",
         "options": [
-          "xwe",
           "winda",
-          "fake1",
-          "fake2",
           "Min",
           "kir",
-          "bilêta"
+          "bilêta",
+          "fake1",
+          "xwe",
+          "fake2"
         ],
         "correctAnswer": [
           "Min",
@@ -2082,8 +2082,8 @@ export const kurdishContent = [
         "options": [
           "Biletimi kaybettim",
           "Yanlış çeviri 1",
-          "Yanlış çeviri 3",
-          "Yanlış çeviri 2"
+          "Yanlış çeviri 2",
+          "Yanlış çeviri 3"
         ],
         "correctIndex": 0,
         "audioText": "Min bilêta xwe winda kir",
@@ -2094,11 +2094,11 @@ export const kurdishContent = [
         "type": "constructSentence",
         "prompt": "Şu cümleyi çevir: Nereye gidiyorsun?",
         "options": [
+          "fake1",
           "ku?",
           "Tu",
-          "fake1",
-          "fake2",
-          "diçî"
+          "diçî",
+          "fake2"
         ],
         "correctAnswer": [
           "Tu",
@@ -2115,9 +2115,9 @@ export const kurdishContent = [
         "prompt": "Çevir: Tu diçî ku?",
         "options": [
           "Nereye gidiyorsun?",
-          "Yanlış çeviri 3",
+          "Yanlış çeviri 2",
           "Yanlış çeviri 1",
-          "Yanlış çeviri 2"
+          "Yanlış çeviri 3"
         ],
         "correctIndex": 0,
         "audioText": "Tu diçî ku?",
@@ -2128,12 +2128,12 @@ export const kurdishContent = [
         "type": "listen",
         "prompt": "Duyduğun cümleyi seç",
         "options": [
-          "Min bilêta xwe winda kir",
+          "Yanlış cümle 2",
           "Yanlış cümle 3",
-          "Yanlış cümle 1",
-          "Yanlış cümle 2"
+          "Min bilêta xwe winda kir",
+          "Yanlış cümle 1"
         ],
-        "correctIndex": 0,
+        "correctIndex": 2,
         "audioText": "Min bilêta xwe winda kir",
         "audioLang": "ku"
       },
@@ -2225,10 +2225,10 @@ export const kurdishContent = [
           "Alakasız"
         ],
         "imageOptions": [
+          "🤔",
           "❓",
           "❓",
-          "❓",
-          "🤔"
+          "❓"
         ],
         "correctIndex": 0,
         "audioText": "Bi dîtina min",
@@ -2239,15 +2239,15 @@ export const kurdishContent = [
         "type": "constructSentence",
         "prompt": "Şu cümleyi çevir: Bence bu çok önemli",
         "options": [
-          "e",
           "fake1",
-          "ev",
-          "fake2",
+          "e",
           "Bi",
-          "min",
           "pir",
-          "giring",
-          "dîtina"
+          "fake2",
+          "dîtina",
+          "min",
+          "ev",
+          "giring"
         ],
         "correctAnswer": [
           "Bi",
@@ -2267,12 +2267,12 @@ export const kurdishContent = [
         "type": "translate",
         "prompt": "Çevir: Bi dîtina min ev pir giring e",
         "options": [
-          "Bence bu çok önemli",
-          "Yanlış çeviri 1",
           "Yanlış çeviri 3",
-          "Yanlış çeviri 2"
+          "Yanlış çeviri 2",
+          "Yanlış çeviri 1",
+          "Bence bu çok önemli"
         ],
-        "correctIndex": 0,
+        "correctIndex": 3,
         "audioText": "Bi dîtina min ev pir giring e",
         "audioLang": "ku"
       },
@@ -2281,12 +2281,12 @@ export const kurdishContent = [
         "type": "constructSentence",
         "prompt": "Şu cümleyi çevir: Emin değilim",
         "options": [
-          "ne",
           "piştrast",
-          "Ez",
-          "im",
           "fake1",
-          "fake2"
+          "im",
+          "fake2",
+          "Ez",
+          "ne"
         ],
         "correctAnswer": [
           "Ez",
@@ -2303,12 +2303,12 @@ export const kurdishContent = [
         "type": "translate",
         "prompt": "Çevir: Ez ne piştrast im",
         "options": [
-          "Emin değilim",
-          "Yanlış çeviri 1",
+          "Yanlış çeviri 3",
           "Yanlış çeviri 2",
-          "Yanlış çeviri 3"
+          "Yanlış çeviri 1",
+          "Emin değilim"
         ],
-        "correctIndex": 0,
+        "correctIndex": 3,
         "audioText": "Ez ne piştrast im",
         "audioLang": "ku"
       },
@@ -2317,12 +2317,12 @@ export const kurdishContent = [
         "type": "listen",
         "prompt": "Duyduğun cümleyi seç",
         "options": [
+          "Bi dîtina min ev pir giring e",
           "Yanlış cümle 1",
           "Yanlış cümle 2",
-          "Yanlış cümle 3",
-          "Bi dîtina min ev pir giring e"
+          "Yanlış cümle 3"
         ],
-        "correctIndex": 3,
+        "correctIndex": 0,
         "audioText": "Bi dîtina min ev pir giring e",
         "audioLang": "ku"
       },
@@ -2340,12 +2340,12 @@ export const kurdishContent = [
         "type": "listen",
         "prompt": "Duyduğun cümleyi seç",
         "options": [
-          "Yanlış cümle 3",
-          "Yanlış cümle 2",
+          "Ez ne piştrast im",
           "Yanlış cümle 1",
-          "Ez ne piştrast im"
+          "Yanlış cümle 2",
+          "Yanlış cümle 3"
         ],
-        "correctIndex": 3,
+        "correctIndex": 0,
         "audioText": "Ez ne piştrast im",
         "audioLang": "ku"
       },
@@ -2408,18 +2408,18 @@ export const kurdishContent = [
         "type": "imageChoice",
         "prompt": "Hangisi 'Bence' demektir?",
         "options": [
-          "Alakasız",
           "Yanlış cevap",
           "Bi dîtina min",
-          "Hatalı"
+          "Hatalı",
+          "Alakasız"
         ],
         "imageOptions": [
-          "❓",
-          "❓",
           "🤔",
+          "❓",
+          "❓",
           "❓"
         ],
-        "correctIndex": 2,
+        "correctIndex": 1,
         "audioText": "Bi dîtina min",
         "audioLang": "ku"
       },
@@ -2428,15 +2428,15 @@ export const kurdishContent = [
         "type": "constructSentence",
         "prompt": "Şu cümleyi çevir: Bence bu çok önemli",
         "options": [
-          "Bi",
           "pir",
-          "fake2",
           "giring",
-          "dîtina",
+          "e",
+          "Bi",
           "fake1",
+          "dîtina",
+          "fake2",
           "min",
-          "ev",
-          "e"
+          "ev"
         ],
         "correctAnswer": [
           "Bi",
@@ -2456,12 +2456,12 @@ export const kurdishContent = [
         "type": "translate",
         "prompt": "Çevir: Bi dîtina min ev pir giring e",
         "options": [
-          "Yanlış çeviri 3",
-          "Yanlış çeviri 2",
+          "Bence bu çok önemli",
           "Yanlış çeviri 1",
-          "Bence bu çok önemli"
+          "Yanlış çeviri 2",
+          "Yanlış çeviri 3"
         ],
-        "correctIndex": 3,
+        "correctIndex": 0,
         "audioText": "Bi dîtina min ev pir giring e",
         "audioLang": "ku"
       },
@@ -2471,11 +2471,11 @@ export const kurdishContent = [
         "prompt": "Şu cümleyi çevir: Emin değilim",
         "options": [
           "im",
+          "Ez",
           "piştrast",
-          "fake2",
           "fake1",
-          "ne",
-          "Ez"
+          "fake2",
+          "ne"
         ],
         "correctAnswer": [
           "Ez",
@@ -2492,12 +2492,12 @@ export const kurdishContent = [
         "type": "translate",
         "prompt": "Çevir: Ez ne piştrast im",
         "options": [
-          "Yanlış çeviri 1",
           "Emin değilim",
+          "Yanlış çeviri 1",
           "Yanlış çeviri 2",
           "Yanlış çeviri 3"
         ],
-        "correctIndex": 1,
+        "correctIndex": 0,
         "audioText": "Ez ne piştrast im",
         "audioLang": "ku"
       },
@@ -2506,12 +2506,12 @@ export const kurdishContent = [
         "type": "listen",
         "prompt": "Duyduğun cümleyi seç",
         "options": [
-          "Yanlış cümle 1",
           "Yanlış cümle 3",
-          "Bi dîtina min ev pir giring e",
-          "Yanlış cümle 2"
+          "Yanlış cümle 2",
+          "Yanlış cümle 1",
+          "Bi dîtina min ev pir giring e"
         ],
-        "correctIndex": 2,
+        "correctIndex": 3,
         "audioText": "Bi dîtina min ev pir giring e",
         "audioLang": "ku"
       },
@@ -2529,12 +2529,12 @@ export const kurdishContent = [
         "type": "listen",
         "prompt": "Duyduğun cümleyi seç",
         "options": [
-          "Ez ne piştrast im",
           "Yanlış cümle 1",
-          "Yanlış cümle 2",
-          "Yanlış cümle 3"
+          "Ez ne piştrast im",
+          "Yanlış cümle 3",
+          "Yanlış cümle 2"
         ],
-        "correctIndex": 0,
+        "correctIndex": 1,
         "audioText": "Ez ne piştrast im",
         "audioLang": "ku"
       },
@@ -2599,16 +2599,16 @@ export const kurdishContent = [
         "options": [
           "Alakasız",
           "Hatalı",
-          "Bi dîtina min",
-          "Yanlış cevap"
+          "Yanlış cevap",
+          "Bi dîtina min"
         ],
         "imageOptions": [
-          "🤔",
           "❓",
           "❓",
-          "❓"
+          "❓",
+          "🤔"
         ],
-        "correctIndex": 2,
+        "correctIndex": 3,
         "audioText": "Bi dîtina min",
         "audioLang": "ku"
       },
@@ -2617,15 +2617,15 @@ export const kurdishContent = [
         "type": "constructSentence",
         "prompt": "Şu cümleyi çevir: Bence bu çok önemli",
         "options": [
-          "dîtina",
           "pir",
-          "fake1",
-          "giring",
           "ev",
+          "fake1",
+          "Bi",
+          "dîtina",
           "fake2",
-          "e",
           "min",
-          "Bi"
+          "giring",
+          "e"
         ],
         "correctAnswer": [
           "Bi",
@@ -2647,8 +2647,8 @@ export const kurdishContent = [
         "options": [
           "Bence bu çok önemli",
           "Yanlış çeviri 3",
-          "Yanlış çeviri 2",
-          "Yanlış çeviri 1"
+          "Yanlış çeviri 1",
+          "Yanlış çeviri 2"
         ],
         "correctIndex": 0,
         "audioText": "Bi dîtina min ev pir giring e",
@@ -2659,12 +2659,12 @@ export const kurdishContent = [
         "type": "constructSentence",
         "prompt": "Şu cümleyi çevir: Emin değilim",
         "options": [
-          "im",
-          "fake2",
-          "fake1",
-          "piştrast",
+          "Ez",
           "ne",
-          "Ez"
+          "fake2",
+          "piştrast",
+          "fake1",
+          "im"
         ],
         "correctAnswer": [
           "Ez",
@@ -2681,12 +2681,12 @@ export const kurdishContent = [
         "type": "translate",
         "prompt": "Çevir: Ez ne piştrast im",
         "options": [
-          "Yanlış çeviri 2",
+          "Emin değilim",
           "Yanlış çeviri 1",
-          "Yanlış çeviri 3",
-          "Emin değilim"
+          "Yanlış çeviri 2",
+          "Yanlış çeviri 3"
         ],
-        "correctIndex": 3,
+        "correctIndex": 0,
         "audioText": "Ez ne piştrast im",
         "audioLang": "ku"
       },
@@ -2697,8 +2697,8 @@ export const kurdishContent = [
         "options": [
           "Bi dîtina min ev pir giring e",
           "Yanlış cümle 1",
-          "Yanlış cümle 3",
-          "Yanlış cümle 2"
+          "Yanlış cümle 2",
+          "Yanlış cümle 3"
         ],
         "correctIndex": 0,
         "audioText": "Bi dîtina min ev pir giring e",
@@ -2718,8 +2718,8 @@ export const kurdishContent = [
         "type": "listen",
         "prompt": "Duyduğun cümleyi seç",
         "options": [
-          "Yanlış cümle 1",
           "Yanlış cümle 3",
+          "Yanlış cümle 1",
           "Ez ne piştrast im",
           "Yanlış cümle 2"
         ],
@@ -2786,16 +2786,16 @@ export const kurdishContent = [
         "type": "imageChoice",
         "prompt": "Hangisi 'Bence' demektir?",
         "options": [
-          "Hatalı",
-          "Yanlış cevap",
           "Alakasız",
+          "Yanlış cevap",
+          "Hatalı",
           "Bi dîtina min"
         ],
         "imageOptions": [
           "❓",
-          "🤔",
           "❓",
-          "❓"
+          "❓",
+          "🤔"
         ],
         "correctIndex": 3,
         "audioText": "Bi dîtina min",
@@ -2806,15 +2806,15 @@ export const kurdishContent = [
         "type": "constructSentence",
         "prompt": "Şu cümleyi çevir: Bence bu çok önemli",
         "options": [
-          "dîtina",
-          "ev",
-          "pir",
-          "min",
-          "fake1",
-          "e",
           "Bi",
+          "ev",
+          "giring",
+          "dîtina",
           "fake2",
-          "giring"
+          "e",
+          "fake1",
+          "min",
+          "pir"
         ],
         "correctAnswer": [
           "Bi",
@@ -2848,12 +2848,12 @@ export const kurdishContent = [
         "type": "constructSentence",
         "prompt": "Şu cümleyi çevir: Emin değilim",
         "options": [
-          "im",
-          "Ez",
           "fake1",
-          "ne",
+          "im",
           "piştrast",
-          "fake2"
+          "fake2",
+          "ne",
+          "Ez"
         ],
         "correctAnswer": [
           "Ez",
@@ -2870,12 +2870,12 @@ export const kurdishContent = [
         "type": "translate",
         "prompt": "Çevir: Ez ne piştrast im",
         "options": [
-          "Emin değilim",
-          "Yanlış çeviri 1",
+          "Yanlış çeviri 3",
           "Yanlış çeviri 2",
-          "Yanlış çeviri 3"
+          "Yanlış çeviri 1",
+          "Emin değilim"
         ],
-        "correctIndex": 0,
+        "correctIndex": 3,
         "audioText": "Ez ne piştrast im",
         "audioLang": "ku"
       },
@@ -2884,12 +2884,12 @@ export const kurdishContent = [
         "type": "listen",
         "prompt": "Duyduğun cümleyi seç",
         "options": [
+          "Yanlış cümle 3",
           "Bi dîtina min ev pir giring e",
-          "Yanlış cümle 1",
           "Yanlış cümle 2",
-          "Yanlış cümle 3"
+          "Yanlış cümle 1"
         ],
-        "correctIndex": 0,
+        "correctIndex": 1,
         "audioText": "Bi dîtina min ev pir giring e",
         "audioLang": "ku"
       },
@@ -2907,12 +2907,12 @@ export const kurdishContent = [
         "type": "listen",
         "prompt": "Duyduğun cümleyi seç",
         "options": [
-          "Yanlış cümle 1",
           "Yanlış cümle 3",
-          "Ez ne piştrast im",
-          "Yanlış cümle 2"
+          "Yanlış cümle 2",
+          "Yanlış cümle 1",
+          "Ez ne piştrast im"
         ],
-        "correctIndex": 2,
+        "correctIndex": 3,
         "audioText": "Ez ne piştrast im",
         "audioLang": "ku"
       },
@@ -2975,18 +2975,18 @@ export const kurdishContent = [
         "type": "imageChoice",
         "prompt": "Hangisi 'Bence' demektir?",
         "options": [
-          "Bi dîtina min",
-          "Yanlış cevap",
+          "Alakasız",
           "Hatalı",
-          "Alakasız"
+          "Yanlış cevap",
+          "Bi dîtina min"
         ],
         "imageOptions": [
           "❓",
+          "🤔",
           "❓",
-          "❓",
-          "🤔"
+          "❓"
         ],
-        "correctIndex": 0,
+        "correctIndex": 3,
         "audioText": "Bi dîtina min",
         "audioLang": "ku"
       },
@@ -2995,15 +2995,15 @@ export const kurdishContent = [
         "type": "constructSentence",
         "prompt": "Şu cümleyi çevir: Bence bu çok önemli",
         "options": [
-          "pir",
-          "fake1",
           "ev",
-          "min",
-          "dîtina",
           "fake2",
-          "Bi",
           "giring",
-          "e"
+          "min",
+          "e",
+          "dîtina",
+          "Bi",
+          "pir",
+          "fake1"
         ],
         "correctAnswer": [
           "Bi",
@@ -3023,12 +3023,12 @@ export const kurdishContent = [
         "type": "translate",
         "prompt": "Çevir: Bi dîtina min ev pir giring e",
         "options": [
-          "Yanlış çeviri 3",
-          "Yanlış çeviri 2",
+          "Bence bu çok önemli",
           "Yanlış çeviri 1",
-          "Bence bu çok önemli"
+          "Yanlış çeviri 2",
+          "Yanlış çeviri 3"
         ],
-        "correctIndex": 3,
+        "correctIndex": 0,
         "audioText": "Bi dîtina min ev pir giring e",
         "audioLang": "ku"
       },
@@ -3037,12 +3037,12 @@ export const kurdishContent = [
         "type": "constructSentence",
         "prompt": "Şu cümleyi çevir: Emin değilim",
         "options": [
-          "im",
-          "ne",
-          "fake2",
           "piştrast",
           "Ez",
-          "fake1"
+          "ne",
+          "fake1",
+          "fake2",
+          "im"
         ],
         "correctAnswer": [
           "Ez",
@@ -3059,12 +3059,12 @@ export const kurdishContent = [
         "type": "translate",
         "prompt": "Çevir: Ez ne piştrast im",
         "options": [
+          "Yanlış çeviri 3",
           "Emin değilim",
           "Yanlış çeviri 1",
-          "Yanlış çeviri 2",
-          "Yanlış çeviri 3"
+          "Yanlış çeviri 2"
         ],
-        "correctIndex": 0,
+        "correctIndex": 1,
         "audioText": "Ez ne piştrast im",
         "audioLang": "ku"
       },
@@ -3096,12 +3096,12 @@ export const kurdishContent = [
         "type": "listen",
         "prompt": "Duyduğun cümleyi seç",
         "options": [
-          "Ez ne piştrast im",
           "Yanlış cümle 1",
-          "Yanlış cümle 2",
-          "Yanlış cümle 3"
+          "Yanlış cümle 3",
+          "Ez ne piştrast im",
+          "Yanlış cümle 2"
         ],
-        "correctIndex": 0,
+        "correctIndex": 2,
         "audioText": "Ez ne piştrast im",
         "audioLang": "ku"
       },
@@ -3164,18 +3164,18 @@ export const kurdishContent = [
         "type": "imageChoice",
         "prompt": "Hangisi 'Bence' demektir?",
         "options": [
-          "Bi dîtina min",
+          "Alakasız",
           "Yanlış cevap",
           "Hatalı",
-          "Alakasız"
+          "Bi dîtina min"
         ],
         "imageOptions": [
-          "🤔",
           "❓",
+          "🤔",
           "❓",
           "❓"
         ],
-        "correctIndex": 0,
+        "correctIndex": 3,
         "audioText": "Bi dîtina min",
         "audioLang": "ku"
       },
@@ -3184,15 +3184,15 @@ export const kurdishContent = [
         "type": "constructSentence",
         "prompt": "Şu cümleyi çevir: Bence bu çok önemli",
         "options": [
-          "Bi",
-          "dîtina",
-          "fake2",
-          "fake1",
           "min",
+          "dîtina",
+          "fake1",
+          "fake2",
+          "e",
+          "Bi",
           "ev",
-          "pir",
           "giring",
-          "e"
+          "pir"
         ],
         "correctAnswer": [
           "Bi",
@@ -3212,12 +3212,12 @@ export const kurdishContent = [
         "type": "translate",
         "prompt": "Çevir: Bi dîtina min ev pir giring e",
         "options": [
-          "Yanlış çeviri 2",
+          "Bence bu çok önemli",
           "Yanlış çeviri 1",
-          "Yanlış çeviri 3",
-          "Bence bu çok önemli"
+          "Yanlış çeviri 2",
+          "Yanlış çeviri 3"
         ],
-        "correctIndex": 3,
+        "correctIndex": 0,
         "audioText": "Bi dîtina min ev pir giring e",
         "audioLang": "ku"
       },
@@ -3226,12 +3226,12 @@ export const kurdishContent = [
         "type": "constructSentence",
         "prompt": "Şu cümleyi çevir: Emin değilim",
         "options": [
-          "im",
+          "Ez",
           "ne",
-          "fake2",
-          "piştrast",
+          "im",
           "fake1",
-          "Ez"
+          "fake2",
+          "piştrast"
         ],
         "correctAnswer": [
           "Ez",
@@ -3248,12 +3248,12 @@ export const kurdishContent = [
         "type": "translate",
         "prompt": "Çevir: Ez ne piştrast im",
         "options": [
-          "Yanlış çeviri 2",
-          "Yanlış çeviri 1",
+          "Emin değilim",
           "Yanlış çeviri 3",
-          "Emin değilim"
+          "Yanlış çeviri 2",
+          "Yanlış çeviri 1"
         ],
-        "correctIndex": 3,
+        "correctIndex": 0,
         "audioText": "Ez ne piştrast im",
         "audioLang": "ku"
       },
@@ -3264,8 +3264,8 @@ export const kurdishContent = [
         "options": [
           "Bi dîtina min ev pir giring e",
           "Yanlış cümle 1",
-          "Yanlış cümle 3",
-          "Yanlış cümle 2"
+          "Yanlış cümle 2",
+          "Yanlış cümle 3"
         ],
         "correctIndex": 0,
         "audioText": "Bi dîtina min ev pir giring e",
@@ -3285,12 +3285,12 @@ export const kurdishContent = [
         "type": "listen",
         "prompt": "Duyduğun cümleyi seç",
         "options": [
-          "Ez ne piştrast im",
-          "Yanlış cümle 1",
+          "Yanlış cümle 3",
           "Yanlış cümle 2",
-          "Yanlış cümle 3"
+          "Yanlış cümle 1",
+          "Ez ne piştrast im"
         ],
-        "correctIndex": 0,
+        "correctIndex": 3,
         "audioText": "Ez ne piştrast im",
         "audioLang": "ku"
       },
@@ -3353,10 +3353,10 @@ export const kurdishContent = [
         "type": "imageChoice",
         "prompt": "Hangisi 'Müzakere' demektir?",
         "options": [
+          "Danûstandin",
           "Alakasız",
-          "Hatalı",
           "Yanlış cevap",
-          "Danûstandin"
+          "Hatalı"
         ],
         "imageOptions": [
           "❓",
@@ -3364,7 +3364,7 @@ export const kurdishContent = [
           "❓",
           "🤝"
         ],
-        "correctIndex": 3,
+        "correctIndex": 0,
         "audioText": "Danûstandin",
         "audioLang": "ku"
       },
@@ -3373,12 +3373,12 @@ export const kurdishContent = [
         "type": "constructSentence",
         "prompt": "Şu cümleyi çevir: Müzakere oldukça zorluydu",
         "options": [
-          "bû",
-          "fake1",
-          "Danûstandin",
           "fake2",
-          "dijwar",
-          "pir"
+          "bû",
+          "Danûstandin",
+          "pir",
+          "fake1",
+          "dijwar"
         ],
         "correctAnswer": [
           "Danûstandin",
@@ -3395,12 +3395,12 @@ export const kurdishContent = [
         "type": "translate",
         "prompt": "Çevir: Danûstandin pir dijwar bû",
         "options": [
-          "Müzakere oldukça zorluydu",
           "Yanlış çeviri 1",
-          "Yanlış çeviri 2",
-          "Yanlış çeviri 3"
+          "Yanlış çeviri 3",
+          "Müzakere oldukça zorluydu",
+          "Yanlış çeviri 2"
         ],
-        "correctIndex": 0,
+        "correctIndex": 2,
         "audioText": "Danûstandin pir dijwar bû",
         "audioLang": "ku"
       },
@@ -3409,12 +3409,12 @@ export const kurdishContent = [
         "type": "constructSentence",
         "prompt": "Şu cümleyi çevir: Bu durum beni hayal kırıklığına uğrattı",
         "options": [
-          "rewşê",
           "bêhêvî",
-          "fake1",
-          "ez",
-          "kirim",
           "Vê",
+          "kirim",
+          "ez",
+          "rewşê",
+          "fake1",
           "fake2"
         ],
         "correctAnswer": [
@@ -3448,11 +3448,11 @@ export const kurdishContent = [
         "prompt": "Duyduğun cümleyi seç",
         "options": [
           "Yanlış cümle 2",
+          "Yanlış cümle 3",
           "Yanlış cümle 1",
-          "Danûstandin pir dijwar bû",
-          "Yanlış cümle 3"
+          "Danûstandin pir dijwar bû"
         ],
-        "correctIndex": 2,
+        "correctIndex": 3,
         "audioText": "Danûstandin pir dijwar bû",
         "audioLang": "ku"
       },
@@ -3471,11 +3471,11 @@ export const kurdishContent = [
         "prompt": "Duyduğun cümleyi seç",
         "options": [
           "Yanlış cümle 2",
-          "Yanlış cümle 1",
+          "Vê rewşê ez bêhêvî kirim",
           "Yanlış cümle 3",
-          "Vê rewşê ez bêhêvî kirim"
+          "Yanlış cümle 1"
         ],
-        "correctIndex": 3,
+        "correctIndex": 1,
         "audioText": "Vê rewşê ez bêhêvî kirim",
         "audioLang": "ku"
       },
@@ -3558,12 +3558,12 @@ export const kurdishContent = [
         "type": "constructSentence",
         "prompt": "Şu cümleyi çevir: Müzakere oldukça zorluydu",
         "options": [
-          "dijwar",
           "fake2",
-          "pir",
           "Danûstandin",
-          "bû",
-          "fake1"
+          "pir",
+          "fake1",
+          "dijwar",
+          "bû"
         ],
         "correctAnswer": [
           "Danûstandin",
@@ -3580,12 +3580,12 @@ export const kurdishContent = [
         "type": "translate",
         "prompt": "Çevir: Danûstandin pir dijwar bû",
         "options": [
-          "Yanlış çeviri 2",
           "Yanlış çeviri 3",
-          "Müzakere oldukça zorluydu",
-          "Yanlış çeviri 1"
+          "Yanlış çeviri 2",
+          "Yanlış çeviri 1",
+          "Müzakere oldukça zorluydu"
         ],
-        "correctIndex": 2,
+        "correctIndex": 3,
         "audioText": "Danûstandin pir dijwar bû",
         "audioLang": "ku"
       },
@@ -3594,13 +3594,13 @@ export const kurdishContent = [
         "type": "constructSentence",
         "prompt": "Şu cümleyi çevir: Bu durum beni hayal kırıklığına uğrattı",
         "options": [
+          "fake1",
           "fake2",
           "Vê",
           "rewşê",
-          "fake1",
+          "bêhêvî",
           "kirim",
-          "ez",
-          "bêhêvî"
+          "ez"
         ],
         "correctAnswer": [
           "Vê",
@@ -3618,12 +3618,12 @@ export const kurdishContent = [
         "type": "translate",
         "prompt": "Çevir: Vê rewşê ez bêhêvî kirim",
         "options": [
-          "Bu durum beni hayal kırıklığına uğrattı",
-          "Yanlış çeviri 1",
+          "Yanlış çeviri 3",
           "Yanlış çeviri 2",
-          "Yanlış çeviri 3"
+          "Yanlış çeviri 1",
+          "Bu durum beni hayal kırıklığına uğrattı"
         ],
-        "correctIndex": 0,
+        "correctIndex": 3,
         "audioText": "Vê rewşê ez bêhêvî kirim",
         "audioLang": "ku"
       },
@@ -3632,12 +3632,12 @@ export const kurdishContent = [
         "type": "listen",
         "prompt": "Duyduğun cümleyi seç",
         "options": [
-          "Yanlış cümle 3",
-          "Yanlış cümle 2",
+          "Danûstandin pir dijwar bû",
           "Yanlış cümle 1",
-          "Danûstandin pir dijwar bû"
+          "Yanlış cümle 3",
+          "Yanlış cümle 2"
         ],
-        "correctIndex": 3,
+        "correctIndex": 0,
         "audioText": "Danûstandin pir dijwar bû",
         "audioLang": "ku"
       },
@@ -3655,12 +3655,12 @@ export const kurdishContent = [
         "type": "listen",
         "prompt": "Duyduğun cümleyi seç",
         "options": [
-          "Yanlış cümle 3",
-          "Yanlış cümle 1",
           "Vê rewşê ez bêhêvî kirim",
-          "Yanlış cümle 2"
+          "Yanlış cümle 1",
+          "Yanlış cümle 2",
+          "Yanlış cümle 3"
         ],
-        "correctIndex": 2,
+        "correctIndex": 0,
         "audioText": "Vê rewşê ez bêhêvî kirim",
         "audioLang": "ku"
       },
@@ -3723,18 +3723,18 @@ export const kurdishContent = [
         "type": "imageChoice",
         "prompt": "Hangisi 'Müzakere' demektir?",
         "options": [
-          "Yanlış cevap",
-          "Hatalı",
+          "Alakasız",
           "Danûstandin",
-          "Alakasız"
+          "Yanlış cevap",
+          "Hatalı"
         ],
         "imageOptions": [
           "❓",
           "❓",
-          "❓",
-          "🤝"
+          "🤝",
+          "❓"
         ],
-        "correctIndex": 2,
+        "correctIndex": 1,
         "audioText": "Danûstandin",
         "audioLang": "ku"
       },
@@ -3765,12 +3765,12 @@ export const kurdishContent = [
         "type": "translate",
         "prompt": "Çevir: Danûstandin pir dijwar bû",
         "options": [
-          "Yanlış çeviri 3",
+          "Müzakere oldukça zorluydu",
           "Yanlış çeviri 2",
           "Yanlış çeviri 1",
-          "Müzakere oldukça zorluydu"
+          "Yanlış çeviri 3"
         ],
-        "correctIndex": 3,
+        "correctIndex": 0,
         "audioText": "Danûstandin pir dijwar bû",
         "audioLang": "ku"
       },
@@ -3779,13 +3779,13 @@ export const kurdishContent = [
         "type": "constructSentence",
         "prompt": "Şu cümleyi çevir: Bu durum beni hayal kırıklığına uğrattı",
         "options": [
-          "fake2",
-          "fake1",
-          "kirim",
-          "bêhêvî",
-          "ez",
+          "Vê",
           "rewşê",
-          "Vê"
+          "ez",
+          "bêhêvî",
+          "kirim",
+          "fake1",
+          "fake2"
         ],
         "correctAnswer": [
           "Vê",
@@ -3803,12 +3803,12 @@ export const kurdishContent = [
         "type": "translate",
         "prompt": "Çevir: Vê rewşê ez bêhêvî kirim",
         "options": [
-          "Yanlış çeviri 3",
-          "Yanlış çeviri 1",
           "Bu durum beni hayal kırıklığına uğrattı",
+          "Yanlış çeviri 1",
+          "Yanlış çeviri 3",
           "Yanlış çeviri 2"
         ],
-        "correctIndex": 2,
+        "correctIndex": 0,
         "audioText": "Vê rewşê ez bêhêvî kirim",
         "audioLang": "ku"
       },
@@ -3817,12 +3817,12 @@ export const kurdishContent = [
         "type": "listen",
         "prompt": "Duyduğun cümleyi seç",
         "options": [
-          "Danûstandin pir dijwar bû",
-          "Yanlış cümle 1",
           "Yanlış cümle 2",
-          "Yanlış cümle 3"
+          "Yanlış cümle 1",
+          "Yanlış cümle 3",
+          "Danûstandin pir dijwar bû"
         ],
-        "correctIndex": 0,
+        "correctIndex": 3,
         "audioText": "Danûstandin pir dijwar bû",
         "audioLang": "ku"
       },
@@ -3840,12 +3840,12 @@ export const kurdishContent = [
         "type": "listen",
         "prompt": "Duyduğun cümleyi seç",
         "options": [
-          "Yanlış cümle 2",
+          "Vê rewşê ez bêhêvî kirim",
           "Yanlış cümle 3",
           "Yanlış cümle 1",
-          "Vê rewşê ez bêhêvî kirim"
+          "Yanlış cümle 2"
         ],
-        "correctIndex": 3,
+        "correctIndex": 0,
         "audioText": "Vê rewşê ez bêhêvî kirim",
         "audioLang": "ku"
       },
@@ -3908,18 +3908,18 @@ export const kurdishContent = [
         "type": "imageChoice",
         "prompt": "Hangisi 'Müzakere' demektir?",
         "options": [
-          "Alakasız",
+          "Danûstandin",
           "Hatalı",
-          "Yanlış cevap",
-          "Danûstandin"
+          "Alakasız",
+          "Yanlış cevap"
         ],
         "imageOptions": [
-          "❓",
           "🤝",
+          "❓",
           "❓",
           "❓"
         ],
-        "correctIndex": 3,
+        "correctIndex": 0,
         "audioText": "Danûstandin",
         "audioLang": "ku"
       },
@@ -3928,12 +3928,12 @@ export const kurdishContent = [
         "type": "constructSentence",
         "prompt": "Şu cümleyi çevir: Müzakere oldukça zorluydu",
         "options": [
-          "bû",
-          "pir",
-          "fake1",
-          "Danûstandin",
           "fake2",
-          "dijwar"
+          "fake1",
+          "bû",
+          "dijwar",
+          "pir",
+          "Danûstandin"
         ],
         "correctAnswer": [
           "Danûstandin",
@@ -3950,12 +3950,12 @@ export const kurdishContent = [
         "type": "translate",
         "prompt": "Çevir: Danûstandin pir dijwar bû",
         "options": [
-          "Müzakere oldukça zorluydu",
-          "Yanlış çeviri 1",
           "Yanlış çeviri 2",
-          "Yanlış çeviri 3"
+          "Yanlış çeviri 3",
+          "Yanlış çeviri 1",
+          "Müzakere oldukça zorluydu"
         ],
-        "correctIndex": 0,
+        "correctIndex": 3,
         "audioText": "Danûstandin pir dijwar bû",
         "audioLang": "ku"
       },
@@ -3964,13 +3964,13 @@ export const kurdishContent = [
         "type": "constructSentence",
         "prompt": "Şu cümleyi çevir: Bu durum beni hayal kırıklığına uğrattı",
         "options": [
-          "kirim",
-          "bêhêvî",
-          "rewşê",
-          "fake2",
           "Vê",
+          "fake2",
+          "kirim",
+          "ez",
+          "rewşê",
           "fake1",
-          "ez"
+          "bêhêvî"
         ],
         "correctAnswer": [
           "Vê",
@@ -3988,12 +3988,12 @@ export const kurdishContent = [
         "type": "translate",
         "prompt": "Çevir: Vê rewşê ez bêhêvî kirim",
         "options": [
-          "Yanlış çeviri 1",
-          "Yanlış çeviri 3",
           "Bu durum beni hayal kırıklığına uğrattı",
+          "Yanlış çeviri 3",
+          "Yanlış çeviri 1",
           "Yanlış çeviri 2"
         ],
-        "correctIndex": 2,
+        "correctIndex": 0,
         "audioText": "Vê rewşê ez bêhêvî kirim",
         "audioLang": "ku"
       },
@@ -4002,12 +4002,12 @@ export const kurdishContent = [
         "type": "listen",
         "prompt": "Duyduğun cümleyi seç",
         "options": [
-          "Danûstandin pir dijwar bû",
-          "Yanlış cümle 1",
           "Yanlış cümle 3",
-          "Yanlış cümle 2"
+          "Yanlış cümle 2",
+          "Yanlış cümle 1",
+          "Danûstandin pir dijwar bû"
         ],
-        "correctIndex": 0,
+        "correctIndex": 3,
         "audioText": "Danûstandin pir dijwar bû",
         "audioLang": "ku"
       },
@@ -4025,9 +4025,9 @@ export const kurdishContent = [
         "type": "listen",
         "prompt": "Duyduğun cümleyi seç",
         "options": [
+          "Yanlış cümle 3",
           "Yanlış cümle 2",
           "Yanlış cümle 1",
-          "Yanlış cümle 3",
           "Vê rewşê ez bêhêvî kirim"
         ],
         "correctIndex": 3,
@@ -4093,18 +4093,18 @@ export const kurdishContent = [
         "type": "imageChoice",
         "prompt": "Hangisi 'Müzakere' demektir?",
         "options": [
-          "Hatalı",
-          "Yanlış cevap",
           "Danûstandin",
+          "Yanlış cevap",
+          "Hatalı",
           "Alakasız"
         ],
         "imageOptions": [
-          "❓",
-          "❓",
           "🤝",
+          "❓",
+          "❓",
           "❓"
         ],
-        "correctIndex": 2,
+        "correctIndex": 0,
         "audioText": "Danûstandin",
         "audioLang": "ku"
       },
@@ -4113,11 +4113,11 @@ export const kurdishContent = [
         "type": "constructSentence",
         "prompt": "Şu cümleyi çevir: Müzakere oldukça zorluydu",
         "options": [
-          "dijwar",
-          "fake1",
-          "fake2",
-          "pir",
           "Danûstandin",
+          "fake1",
+          "pir",
+          "dijwar",
+          "fake2",
           "bû"
         ],
         "correctAnswer": [
@@ -4135,9 +4135,9 @@ export const kurdishContent = [
         "type": "translate",
         "prompt": "Çevir: Danûstandin pir dijwar bû",
         "options": [
-          "Yanlış çeviri 3",
-          "Müzakere oldukça zorluydu",
           "Yanlış çeviri 1",
+          "Müzakere oldukça zorluydu",
+          "Yanlış çeviri 3",
           "Yanlış çeviri 2"
         ],
         "correctIndex": 1,
@@ -4149,12 +4149,12 @@ export const kurdishContent = [
         "type": "constructSentence",
         "prompt": "Şu cümleyi çevir: Bu durum beni hayal kırıklığına uğrattı",
         "options": [
-          "rewşê",
-          "Vê",
-          "fake1",
-          "kirim",
-          "bêhêvî",
           "ez",
+          "bêhêvî",
+          "kirim",
+          "rewşê",
+          "fake1",
+          "Vê",
           "fake2"
         ],
         "correctAnswer": [
@@ -4173,12 +4173,12 @@ export const kurdishContent = [
         "type": "translate",
         "prompt": "Çevir: Vê rewşê ez bêhêvî kirim",
         "options": [
-          "Yanlış çeviri 3",
           "Yanlış çeviri 1",
           "Bu durum beni hayal kırıklığına uğrattı",
+          "Yanlış çeviri 3",
           "Yanlış çeviri 2"
         ],
-        "correctIndex": 2,
+        "correctIndex": 1,
         "audioText": "Vê rewşê ez bêhêvî kirim",
         "audioLang": "ku"
       },
@@ -4187,12 +4187,12 @@ export const kurdishContent = [
         "type": "listen",
         "prompt": "Duyduğun cümleyi seç",
         "options": [
-          "Yanlış cümle 1",
+          "Yanlış cümle 3",
           "Yanlış cümle 2",
-          "Danûstandin pir dijwar bû",
-          "Yanlış cümle 3"
+          "Yanlış cümle 1",
+          "Danûstandin pir dijwar bû"
         ],
-        "correctIndex": 2,
+        "correctIndex": 3,
         "audioText": "Danûstandin pir dijwar bû",
         "audioLang": "ku"
       },
@@ -4210,12 +4210,12 @@ export const kurdishContent = [
         "type": "listen",
         "prompt": "Duyduğun cümleyi seç",
         "options": [
-          "Yanlış cümle 1",
-          "Vê rewşê ez bêhêvî kirim",
           "Yanlış cümle 3",
-          "Yanlış cümle 2"
+          "Yanlış cümle 2",
+          "Yanlış cümle 1",
+          "Vê rewşê ez bêhêvî kirim"
         ],
-        "correctIndex": 1,
+        "correctIndex": 3,
         "audioText": "Vê rewşê ez bêhêvî kirim",
         "audioLang": "ku"
       },
@@ -4298,12 +4298,12 @@ export const kurdishContent = [
         "type": "constructSentence",
         "prompt": "Şu cümleyi çevir: Müzakere oldukça zorluydu",
         "options": [
+          "fake2",
+          "fake1",
+          "bû",
           "dijwar",
           "pir",
-          "fake1",
-          "Danûstandin",
-          "bû",
-          "fake2"
+          "Danûstandin"
         ],
         "correctAnswer": [
           "Danûstandin",
@@ -4320,12 +4320,12 @@ export const kurdishContent = [
         "type": "translate",
         "prompt": "Çevir: Danûstandin pir dijwar bû",
         "options": [
-          "Yanlış çeviri 2",
           "Müzakere oldukça zorluydu",
           "Yanlış çeviri 1",
+          "Yanlış çeviri 2",
           "Yanlış çeviri 3"
         ],
-        "correctIndex": 1,
+        "correctIndex": 0,
         "audioText": "Danûstandin pir dijwar bû",
         "audioLang": "ku"
       },
@@ -4334,13 +4334,13 @@ export const kurdishContent = [
         "type": "constructSentence",
         "prompt": "Şu cümleyi çevir: Bu durum beni hayal kırıklığına uğrattı",
         "options": [
-          "bêhêvî",
-          "fake2",
-          "kirim",
           "ez",
+          "fake1",
           "rewşê",
-          "Vê",
-          "fake1"
+          "fake2",
+          "bêhêvî",
+          "kirim",
+          "Vê"
         ],
         "correctAnswer": [
           "Vê",
@@ -4358,12 +4358,12 @@ export const kurdishContent = [
         "type": "translate",
         "prompt": "Çevir: Vê rewşê ez bêhêvî kirim",
         "options": [
-          "Bu durum beni hayal kırıklığına uğrattı",
-          "Yanlış çeviri 1",
+          "Yanlış çeviri 3",
           "Yanlış çeviri 2",
-          "Yanlış çeviri 3"
+          "Yanlış çeviri 1",
+          "Bu durum beni hayal kırıklığına uğrattı"
         ],
-        "correctIndex": 0,
+        "correctIndex": 3,
         "audioText": "Vê rewşê ez bêhêvî kirim",
         "audioLang": "ku"
       },
@@ -4372,12 +4372,12 @@ export const kurdishContent = [
         "type": "listen",
         "prompt": "Duyduğun cümleyi seç",
         "options": [
-          "Yanlış cümle 1",
-          "Yanlış cümle 3",
           "Yanlış cümle 2",
-          "Danûstandin pir dijwar bû"
+          "Danûstandin pir dijwar bû",
+          "Yanlış cümle 3",
+          "Yanlış cümle 1"
         ],
-        "correctIndex": 3,
+        "correctIndex": 1,
         "audioText": "Danûstandin pir dijwar bû",
         "audioLang": "ku"
       },
@@ -4395,12 +4395,12 @@ export const kurdishContent = [
         "type": "listen",
         "prompt": "Duyduğun cümleyi seç",
         "options": [
-          "Yanlış cümle 3",
           "Yanlış cümle 2",
           "Yanlış cümle 1",
-          "Vê rewşê ez bêhêvî kirim"
+          "Vê rewşê ez bêhêvî kirim",
+          "Yanlış cümle 3"
         ],
-        "correctIndex": 3,
+        "correctIndex": 2,
         "audioText": "Vê rewşê ez bêhêvî kirim",
         "audioLang": "ku"
       },

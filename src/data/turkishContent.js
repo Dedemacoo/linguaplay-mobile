@@ -47,10 +47,10 @@ export const turkishContent = [
         "type": "imageChoice",
         "prompt": "Hangisi 'Hello' demektir?",
         "options": [
-          "Merhaba",
-          "Yanlış cevap",
           "Alakasız",
-          "Hatalı"
+          "Hatalı",
+          "Yanlış cevap",
+          "Merhaba"
         ],
         "imageOptions": [
           "👋",
@@ -58,7 +58,7 @@ export const turkishContent = [
           "❓",
           "❓"
         ],
-        "correctIndex": 0,
+        "correctIndex": 3,
         "audioText": "Merhaba",
         "audioLang": "tr-TR"
       },
@@ -69,9 +69,9 @@ export const turkishContent = [
         "options": [
           "Bir",
           "kahve",
-          "fake2",
           "istiyorum",
-          "fake1"
+          "fake1",
+          "fake2"
         ],
         "correctAnswer": [
           "Bir",
@@ -87,9 +87,9 @@ export const turkishContent = [
         "type": "translate",
         "prompt": "Çevir: Bir kahve istiyorum",
         "options": [
+          "Yanlış çeviri 3",
           "Yanlış çeviri 2",
           "Yanlış çeviri 1",
-          "Yanlış çeviri 3",
           "I want a coffee"
         ],
         "correctIndex": 3,
@@ -101,9 +101,9 @@ export const turkishContent = [
         "type": "constructSentence",
         "prompt": "Şu cümleyi çevir: How are you?",
         "options": [
+          "fake2",
           "Nasılsın?",
-          "fake1",
-          "fake2"
+          "fake1"
         ],
         "correctAnswer": [
           "Nasılsın?"
@@ -117,12 +117,12 @@ export const turkishContent = [
         "type": "translate",
         "prompt": "Çevir: Nasılsın?",
         "options": [
-          "How are you?",
-          "Yanlış çeviri 2",
           "Yanlış çeviri 3",
-          "Yanlış çeviri 1"
+          "Yanlış çeviri 2",
+          "Yanlış çeviri 1",
+          "How are you?"
         ],
-        "correctIndex": 0,
+        "correctIndex": 3,
         "audioText": "Nasılsın?",
         "audioLang": "tr-TR"
       },
@@ -131,12 +131,12 @@ export const turkishContent = [
         "type": "listen",
         "prompt": "Duyduğun cümleyi seç",
         "options": [
-          "Yanlış cümle 2",
+          "Bir kahve istiyorum",
           "Yanlış cümle 3",
-          "Yanlış cümle 1",
-          "Bir kahve istiyorum"
+          "Yanlış cümle 2",
+          "Yanlış cümle 1"
         ],
-        "correctIndex": 3,
+        "correctIndex": 0,
         "audioText": "Bir kahve istiyorum",
         "audioLang": "tr-TR"
       },
@@ -154,12 +154,12 @@ export const turkishContent = [
         "type": "listen",
         "prompt": "Duyduğun cümleyi seç",
         "options": [
-          "Yanlış cümle 3",
-          "Yanlış cümle 2",
+          "Nasılsın?",
           "Yanlış cümle 1",
-          "Nasılsın?"
+          "Yanlış cümle 2",
+          "Yanlış cümle 3"
         ],
-        "correctIndex": 3,
+        "correctIndex": 0,
         "audioText": "Nasılsın?",
         "audioLang": "tr-TR"
       },
@@ -222,14 +222,14 @@ export const turkishContent = [
         "type": "imageChoice",
         "prompt": "Hangisi 'Hello' demektir?",
         "options": [
-          "Alakasız",
           "Hatalı",
           "Yanlış cevap",
+          "Alakasız",
           "Merhaba"
         ],
         "imageOptions": [
-          "👋",
           "❓",
+          "👋",
           "❓",
           "❓"
         ],
@@ -242,11 +242,11 @@ export const turkishContent = [
         "type": "constructSentence",
         "prompt": "Şu cümleyi çevir: I want a coffee",
         "options": [
-          "Bir",
-          "kahve",
           "fake2",
           "istiyorum",
-          "fake1"
+          "kahve",
+          "fake1",
+          "Bir"
         ],
         "correctAnswer": [
           "Bir",
@@ -262,12 +262,12 @@ export const turkishContent = [
         "type": "translate",
         "prompt": "Çevir: Bir kahve istiyorum",
         "options": [
-          "Yanlış çeviri 2",
           "Yanlış çeviri 3",
           "Yanlış çeviri 1",
-          "I want a coffee"
+          "I want a coffee",
+          "Yanlış çeviri 2"
         ],
-        "correctIndex": 3,
+        "correctIndex": 2,
         "audioText": "Bir kahve istiyorum",
         "audioLang": "tr-TR"
       },
@@ -276,9 +276,9 @@ export const turkishContent = [
         "type": "constructSentence",
         "prompt": "Şu cümleyi çevir: How are you?",
         "options": [
+          "fake2",
           "fake1",
-          "Nasılsın?",
-          "fake2"
+          "Nasılsın?"
         ],
         "correctAnswer": [
           "Nasılsın?"
@@ -293,11 +293,11 @@ export const turkishContent = [
         "prompt": "Çevir: Nasılsın?",
         "options": [
           "Yanlış çeviri 3",
-          "How are you?",
           "Yanlış çeviri 1",
+          "How are you?",
           "Yanlış çeviri 2"
         ],
-        "correctIndex": 1,
+        "correctIndex": 2,
         "audioText": "Nasılsın?",
         "audioLang": "tr-TR"
       },
@@ -329,12 +329,12 @@ export const turkishContent = [
         "type": "listen",
         "prompt": "Duyduğun cümleyi seç",
         "options": [
-          "Nasılsın?",
-          "Yanlış cümle 3",
           "Yanlış cümle 2",
-          "Yanlış cümle 1"
+          "Yanlış cümle 3",
+          "Yanlış cümle 1",
+          "Nasılsın?"
         ],
-        "correctIndex": 0,
+        "correctIndex": 3,
         "audioText": "Nasılsın?",
         "audioLang": "tr-TR"
       },
@@ -397,10 +397,10 @@ export const turkishContent = [
         "type": "imageChoice",
         "prompt": "Hangisi 'Hello' demektir?",
         "options": [
+          "Alakasız",
           "Hatalı",
-          "Merhaba",
           "Yanlış cevap",
-          "Alakasız"
+          "Merhaba"
         ],
         "imageOptions": [
           "👋",
@@ -408,7 +408,7 @@ export const turkishContent = [
           "❓",
           "❓"
         ],
-        "correctIndex": 1,
+        "correctIndex": 3,
         "audioText": "Merhaba",
         "audioLang": "tr-TR"
       },
@@ -417,10 +417,10 @@ export const turkishContent = [
         "type": "constructSentence",
         "prompt": "Şu cümleyi çevir: I want a coffee",
         "options": [
-          "fake1",
-          "Bir",
-          "kahve",
           "fake2",
+          "Bir",
+          "fake1",
+          "kahve",
           "istiyorum"
         ],
         "correctAnswer": [
@@ -438,9 +438,9 @@ export const turkishContent = [
         "prompt": "Çevir: Bir kahve istiyorum",
         "options": [
           "I want a coffee",
+          "Yanlış çeviri 3",
           "Yanlış çeviri 1",
-          "Yanlış çeviri 2",
-          "Yanlış çeviri 3"
+          "Yanlış çeviri 2"
         ],
         "correctIndex": 0,
         "audioText": "Bir kahve istiyorum",
@@ -451,9 +451,9 @@ export const turkishContent = [
         "type": "constructSentence",
         "prompt": "Şu cümleyi çevir: How are you?",
         "options": [
-          "fake2",
+          "Nasılsın?",
           "fake1",
-          "Nasılsın?"
+          "fake2"
         ],
         "correctAnswer": [
           "Nasılsın?"
@@ -467,9 +467,9 @@ export const turkishContent = [
         "type": "translate",
         "prompt": "Çevir: Nasılsın?",
         "options": [
+          "Yanlış çeviri 2",
           "Yanlış çeviri 1",
           "Yanlış çeviri 3",
-          "Yanlış çeviri 2",
           "How are you?"
         ],
         "correctIndex": 3,
@@ -481,12 +481,12 @@ export const turkishContent = [
         "type": "listen",
         "prompt": "Duyduğun cümleyi seç",
         "options": [
-          "Yanlış cümle 3",
-          "Yanlış cümle 2",
+          "Bir kahve istiyorum",
           "Yanlış cümle 1",
-          "Bir kahve istiyorum"
+          "Yanlış cümle 2",
+          "Yanlış cümle 3"
         ],
-        "correctIndex": 3,
+        "correctIndex": 0,
         "audioText": "Bir kahve istiyorum",
         "audioLang": "tr-TR"
       },
@@ -504,12 +504,12 @@ export const turkishContent = [
         "type": "listen",
         "prompt": "Duyduğun cümleyi seç",
         "options": [
-          "Yanlış cümle 2",
           "Nasılsın?",
           "Yanlış cümle 3",
-          "Yanlış cümle 1"
+          "Yanlış cümle 1",
+          "Yanlış cümle 2"
         ],
-        "correctIndex": 1,
+        "correctIndex": 0,
         "audioText": "Nasılsın?",
         "audioLang": "tr-TR"
       },
@@ -572,10 +572,10 @@ export const turkishContent = [
         "type": "imageChoice",
         "prompt": "Hangisi 'Hello' demektir?",
         "options": [
-          "Alakasız",
-          "Hatalı",
+          "Merhaba",
           "Yanlış cevap",
-          "Merhaba"
+          "Hatalı",
+          "Alakasız"
         ],
         "imageOptions": [
           "❓",
@@ -583,7 +583,7 @@ export const turkishContent = [
           "❓",
           "👋"
         ],
-        "correctIndex": 3,
+        "correctIndex": 0,
         "audioText": "Merhaba",
         "audioLang": "tr-TR"
       },
@@ -592,11 +592,11 @@ export const turkishContent = [
         "type": "constructSentence",
         "prompt": "Şu cümleyi çevir: I want a coffee",
         "options": [
-          "istiyorum",
-          "kahve",
           "Bir",
-          "fake2",
-          "fake1"
+          "kahve",
+          "fake1",
+          "istiyorum",
+          "fake2"
         ],
         "correctAnswer": [
           "Bir",
@@ -612,12 +612,12 @@ export const turkishContent = [
         "type": "translate",
         "prompt": "Çevir: Bir kahve istiyorum",
         "options": [
-          "I want a coffee",
-          "Yanlış çeviri 1",
           "Yanlış çeviri 2",
-          "Yanlış çeviri 3"
+          "Yanlış çeviri 1",
+          "Yanlış çeviri 3",
+          "I want a coffee"
         ],
-        "correctIndex": 0,
+        "correctIndex": 3,
         "audioText": "Bir kahve istiyorum",
         "audioLang": "tr-TR"
       },
@@ -642,12 +642,12 @@ export const turkishContent = [
         "type": "translate",
         "prompt": "Çevir: Nasılsın?",
         "options": [
-          "Yanlış çeviri 3",
-          "Yanlış çeviri 2",
+          "How are you?",
           "Yanlış çeviri 1",
-          "How are you?"
+          "Yanlış çeviri 2",
+          "Yanlış çeviri 3"
         ],
-        "correctIndex": 3,
+        "correctIndex": 0,
         "audioText": "Nasılsın?",
         "audioLang": "tr-TR"
       },
@@ -657,11 +657,11 @@ export const turkishContent = [
         "prompt": "Duyduğun cümleyi seç",
         "options": [
           "Yanlış cümle 3",
-          "Yanlış cümle 2",
+          "Bir kahve istiyorum",
           "Yanlış cümle 1",
-          "Bir kahve istiyorum"
+          "Yanlış cümle 2"
         ],
-        "correctIndex": 3,
+        "correctIndex": 1,
         "audioText": "Bir kahve istiyorum",
         "audioLang": "tr-TR"
       },
@@ -679,12 +679,12 @@ export const turkishContent = [
         "type": "listen",
         "prompt": "Duyduğun cümleyi seç",
         "options": [
-          "Nasılsın?",
           "Yanlış cümle 1",
           "Yanlış cümle 3",
+          "Nasılsın?",
           "Yanlış cümle 2"
         ],
-        "correctIndex": 0,
+        "correctIndex": 2,
         "audioText": "Nasılsın?",
         "audioLang": "tr-TR"
       },
@@ -747,18 +747,18 @@ export const turkishContent = [
         "type": "imageChoice",
         "prompt": "Hangisi 'Hello' demektir?",
         "options": [
-          "Merhaba",
+          "Hatalı",
           "Yanlış cevap",
           "Alakasız",
-          "Hatalı"
+          "Merhaba"
         ],
         "imageOptions": [
-          "❓",
-          "❓",
           "👋",
+          "❓",
+          "❓",
           "❓"
         ],
-        "correctIndex": 0,
+        "correctIndex": 3,
         "audioText": "Merhaba",
         "audioLang": "tr-TR"
       },
@@ -768,10 +768,10 @@ export const turkishContent = [
         "prompt": "Şu cümleyi çevir: I want a coffee",
         "options": [
           "fake1",
-          "istiyorum",
           "fake2",
+          "Bir",
           "kahve",
-          "Bir"
+          "istiyorum"
         ],
         "correctAnswer": [
           "Bir",
@@ -788,9 +788,9 @@ export const turkishContent = [
         "prompt": "Çevir: Bir kahve istiyorum",
         "options": [
           "Yanlış çeviri 3",
-          "Yanlış çeviri 1",
+          "Yanlış çeviri 2",
           "I want a coffee",
-          "Yanlış çeviri 2"
+          "Yanlış çeviri 1"
         ],
         "correctIndex": 2,
         "audioText": "Bir kahve istiyorum",
@@ -801,9 +801,9 @@ export const turkishContent = [
         "type": "constructSentence",
         "prompt": "Şu cümleyi çevir: How are you?",
         "options": [
-          "fake2",
+          "Nasılsın?",
           "fake1",
-          "Nasılsın?"
+          "fake2"
         ],
         "correctAnswer": [
           "Nasılsın?"
@@ -817,12 +817,12 @@ export const turkishContent = [
         "type": "translate",
         "prompt": "Çevir: Nasılsın?",
         "options": [
-          "How are you?",
-          "Yanlış çeviri 1",
+          "Yanlış çeviri 2",
           "Yanlış çeviri 3",
-          "Yanlış çeviri 2"
+          "Yanlış çeviri 1",
+          "How are you?"
         ],
-        "correctIndex": 0,
+        "correctIndex": 3,
         "audioText": "Nasılsın?",
         "audioLang": "tr-TR"
       },
@@ -833,8 +833,8 @@ export const turkishContent = [
         "options": [
           "Bir kahve istiyorum",
           "Yanlış cümle 1",
-          "Yanlış cümle 2",
-          "Yanlış cümle 3"
+          "Yanlış cümle 3",
+          "Yanlış cümle 2"
         ],
         "correctIndex": 0,
         "audioText": "Bir kahve istiyorum",
@@ -854,12 +854,12 @@ export const turkishContent = [
         "type": "listen",
         "prompt": "Duyduğun cümleyi seç",
         "options": [
-          "Yanlış cümle 3",
           "Yanlış cümle 1",
           "Nasılsın?",
-          "Yanlış cümle 2"
+          "Yanlış cümle 2",
+          "Yanlış cümle 3"
         ],
-        "correctIndex": 2,
+        "correctIndex": 1,
         "audioText": "Nasılsın?",
         "audioLang": "tr-TR"
       },
@@ -922,16 +922,16 @@ export const turkishContent = [
         "type": "imageChoice",
         "prompt": "Hangisi 'Hello' demektir?",
         "options": [
-          "Yanlış cevap",
-          "Merhaba",
           "Alakasız",
+          "Merhaba",
+          "Yanlış cevap",
           "Hatalı"
         ],
         "imageOptions": [
-          "👋",
           "❓",
           "❓",
-          "❓"
+          "❓",
+          "👋"
         ],
         "correctIndex": 1,
         "audioText": "Merhaba",
@@ -943,10 +943,10 @@ export const turkishContent = [
         "prompt": "Şu cümleyi çevir: I want a coffee",
         "options": [
           "istiyorum",
-          "Bir",
-          "fake2",
           "kahve",
-          "fake1"
+          "fake1",
+          "Bir",
+          "fake2"
         ],
         "correctAnswer": [
           "Bir",
@@ -962,12 +962,12 @@ export const turkishContent = [
         "type": "translate",
         "prompt": "Çevir: Bir kahve istiyorum",
         "options": [
-          "I want a coffee",
-          "Yanlış çeviri 3",
+          "Yanlış çeviri 2",
           "Yanlış çeviri 1",
-          "Yanlış çeviri 2"
+          "Yanlış çeviri 3",
+          "I want a coffee"
         ],
-        "correctIndex": 0,
+        "correctIndex": 3,
         "audioText": "Bir kahve istiyorum",
         "audioLang": "tr-TR"
       },
@@ -992,12 +992,12 @@ export const turkishContent = [
         "type": "translate",
         "prompt": "Çevir: Nasılsın?",
         "options": [
-          "How are you?",
-          "Yanlış çeviri 1",
           "Yanlış çeviri 3",
-          "Yanlış çeviri 2"
+          "Yanlış çeviri 1",
+          "Yanlış çeviri 2",
+          "How are you?"
         ],
-        "correctIndex": 0,
+        "correctIndex": 3,
         "audioText": "Nasılsın?",
         "audioLang": "tr-TR"
       },
@@ -1008,10 +1008,10 @@ export const turkishContent = [
         "options": [
           "Yanlış cümle 2",
           "Yanlış cümle 1",
-          "Yanlış cümle 3",
-          "Bir kahve istiyorum"
+          "Bir kahve istiyorum",
+          "Yanlış cümle 3"
         ],
-        "correctIndex": 3,
+        "correctIndex": 2,
         "audioText": "Bir kahve istiyorum",
         "audioLang": "tr-TR"
       },
@@ -1029,12 +1029,12 @@ export const turkishContent = [
         "type": "listen",
         "prompt": "Duyduğun cümleyi seç",
         "options": [
+          "Nasılsın?",
           "Yanlış cümle 3",
-          "Yanlış cümle 2",
           "Yanlış cümle 1",
-          "Nasılsın?"
+          "Yanlış cümle 2"
         ],
-        "correctIndex": 3,
+        "correctIndex": 0,
         "audioText": "Nasılsın?",
         "audioLang": "tr-TR"
       },
@@ -1099,13 +1099,13 @@ export const turkishContent = [
         "options": [
           "Havalimanı",
           "Yanlış cevap",
-          "Alakasız",
-          "Hatalı"
+          "Hatalı",
+          "Alakasız"
         ],
         "imageOptions": [
-          "❓",
-          "❓",
           "✈️",
+          "❓",
+          "❓",
           "❓"
         ],
         "correctIndex": 0,
@@ -1117,10 +1117,10 @@ export const turkishContent = [
         "type": "constructSentence",
         "prompt": "Şu cümleyi çevir: I lost my ticket",
         "options": [
-          "fake2",
           "kaybettim",
-          "Biletimi",
-          "fake1"
+          "fake1",
+          "fake2",
+          "Biletimi"
         ],
         "correctAnswer": [
           "Biletimi",
@@ -1135,10 +1135,10 @@ export const turkishContent = [
         "type": "translate",
         "prompt": "Çevir: Biletimi kaybettim",
         "options": [
-          "Yanlış çeviri 1",
+          "Yanlış çeviri 3",
           "I lost my ticket",
-          "Yanlış çeviri 2",
-          "Yanlış çeviri 3"
+          "Yanlış çeviri 1",
+          "Yanlış çeviri 2"
         ],
         "correctIndex": 1,
         "audioText": "Biletimi kaybettim",
@@ -1167,12 +1167,12 @@ export const turkishContent = [
         "type": "translate",
         "prompt": "Çevir: Nereye gidiyorsun?",
         "options": [
-          "Yanlış çeviri 1",
           "Yanlış çeviri 3",
-          "Yanlış çeviri 2",
-          "Where are you going?"
+          "Where are you going?",
+          "Yanlış çeviri 1",
+          "Yanlış çeviri 2"
         ],
-        "correctIndex": 3,
+        "correctIndex": 1,
         "audioText": "Nereye gidiyorsun?",
         "audioLang": "tr-TR"
       },
@@ -1183,10 +1183,10 @@ export const turkishContent = [
         "options": [
           "Yanlış cümle 3",
           "Yanlış cümle 2",
-          "Yanlış cümle 1",
-          "Biletimi kaybettim"
+          "Biletimi kaybettim",
+          "Yanlış cümle 1"
         ],
-        "correctIndex": 3,
+        "correctIndex": 2,
         "audioText": "Biletimi kaybettim",
         "audioLang": "tr-TR"
       },
@@ -1204,10 +1204,10 @@ export const turkishContent = [
         "type": "listen",
         "prompt": "Duyduğun cümleyi seç",
         "options": [
-          "Yanlış cümle 3",
-          "Nereye gidiyorsun?",
           "Yanlış cümle 1",
-          "Yanlış cümle 2"
+          "Nereye gidiyorsun?",
+          "Yanlış cümle 2",
+          "Yanlış cümle 3"
         ],
         "correctIndex": 1,
         "audioText": "Nereye gidiyorsun?",
@@ -1272,10 +1272,10 @@ export const turkishContent = [
         "type": "imageChoice",
         "prompt": "Hangisi 'Airport' demektir?",
         "options": [
-          "Yanlış cevap",
-          "Alakasız",
           "Hatalı",
-          "Havalimanı"
+          "Yanlış cevap",
+          "Havalimanı",
+          "Alakasız"
         ],
         "imageOptions": [
           "❓",
@@ -1283,7 +1283,7 @@ export const turkishContent = [
           "✈️",
           "❓"
         ],
-        "correctIndex": 3,
+        "correctIndex": 2,
         "audioText": "Havalimanı",
         "audioLang": "tr-TR"
       },
@@ -1292,10 +1292,10 @@ export const turkishContent = [
         "type": "constructSentence",
         "prompt": "Şu cümleyi çevir: I lost my ticket",
         "options": [
-          "kaybettim",
           "fake1",
-          "fake2",
-          "Biletimi"
+          "kaybettim",
+          "Biletimi",
+          "fake2"
         ],
         "correctAnswer": [
           "Biletimi",
@@ -1324,10 +1324,10 @@ export const turkishContent = [
         "type": "constructSentence",
         "prompt": "Şu cümleyi çevir: Where are you going?",
         "options": [
-          "fake1",
           "fake2",
+          "Nereye",
           "gidiyorsun?",
-          "Nereye"
+          "fake1"
         ],
         "correctAnswer": [
           "Nereye",
@@ -1356,12 +1356,12 @@ export const turkishContent = [
         "type": "listen",
         "prompt": "Duyduğun cümleyi seç",
         "options": [
-          "Biletimi kaybettim",
-          "Yanlış cümle 3",
           "Yanlış cümle 1",
-          "Yanlış cümle 2"
+          "Biletimi kaybettim",
+          "Yanlış cümle 2",
+          "Yanlış cümle 3"
         ],
-        "correctIndex": 0,
+        "correctIndex": 1,
         "audioText": "Biletimi kaybettim",
         "audioLang": "tr-TR"
       },
@@ -1379,12 +1379,12 @@ export const turkishContent = [
         "type": "listen",
         "prompt": "Duyduğun cümleyi seç",
         "options": [
+          "Yanlış cümle 3",
           "Yanlış cümle 2",
           "Yanlış cümle 1",
-          "Nereye gidiyorsun?",
-          "Yanlış cümle 3"
+          "Nereye gidiyorsun?"
         ],
-        "correctIndex": 2,
+        "correctIndex": 3,
         "audioText": "Nereye gidiyorsun?",
         "audioLang": "tr-TR"
       },
@@ -1447,18 +1447,18 @@ export const turkishContent = [
         "type": "imageChoice",
         "prompt": "Hangisi 'Airport' demektir?",
         "options": [
-          "Alakasız",
           "Yanlış cevap",
           "Havalimanı",
+          "Alakasız",
           "Hatalı"
         ],
         "imageOptions": [
-          "❓",
-          "❓",
           "✈️",
+          "❓",
+          "❓",
           "❓"
         ],
-        "correctIndex": 2,
+        "correctIndex": 1,
         "audioText": "Havalimanı",
         "audioLang": "tr-TR"
       },
@@ -1467,10 +1467,10 @@ export const turkishContent = [
         "type": "constructSentence",
         "prompt": "Şu cümleyi çevir: I lost my ticket",
         "options": [
-          "Biletimi",
-          "kaybettim",
           "fake2",
-          "fake1"
+          "fake1",
+          "kaybettim",
+          "Biletimi"
         ],
         "correctAnswer": [
           "Biletimi",
@@ -1485,12 +1485,12 @@ export const turkishContent = [
         "type": "translate",
         "prompt": "Çevir: Biletimi kaybettim",
         "options": [
+          "I lost my ticket",
           "Yanlış çeviri 1",
           "Yanlış çeviri 2",
-          "I lost my ticket",
           "Yanlış çeviri 3"
         ],
-        "correctIndex": 2,
+        "correctIndex": 0,
         "audioText": "Biletimi kaybettim",
         "audioLang": "tr-TR"
       },
@@ -1499,10 +1499,10 @@ export const turkishContent = [
         "type": "constructSentence",
         "prompt": "Şu cümleyi çevir: Where are you going?",
         "options": [
-          "fake1",
-          "Nereye",
           "fake2",
-          "gidiyorsun?"
+          "fake1",
+          "gidiyorsun?",
+          "Nereye"
         ],
         "correctAnswer": [
           "Nereye",
@@ -1517,12 +1517,12 @@ export const turkishContent = [
         "type": "translate",
         "prompt": "Çevir: Nereye gidiyorsun?",
         "options": [
-          "Yanlış çeviri 2",
-          "Yanlış çeviri 1",
           "Where are you going?",
+          "Yanlış çeviri 1",
+          "Yanlış çeviri 2",
           "Yanlış çeviri 3"
         ],
-        "correctIndex": 2,
+        "correctIndex": 0,
         "audioText": "Nereye gidiyorsun?",
         "audioLang": "tr-TR"
       },
@@ -1532,9 +1532,9 @@ export const turkishContent = [
         "prompt": "Duyduğun cümleyi seç",
         "options": [
           "Biletimi kaybettim",
+          "Yanlış cümle 3",
           "Yanlış cümle 1",
-          "Yanlış cümle 2",
-          "Yanlış cümle 3"
+          "Yanlış cümle 2"
         ],
         "correctIndex": 0,
         "audioText": "Biletimi kaybettim",
@@ -1554,12 +1554,12 @@ export const turkishContent = [
         "type": "listen",
         "prompt": "Duyduğun cümleyi seç",
         "options": [
+          "Yanlış cümle 2",
           "Yanlış cümle 1",
           "Nereye gidiyorsun?",
-          "Yanlış cümle 3",
-          "Yanlış cümle 2"
+          "Yanlış cümle 3"
         ],
-        "correctIndex": 1,
+        "correctIndex": 2,
         "audioText": "Nereye gidiyorsun?",
         "audioLang": "tr-TR"
       },
@@ -1622,10 +1622,10 @@ export const turkishContent = [
         "type": "imageChoice",
         "prompt": "Hangisi 'Airport' demektir?",
         "options": [
-          "Hatalı",
           "Alakasız",
+          "Havalimanı",
           "Yanlış cevap",
-          "Havalimanı"
+          "Hatalı"
         ],
         "imageOptions": [
           "✈️",
@@ -1633,7 +1633,7 @@ export const turkishContent = [
           "❓",
           "❓"
         ],
-        "correctIndex": 3,
+        "correctIndex": 1,
         "audioText": "Havalimanı",
         "audioLang": "tr-TR"
       },
@@ -1642,10 +1642,10 @@ export const turkishContent = [
         "type": "constructSentence",
         "prompt": "Şu cümleyi çevir: I lost my ticket",
         "options": [
-          "Biletimi",
-          "kaybettim",
           "fake1",
-          "fake2"
+          "fake2",
+          "kaybettim",
+          "Biletimi"
         ],
         "correctAnswer": [
           "Biletimi",
@@ -1660,12 +1660,12 @@ export const turkishContent = [
         "type": "translate",
         "prompt": "Çevir: Biletimi kaybettim",
         "options": [
-          "Yanlış çeviri 1",
           "Yanlış çeviri 3",
-          "I lost my ticket",
-          "Yanlış çeviri 2"
+          "Yanlış çeviri 2",
+          "Yanlış çeviri 1",
+          "I lost my ticket"
         ],
-        "correctIndex": 2,
+        "correctIndex": 3,
         "audioText": "Biletimi kaybettim",
         "audioLang": "tr-TR"
       },
@@ -1674,10 +1674,10 @@ export const turkishContent = [
         "type": "constructSentence",
         "prompt": "Şu cümleyi çevir: Where are you going?",
         "options": [
-          "fake2",
           "gidiyorsun?",
           "Nereye",
-          "fake1"
+          "fake1",
+          "fake2"
         ],
         "correctAnswer": [
           "Nereye",
@@ -1692,12 +1692,12 @@ export const turkishContent = [
         "type": "translate",
         "prompt": "Çevir: Nereye gidiyorsun?",
         "options": [
-          "Where are you going?",
-          "Yanlış çeviri 1",
           "Yanlış çeviri 2",
-          "Yanlış çeviri 3"
+          "Yanlış çeviri 1",
+          "Yanlış çeviri 3",
+          "Where are you going?"
         ],
-        "correctIndex": 0,
+        "correctIndex": 3,
         "audioText": "Nereye gidiyorsun?",
         "audioLang": "tr-TR"
       },
@@ -1707,11 +1707,11 @@ export const turkishContent = [
         "prompt": "Duyduğun cümleyi seç",
         "options": [
           "Yanlış cümle 1",
+          "Yanlış cümle 3",
           "Biletimi kaybettim",
-          "Yanlış cümle 2",
-          "Yanlış cümle 3"
+          "Yanlış cümle 2"
         ],
-        "correctIndex": 1,
+        "correctIndex": 2,
         "audioText": "Biletimi kaybettim",
         "audioLang": "tr-TR"
       },
@@ -1729,12 +1729,12 @@ export const turkishContent = [
         "type": "listen",
         "prompt": "Duyduğun cümleyi seç",
         "options": [
-          "Yanlış cümle 3",
-          "Yanlış cümle 2",
+          "Nereye gidiyorsun?",
           "Yanlış cümle 1",
-          "Nereye gidiyorsun?"
+          "Yanlış cümle 3",
+          "Yanlış cümle 2"
         ],
-        "correctIndex": 3,
+        "correctIndex": 0,
         "audioText": "Nereye gidiyorsun?",
         "audioLang": "tr-TR"
       },
@@ -1798,15 +1798,15 @@ export const turkishContent = [
         "prompt": "Hangisi 'Airport' demektir?",
         "options": [
           "Havalimanı",
-          "Yanlış cevap",
           "Alakasız",
+          "Yanlış cevap",
           "Hatalı"
         ],
         "imageOptions": [
-          "✈️",
           "❓",
           "❓",
-          "❓"
+          "❓",
+          "✈️"
         ],
         "correctIndex": 0,
         "audioText": "Havalimanı",
@@ -1818,9 +1818,9 @@ export const turkishContent = [
         "prompt": "Şu cümleyi çevir: I lost my ticket",
         "options": [
           "fake2",
-          "Biletimi",
+          "fake1",
           "kaybettim",
-          "fake1"
+          "Biletimi"
         ],
         "correctAnswer": [
           "Biletimi",
@@ -1835,12 +1835,12 @@ export const turkishContent = [
         "type": "translate",
         "prompt": "Çevir: Biletimi kaybettim",
         "options": [
-          "Yanlış çeviri 3",
-          "I lost my ticket",
+          "Yanlış çeviri 2",
           "Yanlış çeviri 1",
-          "Yanlış çeviri 2"
+          "Yanlış çeviri 3",
+          "I lost my ticket"
         ],
-        "correctIndex": 1,
+        "correctIndex": 3,
         "audioText": "Biletimi kaybettim",
         "audioLang": "tr-TR"
       },
@@ -1849,10 +1849,10 @@ export const turkishContent = [
         "type": "constructSentence",
         "prompt": "Şu cümleyi çevir: Where are you going?",
         "options": [
-          "gidiyorsun?",
-          "fake2",
           "fake1",
-          "Nereye"
+          "gidiyorsun?",
+          "Nereye",
+          "fake2"
         ],
         "correctAnswer": [
           "Nereye",
@@ -1868,11 +1868,11 @@ export const turkishContent = [
         "prompt": "Çevir: Nereye gidiyorsun?",
         "options": [
           "Yanlış çeviri 3",
-          "Where are you going?",
+          "Yanlış çeviri 2",
           "Yanlış çeviri 1",
-          "Yanlış çeviri 2"
+          "Where are you going?"
         ],
-        "correctIndex": 1,
+        "correctIndex": 3,
         "audioText": "Nereye gidiyorsun?",
         "audioLang": "tr-TR"
       },
@@ -1881,12 +1881,12 @@ export const turkishContent = [
         "type": "listen",
         "prompt": "Duyduğun cümleyi seç",
         "options": [
-          "Biletimi kaybettim",
-          "Yanlış cümle 2",
           "Yanlış cümle 3",
-          "Yanlış cümle 1"
+          "Yanlış cümle 2",
+          "Yanlış cümle 1",
+          "Biletimi kaybettim"
         ],
-        "correctIndex": 0,
+        "correctIndex": 3,
         "audioText": "Biletimi kaybettim",
         "audioLang": "tr-TR"
       },
@@ -1904,8 +1904,8 @@ export const turkishContent = [
         "type": "listen",
         "prompt": "Duyduğun cümleyi seç",
         "options": [
-          "Yanlış cümle 3",
           "Yanlış cümle 2",
+          "Yanlış cümle 3",
           "Yanlış cümle 1",
           "Nereye gidiyorsun?"
         ],
@@ -1973,17 +1973,17 @@ export const turkishContent = [
         "prompt": "Hangisi 'Airport' demektir?",
         "options": [
           "Alakasız",
-          "Yanlış cevap",
           "Hatalı",
-          "Havalimanı"
+          "Havalimanı",
+          "Yanlış cevap"
         ],
         "imageOptions": [
-          "❓",
-          "❓",
           "✈️",
+          "❓",
+          "❓",
           "❓"
         ],
-        "correctIndex": 3,
+        "correctIndex": 2,
         "audioText": "Havalimanı",
         "audioLang": "tr-TR"
       },
@@ -2010,8 +2010,8 @@ export const turkishContent = [
         "type": "translate",
         "prompt": "Çevir: Biletimi kaybettim",
         "options": [
-          "Yanlış çeviri 2",
           "Yanlış çeviri 1",
+          "Yanlış çeviri 2",
           "I lost my ticket",
           "Yanlış çeviri 3"
         ],
@@ -2024,10 +2024,10 @@ export const turkishContent = [
         "type": "constructSentence",
         "prompt": "Şu cümleyi çevir: Where are you going?",
         "options": [
-          "Nereye",
           "fake2",
+          "fake1",
           "gidiyorsun?",
-          "fake1"
+          "Nereye"
         ],
         "correctAnswer": [
           "Nereye",
@@ -2042,12 +2042,12 @@ export const turkishContent = [
         "type": "translate",
         "prompt": "Çevir: Nereye gidiyorsun?",
         "options": [
-          "Yanlış çeviri 3",
-          "Yanlış çeviri 2",
           "Yanlış çeviri 1",
-          "Where are you going?"
+          "Where are you going?",
+          "Yanlış çeviri 2",
+          "Yanlış çeviri 3"
         ],
-        "correctIndex": 3,
+        "correctIndex": 1,
         "audioText": "Nereye gidiyorsun?",
         "audioLang": "tr-TR"
       },
@@ -2056,12 +2056,12 @@ export const turkishContent = [
         "type": "listen",
         "prompt": "Duyduğun cümleyi seç",
         "options": [
-          "Yanlış cümle 3",
-          "Yanlış cümle 1",
           "Biletimi kaybettim",
-          "Yanlış cümle 2"
+          "Yanlış cümle 1",
+          "Yanlış cümle 2",
+          "Yanlış cümle 3"
         ],
-        "correctIndex": 2,
+        "correctIndex": 0,
         "audioText": "Biletimi kaybettim",
         "audioLang": "tr-TR"
       },
@@ -2079,12 +2079,12 @@ export const turkishContent = [
         "type": "listen",
         "prompt": "Duyduğun cümleyi seç",
         "options": [
+          "Yanlış cümle 3",
           "Yanlış cümle 1",
           "Nereye gidiyorsun?",
-          "Yanlış cümle 2",
-          "Yanlış cümle 3"
+          "Yanlış cümle 2"
         ],
-        "correctIndex": 1,
+        "correctIndex": 2,
         "audioText": "Nereye gidiyorsun?",
         "audioLang": "tr-TR"
       },
@@ -2168,11 +2168,11 @@ export const turkishContent = [
         "prompt": "Şu cümleyi çevir: I think this is very important",
         "options": [
           "önemli",
-          "fake1",
-          "Bence",
-          "fake2",
           "bu",
-          "çok"
+          "fake2",
+          "Bence",
+          "çok",
+          "fake1"
         ],
         "correctAnswer": [
           "Bence",
@@ -2189,12 +2189,12 @@ export const turkishContent = [
         "type": "translate",
         "prompt": "Çevir: Bence bu çok önemli",
         "options": [
-          "Yanlış çeviri 3",
-          "Yanlış çeviri 2",
           "Yanlış çeviri 1",
-          "I think this is very important"
+          "Yanlış çeviri 2",
+          "I think this is very important",
+          "Yanlış çeviri 3"
         ],
-        "correctIndex": 3,
+        "correctIndex": 2,
         "audioText": "Bence bu çok önemli",
         "audioLang": "tr-TR"
       },
@@ -2203,9 +2203,9 @@ export const turkishContent = [
         "type": "constructSentence",
         "prompt": "Şu cümleyi çevir: I am not sure",
         "options": [
-          "fake1",
-          "değilim",
           "Emin",
+          "değilim",
+          "fake1",
           "fake2"
         ],
         "correctAnswer": [
@@ -2221,12 +2221,12 @@ export const turkishContent = [
         "type": "translate",
         "prompt": "Çevir: Emin değilim",
         "options": [
-          "I am not sure",
-          "Yanlış çeviri 1",
           "Yanlış çeviri 3",
-          "Yanlış çeviri 2"
+          "Yanlış çeviri 2",
+          "Yanlış çeviri 1",
+          "I am not sure"
         ],
-        "correctIndex": 0,
+        "correctIndex": 3,
         "audioText": "Emin değilim",
         "audioLang": "tr-TR"
       },
@@ -2235,12 +2235,12 @@ export const turkishContent = [
         "type": "listen",
         "prompt": "Duyduğun cümleyi seç",
         "options": [
-          "Bence bu çok önemli",
+          "Yanlış cümle 3",
           "Yanlış cümle 1",
-          "Yanlış cümle 2",
-          "Yanlış cümle 3"
+          "Bence bu çok önemli",
+          "Yanlış cümle 2"
         ],
-        "correctIndex": 0,
+        "correctIndex": 2,
         "audioText": "Bence bu çok önemli",
         "audioLang": "tr-TR"
       },
@@ -2258,12 +2258,12 @@ export const turkishContent = [
         "type": "listen",
         "prompt": "Duyduğun cümleyi seç",
         "options": [
+          "Emin değilim",
           "Yanlış cümle 3",
           "Yanlış cümle 2",
-          "Yanlış cümle 1",
-          "Emin değilim"
+          "Yanlış cümle 1"
         ],
-        "correctIndex": 3,
+        "correctIndex": 0,
         "audioText": "Emin değilim",
         "audioLang": "tr-TR"
       },
@@ -2326,16 +2326,16 @@ export const turkishContent = [
         "type": "imageChoice",
         "prompt": "Hangisi 'I think' demektir?",
         "options": [
+          "Yanlış cevap",
           "Alakasız",
           "Hatalı",
-          "Yanlış cevap",
           "Bence"
         ],
         "imageOptions": [
           "❓",
+          "🤔",
           "❓",
-          "❓",
-          "🤔"
+          "❓"
         ],
         "correctIndex": 3,
         "audioText": "Bence",
@@ -2346,12 +2346,12 @@ export const turkishContent = [
         "type": "constructSentence",
         "prompt": "Şu cümleyi çevir: I think this is very important",
         "options": [
-          "fake2",
           "fake1",
-          "önemli",
-          "çok",
+          "Bence",
           "bu",
-          "Bence"
+          "çok",
+          "önemli",
+          "fake2"
         ],
         "correctAnswer": [
           "Bence",
@@ -2368,12 +2368,12 @@ export const turkishContent = [
         "type": "translate",
         "prompt": "Çevir: Bence bu çok önemli",
         "options": [
-          "Yanlış çeviri 1",
           "Yanlış çeviri 3",
-          "I think this is very important",
-          "Yanlış çeviri 2"
+          "Yanlış çeviri 2",
+          "Yanlış çeviri 1",
+          "I think this is very important"
         ],
-        "correctIndex": 2,
+        "correctIndex": 3,
         "audioText": "Bence bu çok önemli",
         "audioLang": "tr-TR"
       },
@@ -2382,10 +2382,10 @@ export const turkishContent = [
         "type": "constructSentence",
         "prompt": "Şu cümleyi çevir: I am not sure",
         "options": [
-          "fake1",
           "fake2",
           "değilim",
-          "Emin"
+          "Emin",
+          "fake1"
         ],
         "correctAnswer": [
           "Emin",
@@ -2400,12 +2400,12 @@ export const turkishContent = [
         "type": "translate",
         "prompt": "Çevir: Emin değilim",
         "options": [
-          "Yanlış çeviri 3",
-          "Yanlış çeviri 2",
+          "I am not sure",
           "Yanlış çeviri 1",
-          "I am not sure"
+          "Yanlış çeviri 2",
+          "Yanlış çeviri 3"
         ],
-        "correctIndex": 3,
+        "correctIndex": 0,
         "audioText": "Emin değilim",
         "audioLang": "tr-TR"
       },
@@ -2414,12 +2414,12 @@ export const turkishContent = [
         "type": "listen",
         "prompt": "Duyduğun cümleyi seç",
         "options": [
+          "Yanlış cümle 3",
           "Yanlış cümle 1",
           "Bence bu çok önemli",
-          "Yanlış cümle 2",
-          "Yanlış cümle 3"
+          "Yanlış cümle 2"
         ],
-        "correctIndex": 1,
+        "correctIndex": 2,
         "audioText": "Bence bu çok önemli",
         "audioLang": "tr-TR"
       },
@@ -2437,12 +2437,12 @@ export const turkishContent = [
         "type": "listen",
         "prompt": "Duyduğun cümleyi seç",
         "options": [
-          "Yanlış cümle 2",
           "Yanlış cümle 3",
-          "Emin değilim",
-          "Yanlış cümle 1"
+          "Yanlış cümle 2",
+          "Yanlış cümle 1",
+          "Emin değilim"
         ],
-        "correctIndex": 2,
+        "correctIndex": 3,
         "audioText": "Emin değilim",
         "audioLang": "tr-TR"
       },
@@ -2505,18 +2505,18 @@ export const turkishContent = [
         "type": "imageChoice",
         "prompt": "Hangisi 'I think' demektir?",
         "options": [
-          "Bence",
-          "Yanlış cevap",
           "Alakasız",
-          "Hatalı"
+          "Hatalı",
+          "Bence",
+          "Yanlış cevap"
         ],
         "imageOptions": [
-          "🤔",
           "❓",
+          "🤔",
           "❓",
           "❓"
         ],
-        "correctIndex": 0,
+        "correctIndex": 2,
         "audioText": "Bence",
         "audioLang": "tr-TR"
       },
@@ -2525,11 +2525,11 @@ export const turkishContent = [
         "type": "constructSentence",
         "prompt": "Şu cümleyi çevir: I think this is very important",
         "options": [
-          "fake2",
-          "Bence",
-          "bu",
           "çok",
+          "bu",
+          "Bence",
           "önemli",
+          "fake2",
           "fake1"
         ],
         "correctAnswer": [
@@ -2547,12 +2547,12 @@ export const turkishContent = [
         "type": "translate",
         "prompt": "Çevir: Bence bu çok önemli",
         "options": [
-          "Yanlış çeviri 3",
-          "Yanlış çeviri 2",
+          "I think this is very important",
           "Yanlış çeviri 1",
-          "I think this is very important"
+          "Yanlış çeviri 3",
+          "Yanlış çeviri 2"
         ],
-        "correctIndex": 3,
+        "correctIndex": 0,
         "audioText": "Bence bu çok önemli",
         "audioLang": "tr-TR"
       },
@@ -2561,10 +2561,10 @@ export const turkishContent = [
         "type": "constructSentence",
         "prompt": "Şu cümleyi çevir: I am not sure",
         "options": [
-          "Emin",
           "değilim",
-          "fake1",
-          "fake2"
+          "fake2",
+          "Emin",
+          "fake1"
         ],
         "correctAnswer": [
           "Emin",
@@ -2579,12 +2579,12 @@ export const turkishContent = [
         "type": "translate",
         "prompt": "Çevir: Emin değilim",
         "options": [
+          "I am not sure",
           "Yanlış çeviri 3",
-          "Yanlış çeviri 2",
           "Yanlış çeviri 1",
-          "I am not sure"
+          "Yanlış çeviri 2"
         ],
-        "correctIndex": 3,
+        "correctIndex": 0,
         "audioText": "Emin değilim",
         "audioLang": "tr-TR"
       },
@@ -2594,9 +2594,9 @@ export const turkishContent = [
         "prompt": "Duyduğun cümleyi seç",
         "options": [
           "Bence bu çok önemli",
-          "Yanlış cümle 1",
           "Yanlış cümle 2",
-          "Yanlış cümle 3"
+          "Yanlış cümle 3",
+          "Yanlış cümle 1"
         ],
         "correctIndex": 0,
         "audioText": "Bence bu çok önemli",
@@ -2616,12 +2616,12 @@ export const turkishContent = [
         "type": "listen",
         "prompt": "Duyduğun cümleyi seç",
         "options": [
-          "Yanlış cümle 2",
-          "Yanlış cümle 3",
+          "Yanlış cümle 1",
           "Emin değilim",
-          "Yanlış cümle 1"
+          "Yanlış cümle 2",
+          "Yanlış cümle 3"
         ],
-        "correctIndex": 2,
+        "correctIndex": 1,
         "audioText": "Emin değilim",
         "audioLang": "tr-TR"
       },
@@ -2684,18 +2684,18 @@ export const turkishContent = [
         "type": "imageChoice",
         "prompt": "Hangisi 'I think' demektir?",
         "options": [
-          "Bence",
-          "Hatalı",
           "Alakasız",
-          "Yanlış cevap"
+          "Bence",
+          "Yanlış cevap",
+          "Hatalı"
         ],
         "imageOptions": [
           "❓",
-          "🤔",
           "❓",
+          "🤔",
           "❓"
         ],
-        "correctIndex": 0,
+        "correctIndex": 1,
         "audioText": "Bence",
         "audioLang": "tr-TR"
       },
@@ -2704,12 +2704,12 @@ export const turkishContent = [
         "type": "constructSentence",
         "prompt": "Şu cümleyi çevir: I think this is very important",
         "options": [
-          "Bence",
-          "bu",
-          "fake1",
           "çok",
+          "bu",
+          "fake2",
           "önemli",
-          "fake2"
+          "fake1",
+          "Bence"
         ],
         "correctAnswer": [
           "Bence",
@@ -2726,10 +2726,10 @@ export const turkishContent = [
         "type": "translate",
         "prompt": "Çevir: Bence bu çok önemli",
         "options": [
-          "Yanlış çeviri 1",
-          "I think this is very important",
           "Yanlış çeviri 3",
-          "Yanlış çeviri 2"
+          "I think this is very important",
+          "Yanlış çeviri 2",
+          "Yanlış çeviri 1"
         ],
         "correctIndex": 1,
         "audioText": "Bence bu çok önemli",
@@ -2740,10 +2740,10 @@ export const turkishContent = [
         "type": "constructSentence",
         "prompt": "Şu cümleyi çevir: I am not sure",
         "options": [
-          "Emin",
-          "değilim",
           "fake1",
-          "fake2"
+          "Emin",
+          "fake2",
+          "değilim"
         ],
         "correctAnswer": [
           "Emin",
@@ -2759,11 +2759,11 @@ export const turkishContent = [
         "prompt": "Çevir: Emin değilim",
         "options": [
           "Yanlış çeviri 1",
-          "I am not sure",
           "Yanlış çeviri 3",
+          "I am not sure",
           "Yanlış çeviri 2"
         ],
-        "correctIndex": 1,
+        "correctIndex": 2,
         "audioText": "Emin değilim",
         "audioLang": "tr-TR"
       },
@@ -2772,12 +2772,12 @@ export const turkishContent = [
         "type": "listen",
         "prompt": "Duyduğun cümleyi seç",
         "options": [
-          "Yanlış cümle 3",
+          "Bence bu çok önemli",
           "Yanlış cümle 2",
-          "Yanlış cümle 1",
-          "Bence bu çok önemli"
+          "Yanlış cümle 3",
+          "Yanlış cümle 1"
         ],
-        "correctIndex": 3,
+        "correctIndex": 0,
         "audioText": "Bence bu çok önemli",
         "audioLang": "tr-TR"
       },
@@ -2796,11 +2796,11 @@ export const turkishContent = [
         "prompt": "Duyduğun cümleyi seç",
         "options": [
           "Yanlış cümle 3",
-          "Emin değilim",
           "Yanlış cümle 2",
-          "Yanlış cümle 1"
+          "Yanlış cümle 1",
+          "Emin değilim"
         ],
-        "correctIndex": 1,
+        "correctIndex": 3,
         "audioText": "Emin değilim",
         "audioLang": "tr-TR"
       },
@@ -2870,9 +2870,9 @@ export const turkishContent = [
         ],
         "imageOptions": [
           "❓",
-          "🤔",
           "❓",
-          "❓"
+          "❓",
+          "🤔"
         ],
         "correctIndex": 3,
         "audioText": "Bence",
@@ -2883,12 +2883,12 @@ export const turkishContent = [
         "type": "constructSentence",
         "prompt": "Şu cümleyi çevir: I think this is very important",
         "options": [
-          "Bence",
           "bu",
-          "çok",
           "önemli",
           "fake2",
-          "fake1"
+          "fake1",
+          "Bence",
+          "çok"
         ],
         "correctAnswer": [
           "Bence",
@@ -2919,10 +2919,10 @@ export const turkishContent = [
         "type": "constructSentence",
         "prompt": "Şu cümleyi çevir: I am not sure",
         "options": [
-          "Emin",
-          "değilim",
+          "fake2",
           "fake1",
-          "fake2"
+          "değilim",
+          "Emin"
         ],
         "correctAnswer": [
           "Emin",
@@ -2937,12 +2937,12 @@ export const turkishContent = [
         "type": "translate",
         "prompt": "Çevir: Emin değilim",
         "options": [
+          "Yanlış çeviri 2",
           "I am not sure",
           "Yanlış çeviri 3",
-          "Yanlış çeviri 1",
-          "Yanlış çeviri 2"
+          "Yanlış çeviri 1"
         ],
-        "correctIndex": 0,
+        "correctIndex": 1,
         "audioText": "Emin değilim",
         "audioLang": "tr-TR"
       },
@@ -2951,12 +2951,12 @@ export const turkishContent = [
         "type": "listen",
         "prompt": "Duyduğun cümleyi seç",
         "options": [
+          "Yanlış cümle 3",
           "Yanlış cümle 2",
           "Yanlış cümle 1",
-          "Bence bu çok önemli",
-          "Yanlış cümle 3"
+          "Bence bu çok önemli"
         ],
-        "correctIndex": 2,
+        "correctIndex": 3,
         "audioText": "Bence bu çok önemli",
         "audioLang": "tr-TR"
       },
@@ -3042,10 +3042,10 @@ export const turkishContent = [
         "type": "imageChoice",
         "prompt": "Hangisi 'I think' demektir?",
         "options": [
+          "Bence",
           "Hatalı",
           "Alakasız",
-          "Yanlış cevap",
-          "Bence"
+          "Yanlış cevap"
         ],
         "imageOptions": [
           "❓",
@@ -3053,7 +3053,7 @@ export const turkishContent = [
           "❓",
           "🤔"
         ],
-        "correctIndex": 3,
+        "correctIndex": 0,
         "audioText": "Bence",
         "audioLang": "tr-TR"
       },
@@ -3062,12 +3062,12 @@ export const turkishContent = [
         "type": "constructSentence",
         "prompt": "Şu cümleyi çevir: I think this is very important",
         "options": [
-          "önemli",
-          "fake2",
-          "çok",
-          "bu",
           "Bence",
-          "fake1"
+          "fake1",
+          "önemli",
+          "bu",
+          "çok",
+          "fake2"
         ],
         "correctAnswer": [
           "Bence",
@@ -3084,12 +3084,12 @@ export const turkishContent = [
         "type": "translate",
         "prompt": "Çevir: Bence bu çok önemli",
         "options": [
-          "Yanlış çeviri 2",
-          "Yanlış çeviri 1",
+          "Yanlış çeviri 3",
           "I think this is very important",
-          "Yanlış çeviri 3"
+          "Yanlış çeviri 1",
+          "Yanlış çeviri 2"
         ],
-        "correctIndex": 2,
+        "correctIndex": 1,
         "audioText": "Bence bu çok önemli",
         "audioLang": "tr-TR"
       },
@@ -3098,10 +3098,10 @@ export const turkishContent = [
         "type": "constructSentence",
         "prompt": "Şu cümleyi çevir: I am not sure",
         "options": [
-          "Emin",
-          "değilim",
+          "fake2",
           "fake1",
-          "fake2"
+          "değilim",
+          "Emin"
         ],
         "correctAnswer": [
           "Emin",
@@ -3117,11 +3117,11 @@ export const turkishContent = [
         "prompt": "Çevir: Emin değilim",
         "options": [
           "Yanlış çeviri 3",
-          "I am not sure",
           "Yanlış çeviri 1",
-          "Yanlış çeviri 2"
+          "Yanlış çeviri 2",
+          "I am not sure"
         ],
-        "correctIndex": 1,
+        "correctIndex": 3,
         "audioText": "Emin değilim",
         "audioLang": "tr-TR"
       },
@@ -3130,12 +3130,12 @@ export const turkishContent = [
         "type": "listen",
         "prompt": "Duyduğun cümleyi seç",
         "options": [
+          "Yanlış cümle 3",
           "Bence bu çok önemli",
           "Yanlış cümle 1",
-          "Yanlış cümle 2",
-          "Yanlış cümle 3"
+          "Yanlış cümle 2"
         ],
-        "correctIndex": 0,
+        "correctIndex": 1,
         "audioText": "Bence bu çok önemli",
         "audioLang": "tr-TR"
       },
@@ -3153,9 +3153,9 @@ export const turkishContent = [
         "type": "listen",
         "prompt": "Duyduğun cümleyi seç",
         "options": [
-          "Yanlış cümle 3",
           "Yanlış cümle 2",
           "Yanlış cümle 1",
+          "Yanlış cümle 3",
           "Emin değilim"
         ],
         "correctIndex": 3,
@@ -3221,18 +3221,18 @@ export const turkishContent = [
         "type": "imageChoice",
         "prompt": "Hangisi 'Negotiation' demektir?",
         "options": [
-          "Müzakere",
           "Alakasız",
           "Hatalı",
-          "Yanlış cevap"
+          "Yanlış cevap",
+          "Müzakere"
         ],
         "imageOptions": [
-          "❓",
           "🤝",
+          "❓",
           "❓",
           "❓"
         ],
-        "correctIndex": 0,
+        "correctIndex": 3,
         "audioText": "Müzakere",
         "audioLang": "tr-TR"
       },
@@ -3241,11 +3241,11 @@ export const turkishContent = [
         "type": "constructSentence",
         "prompt": "Şu cümleyi çevir: The negotiation was quite challenging",
         "options": [
-          "fake1",
-          "oldukça",
           "zorluydu",
           "fake2",
-          "Müzakere"
+          "Müzakere",
+          "fake1",
+          "oldukça"
         ],
         "correctAnswer": [
           "Müzakere",
@@ -3261,12 +3261,12 @@ export const turkishContent = [
         "type": "translate",
         "prompt": "Çevir: Müzakere oldukça zorluydu",
         "options": [
-          "The negotiation was quite challenging",
           "Yanlış çeviri 3",
+          "Yanlış çeviri 2",
           "Yanlış çeviri 1",
-          "Yanlış çeviri 2"
+          "The negotiation was quite challenging"
         ],
-        "correctIndex": 0,
+        "correctIndex": 3,
         "audioText": "Müzakere oldukça zorluydu",
         "audioLang": "tr-TR"
       },
@@ -3275,14 +3275,14 @@ export const turkishContent = [
         "type": "constructSentence",
         "prompt": "Şu cümleyi çevir: This situation disappointed me",
         "options": [
-          "kırıklığına",
-          "beni",
-          "uğrattı",
-          "durum",
           "fake1",
-          "Bu",
+          "hayal",
+          "uğrattı",
+          "beni",
           "fake2",
-          "hayal"
+          "kırıklığına",
+          "durum",
+          "Bu"
         ],
         "correctAnswer": [
           "Bu",
@@ -3301,12 +3301,12 @@ export const turkishContent = [
         "type": "translate",
         "prompt": "Çevir: Bu durum beni hayal kırıklığına uğrattı",
         "options": [
-          "Yanlış çeviri 3",
-          "Yanlış çeviri 2",
+          "This situation disappointed me",
           "Yanlış çeviri 1",
-          "This situation disappointed me"
+          "Yanlış çeviri 2",
+          "Yanlış çeviri 3"
         ],
-        "correctIndex": 3,
+        "correctIndex": 0,
         "audioText": "Bu durum beni hayal kırıklığına uğrattı",
         "audioLang": "tr-TR"
       },
@@ -3315,12 +3315,12 @@ export const turkishContent = [
         "type": "listen",
         "prompt": "Duyduğun cümleyi seç",
         "options": [
-          "Yanlış cümle 3",
           "Yanlış cümle 2",
-          "Yanlış cümle 1",
-          "Müzakere oldukça zorluydu"
+          "Müzakere oldukça zorluydu",
+          "Yanlış cümle 3",
+          "Yanlış cümle 1"
         ],
-        "correctIndex": 3,
+        "correctIndex": 1,
         "audioText": "Müzakere oldukça zorluydu",
         "audioLang": "tr-TR"
       },
@@ -3338,12 +3338,12 @@ export const turkishContent = [
         "type": "listen",
         "prompt": "Duyduğun cümleyi seç",
         "options": [
-          "Yanlış cümle 3",
-          "Yanlış cümle 2",
           "Bu durum beni hayal kırıklığına uğrattı",
-          "Yanlış cümle 1"
+          "Yanlış cümle 1",
+          "Yanlış cümle 3",
+          "Yanlış cümle 2"
         ],
-        "correctIndex": 2,
+        "correctIndex": 0,
         "audioText": "Bu durum beni hayal kırıklığına uğrattı",
         "audioLang": "tr-TR"
       },
@@ -3406,15 +3406,15 @@ export const turkishContent = [
         "type": "imageChoice",
         "prompt": "Hangisi 'Negotiation' demektir?",
         "options": [
-          "Alakasız",
-          "Müzakere",
           "Yanlış cevap",
-          "Hatalı"
+          "Müzakere",
+          "Hatalı",
+          "Alakasız"
         ],
         "imageOptions": [
-          "❓",
-          "❓",
           "🤝",
+          "❓",
+          "❓",
           "❓"
         ],
         "correctIndex": 1,
@@ -3427,8 +3427,8 @@ export const turkishContent = [
         "prompt": "Şu cümleyi çevir: The negotiation was quite challenging",
         "options": [
           "Müzakere",
-          "oldukça",
           "zorluydu",
+          "oldukça",
           "fake1",
           "fake2"
         ],
@@ -3447,9 +3447,9 @@ export const turkishContent = [
         "prompt": "Çevir: Müzakere oldukça zorluydu",
         "options": [
           "The negotiation was quite challenging",
+          "Yanlış çeviri 2",
           "Yanlış çeviri 1",
-          "Yanlış çeviri 3",
-          "Yanlış çeviri 2"
+          "Yanlış çeviri 3"
         ],
         "correctIndex": 0,
         "audioText": "Müzakere oldukça zorluydu",
@@ -3460,14 +3460,14 @@ export const turkishContent = [
         "type": "constructSentence",
         "prompt": "Şu cümleyi çevir: This situation disappointed me",
         "options": [
-          "kırıklığına",
           "hayal",
-          "fake2",
-          "uğrattı",
           "durum",
-          "beni",
+          "uğrattı",
+          "Bu",
           "fake1",
-          "Bu"
+          "fake2",
+          "kırıklığına",
+          "beni"
         ],
         "correctAnswer": [
           "Bu",
@@ -3486,12 +3486,12 @@ export const turkishContent = [
         "type": "translate",
         "prompt": "Çevir: Bu durum beni hayal kırıklığına uğrattı",
         "options": [
+          "Yanlış çeviri 3",
           "Yanlış çeviri 2",
           "Yanlış çeviri 1",
-          "This situation disappointed me",
-          "Yanlış çeviri 3"
+          "This situation disappointed me"
         ],
-        "correctIndex": 2,
+        "correctIndex": 3,
         "audioText": "Bu durum beni hayal kırıklığına uğrattı",
         "audioLang": "tr-TR"
       },
@@ -3500,12 +3500,12 @@ export const turkishContent = [
         "type": "listen",
         "prompt": "Duyduğun cümleyi seç",
         "options": [
-          "Yanlış cümle 1",
           "Yanlış cümle 2",
+          "Müzakere oldukça zorluydu",
           "Yanlış cümle 3",
-          "Müzakere oldukça zorluydu"
+          "Yanlış cümle 1"
         ],
-        "correctIndex": 3,
+        "correctIndex": 1,
         "audioText": "Müzakere oldukça zorluydu",
         "audioLang": "tr-TR"
       },
@@ -3524,11 +3524,11 @@ export const turkishContent = [
         "prompt": "Duyduğun cümleyi seç",
         "options": [
           "Yanlış cümle 3",
-          "Yanlış cümle 2",
+          "Bu durum beni hayal kırıklığına uğrattı",
           "Yanlış cümle 1",
-          "Bu durum beni hayal kırıklığına uğrattı"
+          "Yanlış cümle 2"
         ],
-        "correctIndex": 3,
+        "correctIndex": 1,
         "audioText": "Bu durum beni hayal kırıklığına uğrattı",
         "audioLang": "tr-TR"
       },
@@ -3591,10 +3591,10 @@ export const turkishContent = [
         "type": "imageChoice",
         "prompt": "Hangisi 'Negotiation' demektir?",
         "options": [
-          "Müzakere",
-          "Alakasız",
+          "Hatalı",
           "Yanlış cevap",
-          "Hatalı"
+          "Alakasız",
+          "Müzakere"
         ],
         "imageOptions": [
           "❓",
@@ -3602,7 +3602,7 @@ export const turkishContent = [
           "❓",
           "🤝"
         ],
-        "correctIndex": 0,
+        "correctIndex": 3,
         "audioText": "Müzakere",
         "audioLang": "tr-TR"
       },
@@ -3611,11 +3611,11 @@ export const turkishContent = [
         "type": "constructSentence",
         "prompt": "Şu cümleyi çevir: The negotiation was quite challenging",
         "options": [
-          "Müzakere",
           "fake2",
+          "fake1",
           "oldukça",
-          "zorluydu",
-          "fake1"
+          "Müzakere",
+          "zorluydu"
         ],
         "correctAnswer": [
           "Müzakere",
@@ -3631,12 +3631,12 @@ export const turkishContent = [
         "type": "translate",
         "prompt": "Çevir: Müzakere oldukça zorluydu",
         "options": [
-          "The negotiation was quite challenging",
           "Yanlış çeviri 1",
           "Yanlış çeviri 2",
-          "Yanlış çeviri 3"
+          "Yanlış çeviri 3",
+          "The negotiation was quite challenging"
         ],
-        "correctIndex": 0,
+        "correctIndex": 3,
         "audioText": "Müzakere oldukça zorluydu",
         "audioLang": "tr-TR"
       },
@@ -3645,14 +3645,14 @@ export const turkishContent = [
         "type": "constructSentence",
         "prompt": "Şu cümleyi çevir: This situation disappointed me",
         "options": [
-          "Bu",
-          "uğrattı",
-          "durum",
-          "beni",
-          "fake1",
           "hayal",
+          "Bu",
+          "beni",
+          "durum",
+          "fake1",
+          "kırıklığına",
           "fake2",
-          "kırıklığına"
+          "uğrattı"
         ],
         "correctAnswer": [
           "Bu",
@@ -3672,9 +3672,9 @@ export const turkishContent = [
         "prompt": "Çevir: Bu durum beni hayal kırıklığına uğrattı",
         "options": [
           "This situation disappointed me",
-          "Yanlış çeviri 3",
           "Yanlış çeviri 1",
-          "Yanlış çeviri 2"
+          "Yanlış çeviri 2",
+          "Yanlış çeviri 3"
         ],
         "correctIndex": 0,
         "audioText": "Bu durum beni hayal kırıklığına uğrattı",
@@ -3687,8 +3687,8 @@ export const turkishContent = [
         "options": [
           "Müzakere oldukça zorluydu",
           "Yanlış cümle 1",
-          "Yanlış cümle 2",
-          "Yanlış cümle 3"
+          "Yanlış cümle 3",
+          "Yanlış cümle 2"
         ],
         "correctIndex": 0,
         "audioText": "Müzakere oldukça zorluydu",
@@ -3708,12 +3708,12 @@ export const turkishContent = [
         "type": "listen",
         "prompt": "Duyduğun cümleyi seç",
         "options": [
-          "Yanlış cümle 2",
-          "Yanlış cümle 3",
+          "Bu durum beni hayal kırıklığına uğrattı",
           "Yanlış cümle 1",
-          "Bu durum beni hayal kırıklığına uğrattı"
+          "Yanlış cümle 3",
+          "Yanlış cümle 2"
         ],
-        "correctIndex": 3,
+        "correctIndex": 0,
         "audioText": "Bu durum beni hayal kırıklığına uğrattı",
         "audioLang": "tr-TR"
       },
@@ -3777,8 +3777,8 @@ export const turkishContent = [
         "prompt": "Hangisi 'Negotiation' demektir?",
         "options": [
           "Yanlış cevap",
-          "Müzakere",
           "Hatalı",
+          "Müzakere",
           "Alakasız"
         ],
         "imageOptions": [
@@ -3787,7 +3787,7 @@ export const turkishContent = [
           "❓",
           "❓"
         ],
-        "correctIndex": 1,
+        "correctIndex": 2,
         "audioText": "Müzakere",
         "audioLang": "tr-TR"
       },
@@ -3796,11 +3796,11 @@ export const turkishContent = [
         "type": "constructSentence",
         "prompt": "Şu cümleyi çevir: The negotiation was quite challenging",
         "options": [
-          "fake1",
-          "fake2",
           "Müzakere",
+          "oldukça",
           "zorluydu",
-          "oldukça"
+          "fake1",
+          "fake2"
         ],
         "correctAnswer": [
           "Müzakere",
@@ -3816,12 +3816,12 @@ export const turkishContent = [
         "type": "translate",
         "prompt": "Çevir: Müzakere oldukça zorluydu",
         "options": [
+          "Yanlış çeviri 3",
           "The negotiation was quite challenging",
           "Yanlış çeviri 1",
-          "Yanlış çeviri 3",
           "Yanlış çeviri 2"
         ],
-        "correctIndex": 0,
+        "correctIndex": 1,
         "audioText": "Müzakere oldukça zorluydu",
         "audioLang": "tr-TR"
       },
@@ -3831,12 +3831,12 @@ export const turkishContent = [
         "prompt": "Şu cümleyi çevir: This situation disappointed me",
         "options": [
           "beni",
-          "durum",
+          "uğrattı",
           "kırıklığına",
+          "durum",
           "fake2",
           "Bu",
           "hayal",
-          "uğrattı",
           "fake1"
         ],
         "correctAnswer": [
@@ -3856,12 +3856,12 @@ export const turkishContent = [
         "type": "translate",
         "prompt": "Çevir: Bu durum beni hayal kırıklığına uğrattı",
         "options": [
+          "Yanlış çeviri 3",
           "This situation disappointed me",
-          "Yanlış çeviri 1",
           "Yanlış çeviri 2",
-          "Yanlış çeviri 3"
+          "Yanlış çeviri 1"
         ],
-        "correctIndex": 0,
+        "correctIndex": 1,
         "audioText": "Bu durum beni hayal kırıklığına uğrattı",
         "audioLang": "tr-TR"
       },
@@ -3870,12 +3870,12 @@ export const turkishContent = [
         "type": "listen",
         "prompt": "Duyduğun cümleyi seç",
         "options": [
-          "Müzakere oldukça zorluydu",
+          "Yanlış cümle 3",
           "Yanlış cümle 1",
-          "Yanlış cümle 2",
-          "Yanlış cümle 3"
+          "Müzakere oldukça zorluydu",
+          "Yanlış cümle 2"
         ],
-        "correctIndex": 0,
+        "correctIndex": 2,
         "audioText": "Müzakere oldukça zorluydu",
         "audioLang": "tr-TR"
       },
@@ -3893,12 +3893,12 @@ export const turkishContent = [
         "type": "listen",
         "prompt": "Duyduğun cümleyi seç",
         "options": [
-          "Yanlış cümle 3",
+          "Bu durum beni hayal kırıklığına uğrattı",
           "Yanlış cümle 2",
           "Yanlış cümle 1",
-          "Bu durum beni hayal kırıklığına uğrattı"
+          "Yanlış cümle 3"
         ],
-        "correctIndex": 3,
+        "correctIndex": 0,
         "audioText": "Bu durum beni hayal kırıklığına uğrattı",
         "audioLang": "tr-TR"
       },
@@ -3963,12 +3963,12 @@ export const turkishContent = [
         "options": [
           "Müzakere",
           "Yanlış cevap",
-          "Alakasız",
-          "Hatalı"
+          "Hatalı",
+          "Alakasız"
         ],
         "imageOptions": [
-          "❓",
           "🤝",
+          "❓",
           "❓",
           "❓"
         ],
@@ -3981,11 +3981,11 @@ export const turkishContent = [
         "type": "constructSentence",
         "prompt": "Şu cümleyi çevir: The negotiation was quite challenging",
         "options": [
-          "zorluydu",
+          "Müzakere",
           "oldukça",
+          "zorluydu",
           "fake1",
-          "fake2",
-          "Müzakere"
+          "fake2"
         ],
         "correctAnswer": [
           "Müzakere",
@@ -4001,12 +4001,12 @@ export const turkishContent = [
         "type": "translate",
         "prompt": "Çevir: Müzakere oldukça zorluydu",
         "options": [
-          "The negotiation was quite challenging",
           "Yanlış çeviri 1",
+          "The negotiation was quite challenging",
           "Yanlış çeviri 2",
           "Yanlış çeviri 3"
         ],
-        "correctIndex": 0,
+        "correctIndex": 1,
         "audioText": "Müzakere oldukça zorluydu",
         "audioLang": "tr-TR"
       },
@@ -4015,13 +4015,13 @@ export const turkishContent = [
         "type": "constructSentence",
         "prompt": "Şu cümleyi çevir: This situation disappointed me",
         "options": [
-          "fake2",
-          "uğrattı",
-          "beni",
           "durum",
-          "kırıklığına",
           "hayal",
+          "kırıklığına",
           "Bu",
+          "fake2",
+          "beni",
+          "uğrattı",
           "fake1"
         ],
         "correctAnswer": [
@@ -4041,12 +4041,12 @@ export const turkishContent = [
         "type": "translate",
         "prompt": "Çevir: Bu durum beni hayal kırıklığına uğrattı",
         "options": [
-          "This situation disappointed me",
           "Yanlış çeviri 3",
+          "Yanlış çeviri 2",
           "Yanlış çeviri 1",
-          "Yanlış çeviri 2"
+          "This situation disappointed me"
         ],
-        "correctIndex": 0,
+        "correctIndex": 3,
         "audioText": "Bu durum beni hayal kırıklığına uğrattı",
         "audioLang": "tr-TR"
       },
@@ -4055,12 +4055,12 @@ export const turkishContent = [
         "type": "listen",
         "prompt": "Duyduğun cümleyi seç",
         "options": [
-          "Yanlış cümle 2",
           "Yanlış cümle 1",
           "Yanlış cümle 3",
-          "Müzakere oldukça zorluydu"
+          "Müzakere oldukça zorluydu",
+          "Yanlış cümle 2"
         ],
-        "correctIndex": 3,
+        "correctIndex": 2,
         "audioText": "Müzakere oldukça zorluydu",
         "audioLang": "tr-TR"
       },
@@ -4078,12 +4078,12 @@ export const turkishContent = [
         "type": "listen",
         "prompt": "Duyduğun cümleyi seç",
         "options": [
-          "Bu durum beni hayal kırıklığına uğrattı",
-          "Yanlış cümle 3",
           "Yanlış cümle 2",
-          "Yanlış cümle 1"
+          "Yanlış cümle 1",
+          "Bu durum beni hayal kırıklığına uğrattı",
+          "Yanlış cümle 3"
         ],
-        "correctIndex": 0,
+        "correctIndex": 2,
         "audioText": "Bu durum beni hayal kırıklığına uğrattı",
         "audioLang": "tr-TR"
       },
@@ -4147,15 +4147,15 @@ export const turkishContent = [
         "prompt": "Hangisi 'Negotiation' demektir?",
         "options": [
           "Müzakere",
-          "Alakasız",
           "Yanlış cevap",
-          "Hatalı"
+          "Hatalı",
+          "Alakasız"
         ],
         "imageOptions": [
+          "🤝",
           "❓",
           "❓",
-          "❓",
-          "🤝"
+          "❓"
         ],
         "correctIndex": 0,
         "audioText": "Müzakere",
@@ -4166,11 +4166,11 @@ export const turkishContent = [
         "type": "constructSentence",
         "prompt": "Şu cümleyi çevir: The negotiation was quite challenging",
         "options": [
-          "oldukça",
-          "zorluydu",
-          "Müzakere",
           "fake1",
-          "fake2"
+          "oldukça",
+          "fake2",
+          "Müzakere",
+          "zorluydu"
         ],
         "correctAnswer": [
           "Müzakere",
@@ -4186,12 +4186,12 @@ export const turkishContent = [
         "type": "translate",
         "prompt": "Çevir: Müzakere oldukça zorluydu",
         "options": [
+          "The negotiation was quite challenging",
           "Yanlış çeviri 3",
           "Yanlış çeviri 1",
-          "The negotiation was quite challenging",
           "Yanlış çeviri 2"
         ],
-        "correctIndex": 2,
+        "correctIndex": 0,
         "audioText": "Müzakere oldukça zorluydu",
         "audioLang": "tr-TR"
       },
@@ -4200,14 +4200,14 @@ export const turkishContent = [
         "type": "constructSentence",
         "prompt": "Şu cümleyi çevir: This situation disappointed me",
         "options": [
-          "Bu",
-          "durum",
           "fake1",
           "beni",
-          "fake2",
-          "kırıklığına",
           "hayal",
-          "uğrattı"
+          "uğrattı",
+          "durum",
+          "kırıklığına",
+          "Bu",
+          "fake2"
         ],
         "correctAnswer": [
           "Bu",
@@ -4226,12 +4226,12 @@ export const turkishContent = [
         "type": "translate",
         "prompt": "Çevir: Bu durum beni hayal kırıklığına uğrattı",
         "options": [
-          "This situation disappointed me",
+          "Yanlış çeviri 2",
           "Yanlış çeviri 1",
           "Yanlış çeviri 3",
-          "Yanlış çeviri 2"
+          "This situation disappointed me"
         ],
-        "correctIndex": 0,
+        "correctIndex": 3,
         "audioText": "Bu durum beni hayal kırıklığına uğrattı",
         "audioLang": "tr-TR"
       },
@@ -4240,8 +4240,8 @@ export const turkishContent = [
         "type": "listen",
         "prompt": "Duyduğun cümleyi seç",
         "options": [
-          "Yanlış cümle 3",
           "Yanlış cümle 2",
+          "Yanlış cümle 3",
           "Yanlış cümle 1",
           "Müzakere oldukça zorluydu"
         ],

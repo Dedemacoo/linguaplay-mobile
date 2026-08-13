@@ -48,13 +48,13 @@ export const spanishContent = [
         "prompt": "Hangisi 'Merhaba' demektir?",
         "options": [
           "Hola",
-          "Alakasız",
           "Yanlış cevap",
-          "Hatalı"
+          "Hatalı",
+          "Alakasız"
         ],
         "imageOptions": [
-          "❓",
           "👋",
+          "❓",
           "❓",
           "❓"
         ],
@@ -67,11 +67,11 @@ export const spanishContent = [
         "type": "constructSentence",
         "prompt": "Şu cümleyi çevir: Bir kahve istiyorum",
         "options": [
-          "Quiero",
-          "un",
           "café",
           "fake2",
-          "fake1"
+          "fake1",
+          "Quiero",
+          "un"
         ],
         "correctAnswer": [
           "Quiero",
@@ -87,12 +87,12 @@ export const spanishContent = [
         "type": "translate",
         "prompt": "Çevir: Quiero un café",
         "options": [
-          "Yanlış çeviri 2",
           "Yanlış çeviri 3",
+          "Bir kahve istiyorum",
           "Yanlış çeviri 1",
-          "Bir kahve istiyorum"
+          "Yanlış çeviri 2"
         ],
-        "correctIndex": 3,
+        "correctIndex": 1,
         "audioText": "Quiero un café",
         "audioLang": "es-ES"
       },
@@ -101,10 +101,10 @@ export const spanishContent = [
         "type": "constructSentence",
         "prompt": "Şu cümleyi çevir: Nasılsın?",
         "options": [
-          "¿Cómo",
-          "estás?",
           "fake1",
-          "fake2"
+          "fake2",
+          "estás?",
+          "¿Cómo"
         ],
         "correctAnswer": [
           "¿Cómo",
@@ -119,12 +119,12 @@ export const spanishContent = [
         "type": "translate",
         "prompt": "Çevir: ¿Cómo estás?",
         "options": [
-          "Yanlış çeviri 3",
-          "Yanlış çeviri 2",
+          "Nasılsın?",
           "Yanlış çeviri 1",
-          "Nasılsın?"
+          "Yanlış çeviri 2",
+          "Yanlış çeviri 3"
         ],
-        "correctIndex": 3,
+        "correctIndex": 0,
         "audioText": "¿Cómo estás?",
         "audioLang": "es-ES"
       },
@@ -157,8 +157,8 @@ export const spanishContent = [
         "prompt": "Duyduğun cümleyi seç",
         "options": [
           "¿Cómo estás?",
-          "Yanlış cümle 1",
           "Yanlış cümle 2",
+          "Yanlış cümle 1",
           "Yanlış cümle 3"
         ],
         "correctIndex": 0,
@@ -245,10 +245,10 @@ export const spanishContent = [
         "prompt": "Şu cümleyi çevir: Bir kahve istiyorum",
         "options": [
           "café",
+          "un",
           "Quiero",
           "fake1",
-          "fake2",
-          "un"
+          "fake2"
         ],
         "correctAnswer": [
           "Quiero",
@@ -264,12 +264,12 @@ export const spanishContent = [
         "type": "translate",
         "prompt": "Çevir: Quiero un café",
         "options": [
-          "Yanlış çeviri 3",
-          "Yanlış çeviri 2",
+          "Bir kahve istiyorum",
           "Yanlış çeviri 1",
-          "Bir kahve istiyorum"
+          "Yanlış çeviri 2",
+          "Yanlış çeviri 3"
         ],
-        "correctIndex": 3,
+        "correctIndex": 0,
         "audioText": "Quiero un café",
         "audioLang": "es-ES"
       },
@@ -278,10 +278,10 @@ export const spanishContent = [
         "type": "constructSentence",
         "prompt": "Şu cümleyi çevir: Nasılsın?",
         "options": [
-          "¿Cómo",
           "fake2",
+          "fake1",
           "estás?",
-          "fake1"
+          "¿Cómo"
         ],
         "correctAnswer": [
           "¿Cómo",
@@ -297,8 +297,8 @@ export const spanishContent = [
         "prompt": "Çevir: ¿Cómo estás?",
         "options": [
           "Nasılsın?",
-          "Yanlış çeviri 1",
           "Yanlış çeviri 3",
+          "Yanlış çeviri 1",
           "Yanlış çeviri 2"
         ],
         "correctIndex": 0,
@@ -311,9 +311,9 @@ export const spanishContent = [
         "prompt": "Duyduğun cümleyi seç",
         "options": [
           "Quiero un café",
+          "Yanlış cümle 3",
           "Yanlış cümle 1",
-          "Yanlış cümle 2",
-          "Yanlış cümle 3"
+          "Yanlış cümle 2"
         ],
         "correctIndex": 0,
         "audioText": "Quiero un café",
@@ -333,12 +333,12 @@ export const spanishContent = [
         "type": "listen",
         "prompt": "Duyduğun cümleyi seç",
         "options": [
-          "Yanlış cümle 1",
-          "¿Cómo estás?",
           "Yanlış cümle 2",
-          "Yanlış cümle 3"
+          "Yanlış cümle 3",
+          "¿Cómo estás?",
+          "Yanlış cümle 1"
         ],
-        "correctIndex": 1,
+        "correctIndex": 2,
         "audioText": "¿Cómo estás?",
         "audioLang": "es-ES"
       },
@@ -421,11 +421,11 @@ export const spanishContent = [
         "type": "constructSentence",
         "prompt": "Şu cümleyi çevir: Bir kahve istiyorum",
         "options": [
-          "café",
           "fake1",
-          "un",
+          "café",
           "fake2",
-          "Quiero"
+          "Quiero",
+          "un"
         ],
         "correctAnswer": [
           "Quiero",
@@ -441,12 +441,12 @@ export const spanishContent = [
         "type": "translate",
         "prompt": "Çevir: Quiero un café",
         "options": [
-          "Yanlış çeviri 2",
-          "Yanlış çeviri 1",
           "Bir kahve istiyorum",
+          "Yanlış çeviri 1",
+          "Yanlış çeviri 2",
           "Yanlış çeviri 3"
         ],
-        "correctIndex": 2,
+        "correctIndex": 0,
         "audioText": "Quiero un café",
         "audioLang": "es-ES"
       },
@@ -456,9 +456,9 @@ export const spanishContent = [
         "prompt": "Şu cümleyi çevir: Nasılsın?",
         "options": [
           "fake2",
-          "¿Cómo",
+          "fake1",
           "estás?",
-          "fake1"
+          "¿Cómo"
         ],
         "correctAnswer": [
           "¿Cómo",
@@ -473,12 +473,12 @@ export const spanishContent = [
         "type": "translate",
         "prompt": "Çevir: ¿Cómo estás?",
         "options": [
-          "Yanlış çeviri 1",
-          "Yanlış çeviri 3",
           "Nasılsın?",
-          "Yanlış çeviri 2"
+          "Yanlış çeviri 1",
+          "Yanlış çeviri 2",
+          "Yanlış çeviri 3"
         ],
-        "correctIndex": 2,
+        "correctIndex": 0,
         "audioText": "¿Cómo estás?",
         "audioLang": "es-ES"
       },
@@ -487,12 +487,12 @@ export const spanishContent = [
         "type": "listen",
         "prompt": "Duyduğun cümleyi seç",
         "options": [
+          "Yanlış cümle 3",
           "Yanlış cümle 2",
           "Yanlış cümle 1",
-          "Quiero un café",
-          "Yanlış cümle 3"
+          "Quiero un café"
         ],
-        "correctIndex": 2,
+        "correctIndex": 3,
         "audioText": "Quiero un café",
         "audioLang": "es-ES"
       },
@@ -511,9 +511,9 @@ export const spanishContent = [
         "prompt": "Duyduğun cümleyi seç",
         "options": [
           "¿Cómo estás?",
+          "Yanlış cümle 1",
           "Yanlış cümle 2",
-          "Yanlış cümle 3",
-          "Yanlış cümle 1"
+          "Yanlış cümle 3"
         ],
         "correctIndex": 0,
         "audioText": "¿Cómo estás?",
@@ -578,18 +578,18 @@ export const spanishContent = [
         "type": "imageChoice",
         "prompt": "Hangisi 'Merhaba' demektir?",
         "options": [
-          "Hola",
-          "Alakasız",
           "Hatalı",
-          "Yanlış cevap"
+          "Yanlış cevap",
+          "Hola",
+          "Alakasız"
         ],
         "imageOptions": [
+          "👋",
           "❓",
           "❓",
-          "❓",
-          "👋"
+          "❓"
         ],
-        "correctIndex": 0,
+        "correctIndex": 2,
         "audioText": "Hola",
         "audioLang": "es-ES"
       },
@@ -598,11 +598,11 @@ export const spanishContent = [
         "type": "constructSentence",
         "prompt": "Şu cümleyi çevir: Bir kahve istiyorum",
         "options": [
-          "café",
-          "un",
-          "Quiero",
           "fake1",
-          "fake2"
+          "Quiero",
+          "un",
+          "fake2",
+          "café"
         ],
         "correctAnswer": [
           "Quiero",
@@ -618,12 +618,12 @@ export const spanishContent = [
         "type": "translate",
         "prompt": "Çevir: Quiero un café",
         "options": [
-          "Yanlış çeviri 1",
-          "Bir kahve istiyorum",
+          "Yanlış çeviri 2",
           "Yanlış çeviri 3",
-          "Yanlış çeviri 2"
+          "Yanlış çeviri 1",
+          "Bir kahve istiyorum"
         ],
-        "correctIndex": 1,
+        "correctIndex": 3,
         "audioText": "Quiero un café",
         "audioLang": "es-ES"
       },
@@ -632,10 +632,10 @@ export const spanishContent = [
         "type": "constructSentence",
         "prompt": "Şu cümleyi çevir: Nasılsın?",
         "options": [
-          "fake2",
-          "fake1",
           "¿Cómo",
-          "estás?"
+          "estás?",
+          "fake1",
+          "fake2"
         ],
         "correctAnswer": [
           "¿Cómo",
@@ -650,12 +650,12 @@ export const spanishContent = [
         "type": "translate",
         "prompt": "Çevir: ¿Cómo estás?",
         "options": [
-          "Nasılsın?",
           "Yanlış çeviri 1",
           "Yanlış çeviri 2",
+          "Nasılsın?",
           "Yanlış çeviri 3"
         ],
-        "correctIndex": 0,
+        "correctIndex": 2,
         "audioText": "¿Cómo estás?",
         "audioLang": "es-ES"
       },
@@ -664,9 +664,9 @@ export const spanishContent = [
         "type": "listen",
         "prompt": "Duyduğun cümleyi seç",
         "options": [
-          "Yanlış cümle 3",
-          "Yanlış cümle 2",
           "Yanlış cümle 1",
+          "Yanlış cümle 2",
+          "Yanlış cümle 3",
           "Quiero un café"
         ],
         "correctIndex": 3,
@@ -688,8 +688,8 @@ export const spanishContent = [
         "prompt": "Duyduğun cümleyi seç",
         "options": [
           "Yanlış cümle 2",
-          "Yanlış cümle 1",
           "Yanlış cümle 3",
+          "Yanlış cümle 1",
           "¿Cómo estás?"
         ],
         "correctIndex": 3,
@@ -756,15 +756,15 @@ export const spanishContent = [
         "prompt": "Hangisi 'Merhaba' demektir?",
         "options": [
           "Hola",
-          "Yanlış cevap",
           "Hatalı",
-          "Alakasız"
+          "Alakasız",
+          "Yanlış cevap"
         ],
         "imageOptions": [
-          "👋",
           "❓",
           "❓",
-          "❓"
+          "❓",
+          "👋"
         ],
         "correctIndex": 0,
         "audioText": "Hola",
@@ -777,9 +777,9 @@ export const spanishContent = [
         "options": [
           "un",
           "Quiero",
+          "fake2",
           "café",
-          "fake1",
-          "fake2"
+          "fake1"
         ],
         "correctAnswer": [
           "Quiero",
@@ -796,11 +796,11 @@ export const spanishContent = [
         "prompt": "Çevir: Quiero un café",
         "options": [
           "Yanlış çeviri 3",
+          "Bir kahve istiyorum",
           "Yanlış çeviri 1",
-          "Yanlış çeviri 2",
-          "Bir kahve istiyorum"
+          "Yanlış çeviri 2"
         ],
-        "correctIndex": 3,
+        "correctIndex": 1,
         "audioText": "Quiero un café",
         "audioLang": "es-ES"
       },
@@ -809,10 +809,10 @@ export const spanishContent = [
         "type": "constructSentence",
         "prompt": "Şu cümleyi çevir: Nasılsın?",
         "options": [
-          "fake2",
-          "fake1",
+          "¿Cómo",
           "estás?",
-          "¿Cómo"
+          "fake1",
+          "fake2"
         ],
         "correctAnswer": [
           "¿Cómo",
@@ -828,11 +828,11 @@ export const spanishContent = [
         "prompt": "Çevir: ¿Cómo estás?",
         "options": [
           "Yanlış çeviri 3",
+          "Yanlış çeviri 2",
           "Yanlış çeviri 1",
-          "Nasılsın?",
-          "Yanlış çeviri 2"
+          "Nasılsın?"
         ],
-        "correctIndex": 2,
+        "correctIndex": 3,
         "audioText": "¿Cómo estás?",
         "audioLang": "es-ES"
       },
@@ -864,12 +864,12 @@ export const spanishContent = [
         "type": "listen",
         "prompt": "Duyduğun cümleyi seç",
         "options": [
-          "¿Cómo estás?",
           "Yanlış cümle 3",
           "Yanlış cümle 1",
+          "¿Cómo estás?",
           "Yanlış cümle 2"
         ],
-        "correctIndex": 0,
+        "correctIndex": 2,
         "audioText": "¿Cómo estás?",
         "audioLang": "es-ES"
       },
@@ -932,16 +932,16 @@ export const spanishContent = [
         "type": "imageChoice",
         "prompt": "Hangisi 'Merhaba' demektir?",
         "options": [
-          "Hatalı",
+          "Alakasız",
           "Yanlış cevap",
           "Hola",
-          "Alakasız"
+          "Hatalı"
         ],
         "imageOptions": [
           "❓",
           "❓",
-          "👋",
-          "❓"
+          "❓",
+          "👋"
         ],
         "correctIndex": 2,
         "audioText": "Hola",
@@ -952,11 +952,11 @@ export const spanishContent = [
         "type": "constructSentence",
         "prompt": "Şu cümleyi çevir: Bir kahve istiyorum",
         "options": [
-          "Quiero",
-          "un",
           "café",
+          "un",
           "fake1",
-          "fake2"
+          "fake2",
+          "Quiero"
         ],
         "correctAnswer": [
           "Quiero",
@@ -972,12 +972,12 @@ export const spanishContent = [
         "type": "translate",
         "prompt": "Çevir: Quiero un café",
         "options": [
+          "Yanlış çeviri 1",
           "Bir kahve istiyorum",
           "Yanlış çeviri 2",
-          "Yanlış çeviri 1",
           "Yanlış çeviri 3"
         ],
-        "correctIndex": 0,
+        "correctIndex": 1,
         "audioText": "Quiero un café",
         "audioLang": "es-ES"
       },
@@ -1004,12 +1004,12 @@ export const spanishContent = [
         "type": "translate",
         "prompt": "Çevir: ¿Cómo estás?",
         "options": [
-          "Yanlış çeviri 2",
-          "Yanlış çeviri 3",
           "Nasılsın?",
-          "Yanlış çeviri 1"
+          "Yanlış çeviri 3",
+          "Yanlış çeviri 1",
+          "Yanlış çeviri 2"
         ],
-        "correctIndex": 2,
+        "correctIndex": 0,
         "audioText": "¿Cómo estás?",
         "audioLang": "es-ES"
       },
@@ -1018,12 +1018,12 @@ export const spanishContent = [
         "type": "listen",
         "prompt": "Duyduğun cümleyi seç",
         "options": [
-          "Quiero un café",
-          "Yanlış cümle 1",
           "Yanlış cümle 3",
-          "Yanlış cümle 2"
+          "Yanlış cümle 2",
+          "Yanlış cümle 1",
+          "Quiero un café"
         ],
-        "correctIndex": 0,
+        "correctIndex": 3,
         "audioText": "Quiero un café",
         "audioLang": "es-ES"
       },
@@ -1041,12 +1041,12 @@ export const spanishContent = [
         "type": "listen",
         "prompt": "Duyduğun cümleyi seç",
         "options": [
-          "¿Cómo estás?",
+          "Yanlış cümle 2",
           "Yanlış cümle 1",
           "Yanlış cümle 3",
-          "Yanlış cümle 2"
+          "¿Cómo estás?"
         ],
-        "correctIndex": 0,
+        "correctIndex": 3,
         "audioText": "¿Cómo estás?",
         "audioLang": "es-ES"
       },
@@ -1109,18 +1109,18 @@ export const spanishContent = [
         "type": "imageChoice",
         "prompt": "Hangisi 'Havalimanı' demektir?",
         "options": [
-          "Alakasız",
-          "Hatalı",
           "Aeropuerto",
-          "Yanlış cevap"
+          "Yanlış cevap",
+          "Alakasız",
+          "Hatalı"
         ],
         "imageOptions": [
-          "❓",
-          "❓",
           "✈️",
+          "❓",
+          "❓",
           "❓"
         ],
-        "correctIndex": 2,
+        "correctIndex": 0,
         "audioText": "Aeropuerto",
         "audioLang": "es-ES"
       },
@@ -1129,11 +1129,11 @@ export const spanishContent = [
         "type": "constructSentence",
         "prompt": "Şu cümleyi çevir: Biletimi kaybettim",
         "options": [
-          "Perdí",
           "mi",
-          "boleto",
           "fake1",
-          "fake2"
+          "Perdí",
+          "fake2",
+          "boleto"
         ],
         "correctAnswer": [
           "Perdí",
@@ -1149,12 +1149,12 @@ export const spanishContent = [
         "type": "translate",
         "prompt": "Çevir: Perdí mi boleto",
         "options": [
-          "Yanlış çeviri 1",
           "Biletimi kaybettim",
-          "Yanlış çeviri 2",
-          "Yanlış çeviri 3"
+          "Yanlış çeviri 3",
+          "Yanlış çeviri 1",
+          "Yanlış çeviri 2"
         ],
-        "correctIndex": 1,
+        "correctIndex": 0,
         "audioText": "Perdí mi boleto",
         "audioLang": "es-ES"
       },
@@ -1163,9 +1163,9 @@ export const spanishContent = [
         "type": "constructSentence",
         "prompt": "Şu cümleyi çevir: Nereye gidiyorsun?",
         "options": [
+          "fake2",
           "¿Adónde",
           "vas?",
-          "fake2",
           "fake1"
         ],
         "correctAnswer": [
@@ -1182,11 +1182,11 @@ export const spanishContent = [
         "prompt": "Çevir: ¿Adónde vas?",
         "options": [
           "Yanlış çeviri 1",
-          "Yanlış çeviri 3",
           "Nereye gidiyorsun?",
+          "Yanlış çeviri 3",
           "Yanlış çeviri 2"
         ],
-        "correctIndex": 2,
+        "correctIndex": 1,
         "audioText": "¿Adónde vas?",
         "audioLang": "es-ES"
       },
@@ -1218,12 +1218,12 @@ export const spanishContent = [
         "type": "listen",
         "prompt": "Duyduğun cümleyi seç",
         "options": [
-          "¿Adónde vas?",
-          "Yanlış cümle 1",
+          "Yanlış cümle 3",
           "Yanlış cümle 2",
-          "Yanlış cümle 3"
+          "¿Adónde vas?",
+          "Yanlış cümle 1"
         ],
-        "correctIndex": 0,
+        "correctIndex": 2,
         "audioText": "¿Adónde vas?",
         "audioLang": "es-ES"
       },
@@ -1286,16 +1286,16 @@ export const spanishContent = [
         "type": "imageChoice",
         "prompt": "Hangisi 'Havalimanı' demektir?",
         "options": [
-          "Yanlış cevap",
           "Alakasız",
           "Hatalı",
+          "Yanlış cevap",
           "Aeropuerto"
         ],
         "imageOptions": [
-          "✈️",
           "❓",
           "❓",
-          "❓"
+          "❓",
+          "✈️"
         ],
         "correctIndex": 3,
         "audioText": "Aeropuerto",
@@ -1306,11 +1306,11 @@ export const spanishContent = [
         "type": "constructSentence",
         "prompt": "Şu cümleyi çevir: Biletimi kaybettim",
         "options": [
-          "Perdí",
+          "fake1",
+          "fake2",
           "mi",
           "boleto",
-          "fake1",
-          "fake2"
+          "Perdí"
         ],
         "correctAnswer": [
           "Perdí",
@@ -1326,12 +1326,12 @@ export const spanishContent = [
         "type": "translate",
         "prompt": "Çevir: Perdí mi boleto",
         "options": [
-          "Biletimi kaybettim",
-          "Yanlış çeviri 1",
           "Yanlış çeviri 2",
-          "Yanlış çeviri 3"
+          "Yanlış çeviri 1",
+          "Yanlış çeviri 3",
+          "Biletimi kaybettim"
         ],
-        "correctIndex": 0,
+        "correctIndex": 3,
         "audioText": "Perdí mi boleto",
         "audioLang": "es-ES"
       },
@@ -1340,10 +1340,10 @@ export const spanishContent = [
         "type": "constructSentence",
         "prompt": "Şu cümleyi çevir: Nereye gidiyorsun?",
         "options": [
-          "fake2",
-          "fake1",
+          "¿Adónde",
           "vas?",
-          "¿Adónde"
+          "fake1",
+          "fake2"
         ],
         "correctAnswer": [
           "¿Adónde",
@@ -1360,8 +1360,8 @@ export const spanishContent = [
         "options": [
           "Nereye gidiyorsun?",
           "Yanlış çeviri 1",
-          "Yanlış çeviri 2",
-          "Yanlış çeviri 3"
+          "Yanlış çeviri 3",
+          "Yanlış çeviri 2"
         ],
         "correctIndex": 0,
         "audioText": "¿Adónde vas?",
@@ -1372,12 +1372,12 @@ export const spanishContent = [
         "type": "listen",
         "prompt": "Duyduğun cümleyi seç",
         "options": [
-          "Yanlış cümle 3",
-          "Yanlış cümle 1",
           "Perdí mi boleto",
+          "Yanlış cümle 1",
+          "Yanlış cümle 3",
           "Yanlış cümle 2"
         ],
-        "correctIndex": 2,
+        "correctIndex": 0,
         "audioText": "Perdí mi boleto",
         "audioLang": "es-ES"
       },
@@ -1463,18 +1463,18 @@ export const spanishContent = [
         "type": "imageChoice",
         "prompt": "Hangisi 'Havalimanı' demektir?",
         "options": [
-          "Yanlış cevap",
           "Aeropuerto",
-          "Alakasız",
-          "Hatalı"
+          "Yanlış cevap",
+          "Hatalı",
+          "Alakasız"
         ],
         "imageOptions": [
+          "❓",
+          "❓",
           "✈️",
-          "❓",
-          "❓",
           "❓"
         ],
-        "correctIndex": 1,
+        "correctIndex": 0,
         "audioText": "Aeropuerto",
         "audioLang": "es-ES"
       },
@@ -1483,11 +1483,11 @@ export const spanishContent = [
         "type": "constructSentence",
         "prompt": "Şu cümleyi çevir: Biletimi kaybettim",
         "options": [
-          "fake1",
-          "boleto",
           "fake2",
+          "fake1",
+          "Perdí",
           "mi",
-          "Perdí"
+          "boleto"
         ],
         "correctAnswer": [
           "Perdí",
@@ -1503,12 +1503,12 @@ export const spanishContent = [
         "type": "translate",
         "prompt": "Çevir: Perdí mi boleto",
         "options": [
-          "Yanlış çeviri 1",
           "Biletimi kaybettim",
           "Yanlış çeviri 3",
+          "Yanlış çeviri 1",
           "Yanlış çeviri 2"
         ],
-        "correctIndex": 1,
+        "correctIndex": 0,
         "audioText": "Perdí mi boleto",
         "audioLang": "es-ES"
       },
@@ -1517,9 +1517,9 @@ export const spanishContent = [
         "type": "constructSentence",
         "prompt": "Şu cümleyi çevir: Nereye gidiyorsun?",
         "options": [
-          "fake2",
-          "fake1",
           "vas?",
+          "fake1",
+          "fake2",
           "¿Adónde"
         ],
         "correctAnswer": [
@@ -1535,9 +1535,9 @@ export const spanishContent = [
         "type": "translate",
         "prompt": "Çevir: ¿Adónde vas?",
         "options": [
-          "Yanlış çeviri 3",
           "Yanlış çeviri 2",
           "Yanlış çeviri 1",
+          "Yanlış çeviri 3",
           "Nereye gidiyorsun?"
         ],
         "correctIndex": 3,
@@ -1549,12 +1549,12 @@ export const spanishContent = [
         "type": "listen",
         "prompt": "Duyduğun cümleyi seç",
         "options": [
-          "Perdí mi boleto",
-          "Yanlış cümle 1",
+          "Yanlış cümle 3",
           "Yanlış cümle 2",
-          "Yanlış cümle 3"
+          "Yanlış cümle 1",
+          "Perdí mi boleto"
         ],
-        "correctIndex": 0,
+        "correctIndex": 3,
         "audioText": "Perdí mi boleto",
         "audioLang": "es-ES"
       },
@@ -1572,9 +1572,9 @@ export const spanishContent = [
         "type": "listen",
         "prompt": "Duyduğun cümleyi seç",
         "options": [
-          "Yanlış cümle 1",
-          "¿Adónde vas?",
           "Yanlış cümle 3",
+          "¿Adónde vas?",
+          "Yanlış cümle 1",
           "Yanlış cümle 2"
         ],
         "correctIndex": 1,
@@ -1640,18 +1640,18 @@ export const spanishContent = [
         "type": "imageChoice",
         "prompt": "Hangisi 'Havalimanı' demektir?",
         "options": [
-          "Alakasız",
           "Aeropuerto",
+          "Alakasız",
           "Yanlış cevap",
           "Hatalı"
         ],
         "imageOptions": [
-          "❓",
           "✈️",
+          "❓",
           "❓",
           "❓"
         ],
-        "correctIndex": 1,
+        "correctIndex": 0,
         "audioText": "Aeropuerto",
         "audioLang": "es-ES"
       },
@@ -1660,11 +1660,11 @@ export const spanishContent = [
         "type": "constructSentence",
         "prompt": "Şu cümleyi çevir: Biletimi kaybettim",
         "options": [
-          "fake2",
           "Perdí",
+          "mi",
           "boleto",
           "fake1",
-          "mi"
+          "fake2"
         ],
         "correctAnswer": [
           "Perdí",
@@ -1680,12 +1680,12 @@ export const spanishContent = [
         "type": "translate",
         "prompt": "Çevir: Perdí mi boleto",
         "options": [
-          "Biletimi kaybettim",
+          "Yanlış çeviri 3",
           "Yanlış çeviri 1",
-          "Yanlış çeviri 2",
-          "Yanlış çeviri 3"
+          "Biletimi kaybettim",
+          "Yanlış çeviri 2"
         ],
-        "correctIndex": 0,
+        "correctIndex": 2,
         "audioText": "Perdí mi boleto",
         "audioLang": "es-ES"
       },
@@ -1694,10 +1694,10 @@ export const spanishContent = [
         "type": "constructSentence",
         "prompt": "Şu cümleyi çevir: Nereye gidiyorsun?",
         "options": [
-          "fake1",
-          "vas?",
           "¿Adónde",
-          "fake2"
+          "fake2",
+          "vas?",
+          "fake1"
         ],
         "correctAnswer": [
           "¿Adónde",
@@ -1712,12 +1712,12 @@ export const spanishContent = [
         "type": "translate",
         "prompt": "Çevir: ¿Adónde vas?",
         "options": [
-          "Nereye gidiyorsun?",
-          "Yanlış çeviri 1",
+          "Yanlış çeviri 2",
           "Yanlış çeviri 3",
-          "Yanlış çeviri 2"
+          "Nereye gidiyorsun?",
+          "Yanlış çeviri 1"
         ],
-        "correctIndex": 0,
+        "correctIndex": 2,
         "audioText": "¿Adónde vas?",
         "audioLang": "es-ES"
       },
@@ -1726,12 +1726,12 @@ export const spanishContent = [
         "type": "listen",
         "prompt": "Duyduğun cümleyi seç",
         "options": [
-          "Yanlış cümle 3",
-          "Yanlış cümle 2",
+          "Perdí mi boleto",
           "Yanlış cümle 1",
-          "Perdí mi boleto"
+          "Yanlış cümle 3",
+          "Yanlış cümle 2"
         ],
-        "correctIndex": 3,
+        "correctIndex": 0,
         "audioText": "Perdí mi boleto",
         "audioLang": "es-ES"
       },
@@ -1749,12 +1749,12 @@ export const spanishContent = [
         "type": "listen",
         "prompt": "Duyduğun cümleyi seç",
         "options": [
+          "Yanlış cümle 3",
           "¿Adónde vas?",
           "Yanlış cümle 1",
-          "Yanlış cümle 2",
-          "Yanlış cümle 3"
+          "Yanlış cümle 2"
         ],
-        "correctIndex": 0,
+        "correctIndex": 1,
         "audioText": "¿Adónde vas?",
         "audioLang": "es-ES"
       },
@@ -1817,18 +1817,18 @@ export const spanishContent = [
         "type": "imageChoice",
         "prompt": "Hangisi 'Havalimanı' demektir?",
         "options": [
-          "Yanlış cevap",
-          "Hatalı",
           "Alakasız",
-          "Aeropuerto"
+          "Aeropuerto",
+          "Yanlış cevap",
+          "Hatalı"
         ],
         "imageOptions": [
-          "❓",
           "✈️",
+          "❓",
           "❓",
           "❓"
         ],
-        "correctIndex": 3,
+        "correctIndex": 1,
         "audioText": "Aeropuerto",
         "audioLang": "es-ES"
       },
@@ -1838,10 +1838,10 @@ export const spanishContent = [
         "prompt": "Şu cümleyi çevir: Biletimi kaybettim",
         "options": [
           "fake2",
+          "fake1",
           "boleto",
           "mi",
-          "Perdí",
-          "fake1"
+          "Perdí"
         ],
         "correctAnswer": [
           "Perdí",
@@ -1889,12 +1889,12 @@ export const spanishContent = [
         "type": "translate",
         "prompt": "Çevir: ¿Adónde vas?",
         "options": [
-          "Nereye gidiyorsun?",
           "Yanlış çeviri 3",
+          "Yanlış çeviri 2",
           "Yanlış çeviri 1",
-          "Yanlış çeviri 2"
+          "Nereye gidiyorsun?"
         ],
-        "correctIndex": 0,
+        "correctIndex": 3,
         "audioText": "¿Adónde vas?",
         "audioLang": "es-ES"
       },
@@ -1903,12 +1903,12 @@ export const spanishContent = [
         "type": "listen",
         "prompt": "Duyduğun cümleyi seç",
         "options": [
-          "Yanlış cümle 3",
           "Perdí mi boleto",
           "Yanlış cümle 1",
-          "Yanlış cümle 2"
+          "Yanlış cümle 2",
+          "Yanlış cümle 3"
         ],
-        "correctIndex": 1,
+        "correctIndex": 0,
         "audioText": "Perdí mi boleto",
         "audioLang": "es-ES"
       },
@@ -1926,12 +1926,12 @@ export const spanishContent = [
         "type": "listen",
         "prompt": "Duyduğun cümleyi seç",
         "options": [
-          "Yanlış cümle 1",
-          "¿Adónde vas?",
           "Yanlış cümle 3",
-          "Yanlış cümle 2"
+          "Yanlış cümle 2",
+          "Yanlış cümle 1",
+          "¿Adónde vas?"
         ],
-        "correctIndex": 1,
+        "correctIndex": 3,
         "audioText": "¿Adónde vas?",
         "audioLang": "es-ES"
       },
@@ -1994,18 +1994,18 @@ export const spanishContent = [
         "type": "imageChoice",
         "prompt": "Hangisi 'Havalimanı' demektir?",
         "options": [
-          "Aeropuerto",
-          "Yanlış cevap",
           "Alakasız",
-          "Hatalı"
+          "Hatalı",
+          "Yanlış cevap",
+          "Aeropuerto"
         ],
         "imageOptions": [
+          "✈️",
           "❓",
           "❓",
-          "❓",
-          "✈️"
+          "❓"
         ],
-        "correctIndex": 0,
+        "correctIndex": 3,
         "audioText": "Aeropuerto",
         "audioLang": "es-ES"
       },
@@ -2034,12 +2034,12 @@ export const spanishContent = [
         "type": "translate",
         "prompt": "Çevir: Perdí mi boleto",
         "options": [
-          "Yanlış çeviri 1",
           "Yanlış çeviri 3",
           "Biletimi kaybettim",
+          "Yanlış çeviri 1",
           "Yanlış çeviri 2"
         ],
-        "correctIndex": 2,
+        "correctIndex": 1,
         "audioText": "Perdí mi boleto",
         "audioLang": "es-ES"
       },
@@ -2048,10 +2048,10 @@ export const spanishContent = [
         "type": "constructSentence",
         "prompt": "Şu cümleyi çevir: Nereye gidiyorsun?",
         "options": [
-          "fake2",
-          "fake1",
+          "¿Adónde",
           "vas?",
-          "¿Adónde"
+          "fake1",
+          "fake2"
         ],
         "correctAnswer": [
           "¿Adónde",
@@ -2066,12 +2066,12 @@ export const spanishContent = [
         "type": "translate",
         "prompt": "Çevir: ¿Adónde vas?",
         "options": [
-          "Nereye gidiyorsun?",
-          "Yanlış çeviri 1",
+          "Yanlış çeviri 3",
           "Yanlış çeviri 2",
-          "Yanlış çeviri 3"
+          "Yanlış çeviri 1",
+          "Nereye gidiyorsun?"
         ],
-        "correctIndex": 0,
+        "correctIndex": 3,
         "audioText": "¿Adónde vas?",
         "audioLang": "es-ES"
       },
@@ -2080,12 +2080,12 @@ export const spanishContent = [
         "type": "listen",
         "prompt": "Duyduğun cümleyi seç",
         "options": [
-          "Yanlış cümle 1",
-          "Yanlış cümle 3",
           "Perdí mi boleto",
-          "Yanlış cümle 2"
+          "Yanlış cümle 1",
+          "Yanlış cümle 2",
+          "Yanlış cümle 3"
         ],
-        "correctIndex": 2,
+        "correctIndex": 0,
         "audioText": "Perdí mi boleto",
         "audioLang": "es-ES"
       },
@@ -2103,12 +2103,12 @@ export const spanishContent = [
         "type": "listen",
         "prompt": "Duyduğun cümleyi seç",
         "options": [
-          "¿Adónde vas?",
-          "Yanlış cümle 2",
           "Yanlış cümle 3",
-          "Yanlış cümle 1"
+          "¿Adónde vas?",
+          "Yanlış cümle 1",
+          "Yanlış cümle 2"
         ],
-        "correctIndex": 0,
+        "correctIndex": 1,
         "audioText": "¿Adónde vas?",
         "audioLang": "es-ES"
       },
@@ -2171,10 +2171,10 @@ export const spanishContent = [
         "type": "imageChoice",
         "prompt": "Hangisi 'Bence' demektir?",
         "options": [
-          "Hatalı",
-          "Yanlış cevap",
+          "Creo que",
           "Alakasız",
-          "Creo que"
+          "Yanlış cevap",
+          "Hatalı"
         ],
         "imageOptions": [
           "🤔",
@@ -2182,7 +2182,7 @@ export const spanishContent = [
           "❓",
           "❓"
         ],
-        "correctIndex": 3,
+        "correctIndex": 0,
         "audioText": "Creo que",
         "audioLang": "es-ES"
       },
@@ -2191,14 +2191,14 @@ export const spanishContent = [
         "type": "constructSentence",
         "prompt": "Şu cümleyi çevir: Bence bu çok önemli",
         "options": [
-          "esto",
           "importante",
-          "Creo",
-          "fake2",
           "fake1",
-          "muy",
           "que",
-          "es"
+          "fake2",
+          "Creo",
+          "esto",
+          "es",
+          "muy"
         ],
         "correctAnswer": [
           "Creo",
@@ -2217,12 +2217,12 @@ export const spanishContent = [
         "type": "translate",
         "prompt": "Çevir: Creo que esto es muy importante",
         "options": [
-          "Bence bu çok önemli",
+          "Yanlış çeviri 2",
           "Yanlış çeviri 3",
           "Yanlış çeviri 1",
-          "Yanlış çeviri 2"
+          "Bence bu çok önemli"
         ],
-        "correctIndex": 0,
+        "correctIndex": 3,
         "audioText": "Creo que esto es muy importante",
         "audioLang": "es-ES"
       },
@@ -2251,12 +2251,12 @@ export const spanishContent = [
         "type": "translate",
         "prompt": "Çevir: No estoy seguro",
         "options": [
-          "Emin değilim",
-          "Yanlış çeviri 1",
+          "Yanlış çeviri 3",
           "Yanlış çeviri 2",
-          "Yanlış çeviri 3"
+          "Yanlış çeviri 1",
+          "Emin değilim"
         ],
-        "correctIndex": 0,
+        "correctIndex": 3,
         "audioText": "No estoy seguro",
         "audioLang": "es-ES"
       },
@@ -2265,12 +2265,12 @@ export const spanishContent = [
         "type": "listen",
         "prompt": "Duyduğun cümleyi seç",
         "options": [
-          "Yanlış cümle 3",
           "Creo que esto es muy importante",
           "Yanlış cümle 1",
-          "Yanlış cümle 2"
+          "Yanlış cümle 2",
+          "Yanlış cümle 3"
         ],
-        "correctIndex": 1,
+        "correctIndex": 0,
         "audioText": "Creo que esto es muy importante",
         "audioLang": "es-ES"
       },
@@ -2288,8 +2288,8 @@ export const spanishContent = [
         "type": "listen",
         "prompt": "Duyduğun cümleyi seç",
         "options": [
-          "Yanlış cümle 2",
           "Yanlış cümle 3",
+          "Yanlış cümle 2",
           "Yanlış cümle 1",
           "No estoy seguro"
         ],
@@ -2357,15 +2357,15 @@ export const spanishContent = [
         "prompt": "Hangisi 'Bence' demektir?",
         "options": [
           "Creo que",
+          "Alakasız",
           "Yanlış cevap",
-          "Hatalı",
-          "Alakasız"
+          "Hatalı"
         ],
         "imageOptions": [
           "❓",
-          "🤔",
           "❓",
-          "❓"
+          "❓",
+          "🤔"
         ],
         "correctIndex": 0,
         "audioText": "Creo que",
@@ -2376,14 +2376,14 @@ export const spanishContent = [
         "type": "constructSentence",
         "prompt": "Şu cümleyi çevir: Bence bu çok önemli",
         "options": [
-          "es",
           "fake2",
-          "importante",
-          "esto",
-          "que",
-          "muy",
           "Creo",
-          "fake1"
+          "fake1",
+          "que",
+          "es",
+          "muy",
+          "importante",
+          "esto"
         ],
         "correctAnswer": [
           "Creo",
@@ -2402,12 +2402,12 @@ export const spanishContent = [
         "type": "translate",
         "prompt": "Çevir: Creo que esto es muy importante",
         "options": [
-          "Bence bu çok önemli",
-          "Yanlış çeviri 1",
           "Yanlış çeviri 3",
-          "Yanlış çeviri 2"
+          "Yanlış çeviri 2",
+          "Yanlış çeviri 1",
+          "Bence bu çok önemli"
         ],
-        "correctIndex": 0,
+        "correctIndex": 3,
         "audioText": "Creo que esto es muy importante",
         "audioLang": "es-ES"
       },
@@ -2416,11 +2416,11 @@ export const spanishContent = [
         "type": "constructSentence",
         "prompt": "Şu cümleyi çevir: Emin değilim",
         "options": [
-          "fake2",
-          "No",
-          "estoy",
           "fake1",
-          "seguro"
+          "seguro",
+          "fake2",
+          "estoy",
+          "No"
         ],
         "correctAnswer": [
           "No",
@@ -2436,12 +2436,12 @@ export const spanishContent = [
         "type": "translate",
         "prompt": "Çevir: No estoy seguro",
         "options": [
-          "Emin değilim",
           "Yanlış çeviri 1",
+          "Yanlış çeviri 3",
           "Yanlış çeviri 2",
-          "Yanlış çeviri 3"
+          "Emin değilim"
         ],
-        "correctIndex": 0,
+        "correctIndex": 3,
         "audioText": "No estoy seguro",
         "audioLang": "es-ES"
       },
@@ -2474,11 +2474,11 @@ export const spanishContent = [
         "prompt": "Duyduğun cümleyi seç",
         "options": [
           "Yanlış cümle 1",
+          "Yanlış cümle 2",
           "Yanlış cümle 3",
-          "No estoy seguro",
-          "Yanlış cümle 2"
+          "No estoy seguro"
         ],
-        "correctIndex": 2,
+        "correctIndex": 3,
         "audioText": "No estoy seguro",
         "audioLang": "es-ES"
       },
@@ -2547,10 +2547,10 @@ export const spanishContent = [
           "Creo que"
         ],
         "imageOptions": [
+          "🤔",
           "❓",
           "❓",
-          "❓",
-          "🤔"
+          "❓"
         ],
         "correctIndex": 3,
         "audioText": "Creo que",
@@ -2561,14 +2561,14 @@ export const spanishContent = [
         "type": "constructSentence",
         "prompt": "Şu cümleyi çevir: Bence bu çok önemli",
         "options": [
-          "que",
-          "es",
-          "importante",
-          "fake1",
-          "esto",
-          "muy",
           "fake2",
-          "Creo"
+          "Creo",
+          "que",
+          "esto",
+          "es",
+          "muy",
+          "importante",
+          "fake1"
         ],
         "correctAnswer": [
           "Creo",
@@ -2601,11 +2601,11 @@ export const spanishContent = [
         "type": "constructSentence",
         "prompt": "Şu cümleyi çevir: Emin değilim",
         "options": [
-          "fake1",
           "No",
           "estoy",
-          "fake2",
-          "seguro"
+          "seguro",
+          "fake1",
+          "fake2"
         ],
         "correctAnswer": [
           "No",
@@ -2621,12 +2621,12 @@ export const spanishContent = [
         "type": "translate",
         "prompt": "Çevir: No estoy seguro",
         "options": [
-          "Yanlış çeviri 1",
-          "Emin değilim",
           "Yanlış çeviri 3",
-          "Yanlış çeviri 2"
+          "Yanlış çeviri 2",
+          "Yanlış çeviri 1",
+          "Emin değilim"
         ],
-        "correctIndex": 1,
+        "correctIndex": 3,
         "audioText": "No estoy seguro",
         "audioLang": "es-ES"
       },
@@ -2658,12 +2658,12 @@ export const spanishContent = [
         "type": "listen",
         "prompt": "Duyduğun cümleyi seç",
         "options": [
-          "Yanlış cümle 2",
-          "Yanlış cümle 1",
           "Yanlış cümle 3",
-          "No estoy seguro"
+          "No estoy seguro",
+          "Yanlış cümle 2",
+          "Yanlış cümle 1"
         ],
-        "correctIndex": 3,
+        "correctIndex": 1,
         "audioText": "No estoy seguro",
         "audioLang": "es-ES"
       },
@@ -2726,10 +2726,10 @@ export const spanishContent = [
         "type": "imageChoice",
         "prompt": "Hangisi 'Bence' demektir?",
         "options": [
-          "Alakasız",
-          "Hatalı",
+          "Creo que",
           "Yanlış cevap",
-          "Creo que"
+          "Hatalı",
+          "Alakasız"
         ],
         "imageOptions": [
           "🤔",
@@ -2737,7 +2737,7 @@ export const spanishContent = [
           "❓",
           "❓"
         ],
-        "correctIndex": 3,
+        "correctIndex": 0,
         "audioText": "Creo que",
         "audioLang": "es-ES"
       },
@@ -2746,14 +2746,14 @@ export const spanishContent = [
         "type": "constructSentence",
         "prompt": "Şu cümleyi çevir: Bence bu çok önemli",
         "options": [
-          "importante",
-          "que",
-          "fake1",
-          "Creo",
-          "fake2",
-          "muy",
           "esto",
-          "es"
+          "es",
+          "fake2",
+          "fake1",
+          "que",
+          "Creo",
+          "importante",
+          "muy"
         ],
         "correctAnswer": [
           "Creo",
@@ -2772,12 +2772,12 @@ export const spanishContent = [
         "type": "translate",
         "prompt": "Çevir: Creo que esto es muy importante",
         "options": [
-          "Yanlış çeviri 2",
           "Bence bu çok önemli",
+          "Yanlış çeviri 3",
           "Yanlış çeviri 1",
-          "Yanlış çeviri 3"
+          "Yanlış çeviri 2"
         ],
-        "correctIndex": 1,
+        "correctIndex": 0,
         "audioText": "Creo que esto es muy importante",
         "audioLang": "es-ES"
       },
@@ -2786,11 +2786,11 @@ export const spanishContent = [
         "type": "constructSentence",
         "prompt": "Şu cümleyi çevir: Emin değilim",
         "options": [
-          "No",
-          "fake1",
           "seguro",
+          "estoy",
           "fake2",
-          "estoy"
+          "No",
+          "fake1"
         ],
         "correctAnswer": [
           "No",
@@ -2806,12 +2806,12 @@ export const spanishContent = [
         "type": "translate",
         "prompt": "Çevir: No estoy seguro",
         "options": [
-          "Emin değilim",
-          "Yanlış çeviri 3",
           "Yanlış çeviri 1",
-          "Yanlış çeviri 2"
+          "Yanlış çeviri 3",
+          "Yanlış çeviri 2",
+          "Emin değilim"
         ],
-        "correctIndex": 0,
+        "correctIndex": 3,
         "audioText": "No estoy seguro",
         "audioLang": "es-ES"
       },
@@ -2820,12 +2820,12 @@ export const spanishContent = [
         "type": "listen",
         "prompt": "Duyduğun cümleyi seç",
         "options": [
+          "Creo que esto es muy importante",
           "Yanlış cümle 3",
-          "Yanlış cümle 2",
           "Yanlış cümle 1",
-          "Creo que esto es muy importante"
+          "Yanlış cümle 2"
         ],
-        "correctIndex": 3,
+        "correctIndex": 0,
         "audioText": "Creo que esto es muy importante",
         "audioLang": "es-ES"
       },
@@ -2843,10 +2843,10 @@ export const spanishContent = [
         "type": "listen",
         "prompt": "Duyduğun cümleyi seç",
         "options": [
-          "Yanlış cümle 3",
+          "Yanlış cümle 2",
           "Yanlış cümle 1",
           "No estoy seguro",
-          "Yanlış cümle 2"
+          "Yanlış cümle 3"
         ],
         "correctIndex": 2,
         "audioText": "No estoy seguro",
@@ -2911,18 +2911,18 @@ export const spanishContent = [
         "type": "imageChoice",
         "prompt": "Hangisi 'Bence' demektir?",
         "options": [
-          "Alakasız",
+          "Hatalı",
           "Yanlış cevap",
-          "Creo que",
-          "Hatalı"
+          "Alakasız",
+          "Creo que"
         ],
         "imageOptions": [
-          "🤔",
           "❓",
+          "🤔",
           "❓",
           "❓"
         ],
-        "correctIndex": 2,
+        "correctIndex": 3,
         "audioText": "Creo que",
         "audioLang": "es-ES"
       },
@@ -2931,14 +2931,14 @@ export const spanishContent = [
         "type": "constructSentence",
         "prompt": "Şu cümleyi çevir: Bence bu çok önemli",
         "options": [
-          "fake1",
           "esto",
           "que",
-          "importante",
-          "muy",
           "fake2",
+          "Creo",
+          "fake1",
           "es",
-          "Creo"
+          "muy",
+          "importante"
         ],
         "correctAnswer": [
           "Creo",
@@ -2958,8 +2958,8 @@ export const spanishContent = [
         "prompt": "Çevir: Creo que esto es muy importante",
         "options": [
           "Yanlış çeviri 3",
-          "Yanlış çeviri 1",
           "Yanlış çeviri 2",
+          "Yanlış çeviri 1",
           "Bence bu çok önemli"
         ],
         "correctIndex": 3,
@@ -2991,12 +2991,12 @@ export const spanishContent = [
         "type": "translate",
         "prompt": "Çevir: No estoy seguro",
         "options": [
-          "Yanlış çeviri 3",
-          "Yanlış çeviri 2",
           "Yanlış çeviri 1",
-          "Emin değilim"
+          "Emin değilim",
+          "Yanlış çeviri 2",
+          "Yanlış çeviri 3"
         ],
-        "correctIndex": 3,
+        "correctIndex": 1,
         "audioText": "No estoy seguro",
         "audioLang": "es-ES"
       },
@@ -3005,12 +3005,12 @@ export const spanishContent = [
         "type": "listen",
         "prompt": "Duyduğun cümleyi seç",
         "options": [
-          "Creo que esto es muy importante",
+          "Yanlış cümle 2",
           "Yanlış cümle 1",
-          "Yanlış cümle 3",
-          "Yanlış cümle 2"
+          "Creo que esto es muy importante",
+          "Yanlış cümle 3"
         ],
-        "correctIndex": 0,
+        "correctIndex": 2,
         "audioText": "Creo que esto es muy importante",
         "audioLang": "es-ES"
       },
@@ -3028,12 +3028,12 @@ export const spanishContent = [
         "type": "listen",
         "prompt": "Duyduğun cümleyi seç",
         "options": [
-          "Yanlış cümle 3",
-          "Yanlış cümle 2",
+          "No estoy seguro",
           "Yanlış cümle 1",
-          "No estoy seguro"
+          "Yanlış cümle 2",
+          "Yanlış cümle 3"
         ],
-        "correctIndex": 3,
+        "correctIndex": 0,
         "audioText": "No estoy seguro",
         "audioLang": "es-ES"
       },
@@ -3096,18 +3096,18 @@ export const spanishContent = [
         "type": "imageChoice",
         "prompt": "Hangisi 'Bence' demektir?",
         "options": [
-          "Hatalı",
-          "Yanlış cevap",
           "Creo que",
-          "Alakasız"
+          "Yanlış cevap",
+          "Alakasız",
+          "Hatalı"
         ],
         "imageOptions": [
-          "🤔",
           "❓",
           "❓",
-          "❓"
+          "❓",
+          "🤔"
         ],
-        "correctIndex": 2,
+        "correctIndex": 0,
         "audioText": "Creo que",
         "audioLang": "es-ES"
       },
@@ -3116,14 +3116,14 @@ export const spanishContent = [
         "type": "constructSentence",
         "prompt": "Şu cümleyi çevir: Bence bu çok önemli",
         "options": [
-          "es",
-          "fake1",
-          "fake2",
-          "Creo",
-          "importante",
-          "muy",
           "esto",
-          "que"
+          "es",
+          "importante",
+          "que",
+          "Creo",
+          "fake2",
+          "fake1",
+          "muy"
         ],
         "correctAnswer": [
           "Creo",
@@ -3157,10 +3157,10 @@ export const spanishContent = [
         "prompt": "Şu cümleyi çevir: Emin değilim",
         "options": [
           "seguro",
-          "fake1",
           "estoy",
+          "fake2",
           "No",
-          "fake2"
+          "fake1"
         ],
         "correctAnswer": [
           "No",
@@ -3176,12 +3176,12 @@ export const spanishContent = [
         "type": "translate",
         "prompt": "Çevir: No estoy seguro",
         "options": [
-          "Emin değilim",
           "Yanlış çeviri 3",
-          "Yanlış çeviri 1",
-          "Yanlış çeviri 2"
+          "Yanlış çeviri 2",
+          "Emin değilim",
+          "Yanlış çeviri 1"
         ],
-        "correctIndex": 0,
+        "correctIndex": 2,
         "audioText": "No estoy seguro",
         "audioLang": "es-ES"
       },
@@ -3190,12 +3190,12 @@ export const spanishContent = [
         "type": "listen",
         "prompt": "Duyduğun cümleyi seç",
         "options": [
+          "Yanlış cümle 3",
           "Yanlış cümle 2",
           "Creo que esto es muy importante",
-          "Yanlış cümle 1",
-          "Yanlış cümle 3"
+          "Yanlış cümle 1"
         ],
-        "correctIndex": 1,
+        "correctIndex": 2,
         "audioText": "Creo que esto es muy importante",
         "audioLang": "es-ES"
       },
@@ -3281,18 +3281,18 @@ export const spanishContent = [
         "type": "imageChoice",
         "prompt": "Hangisi 'Müzakere' demektir?",
         "options": [
-          "Hatalı",
+          "Negociación",
           "Yanlış cevap",
           "Alakasız",
-          "Negociación"
+          "Hatalı"
         ],
         "imageOptions": [
           "❓",
           "❓",
-          "🤝",
-          "❓"
+          "❓",
+          "🤝"
         ],
-        "correctIndex": 3,
+        "correctIndex": 0,
         "audioText": "Negociación",
         "audioLang": "es-ES"
       },
@@ -3301,13 +3301,13 @@ export const spanishContent = [
         "type": "constructSentence",
         "prompt": "Şu cümleyi çevir: Müzakere oldukça zorluydu",
         "options": [
-          "La",
           "fake1",
+          "bastante",
           "fake2",
           "negociación",
-          "desafiante",
           "fue",
-          "bastante"
+          "desafiante",
+          "La"
         ],
         "correctAnswer": [
           "La",
@@ -3325,12 +3325,12 @@ export const spanishContent = [
         "type": "translate",
         "prompt": "Çevir: La negociación fue bastante desafiante",
         "options": [
-          "Yanlış çeviri 3",
-          "Yanlış çeviri 2",
           "Yanlış çeviri 1",
-          "Müzakere oldukça zorluydu"
+          "Müzakere oldukça zorluydu",
+          "Yanlış çeviri 3",
+          "Yanlış çeviri 2"
         ],
-        "correctIndex": 3,
+        "correctIndex": 1,
         "audioText": "La negociación fue bastante desafiante",
         "audioLang": "es-ES"
       },
@@ -3339,12 +3339,12 @@ export const spanishContent = [
         "type": "constructSentence",
         "prompt": "Şu cümleyi çevir: Bu durum beni hayal kırıklığına uğrattı",
         "options": [
-          "fake1",
+          "decepcionó",
           "Esta",
-          "fake2",
           "situación",
-          "me",
-          "decepcionó"
+          "fake2",
+          "fake1",
+          "me"
         ],
         "correctAnswer": [
           "Esta",
@@ -3361,12 +3361,12 @@ export const spanishContent = [
         "type": "translate",
         "prompt": "Çevir: Esta situación me decepcionó",
         "options": [
-          "Bu durum beni hayal kırıklığına uğrattı",
-          "Yanlış çeviri 1",
           "Yanlış çeviri 2",
-          "Yanlış çeviri 3"
+          "Yanlış çeviri 1",
+          "Yanlış çeviri 3",
+          "Bu durum beni hayal kırıklığına uğrattı"
         ],
-        "correctIndex": 0,
+        "correctIndex": 3,
         "audioText": "Esta situación me decepcionó",
         "audioLang": "es-ES"
       },
@@ -3376,11 +3376,11 @@ export const spanishContent = [
         "prompt": "Duyduğun cümleyi seç",
         "options": [
           "Yanlış cümle 3",
-          "Yanlış cümle 2",
           "La negociación fue bastante desafiante",
-          "Yanlış cümle 1"
+          "Yanlış cümle 1",
+          "Yanlış cümle 2"
         ],
-        "correctIndex": 2,
+        "correctIndex": 1,
         "audioText": "La negociación fue bastante desafiante",
         "audioLang": "es-ES"
       },
@@ -3398,12 +3398,12 @@ export const spanishContent = [
         "type": "listen",
         "prompt": "Duyduğun cümleyi seç",
         "options": [
-          "Esta situación me decepcionó",
-          "Yanlış cümle 1",
+          "Yanlış cümle 3",
           "Yanlış cümle 2",
-          "Yanlış cümle 3"
+          "Yanlış cümle 1",
+          "Esta situación me decepcionó"
         ],
-        "correctIndex": 0,
+        "correctIndex": 3,
         "audioText": "Esta situación me decepcionó",
         "audioLang": "es-ES"
       },
@@ -3466,18 +3466,18 @@ export const spanishContent = [
         "type": "imageChoice",
         "prompt": "Hangisi 'Müzakere' demektir?",
         "options": [
+          "Negociación",
           "Alakasız",
-          "Hatalı",
           "Yanlış cevap",
-          "Negociación"
+          "Hatalı"
         ],
         "imageOptions": [
           "❓",
+          "🤝",
           "❓",
-          "❓",
-          "🤝"
+          "❓"
         ],
-        "correctIndex": 3,
+        "correctIndex": 0,
         "audioText": "Negociación",
         "audioLang": "es-ES"
       },
@@ -3486,13 +3486,13 @@ export const spanishContent = [
         "type": "constructSentence",
         "prompt": "Şu cümleyi çevir: Müzakere oldukça zorluydu",
         "options": [
-          "desafiante",
-          "fue",
-          "fake2",
-          "negociación",
-          "fake1",
           "La",
-          "bastante"
+          "negociación",
+          "fue",
+          "fake1",
+          "fake2",
+          "bastante",
+          "desafiante"
         ],
         "correctAnswer": [
           "La",
@@ -3510,12 +3510,12 @@ export const spanishContent = [
         "type": "translate",
         "prompt": "Çevir: La negociación fue bastante desafiante",
         "options": [
-          "Yanlış çeviri 3",
           "Yanlış çeviri 1",
-          "Yanlış çeviri 2",
-          "Müzakere oldukça zorluydu"
+          "Yanlış çeviri 3",
+          "Müzakere oldukça zorluydu",
+          "Yanlış çeviri 2"
         ],
-        "correctIndex": 3,
+        "correctIndex": 2,
         "audioText": "La negociación fue bastante desafiante",
         "audioLang": "es-ES"
       },
@@ -3524,12 +3524,12 @@ export const spanishContent = [
         "type": "constructSentence",
         "prompt": "Şu cümleyi çevir: Bu durum beni hayal kırıklığına uğrattı",
         "options": [
-          "fake1",
           "me",
+          "Esta",
           "fake2",
           "decepcionó",
-          "situación",
-          "Esta"
+          "fake1",
+          "situación"
         ],
         "correctAnswer": [
           "Esta",
@@ -3546,12 +3546,12 @@ export const spanishContent = [
         "type": "translate",
         "prompt": "Çevir: Esta situación me decepcionó",
         "options": [
-          "Yanlış çeviri 3",
-          "Bu durum beni hayal kırıklığına uğrattı",
           "Yanlış çeviri 1",
-          "Yanlış çeviri 2"
+          "Yanlış çeviri 2",
+          "Bu durum beni hayal kırıklığına uğrattı",
+          "Yanlış çeviri 3"
         ],
-        "correctIndex": 1,
+        "correctIndex": 2,
         "audioText": "Esta situación me decepcionó",
         "audioLang": "es-ES"
       },
@@ -3560,12 +3560,12 @@ export const spanishContent = [
         "type": "listen",
         "prompt": "Duyduğun cümleyi seç",
         "options": [
-          "Yanlış cümle 1",
-          "Yanlış cümle 3",
           "La negociación fue bastante desafiante",
-          "Yanlış cümle 2"
+          "Yanlış cümle 1",
+          "Yanlış cümle 2",
+          "Yanlış cümle 3"
         ],
-        "correctIndex": 2,
+        "correctIndex": 0,
         "audioText": "La negociación fue bastante desafiante",
         "audioLang": "es-ES"
       },
@@ -3583,12 +3583,12 @@ export const spanishContent = [
         "type": "listen",
         "prompt": "Duyduğun cümleyi seç",
         "options": [
-          "Yanlış cümle 2",
-          "Yanlış cümle 1",
+          "Yanlış cümle 3",
           "Esta situación me decepcionó",
-          "Yanlış cümle 3"
+          "Yanlış cümle 1",
+          "Yanlış cümle 2"
         ],
-        "correctIndex": 2,
+        "correctIndex": 1,
         "audioText": "Esta situación me decepcionó",
         "audioLang": "es-ES"
       },
@@ -3651,18 +3651,18 @@ export const spanishContent = [
         "type": "imageChoice",
         "prompt": "Hangisi 'Müzakere' demektir?",
         "options": [
+          "Alakasız",
           "Yanlış cevap",
           "Negociación",
-          "Alakasız",
           "Hatalı"
         ],
         "imageOptions": [
           "❓",
           "❓",
-          "🤝",
-          "❓"
+          "❓",
+          "🤝"
         ],
-        "correctIndex": 1,
+        "correctIndex": 2,
         "audioText": "Negociación",
         "audioLang": "es-ES"
       },
@@ -3671,12 +3671,12 @@ export const spanishContent = [
         "type": "constructSentence",
         "prompt": "Şu cümleyi çevir: Müzakere oldukça zorluydu",
         "options": [
-          "bastante",
-          "La",
-          "negociación",
-          "fake2",
-          "desafiante",
           "fue",
+          "desafiante",
+          "fake2",
+          "negociación",
+          "La",
+          "bastante",
           "fake1"
         ],
         "correctAnswer": [
@@ -3695,12 +3695,12 @@ export const spanishContent = [
         "type": "translate",
         "prompt": "Çevir: La negociación fue bastante desafiante",
         "options": [
-          "Müzakere oldukça zorluydu",
           "Yanlış çeviri 1",
           "Yanlış çeviri 2",
+          "Müzakere oldukça zorluydu",
           "Yanlış çeviri 3"
         ],
-        "correctIndex": 0,
+        "correctIndex": 2,
         "audioText": "La negociación fue bastante desafiante",
         "audioLang": "es-ES"
       },
@@ -3710,11 +3710,11 @@ export const spanishContent = [
         "prompt": "Şu cümleyi çevir: Bu durum beni hayal kırıklığına uğrattı",
         "options": [
           "fake2",
-          "me",
           "situación",
-          "fake1",
+          "me",
           "decepcionó",
-          "Esta"
+          "Esta",
+          "fake1"
         ],
         "correctAnswer": [
           "Esta",
@@ -3732,9 +3732,9 @@ export const spanishContent = [
         "prompt": "Çevir: Esta situación me decepcionó",
         "options": [
           "Bu durum beni hayal kırıklığına uğrattı",
-          "Yanlış çeviri 2",
           "Yanlış çeviri 3",
-          "Yanlış çeviri 1"
+          "Yanlış çeviri 1",
+          "Yanlış çeviri 2"
         ],
         "correctIndex": 0,
         "audioText": "Esta situación me decepcionó",
@@ -3745,12 +3745,12 @@ export const spanishContent = [
         "type": "listen",
         "prompt": "Duyduğun cümleyi seç",
         "options": [
+          "La negociación fue bastante desafiante",
           "Yanlış cümle 3",
-          "Yanlış cümle 1",
           "Yanlış cümle 2",
-          "La negociación fue bastante desafiante"
+          "Yanlış cümle 1"
         ],
-        "correctIndex": 3,
+        "correctIndex": 0,
         "audioText": "La negociación fue bastante desafiante",
         "audioLang": "es-ES"
       },
@@ -3768,12 +3768,12 @@ export const spanishContent = [
         "type": "listen",
         "prompt": "Duyduğun cümleyi seç",
         "options": [
-          "Esta situación me decepcionó",
+          "Yanlış cümle 2",
           "Yanlış cümle 1",
           "Yanlış cümle 3",
-          "Yanlış cümle 2"
+          "Esta situación me decepcionó"
         ],
-        "correctIndex": 0,
+        "correctIndex": 3,
         "audioText": "Esta situación me decepcionó",
         "audioLang": "es-ES"
       },
@@ -3836,18 +3836,18 @@ export const spanishContent = [
         "type": "imageChoice",
         "prompt": "Hangisi 'Müzakere' demektir?",
         "options": [
+          "Yanlış cevap",
           "Alakasız",
           "Negociación",
-          "Yanlış cevap",
           "Hatalı"
         ],
         "imageOptions": [
+          "🤝",
           "❓",
           "❓",
-          "❓",
-          "🤝"
+          "❓"
         ],
-        "correctIndex": 1,
+        "correctIndex": 2,
         "audioText": "Negociación",
         "audioLang": "es-ES"
       },
@@ -3856,13 +3856,13 @@ export const spanishContent = [
         "type": "constructSentence",
         "prompt": "Şu cümleyi çevir: Müzakere oldukça zorluydu",
         "options": [
-          "fue",
           "fake1",
-          "negociación",
-          "fake2",
-          "desafiante",
           "La",
-          "bastante"
+          "fake2",
+          "bastante",
+          "negociación",
+          "fue",
+          "desafiante"
         ],
         "correctAnswer": [
           "La",
@@ -3880,12 +3880,12 @@ export const spanishContent = [
         "type": "translate",
         "prompt": "Çevir: La negociación fue bastante desafiante",
         "options": [
-          "Yanlış çeviri 3",
           "Müzakere oldukça zorluydu",
+          "Yanlış çeviri 3",
           "Yanlış çeviri 1",
           "Yanlış çeviri 2"
         ],
-        "correctIndex": 1,
+        "correctIndex": 0,
         "audioText": "La negociación fue bastante desafiante",
         "audioLang": "es-ES"
       },
@@ -3896,10 +3896,10 @@ export const spanishContent = [
         "options": [
           "Esta",
           "situación",
-          "me",
           "fake1",
-          "fake2",
-          "decepcionó"
+          "me",
+          "decepcionó",
+          "fake2"
         ],
         "correctAnswer": [
           "Esta",
@@ -3916,12 +3916,12 @@ export const spanishContent = [
         "type": "translate",
         "prompt": "Çevir: Esta situación me decepcionó",
         "options": [
+          "Yanlış çeviri 2",
           "Bu durum beni hayal kırıklığına uğrattı",
-          "Yanlış çeviri 1",
           "Yanlış çeviri 3",
-          "Yanlış çeviri 2"
+          "Yanlış çeviri 1"
         ],
-        "correctIndex": 0,
+        "correctIndex": 1,
         "audioText": "Esta situación me decepcionó",
         "audioLang": "es-ES"
       },
@@ -3930,12 +3930,12 @@ export const spanishContent = [
         "type": "listen",
         "prompt": "Duyduğun cümleyi seç",
         "options": [
-          "Yanlış cümle 2",
-          "Yanlış cümle 1",
           "Yanlış cümle 3",
-          "La negociación fue bastante desafiante"
+          "Yanlış cümle 1",
+          "La negociación fue bastante desafiante",
+          "Yanlış cümle 2"
         ],
-        "correctIndex": 3,
+        "correctIndex": 2,
         "audioText": "La negociación fue bastante desafiante",
         "audioLang": "es-ES"
       },
@@ -3954,11 +3954,11 @@ export const spanishContent = [
         "prompt": "Duyduğun cümleyi seç",
         "options": [
           "Yanlış cümle 3",
-          "Esta situación me decepcionó",
+          "Yanlış cümle 2",
           "Yanlış cümle 1",
-          "Yanlış cümle 2"
+          "Esta situación me decepcionó"
         ],
-        "correctIndex": 1,
+        "correctIndex": 3,
         "audioText": "Esta situación me decepcionó",
         "audioLang": "es-ES"
       },
@@ -4021,18 +4021,18 @@ export const spanishContent = [
         "type": "imageChoice",
         "prompt": "Hangisi 'Müzakere' demektir?",
         "options": [
-          "Alakasız",
+          "Negociación",
           "Hatalı",
-          "Yanlış cevap",
-          "Negociación"
+          "Alakasız",
+          "Yanlış cevap"
         ],
         "imageOptions": [
+          "❓",
+          "❓",
           "🤝",
-          "❓",
-          "❓",
           "❓"
         ],
-        "correctIndex": 3,
+        "correctIndex": 0,
         "audioText": "Negociación",
         "audioLang": "es-ES"
       },
@@ -4042,12 +4042,12 @@ export const spanishContent = [
         "prompt": "Şu cümleyi çevir: Müzakere oldukça zorluydu",
         "options": [
           "negociación",
+          "bastante",
           "desafiante",
           "fake1",
-          "fue",
-          "fake2",
           "La",
-          "bastante"
+          "fue",
+          "fake2"
         ],
         "correctAnswer": [
           "La",
@@ -4065,12 +4065,12 @@ export const spanishContent = [
         "type": "translate",
         "prompt": "Çevir: La negociación fue bastante desafiante",
         "options": [
-          "Müzakere oldukça zorluydu",
-          "Yanlış çeviri 1",
           "Yanlış çeviri 2",
-          "Yanlış çeviri 3"
+          "Yanlış çeviri 1",
+          "Yanlış çeviri 3",
+          "Müzakere oldukça zorluydu"
         ],
-        "correctIndex": 0,
+        "correctIndex": 3,
         "audioText": "La negociación fue bastante desafiante",
         "audioLang": "es-ES"
       },
@@ -4079,12 +4079,12 @@ export const spanishContent = [
         "type": "constructSentence",
         "prompt": "Şu cümleyi çevir: Bu durum beni hayal kırıklığına uğrattı",
         "options": [
-          "fake2",
+          "Esta",
           "decepcionó",
-          "me",
           "situación",
+          "fake2",
           "fake1",
-          "Esta"
+          "me"
         ],
         "correctAnswer": [
           "Esta",
@@ -4101,12 +4101,12 @@ export const spanishContent = [
         "type": "translate",
         "prompt": "Çevir: Esta situación me decepcionó",
         "options": [
-          "Yanlış çeviri 2",
-          "Yanlış çeviri 1",
           "Bu durum beni hayal kırıklığına uğrattı",
+          "Yanlış çeviri 1",
+          "Yanlış çeviri 2",
           "Yanlış çeviri 3"
         ],
-        "correctIndex": 2,
+        "correctIndex": 0,
         "audioText": "Esta situación me decepcionó",
         "audioLang": "es-ES"
       },
@@ -4115,12 +4115,12 @@ export const spanishContent = [
         "type": "listen",
         "prompt": "Duyduğun cümleyi seç",
         "options": [
-          "Yanlış cümle 1",
-          "La negociación fue bastante desafiante",
+          "Yanlış cümle 3",
           "Yanlış cümle 2",
-          "Yanlış cümle 3"
+          "Yanlış cümle 1",
+          "La negociación fue bastante desafiante"
         ],
-        "correctIndex": 1,
+        "correctIndex": 3,
         "audioText": "La negociación fue bastante desafiante",
         "audioLang": "es-ES"
       },
@@ -4138,10 +4138,10 @@ export const spanishContent = [
         "type": "listen",
         "prompt": "Duyduğun cümleyi seç",
         "options": [
-          "Yanlış cümle 2",
           "Yanlış cümle 1",
+          "Yanlış cümle 3",
           "Esta situación me decepcionó",
-          "Yanlış cümle 3"
+          "Yanlış cümle 2"
         ],
         "correctIndex": 2,
         "audioText": "Esta situación me decepcionó",
@@ -4207,17 +4207,17 @@ export const spanishContent = [
         "prompt": "Hangisi 'Müzakere' demektir?",
         "options": [
           "Alakasız",
-          "Negociación",
+          "Hatalı",
           "Yanlış cevap",
-          "Hatalı"
+          "Negociación"
         ],
         "imageOptions": [
+          "🤝",
           "❓",
           "❓",
-          "❓",
-          "🤝"
+          "❓"
         ],
-        "correctIndex": 1,
+        "correctIndex": 3,
         "audioText": "Negociación",
         "audioLang": "es-ES"
       },
@@ -4226,13 +4226,13 @@ export const spanishContent = [
         "type": "constructSentence",
         "prompt": "Şu cümleyi çevir: Müzakere oldukça zorluydu",
         "options": [
+          "fue",
+          "fake2",
+          "bastante",
           "fake1",
           "negociación",
-          "desafiante",
-          "fake2",
           "La",
-          "fue",
-          "bastante"
+          "desafiante"
         ],
         "correctAnswer": [
           "La",
@@ -4250,12 +4250,12 @@ export const spanishContent = [
         "type": "translate",
         "prompt": "Çevir: La negociación fue bastante desafiante",
         "options": [
-          "Müzakere oldukça zorluydu",
-          "Yanlış çeviri 3",
+          "Yanlış çeviri 2",
           "Yanlış çeviri 1",
-          "Yanlış çeviri 2"
+          "Yanlış çeviri 3",
+          "Müzakere oldukça zorluydu"
         ],
-        "correctIndex": 0,
+        "correctIndex": 3,
         "audioText": "La negociación fue bastante desafiante",
         "audioLang": "es-ES"
       },
@@ -4264,11 +4264,11 @@ export const spanishContent = [
         "type": "constructSentence",
         "prompt": "Şu cümleyi çevir: Bu durum beni hayal kırıklığına uğrattı",
         "options": [
-          "fake1",
           "decepcionó",
-          "me",
-          "situación",
+          "fake1",
           "fake2",
+          "situación",
+          "me",
           "Esta"
         ],
         "correctAnswer": [
@@ -4286,12 +4286,12 @@ export const spanishContent = [
         "type": "translate",
         "prompt": "Çevir: Esta situación me decepcionó",
         "options": [
-          "Yanlış çeviri 3",
-          "Yanlış çeviri 2",
           "Yanlış çeviri 1",
-          "Bu durum beni hayal kırıklığına uğrattı"
+          "Bu durum beni hayal kırıklığına uğrattı",
+          "Yanlış çeviri 2",
+          "Yanlış çeviri 3"
         ],
-        "correctIndex": 3,
+        "correctIndex": 1,
         "audioText": "Esta situación me decepcionó",
         "audioLang": "es-ES"
       },
@@ -4301,11 +4301,11 @@ export const spanishContent = [
         "prompt": "Duyduğun cümleyi seç",
         "options": [
           "Yanlış cümle 1",
-          "La negociación fue bastante desafiante",
+          "Yanlış cümle 3",
           "Yanlış cümle 2",
-          "Yanlış cümle 3"
+          "La negociación fue bastante desafiante"
         ],
-        "correctIndex": 1,
+        "correctIndex": 3,
         "audioText": "La negociación fue bastante desafiante",
         "audioLang": "es-ES"
       },
@@ -4323,12 +4323,12 @@ export const spanishContent = [
         "type": "listen",
         "prompt": "Duyduğun cümleyi seç",
         "options": [
-          "Esta situación me decepcionó",
           "Yanlış cümle 2",
           "Yanlış cümle 1",
-          "Yanlış cümle 3"
+          "Yanlış cümle 3",
+          "Esta situación me decepcionó"
         ],
-        "correctIndex": 0,
+        "correctIndex": 3,
         "audioText": "Esta situación me decepcionó",
         "audioLang": "es-ES"
       },
