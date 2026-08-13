@@ -117,7 +117,7 @@ export class ContentService {
         if (match) {
           const unitIdx = parseInt(match[1], 10) - 1;
           const lessonIdx = parseInt(match[2], 10) - 1;
-          const topicIndex = (unitIdx * 5) + Math.min(lessonIdx, 4);
+          const topicIndex = (unitIdx * 6) + Math.min(lessonIdx, 5);
           const lesson = allLessons[topicIndex] || allLessons[topicIndex % allLessons.length];
           if (lesson) {
             await AsyncStorage.setItem(cacheKey, JSON.stringify({ data: lesson, timestamp: Date.now() }));
@@ -126,7 +126,24 @@ export class ContentService {
         }
       }
 
-      console.warn(`[ContentService] Lesson ${baseLessonId} not found`);
+      // 4. Try local fallback if not found in Firestore
+      const localData = await this.getLocalLessonsFallback(lang);
+      if (localData && localData.length > 0) {
+        const exactMatch = localData.find(l => l.id === baseLessonId);
+        if (exactMatch) return this.buildLessonFromFirestoreDoc(exactMatch, lessonId, partNumber);
+        
+        const langPrefix = LANG_PREFIX_MAP[lang] || 'eng';
+        const match = baseLessonId.match(new RegExp(`${langPrefix}_u(\\d+)_l(\\d+)`));
+        if (match) {
+          const unitIdx = parseInt(match[1], 10) - 1;
+          const lessonIdx = parseInt(match[2], 10) - 1;
+          const topicIndex = (unitIdx * 6) + Math.min(lessonIdx, 5); // Updated to 6 lessons per unit
+          const lesson = localData[topicIndex] || localData[topicIndex % localData.length];
+          if (lesson) return this.buildLessonFromFirestoreDoc(lesson, lessonId, partNumber);
+        }
+      }
+
+      console.warn(`[ContentService] Lesson ${baseLessonId} not found in Firestore or local data`);
       return null;
     } catch (error) {
       console.error(`[ContentService] Error loading lesson ${lessonId}:`, error);
@@ -148,7 +165,7 @@ export class ContentService {
         if (match) {
           const unitIdx = parseInt(match[1], 10) - 1;
           const lessonIdx = parseInt(match[2], 10) - 1;
-          const topicIndex = (unitIdx * 5) + Math.min(lessonIdx, 4);
+          const topicIndex = (unitIdx * 6) + Math.min(lessonIdx, 5);
           const lesson = localData[topicIndex] || localData[topicIndex % localData.length];
           if (lesson) return this.buildLessonFromFirestoreDoc(lesson, lessonId, partNumber);
         }
