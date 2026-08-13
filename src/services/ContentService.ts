@@ -103,9 +103,15 @@ export class ContentService {
         return this.buildLessonFromFirestoreDoc(data, lessonId, partNumber);
       }
 
-      // 3. Try fetching all and find by index pattern
+      // 3. Try fetching all and find by exact ID or index pattern
       const allLessons = await this.getAllLessonsFromFirestore(lang);
       if (allLessons.length > 0) {
+        const exactMatch = allLessons.find(l => l.id === baseLessonId);
+        if (exactMatch) {
+          await AsyncStorage.setItem(cacheKey, JSON.stringify({ data: exactMatch, timestamp: Date.now() }));
+          return this.buildLessonFromFirestoreDoc(exactMatch, lessonId, partNumber);
+        }
+
         const langPrefix = LANG_PREFIX_MAP[lang] || 'eng';
         const match = baseLessonId.match(new RegExp(`${langPrefix}_u(\\d+)_l(\\d+)`));
         if (match) {
@@ -124,11 +130,28 @@ export class ContentService {
       return null;
     } catch (error) {
       console.error(`[ContentService] Error loading lesson ${lessonId}:`, error);
-      // Stale cache fallback
+      // 1. Stale cache fallback
       const cachedStr = await AsyncStorage.getItem(cacheKey);
       if (cachedStr) {
         const data = JSON.parse(cachedStr).data;
         return this.buildLessonFromFirestoreDoc(data, lessonId, partNumber);
+      }
+
+      // 2. Local fallback data
+      const localData = await this.getLocalLessonsFallback(lang);
+      if (localData && localData.length > 0) {
+        const exactMatch = localData.find(l => l.id === baseLessonId);
+        if (exactMatch) return this.buildLessonFromFirestoreDoc(exactMatch, lessonId, partNumber);
+        
+        const langPrefix = LANG_PREFIX_MAP[lang] || 'eng';
+        const match = baseLessonId.match(new RegExp(`${langPrefix}_u(\\d+)_l(\\d+)`));
+        if (match) {
+          const unitIdx = parseInt(match[1], 10) - 1;
+          const lessonIdx = parseInt(match[2], 10) - 1;
+          const topicIndex = (unitIdx * 5) + Math.min(lessonIdx, 4);
+          const lesson = localData[topicIndex] || localData[topicIndex % localData.length];
+          if (lesson) return this.buildLessonFromFirestoreDoc(lesson, lessonId, partNumber);
+        }
       }
       return null;
     }
@@ -163,6 +186,24 @@ export class ContentService {
     };
   }
 
+  private static async getLocalLessonsFallback(lang: string): Promise<any[]> {
+    try {
+      switch(lang) {
+        case 'english': return (await import('../data/englishContent.js')).englishContent;
+        case 'turkish': return (await import('../data/turkishContent.js')).turkishContent;
+        case 'french': return (await import('../data/frenchContent.js')).frenchContent;
+        case 'german': return (await import('../data/germanContent.js')).germanContent;
+        case 'italian': return (await import('../data/italianContent.js')).italianContent;
+        case 'spanish': return (await import('../data/spanishContent.js')).spanishContent;
+        case 'kurdish': return (await import('../data/kurdishContent.js')).kurdishContent;
+        default: return [];
+      }
+    } catch (e) {
+      console.warn(`[ContentService] Local fallback failed for ${lang}`, e);
+      return [];
+    }
+  }
+
   private static async getAllLessonsFromFirestore(lang: string): Promise<any[]> {
     const allCacheKey = `${CACHE_PREFIX_LESSON}${lang}_all`;
     try {
@@ -184,10 +225,16 @@ export class ContentService {
         await AsyncStorage.setItem(allCacheKey, JSON.stringify({ data: lessons, timestamp: Date.now() }));
         return lessons;
       }
-      return [];
+
+      // If Firestore is empty, fallback to local data
+      const localData = await this.getLocalLessonsFallback(lang);
+      if (localData && localData.length > 0) {
+        await AsyncStorage.setItem(allCacheKey, JSON.stringify({ data: localData, timestamp: Date.now() }));
+      }
+      return localData;
     } catch (e) {
       console.error(`[ContentService] getAllLessonsFromFirestore error for ${lang}:`, e);
-      return [];
+      return await this.getLocalLessonsFallback(lang);
     }
   }
 
