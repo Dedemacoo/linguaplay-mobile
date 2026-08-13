@@ -21,7 +21,7 @@ export const LANG_PREFIX_MAP: Record<string, string> = {
   portuguese: 'pt', dutch: 'nl',
 };
 
-const CACHE_PREFIX_LESSON = '@lesson_cache_v2_';
+const CACHE_PREFIX_LESSON = '@lesson_cache_v3_';
 const CACHE_EXPIRY_MS = 7 * 24 * 60 * 60 * 1000; // 7 days
 
 interface CacheEntry<T> {
