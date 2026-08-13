@@ -5,6 +5,7 @@ import { FontAwesome5 } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
 import { useNavigation } from '@react-navigation/native';
 import LottieView from 'lottie-react-native';
+import { LANG_PREFIX_MAP } from '../services/ContentService';
 
 import { useLanguageStore, LanguageKey } from '../store/useLanguageStore';
 import { useProgressStore } from '../store/useProgressStore';
@@ -82,7 +83,7 @@ const HomeScreen: React.FC = () => {
 
   const activeNodeIndex = useMemo(() => {
     if (!courseData) return 0;
-    const langPrefix = activeLanguage === 'kurdish' ? 'kur' : activeLanguage === 'english' ? 'eng' : activeLanguage.substring(0,3);
+    const langPrefix = LANG_PREFIX_MAP[activeLanguage] || 'eng';
     
     let index = 0;
     for (let uIdx = 0; uIdx < courseData.units.length; uIdx++) {

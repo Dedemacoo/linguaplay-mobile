@@ -14,7 +14,7 @@ const LANG_CODE_MAP: Record<string, string> = {
 };
 
 // Language prefix in lesson IDs (e.g. eng, tr, fr, de...)
-const LANG_PREFIX_MAP: Record<string, string> = {
+export const LANG_PREFIX_MAP: Record<string, string> = {
   english: 'eng', turkish: 'tr', french: 'fr', german: 'de',
   italian: 'it', spanish: 'es', kurdish: 'ku', japanese: 'ja',
   korean: 'ko', russian: 'ru', chinese: 'zh', arabic: 'ar',
