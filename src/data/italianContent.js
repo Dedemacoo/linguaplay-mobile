@@ -1,13 +1,13 @@
 export const italianContent = [
   {
     "id": "it_u1_l1",
-    "title": "Temel İletişim (A1) - VOCAB",
-    "description": "B2'ye giden yolda vocab becerileri",
-    "icon": "🔤",
+    "title": "Temel İletişim (A1) - Bölüm 1",
+    "description": "B2'ye giden yolda kapsamlı eğitim",
+    "icon": "📖",
     "xpReward": 20,
     "questions": [
       {
-        "id": "it_u1_l1q0",
+        "id": "it_u1_l1q_f0",
         "type": "flashcard",
         "prompt": "Merhaba",
         "options": [],
@@ -19,7 +19,7 @@ export const italianContent = [
         ]
       },
       {
-        "id": "it_u1_l1q1",
+        "id": "it_u1_l1q_f1",
         "type": "flashcard",
         "prompt": "Teşekkürler",
         "options": [],
@@ -31,7 +31,7 @@ export const italianContent = [
         ]
       },
       {
-        "id": "it_u1_l1q2",
+        "id": "it_u1_l1q_f2",
         "type": "flashcard",
         "prompt": "Lütfen",
         "options": [],
@@ -44,6 +44,714 @@ export const italianContent = [
       },
       {
         "id": "it_u1_l1q_t1",
+        "type": "imageChoice",
+        "prompt": "Hangisi 'Merhaba' demektir?",
+        "options": [
+          "Ciao",
+          "Hatalı",
+          "Yanlış cevap",
+          "Alakasız"
+        ],
+        "imageOptions": [
+          "👋",
+          "❓",
+          "❓",
+          "❓"
+        ],
+        "correctIndex": 0,
+        "audioText": "Ciao",
+        "audioLang": "it-IT"
+      },
+      {
+        "id": "it_u1_l1q_cs0",
+        "type": "constructSentence",
+        "prompt": "Şu cümleyi çevir: Bir kahve istiyorum",
+        "options": [
+          "fake2",
+          "caffè",
+          "Voglio",
+          "fake1",
+          "un"
+        ],
+        "correctAnswer": [
+          "Voglio",
+          "un",
+          "caffè"
+        ],
+        "correctIndex": 0,
+        "audioText": "Voglio un caffè",
+        "audioLang": "it-IT"
+      },
+      {
+        "id": "it_u1_l1q_tr0",
+        "type": "translate",
+        "prompt": "Çevir: Voglio un caffè",
+        "options": [
+          "Yanlış çeviri 1",
+          "Yanlış çeviri 3",
+          "Bir kahve istiyorum",
+          "Yanlış çeviri 2"
+        ],
+        "correctIndex": 2,
+        "audioText": "Voglio un caffè",
+        "audioLang": "it-IT"
+      },
+      {
+        "id": "it_u1_l1q_cs1",
+        "type": "constructSentence",
+        "prompt": "Şu cümleyi çevir: Nasılsın?",
+        "options": [
+          "fake1",
+          "Come",
+          "fake2",
+          "stai?"
+        ],
+        "correctAnswer": [
+          "Come",
+          "stai?"
+        ],
+        "correctIndex": 0,
+        "audioText": "Come stai?",
+        "audioLang": "it-IT"
+      },
+      {
+        "id": "it_u1_l1q_tr1",
+        "type": "translate",
+        "prompt": "Çevir: Come stai?",
+        "options": [
+          "Yanlış çeviri 1",
+          "Yanlış çeviri 3",
+          "Nasılsın?",
+          "Yanlış çeviri 2"
+        ],
+        "correctIndex": 2,
+        "audioText": "Come stai?",
+        "audioLang": "it-IT"
+      },
+      {
+        "id": "it_u1_l1q_ls0",
+        "type": "listen",
+        "prompt": "Duyduğun cümleyi seç",
+        "options": [
+          "Voglio un caffè",
+          "Yanlış cümle 1",
+          "Yanlış cümle 2",
+          "Yanlış cümle 3"
+        ],
+        "correctIndex": 0,
+        "audioText": "Voglio un caffè",
+        "audioLang": "it-IT"
+      },
+      {
+        "id": "it_u1_l1q_sp0",
+        "type": "speak",
+        "prompt": "Lütfen şu cümleyi mikrofona söyle:",
+        "options": [],
+        "correctIndex": 0,
+        "audioText": "Voglio un caffè",
+        "audioLang": "it-IT"
+      },
+      {
+        "id": "it_u1_l1q_ls1",
+        "type": "listen",
+        "prompt": "Duyduğun cümleyi seç",
+        "options": [
+          "Yanlış cümle 3",
+          "Come stai?",
+          "Yanlış cümle 2",
+          "Yanlış cümle 1"
+        ],
+        "correctIndex": 1,
+        "audioText": "Come stai?",
+        "audioLang": "it-IT"
+      },
+      {
+        "id": "it_u1_l1q_sp1",
+        "type": "speak",
+        "prompt": "Lütfen şu cümleyi mikrofona söyle:",
+        "options": [],
+        "correctIndex": 0,
+        "audioText": "Come stai?",
+        "audioLang": "it-IT"
+      }
+    ]
+  },
+  {
+    "id": "it_u1_l2",
+    "title": "Temel İletişim (A1) - Bölüm 2",
+    "description": "B2'ye giden yolda kapsamlı eğitim",
+    "icon": "📖",
+    "xpReward": 20,
+    "questions": [
+      {
+        "id": "it_u1_l2q_f0",
+        "type": "flashcard",
+        "prompt": "Merhaba",
+        "options": [],
+        "correctIndex": 0,
+        "audioText": "Ciao",
+        "audioLang": "it-IT",
+        "imageOptions": [
+          "👋"
+        ]
+      },
+      {
+        "id": "it_u1_l2q_f1",
+        "type": "flashcard",
+        "prompt": "Teşekkürler",
+        "options": [],
+        "correctIndex": 0,
+        "audioText": "Grazie",
+        "audioLang": "it-IT",
+        "imageOptions": [
+          "🙏"
+        ]
+      },
+      {
+        "id": "it_u1_l2q_f2",
+        "type": "flashcard",
+        "prompt": "Lütfen",
+        "options": [],
+        "correctIndex": 0,
+        "audioText": "Per favore",
+        "audioLang": "it-IT",
+        "imageOptions": [
+          "🥺"
+        ]
+      },
+      {
+        "id": "it_u1_l2q_t1",
+        "type": "imageChoice",
+        "prompt": "Hangisi 'Merhaba' demektir?",
+        "options": [
+          "Alakasız",
+          "Hatalı",
+          "Yanlış cevap",
+          "Ciao"
+        ],
+        "imageOptions": [
+          "👋",
+          "❓",
+          "❓",
+          "❓"
+        ],
+        "correctIndex": 3,
+        "audioText": "Ciao",
+        "audioLang": "it-IT"
+      },
+      {
+        "id": "it_u1_l2q_cs0",
+        "type": "constructSentence",
+        "prompt": "Şu cümleyi çevir: Bir kahve istiyorum",
+        "options": [
+          "caffè",
+          "fake2",
+          "fake1",
+          "un",
+          "Voglio"
+        ],
+        "correctAnswer": [
+          "Voglio",
+          "un",
+          "caffè"
+        ],
+        "correctIndex": 0,
+        "audioText": "Voglio un caffè",
+        "audioLang": "it-IT"
+      },
+      {
+        "id": "it_u1_l2q_tr0",
+        "type": "translate",
+        "prompt": "Çevir: Voglio un caffè",
+        "options": [
+          "Bir kahve istiyorum",
+          "Yanlış çeviri 1",
+          "Yanlış çeviri 2",
+          "Yanlış çeviri 3"
+        ],
+        "correctIndex": 0,
+        "audioText": "Voglio un caffè",
+        "audioLang": "it-IT"
+      },
+      {
+        "id": "it_u1_l2q_cs1",
+        "type": "constructSentence",
+        "prompt": "Şu cümleyi çevir: Nasılsın?",
+        "options": [
+          "fake2",
+          "Come",
+          "stai?",
+          "fake1"
+        ],
+        "correctAnswer": [
+          "Come",
+          "stai?"
+        ],
+        "correctIndex": 0,
+        "audioText": "Come stai?",
+        "audioLang": "it-IT"
+      },
+      {
+        "id": "it_u1_l2q_tr1",
+        "type": "translate",
+        "prompt": "Çevir: Come stai?",
+        "options": [
+          "Yanlış çeviri 2",
+          "Yanlış çeviri 3",
+          "Yanlış çeviri 1",
+          "Nasılsın?"
+        ],
+        "correctIndex": 3,
+        "audioText": "Come stai?",
+        "audioLang": "it-IT"
+      },
+      {
+        "id": "it_u1_l2q_ls0",
+        "type": "listen",
+        "prompt": "Duyduğun cümleyi seç",
+        "options": [
+          "Voglio un caffè",
+          "Yanlış cümle 1",
+          "Yanlış cümle 2",
+          "Yanlış cümle 3"
+        ],
+        "correctIndex": 0,
+        "audioText": "Voglio un caffè",
+        "audioLang": "it-IT"
+      },
+      {
+        "id": "it_u1_l2q_sp0",
+        "type": "speak",
+        "prompt": "Lütfen şu cümleyi mikrofona söyle:",
+        "options": [],
+        "correctIndex": 0,
+        "audioText": "Voglio un caffè",
+        "audioLang": "it-IT"
+      },
+      {
+        "id": "it_u1_l2q_ls1",
+        "type": "listen",
+        "prompt": "Duyduğun cümleyi seç",
+        "options": [
+          "Yanlış cümle 2",
+          "Yanlış cümle 3",
+          "Yanlış cümle 1",
+          "Come stai?"
+        ],
+        "correctIndex": 3,
+        "audioText": "Come stai?",
+        "audioLang": "it-IT"
+      },
+      {
+        "id": "it_u1_l2q_sp1",
+        "type": "speak",
+        "prompt": "Lütfen şu cümleyi mikrofona söyle:",
+        "options": [],
+        "correctIndex": 0,
+        "audioText": "Come stai?",
+        "audioLang": "it-IT"
+      }
+    ]
+  },
+  {
+    "id": "it_u1_l3",
+    "title": "Temel İletişim (A1) - Bölüm 3",
+    "description": "B2'ye giden yolda kapsamlı eğitim",
+    "icon": "📖",
+    "xpReward": 20,
+    "questions": [
+      {
+        "id": "it_u1_l3q_f0",
+        "type": "flashcard",
+        "prompt": "Merhaba",
+        "options": [],
+        "correctIndex": 0,
+        "audioText": "Ciao",
+        "audioLang": "it-IT",
+        "imageOptions": [
+          "👋"
+        ]
+      },
+      {
+        "id": "it_u1_l3q_f1",
+        "type": "flashcard",
+        "prompt": "Teşekkürler",
+        "options": [],
+        "correctIndex": 0,
+        "audioText": "Grazie",
+        "audioLang": "it-IT",
+        "imageOptions": [
+          "🙏"
+        ]
+      },
+      {
+        "id": "it_u1_l3q_f2",
+        "type": "flashcard",
+        "prompt": "Lütfen",
+        "options": [],
+        "correctIndex": 0,
+        "audioText": "Per favore",
+        "audioLang": "it-IT",
+        "imageOptions": [
+          "🥺"
+        ]
+      },
+      {
+        "id": "it_u1_l3q_t1",
+        "type": "imageChoice",
+        "prompt": "Hangisi 'Merhaba' demektir?",
+        "options": [
+          "Ciao",
+          "Alakasız",
+          "Yanlış cevap",
+          "Hatalı"
+        ],
+        "imageOptions": [
+          "👋",
+          "❓",
+          "❓",
+          "❓"
+        ],
+        "correctIndex": 0,
+        "audioText": "Ciao",
+        "audioLang": "it-IT"
+      },
+      {
+        "id": "it_u1_l3q_cs0",
+        "type": "constructSentence",
+        "prompt": "Şu cümleyi çevir: Bir kahve istiyorum",
+        "options": [
+          "fake1",
+          "caffè",
+          "fake2",
+          "un",
+          "Voglio"
+        ],
+        "correctAnswer": [
+          "Voglio",
+          "un",
+          "caffè"
+        ],
+        "correctIndex": 0,
+        "audioText": "Voglio un caffè",
+        "audioLang": "it-IT"
+      },
+      {
+        "id": "it_u1_l3q_tr0",
+        "type": "translate",
+        "prompt": "Çevir: Voglio un caffè",
+        "options": [
+          "Yanlış çeviri 3",
+          "Yanlış çeviri 2",
+          "Bir kahve istiyorum",
+          "Yanlış çeviri 1"
+        ],
+        "correctIndex": 2,
+        "audioText": "Voglio un caffè",
+        "audioLang": "it-IT"
+      },
+      {
+        "id": "it_u1_l3q_cs1",
+        "type": "constructSentence",
+        "prompt": "Şu cümleyi çevir: Nasılsın?",
+        "options": [
+          "Come",
+          "stai?",
+          "fake2",
+          "fake1"
+        ],
+        "correctAnswer": [
+          "Come",
+          "stai?"
+        ],
+        "correctIndex": 0,
+        "audioText": "Come stai?",
+        "audioLang": "it-IT"
+      },
+      {
+        "id": "it_u1_l3q_tr1",
+        "type": "translate",
+        "prompt": "Çevir: Come stai?",
+        "options": [
+          "Nasılsın?",
+          "Yanlış çeviri 1",
+          "Yanlış çeviri 2",
+          "Yanlış çeviri 3"
+        ],
+        "correctIndex": 0,
+        "audioText": "Come stai?",
+        "audioLang": "it-IT"
+      },
+      {
+        "id": "it_u1_l3q_ls0",
+        "type": "listen",
+        "prompt": "Duyduğun cümleyi seç",
+        "options": [
+          "Voglio un caffè",
+          "Yanlış cümle 1",
+          "Yanlış cümle 2",
+          "Yanlış cümle 3"
+        ],
+        "correctIndex": 0,
+        "audioText": "Voglio un caffè",
+        "audioLang": "it-IT"
+      },
+      {
+        "id": "it_u1_l3q_sp0",
+        "type": "speak",
+        "prompt": "Lütfen şu cümleyi mikrofona söyle:",
+        "options": [],
+        "correctIndex": 0,
+        "audioText": "Voglio un caffè",
+        "audioLang": "it-IT"
+      },
+      {
+        "id": "it_u1_l3q_ls1",
+        "type": "listen",
+        "prompt": "Duyduğun cümleyi seç",
+        "options": [
+          "Yanlış cümle 2",
+          "Yanlış cümle 1",
+          "Come stai?",
+          "Yanlış cümle 3"
+        ],
+        "correctIndex": 2,
+        "audioText": "Come stai?",
+        "audioLang": "it-IT"
+      },
+      {
+        "id": "it_u1_l3q_sp1",
+        "type": "speak",
+        "prompt": "Lütfen şu cümleyi mikrofona söyle:",
+        "options": [],
+        "correctIndex": 0,
+        "audioText": "Come stai?",
+        "audioLang": "it-IT"
+      }
+    ]
+  },
+  {
+    "id": "it_u1_l4",
+    "title": "Temel İletişim (A1) - Bölüm 4",
+    "description": "B2'ye giden yolda kapsamlı eğitim",
+    "icon": "📖",
+    "xpReward": 20,
+    "questions": [
+      {
+        "id": "it_u1_l4q_f0",
+        "type": "flashcard",
+        "prompt": "Merhaba",
+        "options": [],
+        "correctIndex": 0,
+        "audioText": "Ciao",
+        "audioLang": "it-IT",
+        "imageOptions": [
+          "👋"
+        ]
+      },
+      {
+        "id": "it_u1_l4q_f1",
+        "type": "flashcard",
+        "prompt": "Teşekkürler",
+        "options": [],
+        "correctIndex": 0,
+        "audioText": "Grazie",
+        "audioLang": "it-IT",
+        "imageOptions": [
+          "🙏"
+        ]
+      },
+      {
+        "id": "it_u1_l4q_f2",
+        "type": "flashcard",
+        "prompt": "Lütfen",
+        "options": [],
+        "correctIndex": 0,
+        "audioText": "Per favore",
+        "audioLang": "it-IT",
+        "imageOptions": [
+          "🥺"
+        ]
+      },
+      {
+        "id": "it_u1_l4q_t1",
+        "type": "imageChoice",
+        "prompt": "Hangisi 'Merhaba' demektir?",
+        "options": [
+          "Ciao",
+          "Yanlış cevap",
+          "Hatalı",
+          "Alakasız"
+        ],
+        "imageOptions": [
+          "👋",
+          "❓",
+          "❓",
+          "❓"
+        ],
+        "correctIndex": 0,
+        "audioText": "Ciao",
+        "audioLang": "it-IT"
+      },
+      {
+        "id": "it_u1_l4q_cs0",
+        "type": "constructSentence",
+        "prompt": "Şu cümleyi çevir: Bir kahve istiyorum",
+        "options": [
+          "fake1",
+          "caffè",
+          "un",
+          "fake2",
+          "Voglio"
+        ],
+        "correctAnswer": [
+          "Voglio",
+          "un",
+          "caffè"
+        ],
+        "correctIndex": 0,
+        "audioText": "Voglio un caffè",
+        "audioLang": "it-IT"
+      },
+      {
+        "id": "it_u1_l4q_tr0",
+        "type": "translate",
+        "prompt": "Çevir: Voglio un caffè",
+        "options": [
+          "Bir kahve istiyorum",
+          "Yanlış çeviri 1",
+          "Yanlış çeviri 3",
+          "Yanlış çeviri 2"
+        ],
+        "correctIndex": 0,
+        "audioText": "Voglio un caffè",
+        "audioLang": "it-IT"
+      },
+      {
+        "id": "it_u1_l4q_cs1",
+        "type": "constructSentence",
+        "prompt": "Şu cümleyi çevir: Nasılsın?",
+        "options": [
+          "fake2",
+          "fake1",
+          "stai?",
+          "Come"
+        ],
+        "correctAnswer": [
+          "Come",
+          "stai?"
+        ],
+        "correctIndex": 0,
+        "audioText": "Come stai?",
+        "audioLang": "it-IT"
+      },
+      {
+        "id": "it_u1_l4q_tr1",
+        "type": "translate",
+        "prompt": "Çevir: Come stai?",
+        "options": [
+          "Nasılsın?",
+          "Yanlış çeviri 1",
+          "Yanlış çeviri 2",
+          "Yanlış çeviri 3"
+        ],
+        "correctIndex": 0,
+        "audioText": "Come stai?",
+        "audioLang": "it-IT"
+      },
+      {
+        "id": "it_u1_l4q_ls0",
+        "type": "listen",
+        "prompt": "Duyduğun cümleyi seç",
+        "options": [
+          "Voglio un caffè",
+          "Yanlış cümle 3",
+          "Yanlış cümle 1",
+          "Yanlış cümle 2"
+        ],
+        "correctIndex": 0,
+        "audioText": "Voglio un caffè",
+        "audioLang": "it-IT"
+      },
+      {
+        "id": "it_u1_l4q_sp0",
+        "type": "speak",
+        "prompt": "Lütfen şu cümleyi mikrofona söyle:",
+        "options": [],
+        "correctIndex": 0,
+        "audioText": "Voglio un caffè",
+        "audioLang": "it-IT"
+      },
+      {
+        "id": "it_u1_l4q_ls1",
+        "type": "listen",
+        "prompt": "Duyduğun cümleyi seç",
+        "options": [
+          "Yanlış cümle 1",
+          "Come stai?",
+          "Yanlış cümle 2",
+          "Yanlış cümle 3"
+        ],
+        "correctIndex": 1,
+        "audioText": "Come stai?",
+        "audioLang": "it-IT"
+      },
+      {
+        "id": "it_u1_l4q_sp1",
+        "type": "speak",
+        "prompt": "Lütfen şu cümleyi mikrofona söyle:",
+        "options": [],
+        "correctIndex": 0,
+        "audioText": "Come stai?",
+        "audioLang": "it-IT"
+      }
+    ]
+  },
+  {
+    "id": "it_u1_l5",
+    "title": "Temel İletişim (A1) - Bölüm 5",
+    "description": "B2'ye giden yolda kapsamlı eğitim",
+    "icon": "📖",
+    "xpReward": 20,
+    "questions": [
+      {
+        "id": "it_u1_l5q_f0",
+        "type": "flashcard",
+        "prompt": "Merhaba",
+        "options": [],
+        "correctIndex": 0,
+        "audioText": "Ciao",
+        "audioLang": "it-IT",
+        "imageOptions": [
+          "👋"
+        ]
+      },
+      {
+        "id": "it_u1_l5q_f1",
+        "type": "flashcard",
+        "prompt": "Teşekkürler",
+        "options": [],
+        "correctIndex": 0,
+        "audioText": "Grazie",
+        "audioLang": "it-IT",
+        "imageOptions": [
+          "🙏"
+        ]
+      },
+      {
+        "id": "it_u1_l5q_f2",
+        "type": "flashcard",
+        "prompt": "Lütfen",
+        "options": [],
+        "correctIndex": 0,
+        "audioText": "Per favore",
+        "audioLang": "it-IT",
+        "imageOptions": [
+          "🥺"
+        ]
+      },
+      {
+        "id": "it_u1_l5q_t1",
         "type": "imageChoice",
         "prompt": "Hangisi 'Merhaba' demektir?",
         "options": [
@@ -61,26 +769,17 @@ export const italianContent = [
         "correctIndex": 3,
         "audioText": "Ciao",
         "audioLang": "it-IT"
-      }
-    ]
-  },
-  {
-    "id": "it_u1_l2",
-    "title": "Temel İletişim (A1) - SENTENCE",
-    "description": "B2'ye giden yolda sentence becerileri",
-    "icon": "✍️",
-    "xpReward": 20,
-    "questions": [
+      },
       {
-        "id": "it_u1_l2q_cs0",
+        "id": "it_u1_l5q_cs0",
         "type": "constructSentence",
         "prompt": "Şu cümleyi çevir: Bir kahve istiyorum",
         "options": [
           "caffè",
-          "un",
-          "wrong2",
+          "fake1",
           "Voglio",
-          "wrong1"
+          "fake2",
+          "un"
         ],
         "correctAnswer": [
           "Voglio",
@@ -92,27 +791,27 @@ export const italianContent = [
         "audioLang": "it-IT"
       },
       {
-        "id": "it_u1_l2q_tr0",
+        "id": "it_u1_l5q_tr0",
         "type": "translate",
         "prompt": "Çevir: Voglio un caffè",
         "options": [
+          "Yanlış çeviri 3",
           "Yanlış çeviri 2",
           "Yanlış çeviri 1",
-          "Bir kahve istiyorum",
-          "Yanlış çeviri 3"
+          "Bir kahve istiyorum"
         ],
-        "correctIndex": 2,
+        "correctIndex": 3,
         "audioText": "Voglio un caffè",
         "audioLang": "it-IT"
       },
       {
-        "id": "it_u1_l2q_cs1",
+        "id": "it_u1_l5q_cs1",
         "type": "constructSentence",
         "prompt": "Şu cümleyi çevir: Nasılsın?",
         "options": [
-          "wrong1",
+          "fake1",
+          "fake2",
           "stai?",
-          "wrong2",
           "Come"
         ],
         "correctAnswer": [
@@ -124,76 +823,58 @@ export const italianContent = [
         "audioLang": "it-IT"
       },
       {
-        "id": "it_u1_l2q_tr1",
+        "id": "it_u1_l5q_tr1",
         "type": "translate",
         "prompt": "Çevir: Come stai?",
         "options": [
-          "Yanlış çeviri 3",
           "Yanlış çeviri 2",
           "Yanlış çeviri 1",
+          "Yanlış çeviri 3",
           "Nasılsın?"
         ],
         "correctIndex": 3,
         "audioText": "Come stai?",
         "audioLang": "it-IT"
-      }
-    ]
-  },
-  {
-    "id": "it_u1_l3",
-    "title": "Temel İletişim (A1) - LISTEN",
-    "description": "B2'ye giden yolda listen becerileri",
-    "icon": "🎧",
-    "xpReward": 20,
-    "questions": [
+      },
       {
-        "id": "it_u1_l3q_ls0",
+        "id": "it_u1_l5q_ls0",
         "type": "listen",
         "prompt": "Duyduğun cümleyi seç",
         "options": [
           "Yanlış cümle 3",
-          "Voglio un caffè",
+          "Yanlış cümle 2",
           "Yanlış cümle 1",
-          "Yanlış cümle 2"
+          "Voglio un caffè"
         ],
-        "correctIndex": 1,
+        "correctIndex": 3,
         "audioText": "Voglio un caffè",
         "audioLang": "it-IT"
       },
       {
-        "id": "it_u1_l3q_ls1",
+        "id": "it_u1_l5q_sp0",
+        "type": "speak",
+        "prompt": "Lütfen şu cümleyi mikrofona söyle:",
+        "options": [],
+        "correctIndex": 0,
+        "audioText": "Voglio un caffè",
+        "audioLang": "it-IT"
+      },
+      {
+        "id": "it_u1_l5q_ls1",
         "type": "listen",
         "prompt": "Duyduğun cümleyi seç",
         "options": [
-          "Come stai?",
           "Yanlış cümle 1",
-          "Yanlış cümle 2",
-          "Yanlış cümle 3"
+          "Yanlış cümle 3",
+          "Come stai?",
+          "Yanlış cümle 2"
         ],
-        "correctIndex": 0,
+        "correctIndex": 2,
         "audioText": "Come stai?",
-        "audioLang": "it-IT"
-      }
-    ]
-  },
-  {
-    "id": "it_u1_l4",
-    "title": "Temel İletişim (A1) - SPEAK",
-    "description": "B2'ye giden yolda speak becerileri",
-    "icon": "🎤",
-    "xpReward": 20,
-    "questions": [
-      {
-        "id": "it_u1_l4q_sp0",
-        "type": "speak",
-        "prompt": "Lütfen şu cümleyi mikrofona söyle:",
-        "options": [],
-        "correctIndex": 0,
-        "audioText": "Voglio un caffè",
         "audioLang": "it-IT"
       },
       {
-        "id": "it_u1_l4q_sp1",
+        "id": "it_u1_l5q_sp1",
         "type": "speak",
         "prompt": "Lütfen şu cümleyi mikrofona söyle:",
         "options": [],
@@ -204,14 +885,14 @@ export const italianContent = [
     ]
   },
   {
-    "id": "it_u1_l5",
-    "title": "Temel İletişim (A1) - VOCAB",
-    "description": "B2'ye giden yolda vocab becerileri",
-    "icon": "🔤",
-    "xpReward": 20,
+    "id": "it_u1_l6",
+    "title": "Temel İletişim (A1) - Bölüm 6",
+    "description": "B2'ye giden yolda kapsamlı eğitim",
+    "icon": "👑",
+    "xpReward": 50,
     "questions": [
       {
-        "id": "it_u1_l5q0",
+        "id": "it_u1_l6q_f0",
         "type": "flashcard",
         "prompt": "Merhaba",
         "options": [],
@@ -223,7 +904,7 @@ export const italianContent = [
         ]
       },
       {
-        "id": "it_u1_l5q1",
+        "id": "it_u1_l6q_f1",
         "type": "flashcard",
         "prompt": "Teşekkürler",
         "options": [],
@@ -235,7 +916,7 @@ export const italianContent = [
         ]
       },
       {
-        "id": "it_u1_l5q2",
+        "id": "it_u1_l6q_f2",
         "type": "flashcard",
         "prompt": "Lütfen",
         "options": [],
@@ -247,14 +928,14 @@ export const italianContent = [
         ]
       },
       {
-        "id": "it_u1_l5q_t1",
+        "id": "it_u1_l6q_t1",
         "type": "imageChoice",
         "prompt": "Hangisi 'Merhaba' demektir?",
         "options": [
           "Yanlış cevap",
+          "Hatalı",
           "Ciao",
-          "Alakasız",
-          "Hatalı"
+          "Alakasız"
         ],
         "imageOptions": [
           "❓",
@@ -262,35 +943,17 @@ export const italianContent = [
           "❓",
           "👋"
         ],
-        "correctIndex": 1,
+        "correctIndex": 2,
         "audioText": "Ciao",
-        "audioLang": "it-IT"
-      }
-    ]
-  },
-  {
-    "id": "it_u1_l6",
-    "title": "Temel İletişim (A1) - BOSS",
-    "description": "B2'ye giden yolda boss becerileri",
-    "icon": "👑",
-    "xpReward": 50,
-    "questions": [
-      {
-        "id": "it_u1_l6q_bsp0",
-        "type": "speak",
-        "prompt": "Akıcı bir şekilde söyle (B2 Challenge):",
-        "options": [],
-        "correctIndex": 0,
-        "audioText": "Voglio un caffè",
         "audioLang": "it-IT"
       },
       {
-        "id": "it_u1_l6q_bcs0",
+        "id": "it_u1_l6q_cs0",
         "type": "constructSentence",
-        "prompt": "Hızlı Çeviri: Bir kahve istiyorum",
+        "prompt": "Şu cümleyi çevir: Bir kahve istiyorum",
         "options": [
-          "un",
           "Voglio",
+          "un",
           "caffè",
           "fake1",
           "fake2"
@@ -305,22 +968,27 @@ export const italianContent = [
         "audioLang": "it-IT"
       },
       {
-        "id": "it_u1_l6q_bsp1",
-        "type": "speak",
-        "prompt": "Akıcı bir şekilde söyle (B2 Challenge):",
-        "options": [],
+        "id": "it_u1_l6q_tr0",
+        "type": "translate",
+        "prompt": "Çevir: Voglio un caffè",
+        "options": [
+          "Bir kahve istiyorum",
+          "Yanlış çeviri 3",
+          "Yanlış çeviri 1",
+          "Yanlış çeviri 2"
+        ],
         "correctIndex": 0,
-        "audioText": "Come stai?",
+        "audioText": "Voglio un caffè",
         "audioLang": "it-IT"
       },
       {
-        "id": "it_u1_l6q_bcs1",
+        "id": "it_u1_l6q_cs1",
         "type": "constructSentence",
-        "prompt": "Hızlı Çeviri: Nasılsın?",
+        "prompt": "Şu cümleyi çevir: Nasılsın?",
         "options": [
-          "stai?",
           "fake2",
           "Come",
+          "stai?",
           "fake1"
         ],
         "correctAnswer": [
@@ -330,18 +998,78 @@ export const italianContent = [
         "correctIndex": 0,
         "audioText": "Come stai?",
         "audioLang": "it-IT"
+      },
+      {
+        "id": "it_u1_l6q_tr1",
+        "type": "translate",
+        "prompt": "Çevir: Come stai?",
+        "options": [
+          "Yanlış çeviri 3",
+          "Yanlış çeviri 2",
+          "Yanlış çeviri 1",
+          "Nasılsın?"
+        ],
+        "correctIndex": 3,
+        "audioText": "Come stai?",
+        "audioLang": "it-IT"
+      },
+      {
+        "id": "it_u1_l6q_ls0",
+        "type": "listen",
+        "prompt": "Duyduğun cümleyi seç",
+        "options": [
+          "Yanlış cümle 1",
+          "Yanlış cümle 3",
+          "Yanlış cümle 2",
+          "Voglio un caffè"
+        ],
+        "correctIndex": 3,
+        "audioText": "Voglio un caffè",
+        "audioLang": "it-IT"
+      },
+      {
+        "id": "it_u1_l6q_sp0",
+        "type": "speak",
+        "prompt": "Lütfen şu cümleyi mikrofona söyle:",
+        "options": [],
+        "correctIndex": 0,
+        "audioText": "Voglio un caffè",
+        "audioLang": "it-IT"
+      },
+      {
+        "id": "it_u1_l6q_ls1",
+        "type": "listen",
+        "prompt": "Duyduğun cümleyi seç",
+        "options": [
+          "Yanlış cümle 3",
+          "Come stai?",
+          "Yanlış cümle 1",
+          "Yanlış cümle 2"
+        ],
+        "correctIndex": 1,
+        "audioText": "Come stai?",
+        "audioLang": "it-IT"
+      },
+      {
+        "id": "it_u1_l6q_sp1",
+        "type": "speak",
+        "prompt": "Lütfen şu cümleyi mikrofona söyle:",
+        "options": [],
+        "correctIndex": 0,
+        "audioText": "Come stai?",
+        "audioLang": "it-IT"
       }
     ]
   },
   {
     "id": "it_u2_l1",
-    "title": "Seyahat (A2) - VOCAB",
-    "description": "B2'ye giden yolda vocab becerileri",
-    "icon": "🔤",
+    "title": "Seyahat (A2) - Bölüm 1",
+    "description": "B2'ye giden yolda kapsamlı eğitim",
+    "icon": "📖",
     "xpReward": 20,
     "questions": [
       {
-        "id": "it_u2_l1q0",
+        "id": "it_u2_l1q_f0",
         "type": "flashcard",
         "prompt": "Havalimanı",
         "options": [],
@@ -353,7 +1081,7 @@ export const italianContent = [
         ]
       },
       {
-        "id": "it_u2_l1q1",
+        "id": "it_u2_l1q_f1",
         "type": "flashcard",
         "prompt": "Bilet",
         "options": [],
@@ -365,7 +1093,7 @@ export const italianContent = [
         ]
       },
       {
-        "id": "it_u2_l1q2",
+        "id": "it_u2_l1q_f2",
         "type": "flashcard",
         "prompt": "Pasaport",
         "options": [],
@@ -382,41 +1110,32 @@ export const italianContent = [
         "prompt": "Hangisi 'Havalimanı' demektir?",
         "options": [
           "Aeroporto",
-          "Alakasız",
+          "Hatalı",
           "Yanlış cevap",
-          "Hatalı"
+          "Alakasız"
         ],
         "imageOptions": [
           "❓",
           "❓",
-          "❓",
-          "✈️"
+          "✈️",
+          "❓"
         ],
         "correctIndex": 0,
         "audioText": "Aeroporto",
         "audioLang": "it-IT"
-      }
-    ]
-  },
-  {
-    "id": "it_u2_l2",
-    "title": "Seyahat (A2) - SENTENCE",
-    "description": "B2'ye giden yolda sentence becerileri",
-    "icon": "✍️",
-    "xpReward": 20,
-    "questions": [
+      },
       {
-        "id": "it_u2_l2q_cs0",
+        "id": "it_u2_l1q_cs0",
         "type": "constructSentence",
         "prompt": "Şu cümleyi çevir: Biletimi kaybettim",
         "options": [
-          "wrong2",
-          "Ho",
-          "perso",
-          "il",
           "mio",
-          "wrong1",
-          "biglietto"
+          "il",
+          "biglietto",
+          "perso",
+          "fake2",
+          "fake1",
+          "Ho"
         ],
         "correctAnswer": [
           "Ho",
@@ -430,28 +1149,28 @@ export const italianContent = [
         "audioLang": "it-IT"
       },
       {
-        "id": "it_u2_l2q_tr0",
+        "id": "it_u2_l1q_tr0",
         "type": "translate",
         "prompt": "Çevir: Ho perso il mio biglietto",
         "options": [
-          "Yanlış çeviri 3",
-          "Yanlış çeviri 1",
           "Yanlış çeviri 2",
-          "Biletimi kaybettim"
+          "Biletimi kaybettim",
+          "Yanlış çeviri 1",
+          "Yanlış çeviri 3"
         ],
-        "correctIndex": 3,
+        "correctIndex": 1,
         "audioText": "Ho perso il mio biglietto",
         "audioLang": "it-IT"
       },
       {
-        "id": "it_u2_l2q_cs1",
+        "id": "it_u2_l1q_cs1",
         "type": "constructSentence",
         "prompt": "Şu cümleyi çevir: Nereye gidiyorsun?",
         "options": [
-          "Dove",
           "vai?",
-          "wrong1",
-          "wrong2"
+          "fake1",
+          "fake2",
+          "Dove"
         ],
         "correctAnswer": [
           "Dove",
@@ -462,67 +1181,35 @@ export const italianContent = [
         "audioLang": "it-IT"
       },
       {
-        "id": "it_u2_l2q_tr1",
+        "id": "it_u2_l1q_tr1",
         "type": "translate",
         "prompt": "Çevir: Dove vai?",
         "options": [
           "Yanlış çeviri 3",
+          "Yanlış çeviri 2",
           "Yanlış çeviri 1",
-          "Nereye gidiyorsun?",
-          "Yanlış çeviri 2"
+          "Nereye gidiyorsun?"
+        ],
+        "correctIndex": 3,
+        "audioText": "Dove vai?",
+        "audioLang": "it-IT"
+      },
+      {
+        "id": "it_u2_l1q_ls0",
+        "type": "listen",
+        "prompt": "Duyduğun cümleyi seç",
+        "options": [
+          "Yanlış cümle 3",
+          "Yanlış cümle 1",
+          "Ho perso il mio biglietto",
+          "Yanlış cümle 2"
         ],
         "correctIndex": 2,
-        "audioText": "Dove vai?",
-        "audioLang": "it-IT"
-      }
-    ]
-  },
-  {
-    "id": "it_u2_l3",
-    "title": "Seyahat (A2) - LISTEN",
-    "description": "B2'ye giden yolda listen becerileri",
-    "icon": "🎧",
-    "xpReward": 20,
-    "questions": [
-      {
-        "id": "it_u2_l3q_ls0",
-        "type": "listen",
-        "prompt": "Duyduğun cümleyi seç",
-        "options": [
-          "Yanlış cümle 3",
-          "Ho perso il mio biglietto",
-          "Yanlış cümle 1",
-          "Yanlış cümle 2"
-        ],
-        "correctIndex": 1,
         "audioText": "Ho perso il mio biglietto",
         "audioLang": "it-IT"
       },
       {
-        "id": "it_u2_l3q_ls1",
-        "type": "listen",
-        "prompt": "Duyduğun cümleyi seç",
-        "options": [
-          "Dove vai?",
-          "Yanlış cümle 3",
-          "Yanlış cümle 1",
-          "Yanlış cümle 2"
-        ],
-        "correctIndex": 0,
-        "audioText": "Dove vai?",
-        "audioLang": "it-IT"
-      }
-    ]
-  },
-  {
-    "id": "it_u2_l4",
-    "title": "Seyahat (A2) - SPEAK",
-    "description": "B2'ye giden yolda speak becerileri",
-    "icon": "🎤",
-    "xpReward": 20,
-    "questions": [
-      {
-        "id": "it_u2_l4q_sp0",
+        "id": "it_u2_l1q_sp0",
         "type": "speak",
         "prompt": "Lütfen şu cümleyi mikrofona söyle:",
         "options": [],
@@ -531,7 +1218,21 @@ export const italianContent = [
         "audioLang": "it-IT"
       },
       {
-        "id": "it_u2_l4q_sp1",
+        "id": "it_u2_l1q_ls1",
+        "type": "listen",
+        "prompt": "Duyduğun cümleyi seç",
+        "options": [
+          "Yanlış cümle 1",
+          "Yanlış cümle 2",
+          "Yanlış cümle 3",
+          "Dove vai?"
+        ],
+        "correctIndex": 3,
+        "audioText": "Dove vai?",
+        "audioLang": "it-IT"
+      },
+      {
+        "id": "it_u2_l1q_sp1",
         "type": "speak",
         "prompt": "Lütfen şu cümleyi mikrofona söyle:",
         "options": [],
@@ -542,14 +1243,14 @@ export const italianContent = [
     ]
   },
   {
-    "id": "it_u2_l5",
-    "title": "Seyahat (A2) - VOCAB",
-    "description": "B2'ye giden yolda vocab becerileri",
-    "icon": "🔤",
+    "id": "it_u2_l2",
+    "title": "Seyahat (A2) - Bölüm 2",
+    "description": "B2'ye giden yolda kapsamlı eğitim",
+    "icon": "📖",
     "xpReward": 20,
     "questions": [
       {
-        "id": "it_u2_l5q0",
+        "id": "it_u2_l2q_f0",
         "type": "flashcard",
         "prompt": "Havalimanı",
         "options": [],
@@ -561,7 +1262,7 @@ export const italianContent = [
         ]
       },
       {
-        "id": "it_u2_l5q1",
+        "id": "it_u2_l2q_f1",
         "type": "flashcard",
         "prompt": "Bilet",
         "options": [],
@@ -573,7 +1274,7 @@ export const italianContent = [
         ]
       },
       {
-        "id": "it_u2_l5q2",
+        "id": "it_u2_l2q_f2",
         "type": "flashcard",
         "prompt": "Pasaport",
         "options": [],
@@ -585,7 +1286,7 @@ export const italianContent = [
         ]
       },
       {
-        "id": "it_u2_l5q_t1",
+        "id": "it_u2_l2q_t1",
         "type": "imageChoice",
         "prompt": "Hangisi 'Havalimanı' demektir?",
         "options": [
@@ -603,37 +1304,19 @@ export const italianContent = [
         "correctIndex": 3,
         "audioText": "Aeroporto",
         "audioLang": "it-IT"
-      }
-    ]
-  },
-  {
-    "id": "it_u2_l6",
-    "title": "Seyahat (A2) - BOSS",
-    "description": "B2'ye giden yolda boss becerileri",
-    "icon": "👑",
-    "xpReward": 50,
-    "questions": [
-      {
-        "id": "it_u2_l6q_bsp0",
-        "type": "speak",
-        "prompt": "Akıcı bir şekilde söyle (B2 Challenge):",
-        "options": [],
-        "correctIndex": 0,
-        "audioText": "Ho perso il mio biglietto",
-        "audioLang": "it-IT"
       },
       {
-        "id": "it_u2_l6q_bcs0",
+        "id": "it_u2_l2q_cs0",
         "type": "constructSentence",
-        "prompt": "Hızlı Çeviri: Biletimi kaybettim",
+        "prompt": "Şu cümleyi çevir: Biletimi kaybettim",
         "options": [
-          "Ho",
-          "fake2",
-          "fake1",
-          "biglietto",
           "mio",
           "il",
-          "perso"
+          "biglietto",
+          "fake2",
+          "perso",
+          "fake1",
+          "Ho"
         ],
         "correctAnswer": [
           "Ho",
@@ -647,21 +1330,207 @@ export const italianContent = [
         "audioLang": "it-IT"
       },
       {
-        "id": "it_u2_l6q_bsp1",
-        "type": "speak",
-        "prompt": "Akıcı bir şekilde söyle (B2 Challenge):",
-        "options": [],
+        "id": "it_u2_l2q_tr0",
+        "type": "translate",
+        "prompt": "Çevir: Ho perso il mio biglietto",
+        "options": [
+          "Biletimi kaybettim",
+          "Yanlış çeviri 1",
+          "Yanlış çeviri 2",
+          "Yanlış çeviri 3"
+        ],
+        "correctIndex": 0,
+        "audioText": "Ho perso il mio biglietto",
+        "audioLang": "it-IT"
+      },
+      {
+        "id": "it_u2_l2q_cs1",
+        "type": "constructSentence",
+        "prompt": "Şu cümleyi çevir: Nereye gidiyorsun?",
+        "options": [
+          "vai?",
+          "fake2",
+          "Dove",
+          "fake1"
+        ],
+        "correctAnswer": [
+          "Dove",
+          "vai?"
+        ],
         "correctIndex": 0,
         "audioText": "Dove vai?",
         "audioLang": "it-IT"
       },
       {
-        "id": "it_u2_l6q_bcs1",
-        "type": "constructSentence",
-        "prompt": "Hızlı Çeviri: Nereye gidiyorsun?",
+        "id": "it_u2_l2q_tr1",
+        "type": "translate",
+        "prompt": "Çevir: Dove vai?",
         "options": [
-          "vai?",
+          "Nereye gidiyorsun?",
+          "Yanlış çeviri 1",
+          "Yanlış çeviri 2",
+          "Yanlış çeviri 3"
+        ],
+        "correctIndex": 0,
+        "audioText": "Dove vai?",
+        "audioLang": "it-IT"
+      },
+      {
+        "id": "it_u2_l2q_ls0",
+        "type": "listen",
+        "prompt": "Duyduğun cümleyi seç",
+        "options": [
+          "Ho perso il mio biglietto",
+          "Yanlış cümle 1",
+          "Yanlış cümle 2",
+          "Yanlış cümle 3"
+        ],
+        "correctIndex": 0,
+        "audioText": "Ho perso il mio biglietto",
+        "audioLang": "it-IT"
+      },
+      {
+        "id": "it_u2_l2q_sp0",
+        "type": "speak",
+        "prompt": "Lütfen şu cümleyi mikrofona söyle:",
+        "options": [],
+        "correctIndex": 0,
+        "audioText": "Ho perso il mio biglietto",
+        "audioLang": "it-IT"
+      },
+      {
+        "id": "it_u2_l2q_ls1",
+        "type": "listen",
+        "prompt": "Duyduğun cümleyi seç",
+        "options": [
+          "Dove vai?",
+          "Yanlış cümle 1",
+          "Yanlış cümle 2",
+          "Yanlış cümle 3"
+        ],
+        "correctIndex": 0,
+        "audioText": "Dove vai?",
+        "audioLang": "it-IT"
+      },
+      {
+        "id": "it_u2_l2q_sp1",
+        "type": "speak",
+        "prompt": "Lütfen şu cümleyi mikrofona söyle:",
+        "options": [],
+        "correctIndex": 0,
+        "audioText": "Dove vai?",
+        "audioLang": "it-IT"
+      }
+    ]
+  },
+  {
+    "id": "it_u2_l3",
+    "title": "Seyahat (A2) - Bölüm 3",
+    "description": "B2'ye giden yolda kapsamlı eğitim",
+    "icon": "📖",
+    "xpReward": 20,
+    "questions": [
+      {
+        "id": "it_u2_l3q_f0",
+        "type": "flashcard",
+        "prompt": "Havalimanı",
+        "options": [],
+        "correctIndex": 0,
+        "audioText": "Aeroporto",
+        "audioLang": "it-IT",
+        "imageOptions": [
+          "✈️"
+        ]
+      },
+      {
+        "id": "it_u2_l3q_f1",
+        "type": "flashcard",
+        "prompt": "Bilet",
+        "options": [],
+        "correctIndex": 0,
+        "audioText": "Biglietto",
+        "audioLang": "it-IT",
+        "imageOptions": [
+          "🎫"
+        ]
+      },
+      {
+        "id": "it_u2_l3q_f2",
+        "type": "flashcard",
+        "prompt": "Pasaport",
+        "options": [],
+        "correctIndex": 0,
+        "audioText": "Passaporto",
+        "audioLang": "it-IT",
+        "imageOptions": [
+          "🛂"
+        ]
+      },
+      {
+        "id": "it_u2_l3q_t1",
+        "type": "imageChoice",
+        "prompt": "Hangisi 'Havalimanı' demektir?",
+        "options": [
+          "Yanlış cevap",
+          "Aeroporto",
+          "Hatalı",
+          "Alakasız"
+        ],
+        "imageOptions": [
+          "❓",
+          "✈️",
+          "❓",
+          "❓"
+        ],
+        "correctIndex": 1,
+        "audioText": "Aeroporto",
+        "audioLang": "it-IT"
+      },
+      {
+        "id": "it_u2_l3q_cs0",
+        "type": "constructSentence",
+        "prompt": "Şu cümleyi çevir: Biletimi kaybettim",
+        "options": [
+          "il",
+          "perso",
+          "fake1",
+          "Ho",
+          "fake2",
+          "mio",
+          "biglietto"
+        ],
+        "correctAnswer": [
+          "Ho",
+          "perso",
+          "il",
+          "mio",
+          "biglietto"
+        ],
+        "correctIndex": 0,
+        "audioText": "Ho perso il mio biglietto",
+        "audioLang": "it-IT"
+      },
+      {
+        "id": "it_u2_l3q_tr0",
+        "type": "translate",
+        "prompt": "Çevir: Ho perso il mio biglietto",
+        "options": [
+          "Yanlış çeviri 1",
+          "Yanlış çeviri 3",
+          "Biletimi kaybettim",
+          "Yanlış çeviri 2"
+        ],
+        "correctIndex": 2,
+        "audioText": "Ho perso il mio biglietto",
+        "audioLang": "it-IT"
+      },
+      {
+        "id": "it_u2_l3q_cs1",
+        "type": "constructSentence",
+        "prompt": "Şu cümleyi çevir: Nereye gidiyorsun?",
+        "options": [
           "Dove",
+          "vai?",
           "fake1",
           "fake2"
         ],
@@ -672,18 +1541,621 @@ export const italianContent = [
         "correctIndex": 0,
         "audioText": "Dove vai?",
         "audioLang": "it-IT"
+      },
+      {
+        "id": "it_u2_l3q_tr1",
+        "type": "translate",
+        "prompt": "Çevir: Dove vai?",
+        "options": [
+          "Nereye gidiyorsun?",
+          "Yanlış çeviri 1",
+          "Yanlış çeviri 2",
+          "Yanlış çeviri 3"
+        ],
+        "correctIndex": 0,
+        "audioText": "Dove vai?",
+        "audioLang": "it-IT"
+      },
+      {
+        "id": "it_u2_l3q_ls0",
+        "type": "listen",
+        "prompt": "Duyduğun cümleyi seç",
+        "options": [
+          "Yanlış cümle 2",
+          "Yanlış cümle 3",
+          "Yanlış cümle 1",
+          "Ho perso il mio biglietto"
+        ],
+        "correctIndex": 3,
+        "audioText": "Ho perso il mio biglietto",
+        "audioLang": "it-IT"
+      },
+      {
+        "id": "it_u2_l3q_sp0",
+        "type": "speak",
+        "prompt": "Lütfen şu cümleyi mikrofona söyle:",
+        "options": [],
+        "correctIndex": 0,
+        "audioText": "Ho perso il mio biglietto",
+        "audioLang": "it-IT"
+      },
+      {
+        "id": "it_u2_l3q_ls1",
+        "type": "listen",
+        "prompt": "Duyduğun cümleyi seç",
+        "options": [
+          "Dove vai?",
+          "Yanlış cümle 1",
+          "Yanlış cümle 3",
+          "Yanlış cümle 2"
+        ],
+        "correctIndex": 0,
+        "audioText": "Dove vai?",
+        "audioLang": "it-IT"
+      },
+      {
+        "id": "it_u2_l3q_sp1",
+        "type": "speak",
+        "prompt": "Lütfen şu cümleyi mikrofona söyle:",
+        "options": [],
+        "correctIndex": 0,
+        "audioText": "Dove vai?",
+        "audioLang": "it-IT"
+      }
+    ]
+  },
+  {
+    "id": "it_u2_l4",
+    "title": "Seyahat (A2) - Bölüm 4",
+    "description": "B2'ye giden yolda kapsamlı eğitim",
+    "icon": "📖",
+    "xpReward": 20,
+    "questions": [
+      {
+        "id": "it_u2_l4q_f0",
+        "type": "flashcard",
+        "prompt": "Havalimanı",
+        "options": [],
+        "correctIndex": 0,
+        "audioText": "Aeroporto",
+        "audioLang": "it-IT",
+        "imageOptions": [
+          "✈️"
+        ]
+      },
+      {
+        "id": "it_u2_l4q_f1",
+        "type": "flashcard",
+        "prompt": "Bilet",
+        "options": [],
+        "correctIndex": 0,
+        "audioText": "Biglietto",
+        "audioLang": "it-IT",
+        "imageOptions": [
+          "🎫"
+        ]
+      },
+      {
+        "id": "it_u2_l4q_f2",
+        "type": "flashcard",
+        "prompt": "Pasaport",
+        "options": [],
+        "correctIndex": 0,
+        "audioText": "Passaporto",
+        "audioLang": "it-IT",
+        "imageOptions": [
+          "🛂"
+        ]
+      },
+      {
+        "id": "it_u2_l4q_t1",
+        "type": "imageChoice",
+        "prompt": "Hangisi 'Havalimanı' demektir?",
+        "options": [
+          "Alakasız",
+          "Hatalı",
+          "Yanlış cevap",
+          "Aeroporto"
+        ],
+        "imageOptions": [
+          "❓",
+          "❓",
+          "❓",
+          "✈️"
+        ],
+        "correctIndex": 3,
+        "audioText": "Aeroporto",
+        "audioLang": "it-IT"
+      },
+      {
+        "id": "it_u2_l4q_cs0",
+        "type": "constructSentence",
+        "prompt": "Şu cümleyi çevir: Biletimi kaybettim",
+        "options": [
+          "fake2",
+          "perso",
+          "il",
+          "biglietto",
+          "Ho",
+          "mio",
+          "fake1"
+        ],
+        "correctAnswer": [
+          "Ho",
+          "perso",
+          "il",
+          "mio",
+          "biglietto"
+        ],
+        "correctIndex": 0,
+        "audioText": "Ho perso il mio biglietto",
+        "audioLang": "it-IT"
+      },
+      {
+        "id": "it_u2_l4q_tr0",
+        "type": "translate",
+        "prompt": "Çevir: Ho perso il mio biglietto",
+        "options": [
+          "Biletimi kaybettim",
+          "Yanlış çeviri 1",
+          "Yanlış çeviri 3",
+          "Yanlış çeviri 2"
+        ],
+        "correctIndex": 0,
+        "audioText": "Ho perso il mio biglietto",
+        "audioLang": "it-IT"
+      },
+      {
+        "id": "it_u2_l4q_cs1",
+        "type": "constructSentence",
+        "prompt": "Şu cümleyi çevir: Nereye gidiyorsun?",
+        "options": [
+          "fake1",
+          "vai?",
+          "Dove",
+          "fake2"
+        ],
+        "correctAnswer": [
+          "Dove",
+          "vai?"
+        ],
+        "correctIndex": 0,
+        "audioText": "Dove vai?",
+        "audioLang": "it-IT"
+      },
+      {
+        "id": "it_u2_l4q_tr1",
+        "type": "translate",
+        "prompt": "Çevir: Dove vai?",
+        "options": [
+          "Yanlış çeviri 3",
+          "Yanlış çeviri 1",
+          "Nereye gidiyorsun?",
+          "Yanlış çeviri 2"
+        ],
+        "correctIndex": 2,
+        "audioText": "Dove vai?",
+        "audioLang": "it-IT"
+      },
+      {
+        "id": "it_u2_l4q_ls0",
+        "type": "listen",
+        "prompt": "Duyduğun cümleyi seç",
+        "options": [
+          "Yanlış cümle 1",
+          "Ho perso il mio biglietto",
+          "Yanlış cümle 2",
+          "Yanlış cümle 3"
+        ],
+        "correctIndex": 1,
+        "audioText": "Ho perso il mio biglietto",
+        "audioLang": "it-IT"
+      },
+      {
+        "id": "it_u2_l4q_sp0",
+        "type": "speak",
+        "prompt": "Lütfen şu cümleyi mikrofona söyle:",
+        "options": [],
+        "correctIndex": 0,
+        "audioText": "Ho perso il mio biglietto",
+        "audioLang": "it-IT"
+      },
+      {
+        "id": "it_u2_l4q_ls1",
+        "type": "listen",
+        "prompt": "Duyduğun cümleyi seç",
+        "options": [
+          "Yanlış cümle 3",
+          "Yanlış cümle 2",
+          "Yanlış cümle 1",
+          "Dove vai?"
+        ],
+        "correctIndex": 3,
+        "audioText": "Dove vai?",
+        "audioLang": "it-IT"
+      },
+      {
+        "id": "it_u2_l4q_sp1",
+        "type": "speak",
+        "prompt": "Lütfen şu cümleyi mikrofona söyle:",
+        "options": [],
+        "correctIndex": 0,
+        "audioText": "Dove vai?",
+        "audioLang": "it-IT"
+      }
+    ]
+  },
+  {
+    "id": "it_u2_l5",
+    "title": "Seyahat (A2) - Bölüm 5",
+    "description": "B2'ye giden yolda kapsamlı eğitim",
+    "icon": "📖",
+    "xpReward": 20,
+    "questions": [
+      {
+        "id": "it_u2_l5q_f0",
+        "type": "flashcard",
+        "prompt": "Havalimanı",
+        "options": [],
+        "correctIndex": 0,
+        "audioText": "Aeroporto",
+        "audioLang": "it-IT",
+        "imageOptions": [
+          "✈️"
+        ]
+      },
+      {
+        "id": "it_u2_l5q_f1",
+        "type": "flashcard",
+        "prompt": "Bilet",
+        "options": [],
+        "correctIndex": 0,
+        "audioText": "Biglietto",
+        "audioLang": "it-IT",
+        "imageOptions": [
+          "🎫"
+        ]
+      },
+      {
+        "id": "it_u2_l5q_f2",
+        "type": "flashcard",
+        "prompt": "Pasaport",
+        "options": [],
+        "correctIndex": 0,
+        "audioText": "Passaporto",
+        "audioLang": "it-IT",
+        "imageOptions": [
+          "🛂"
+        ]
+      },
+      {
+        "id": "it_u2_l5q_t1",
+        "type": "imageChoice",
+        "prompt": "Hangisi 'Havalimanı' demektir?",
+        "options": [
+          "Aeroporto",
+          "Yanlış cevap",
+          "Hatalı",
+          "Alakasız"
+        ],
+        "imageOptions": [
+          "❓",
+          "❓",
+          "❓",
+          "✈️"
+        ],
+        "correctIndex": 0,
+        "audioText": "Aeroporto",
+        "audioLang": "it-IT"
+      },
+      {
+        "id": "it_u2_l5q_cs0",
+        "type": "constructSentence",
+        "prompt": "Şu cümleyi çevir: Biletimi kaybettim",
+        "options": [
+          "fake1",
+          "perso",
+          "Ho",
+          "mio",
+          "biglietto",
+          "il",
+          "fake2"
+        ],
+        "correctAnswer": [
+          "Ho",
+          "perso",
+          "il",
+          "mio",
+          "biglietto"
+        ],
+        "correctIndex": 0,
+        "audioText": "Ho perso il mio biglietto",
+        "audioLang": "it-IT"
+      },
+      {
+        "id": "it_u2_l5q_tr0",
+        "type": "translate",
+        "prompt": "Çevir: Ho perso il mio biglietto",
+        "options": [
+          "Biletimi kaybettim",
+          "Yanlış çeviri 1",
+          "Yanlış çeviri 2",
+          "Yanlış çeviri 3"
+        ],
+        "correctIndex": 0,
+        "audioText": "Ho perso il mio biglietto",
+        "audioLang": "it-IT"
+      },
+      {
+        "id": "it_u2_l5q_cs1",
+        "type": "constructSentence",
+        "prompt": "Şu cümleyi çevir: Nereye gidiyorsun?",
+        "options": [
+          "Dove",
+          "fake1",
+          "vai?",
+          "fake2"
+        ],
+        "correctAnswer": [
+          "Dove",
+          "vai?"
+        ],
+        "correctIndex": 0,
+        "audioText": "Dove vai?",
+        "audioLang": "it-IT"
+      },
+      {
+        "id": "it_u2_l5q_tr1",
+        "type": "translate",
+        "prompt": "Çevir: Dove vai?",
+        "options": [
+          "Yanlış çeviri 1",
+          "Yanlış çeviri 3",
+          "Nereye gidiyorsun?",
+          "Yanlış çeviri 2"
+        ],
+        "correctIndex": 2,
+        "audioText": "Dove vai?",
+        "audioLang": "it-IT"
+      },
+      {
+        "id": "it_u2_l5q_ls0",
+        "type": "listen",
+        "prompt": "Duyduğun cümleyi seç",
+        "options": [
+          "Ho perso il mio biglietto",
+          "Yanlış cümle 1",
+          "Yanlış cümle 3",
+          "Yanlış cümle 2"
+        ],
+        "correctIndex": 0,
+        "audioText": "Ho perso il mio biglietto",
+        "audioLang": "it-IT"
+      },
+      {
+        "id": "it_u2_l5q_sp0",
+        "type": "speak",
+        "prompt": "Lütfen şu cümleyi mikrofona söyle:",
+        "options": [],
+        "correctIndex": 0,
+        "audioText": "Ho perso il mio biglietto",
+        "audioLang": "it-IT"
+      },
+      {
+        "id": "it_u2_l5q_ls1",
+        "type": "listen",
+        "prompt": "Duyduğun cümleyi seç",
+        "options": [
+          "Dove vai?",
+          "Yanlış cümle 1",
+          "Yanlış cümle 3",
+          "Yanlış cümle 2"
+        ],
+        "correctIndex": 0,
+        "audioText": "Dove vai?",
+        "audioLang": "it-IT"
+      },
+      {
+        "id": "it_u2_l5q_sp1",
+        "type": "speak",
+        "prompt": "Lütfen şu cümleyi mikrofona söyle:",
+        "options": [],
+        "correctIndex": 0,
+        "audioText": "Dove vai?",
+        "audioLang": "it-IT"
+      }
+    ]
+  },
+  {
+    "id": "it_u2_l6",
+    "title": "Seyahat (A2) - Bölüm 6",
+    "description": "B2'ye giden yolda kapsamlı eğitim",
+    "icon": "👑",
+    "xpReward": 50,
+    "questions": [
+      {
+        "id": "it_u2_l6q_f0",
+        "type": "flashcard",
+        "prompt": "Havalimanı",
+        "options": [],
+        "correctIndex": 0,
+        "audioText": "Aeroporto",
+        "audioLang": "it-IT",
+        "imageOptions": [
+          "✈️"
+        ]
+      },
+      {
+        "id": "it_u2_l6q_f1",
+        "type": "flashcard",
+        "prompt": "Bilet",
+        "options": [],
+        "correctIndex": 0,
+        "audioText": "Biglietto",
+        "audioLang": "it-IT",
+        "imageOptions": [
+          "🎫"
+        ]
+      },
+      {
+        "id": "it_u2_l6q_f2",
+        "type": "flashcard",
+        "prompt": "Pasaport",
+        "options": [],
+        "correctIndex": 0,
+        "audioText": "Passaporto",
+        "audioLang": "it-IT",
+        "imageOptions": [
+          "🛂"
+        ]
+      },
+      {
+        "id": "it_u2_l6q_t1",
+        "type": "imageChoice",
+        "prompt": "Hangisi 'Havalimanı' demektir?",
+        "options": [
+          "Alakasız",
+          "Hatalı",
+          "Yanlış cevap",
+          "Aeroporto"
+        ],
+        "imageOptions": [
+          "❓",
+          "✈️",
+          "❓",
+          "❓"
+        ],
+        "correctIndex": 3,
+        "audioText": "Aeroporto",
+        "audioLang": "it-IT"
+      },
+      {
+        "id": "it_u2_l6q_cs0",
+        "type": "constructSentence",
+        "prompt": "Şu cümleyi çevir: Biletimi kaybettim",
+        "options": [
+          "mio",
+          "Ho",
+          "perso",
+          "il",
+          "fake2",
+          "biglietto",
+          "fake1"
+        ],
+        "correctAnswer": [
+          "Ho",
+          "perso",
+          "il",
+          "mio",
+          "biglietto"
+        ],
+        "correctIndex": 0,
+        "audioText": "Ho perso il mio biglietto",
+        "audioLang": "it-IT"
+      },
+      {
+        "id": "it_u2_l6q_tr0",
+        "type": "translate",
+        "prompt": "Çevir: Ho perso il mio biglietto",
+        "options": [
+          "Yanlış çeviri 2",
+          "Yanlış çeviri 3",
+          "Yanlış çeviri 1",
+          "Biletimi kaybettim"
+        ],
+        "correctIndex": 3,
+        "audioText": "Ho perso il mio biglietto",
+        "audioLang": "it-IT"
+      },
+      {
+        "id": "it_u2_l6q_cs1",
+        "type": "constructSentence",
+        "prompt": "Şu cümleyi çevir: Nereye gidiyorsun?",
+        "options": [
+          "vai?",
+          "fake1",
+          "fake2",
+          "Dove"
+        ],
+        "correctAnswer": [
+          "Dove",
+          "vai?"
+        ],
+        "correctIndex": 0,
+        "audioText": "Dove vai?",
+        "audioLang": "it-IT"
+      },
+      {
+        "id": "it_u2_l6q_tr1",
+        "type": "translate",
+        "prompt": "Çevir: Dove vai?",
+        "options": [
+          "Nereye gidiyorsun?",
+          "Yanlış çeviri 1",
+          "Yanlış çeviri 2",
+          "Yanlış çeviri 3"
+        ],
+        "correctIndex": 0,
+        "audioText": "Dove vai?",
+        "audioLang": "it-IT"
+      },
+      {
+        "id": "it_u2_l6q_ls0",
+        "type": "listen",
+        "prompt": "Duyduğun cümleyi seç",
+        "options": [
+          "Yanlış cümle 1",
+          "Ho perso il mio biglietto",
+          "Yanlış cümle 2",
+          "Yanlış cümle 3"
+        ],
+        "correctIndex": 1,
+        "audioText": "Ho perso il mio biglietto",
+        "audioLang": "it-IT"
+      },
+      {
+        "id": "it_u2_l6q_sp0",
+        "type": "speak",
+        "prompt": "Lütfen şu cümleyi mikrofona söyle:",
+        "options": [],
+        "correctIndex": 0,
+        "audioText": "Ho perso il mio biglietto",
+        "audioLang": "it-IT"
+      },
+      {
+        "id": "it_u2_l6q_ls1",
+        "type": "listen",
+        "prompt": "Duyduğun cümleyi seç",
+        "options": [
+          "Dove vai?",
+          "Yanlış cümle 1",
+          "Yanlış cümle 2",
+          "Yanlış cümle 3"
+        ],
+        "correctIndex": 0,
+        "audioText": "Dove vai?",
+        "audioLang": "it-IT"
+      },
+      {
+        "id": "it_u2_l6q_sp1",
+        "type": "speak",
+        "prompt": "Lütfen şu cümleyi mikrofona söyle:",
+        "options": [],
+        "correctIndex": 0,
+        "audioText": "Dove vai?",
+        "audioLang": "it-IT"
       }
     ]
   },
   {
     "id": "it_u3_l1",
-    "title": "Fikir Belirtme (B1) - VOCAB",
-    "description": "B2'ye giden yolda vocab becerileri",
-    "icon": "🔤",
+    "title": "Fikir Belirtme (B1) - Bölüm 1",
+    "description": "B2'ye giden yolda kapsamlı eğitim",
+    "icon": "📖",
     "xpReward": 20,
     "questions": [
       {
-        "id": "it_u3_l1q0",
+        "id": "it_u3_l1q_f0",
         "type": "flashcard",
         "prompt": "Bence",
         "options": [],
@@ -695,7 +2167,7 @@ export const italianContent = [
         ]
       },
       {
-        "id": "it_u3_l1q1",
+        "id": "it_u3_l1q_f1",
         "type": "flashcard",
         "prompt": "Önemli",
         "options": [],
@@ -707,7 +2179,7 @@ export const italianContent = [
         ]
       },
       {
-        "id": "it_u3_l1q2",
+        "id": "it_u3_l1q_f2",
         "type": "flashcard",
         "prompt": "Belki",
         "options": [],
@@ -720,216 +2192,6 @@ export const italianContent = [
       },
       {
         "id": "it_u3_l1q_t1",
-        "type": "imageChoice",
-        "prompt": "Hangisi 'Bence' demektir?",
-        "options": [
-          "Yanlış cevap",
-          "Hatalı",
-          "Alakasız",
-          "Penso che"
-        ],
-        "imageOptions": [
-          "🤔",
-          "❓",
-          "❓",
-          "❓"
-        ],
-        "correctIndex": 3,
-        "audioText": "Penso che",
-        "audioLang": "it-IT"
-      }
-    ]
-  },
-  {
-    "id": "it_u3_l2",
-    "title": "Fikir Belirtme (B1) - SENTENCE",
-    "description": "B2'ye giden yolda sentence becerileri",
-    "icon": "✍️",
-    "xpReward": 20,
-    "questions": [
-      {
-        "id": "it_u3_l2q_cs0",
-        "type": "constructSentence",
-        "prompt": "Şu cümleyi çevir: Bence bu çok önemli",
-        "options": [
-          "wrong1",
-          "wrong2",
-          "importante",
-          "molto",
-          "sia",
-          "che",
-          "Penso"
-        ],
-        "correctAnswer": [
-          "Penso",
-          "che",
-          "sia",
-          "molto",
-          "importante"
-        ],
-        "correctIndex": 0,
-        "audioText": "Penso che sia molto importante",
-        "audioLang": "it-IT"
-      },
-      {
-        "id": "it_u3_l2q_tr0",
-        "type": "translate",
-        "prompt": "Çevir: Penso che sia molto importante",
-        "options": [
-          "Yanlış çeviri 1",
-          "Yanlış çeviri 2",
-          "Bence bu çok önemli",
-          "Yanlış çeviri 3"
-        ],
-        "correctIndex": 2,
-        "audioText": "Penso che sia molto importante",
-        "audioLang": "it-IT"
-      },
-      {
-        "id": "it_u3_l2q_cs1",
-        "type": "constructSentence",
-        "prompt": "Şu cümleyi çevir: Emin değilim",
-        "options": [
-          "wrong1",
-          "sono",
-          "Non",
-          "sicuro",
-          "wrong2"
-        ],
-        "correctAnswer": [
-          "Non",
-          "sono",
-          "sicuro"
-        ],
-        "correctIndex": 0,
-        "audioText": "Non sono sicuro",
-        "audioLang": "it-IT"
-      },
-      {
-        "id": "it_u3_l2q_tr1",
-        "type": "translate",
-        "prompt": "Çevir: Non sono sicuro",
-        "options": [
-          "Emin değilim",
-          "Yanlış çeviri 1",
-          "Yanlış çeviri 2",
-          "Yanlış çeviri 3"
-        ],
-        "correctIndex": 0,
-        "audioText": "Non sono sicuro",
-        "audioLang": "it-IT"
-      }
-    ]
-  },
-  {
-    "id": "it_u3_l3",
-    "title": "Fikir Belirtme (B1) - LISTEN",
-    "description": "B2'ye giden yolda listen becerileri",
-    "icon": "🎧",
-    "xpReward": 20,
-    "questions": [
-      {
-        "id": "it_u3_l3q_ls0",
-        "type": "listen",
-        "prompt": "Duyduğun cümleyi seç",
-        "options": [
-          "Penso che sia molto importante",
-          "Yanlış cümle 1",
-          "Yanlış cümle 3",
-          "Yanlış cümle 2"
-        ],
-        "correctIndex": 0,
-        "audioText": "Penso che sia molto importante",
-        "audioLang": "it-IT"
-      },
-      {
-        "id": "it_u3_l3q_ls1",
-        "type": "listen",
-        "prompt": "Duyduğun cümleyi seç",
-        "options": [
-          "Non sono sicuro",
-          "Yanlış cümle 2",
-          "Yanlış cümle 3",
-          "Yanlış cümle 1"
-        ],
-        "correctIndex": 0,
-        "audioText": "Non sono sicuro",
-        "audioLang": "it-IT"
-      }
-    ]
-  },
-  {
-    "id": "it_u3_l4",
-    "title": "Fikir Belirtme (B1) - SPEAK",
-    "description": "B2'ye giden yolda speak becerileri",
-    "icon": "🎤",
-    "xpReward": 20,
-    "questions": [
-      {
-        "id": "it_u3_l4q_sp0",
-        "type": "speak",
-        "prompt": "Lütfen şu cümleyi mikrofona söyle:",
-        "options": [],
-        "correctIndex": 0,
-        "audioText": "Penso che sia molto importante",
-        "audioLang": "it-IT"
-      },
-      {
-        "id": "it_u3_l4q_sp1",
-        "type": "speak",
-        "prompt": "Lütfen şu cümleyi mikrofona söyle:",
-        "options": [],
-        "correctIndex": 0,
-        "audioText": "Non sono sicuro",
-        "audioLang": "it-IT"
-      }
-    ]
-  },
-  {
-    "id": "it_u3_l5",
-    "title": "Fikir Belirtme (B1) - VOCAB",
-    "description": "B2'ye giden yolda vocab becerileri",
-    "icon": "🔤",
-    "xpReward": 20,
-    "questions": [
-      {
-        "id": "it_u3_l5q0",
-        "type": "flashcard",
-        "prompt": "Bence",
-        "options": [],
-        "correctIndex": 0,
-        "audioText": "Penso che",
-        "audioLang": "it-IT",
-        "imageOptions": [
-          "🤔"
-        ]
-      },
-      {
-        "id": "it_u3_l5q1",
-        "type": "flashcard",
-        "prompt": "Önemli",
-        "options": [],
-        "correctIndex": 0,
-        "audioText": "Importante",
-        "audioLang": "it-IT",
-        "imageOptions": [
-          "⭐"
-        ]
-      },
-      {
-        "id": "it_u3_l5q2",
-        "type": "flashcard",
-        "prompt": "Belki",
-        "options": [],
-        "correctIndex": 0,
-        "audioText": "Forse",
-        "audioLang": "it-IT",
-        "imageOptions": [
-          "🤷"
-        ]
-      },
-      {
-        "id": "it_u3_l5q_t1",
         "type": "imageChoice",
         "prompt": "Hangisi 'Bence' demektir?",
         "options": [
@@ -947,37 +2209,19 @@ export const italianContent = [
         "correctIndex": 0,
         "audioText": "Penso che",
         "audioLang": "it-IT"
-      }
-    ]
-  },
-  {
-    "id": "it_u3_l6",
-    "title": "Fikir Belirtme (B1) - BOSS",
-    "description": "B2'ye giden yolda boss becerileri",
-    "icon": "👑",
-    "xpReward": 50,
-    "questions": [
-      {
-        "id": "it_u3_l6q_bsp0",
-        "type": "speak",
-        "prompt": "Akıcı bir şekilde söyle (B2 Challenge):",
-        "options": [],
-        "correctIndex": 0,
-        "audioText": "Penso che sia molto importante",
-        "audioLang": "it-IT"
       },
       {
-        "id": "it_u3_l6q_bcs0",
+        "id": "it_u3_l1q_cs0",
         "type": "constructSentence",
-        "prompt": "Hızlı Çeviri: Bence bu çok önemli",
+        "prompt": "Şu cümleyi çevir: Bence bu çok önemli",
         "options": [
-          "molto",
-          "fake1",
-          "Penso",
           "sia",
-          "importante",
+          "Penso",
+          "fake1",
+          "molto",
           "che",
-          "fake2"
+          "fake2",
+          "importante"
         ],
         "correctAnswer": [
           "Penso",
@@ -991,23 +2235,577 @@ export const italianContent = [
         "audioLang": "it-IT"
       },
       {
-        "id": "it_u3_l6q_bsp1",
-        "type": "speak",
-        "prompt": "Akıcı bir şekilde söyle (B2 Challenge):",
-        "options": [],
+        "id": "it_u3_l1q_tr0",
+        "type": "translate",
+        "prompt": "Çevir: Penso che sia molto importante",
+        "options": [
+          "Yanlış çeviri 1",
+          "Yanlış çeviri 3",
+          "Bence bu çok önemli",
+          "Yanlış çeviri 2"
+        ],
+        "correctIndex": 2,
+        "audioText": "Penso che sia molto importante",
+        "audioLang": "it-IT"
+      },
+      {
+        "id": "it_u3_l1q_cs1",
+        "type": "constructSentence",
+        "prompt": "Şu cümleyi çevir: Emin değilim",
+        "options": [
+          "sicuro",
+          "fake1",
+          "Non",
+          "sono",
+          "fake2"
+        ],
+        "correctAnswer": [
+          "Non",
+          "sono",
+          "sicuro"
+        ],
         "correctIndex": 0,
         "audioText": "Non sono sicuro",
         "audioLang": "it-IT"
       },
       {
-        "id": "it_u3_l6q_bcs1",
+        "id": "it_u3_l1q_tr1",
+        "type": "translate",
+        "prompt": "Çevir: Non sono sicuro",
+        "options": [
+          "Yanlış çeviri 2",
+          "Yanlış çeviri 1",
+          "Emin değilim",
+          "Yanlış çeviri 3"
+        ],
+        "correctIndex": 2,
+        "audioText": "Non sono sicuro",
+        "audioLang": "it-IT"
+      },
+      {
+        "id": "it_u3_l1q_ls0",
+        "type": "listen",
+        "prompt": "Duyduğun cümleyi seç",
+        "options": [
+          "Yanlış cümle 1",
+          "Yanlış cümle 3",
+          "Yanlış cümle 2",
+          "Penso che sia molto importante"
+        ],
+        "correctIndex": 3,
+        "audioText": "Penso che sia molto importante",
+        "audioLang": "it-IT"
+      },
+      {
+        "id": "it_u3_l1q_sp0",
+        "type": "speak",
+        "prompt": "Lütfen şu cümleyi mikrofona söyle:",
+        "options": [],
+        "correctIndex": 0,
+        "audioText": "Penso che sia molto importante",
+        "audioLang": "it-IT"
+      },
+      {
+        "id": "it_u3_l1q_ls1",
+        "type": "listen",
+        "prompt": "Duyduğun cümleyi seç",
+        "options": [
+          "Non sono sicuro",
+          "Yanlış cümle 1",
+          "Yanlış cümle 2",
+          "Yanlış cümle 3"
+        ],
+        "correctIndex": 0,
+        "audioText": "Non sono sicuro",
+        "audioLang": "it-IT"
+      },
+      {
+        "id": "it_u3_l1q_sp1",
+        "type": "speak",
+        "prompt": "Lütfen şu cümleyi mikrofona söyle:",
+        "options": [],
+        "correctIndex": 0,
+        "audioText": "Non sono sicuro",
+        "audioLang": "it-IT"
+      }
+    ]
+  },
+  {
+    "id": "it_u3_l2",
+    "title": "Fikir Belirtme (B1) - Bölüm 2",
+    "description": "B2'ye giden yolda kapsamlı eğitim",
+    "icon": "📖",
+    "xpReward": 20,
+    "questions": [
+      {
+        "id": "it_u3_l2q_f0",
+        "type": "flashcard",
+        "prompt": "Bence",
+        "options": [],
+        "correctIndex": 0,
+        "audioText": "Penso che",
+        "audioLang": "it-IT",
+        "imageOptions": [
+          "🤔"
+        ]
+      },
+      {
+        "id": "it_u3_l2q_f1",
+        "type": "flashcard",
+        "prompt": "Önemli",
+        "options": [],
+        "correctIndex": 0,
+        "audioText": "Importante",
+        "audioLang": "it-IT",
+        "imageOptions": [
+          "⭐"
+        ]
+      },
+      {
+        "id": "it_u3_l2q_f2",
+        "type": "flashcard",
+        "prompt": "Belki",
+        "options": [],
+        "correctIndex": 0,
+        "audioText": "Forse",
+        "audioLang": "it-IT",
+        "imageOptions": [
+          "🤷"
+        ]
+      },
+      {
+        "id": "it_u3_l2q_t1",
+        "type": "imageChoice",
+        "prompt": "Hangisi 'Bence' demektir?",
+        "options": [
+          "Alakasız",
+          "Hatalı",
+          "Yanlış cevap",
+          "Penso che"
+        ],
+        "imageOptions": [
+          "❓",
+          "🤔",
+          "❓",
+          "❓"
+        ],
+        "correctIndex": 3,
+        "audioText": "Penso che",
+        "audioLang": "it-IT"
+      },
+      {
+        "id": "it_u3_l2q_cs0",
         "type": "constructSentence",
-        "prompt": "Hızlı Çeviri: Emin değilim",
+        "prompt": "Şu cümleyi çevir: Bence bu çok önemli",
+        "options": [
+          "che",
+          "molto",
+          "Penso",
+          "sia",
+          "fake1",
+          "fake2",
+          "importante"
+        ],
+        "correctAnswer": [
+          "Penso",
+          "che",
+          "sia",
+          "molto",
+          "importante"
+        ],
+        "correctIndex": 0,
+        "audioText": "Penso che sia molto importante",
+        "audioLang": "it-IT"
+      },
+      {
+        "id": "it_u3_l2q_tr0",
+        "type": "translate",
+        "prompt": "Çevir: Penso che sia molto importante",
+        "options": [
+          "Yanlış çeviri 3",
+          "Bence bu çok önemli",
+          "Yanlış çeviri 1",
+          "Yanlış çeviri 2"
+        ],
+        "correctIndex": 1,
+        "audioText": "Penso che sia molto importante",
+        "audioLang": "it-IT"
+      },
+      {
+        "id": "it_u3_l2q_cs1",
+        "type": "constructSentence",
+        "prompt": "Şu cümleyi çevir: Emin değilim",
         "options": [
           "fake1",
+          "sicuro",
           "sono",
           "Non",
+          "fake2"
+        ],
+        "correctAnswer": [
+          "Non",
+          "sono",
+          "sicuro"
+        ],
+        "correctIndex": 0,
+        "audioText": "Non sono sicuro",
+        "audioLang": "it-IT"
+      },
+      {
+        "id": "it_u3_l2q_tr1",
+        "type": "translate",
+        "prompt": "Çevir: Non sono sicuro",
+        "options": [
+          "Yanlış çeviri 3",
+          "Emin değilim",
+          "Yanlış çeviri 1",
+          "Yanlış çeviri 2"
+        ],
+        "correctIndex": 1,
+        "audioText": "Non sono sicuro",
+        "audioLang": "it-IT"
+      },
+      {
+        "id": "it_u3_l2q_ls0",
+        "type": "listen",
+        "prompt": "Duyduğun cümleyi seç",
+        "options": [
+          "Penso che sia molto importante",
+          "Yanlış cümle 1",
+          "Yanlış cümle 2",
+          "Yanlış cümle 3"
+        ],
+        "correctIndex": 0,
+        "audioText": "Penso che sia molto importante",
+        "audioLang": "it-IT"
+      },
+      {
+        "id": "it_u3_l2q_sp0",
+        "type": "speak",
+        "prompt": "Lütfen şu cümleyi mikrofona söyle:",
+        "options": [],
+        "correctIndex": 0,
+        "audioText": "Penso che sia molto importante",
+        "audioLang": "it-IT"
+      },
+      {
+        "id": "it_u3_l2q_ls1",
+        "type": "listen",
+        "prompt": "Duyduğun cümleyi seç",
+        "options": [
+          "Non sono sicuro",
+          "Yanlış cümle 1",
+          "Yanlış cümle 3",
+          "Yanlış cümle 2"
+        ],
+        "correctIndex": 0,
+        "audioText": "Non sono sicuro",
+        "audioLang": "it-IT"
+      },
+      {
+        "id": "it_u3_l2q_sp1",
+        "type": "speak",
+        "prompt": "Lütfen şu cümleyi mikrofona söyle:",
+        "options": [],
+        "correctIndex": 0,
+        "audioText": "Non sono sicuro",
+        "audioLang": "it-IT"
+      }
+    ]
+  },
+  {
+    "id": "it_u3_l3",
+    "title": "Fikir Belirtme (B1) - Bölüm 3",
+    "description": "B2'ye giden yolda kapsamlı eğitim",
+    "icon": "📖",
+    "xpReward": 20,
+    "questions": [
+      {
+        "id": "it_u3_l3q_f0",
+        "type": "flashcard",
+        "prompt": "Bence",
+        "options": [],
+        "correctIndex": 0,
+        "audioText": "Penso che",
+        "audioLang": "it-IT",
+        "imageOptions": [
+          "🤔"
+        ]
+      },
+      {
+        "id": "it_u3_l3q_f1",
+        "type": "flashcard",
+        "prompt": "Önemli",
+        "options": [],
+        "correctIndex": 0,
+        "audioText": "Importante",
+        "audioLang": "it-IT",
+        "imageOptions": [
+          "⭐"
+        ]
+      },
+      {
+        "id": "it_u3_l3q_f2",
+        "type": "flashcard",
+        "prompt": "Belki",
+        "options": [],
+        "correctIndex": 0,
+        "audioText": "Forse",
+        "audioLang": "it-IT",
+        "imageOptions": [
+          "🤷"
+        ]
+      },
+      {
+        "id": "it_u3_l3q_t1",
+        "type": "imageChoice",
+        "prompt": "Hangisi 'Bence' demektir?",
+        "options": [
+          "Alakasız",
+          "Hatalı",
+          "Yanlış cevap",
+          "Penso che"
+        ],
+        "imageOptions": [
+          "❓",
+          "🤔",
+          "❓",
+          "❓"
+        ],
+        "correctIndex": 3,
+        "audioText": "Penso che",
+        "audioLang": "it-IT"
+      },
+      {
+        "id": "it_u3_l3q_cs0",
+        "type": "constructSentence",
+        "prompt": "Şu cümleyi çevir: Bence bu çok önemli",
+        "options": [
+          "importante",
+          "molto",
+          "sia",
+          "che",
           "fake2",
+          "Penso",
+          "fake1"
+        ],
+        "correctAnswer": [
+          "Penso",
+          "che",
+          "sia",
+          "molto",
+          "importante"
+        ],
+        "correctIndex": 0,
+        "audioText": "Penso che sia molto importante",
+        "audioLang": "it-IT"
+      },
+      {
+        "id": "it_u3_l3q_tr0",
+        "type": "translate",
+        "prompt": "Çevir: Penso che sia molto importante",
+        "options": [
+          "Yanlış çeviri 3",
+          "Yanlış çeviri 1",
+          "Bence bu çok önemli",
+          "Yanlış çeviri 2"
+        ],
+        "correctIndex": 2,
+        "audioText": "Penso che sia molto importante",
+        "audioLang": "it-IT"
+      },
+      {
+        "id": "it_u3_l3q_cs1",
+        "type": "constructSentence",
+        "prompt": "Şu cümleyi çevir: Emin değilim",
+        "options": [
+          "fake1",
+          "sicuro",
+          "fake2",
+          "sono",
+          "Non"
+        ],
+        "correctAnswer": [
+          "Non",
+          "sono",
+          "sicuro"
+        ],
+        "correctIndex": 0,
+        "audioText": "Non sono sicuro",
+        "audioLang": "it-IT"
+      },
+      {
+        "id": "it_u3_l3q_tr1",
+        "type": "translate",
+        "prompt": "Çevir: Non sono sicuro",
+        "options": [
+          "Yanlış çeviri 2",
+          "Emin değilim",
+          "Yanlış çeviri 3",
+          "Yanlış çeviri 1"
+        ],
+        "correctIndex": 1,
+        "audioText": "Non sono sicuro",
+        "audioLang": "it-IT"
+      },
+      {
+        "id": "it_u3_l3q_ls0",
+        "type": "listen",
+        "prompt": "Duyduğun cümleyi seç",
+        "options": [
+          "Yanlış cümle 3",
+          "Penso che sia molto importante",
+          "Yanlış cümle 1",
+          "Yanlış cümle 2"
+        ],
+        "correctIndex": 1,
+        "audioText": "Penso che sia molto importante",
+        "audioLang": "it-IT"
+      },
+      {
+        "id": "it_u3_l3q_sp0",
+        "type": "speak",
+        "prompt": "Lütfen şu cümleyi mikrofona söyle:",
+        "options": [],
+        "correctIndex": 0,
+        "audioText": "Penso che sia molto importante",
+        "audioLang": "it-IT"
+      },
+      {
+        "id": "it_u3_l3q_ls1",
+        "type": "listen",
+        "prompt": "Duyduğun cümleyi seç",
+        "options": [
+          "Yanlış cümle 3",
+          "Yanlış cümle 1",
+          "Non sono sicuro",
+          "Yanlış cümle 2"
+        ],
+        "correctIndex": 2,
+        "audioText": "Non sono sicuro",
+        "audioLang": "it-IT"
+      },
+      {
+        "id": "it_u3_l3q_sp1",
+        "type": "speak",
+        "prompt": "Lütfen şu cümleyi mikrofona söyle:",
+        "options": [],
+        "correctIndex": 0,
+        "audioText": "Non sono sicuro",
+        "audioLang": "it-IT"
+      }
+    ]
+  },
+  {
+    "id": "it_u3_l4",
+    "title": "Fikir Belirtme (B1) - Bölüm 4",
+    "description": "B2'ye giden yolda kapsamlı eğitim",
+    "icon": "📖",
+    "xpReward": 20,
+    "questions": [
+      {
+        "id": "it_u3_l4q_f0",
+        "type": "flashcard",
+        "prompt": "Bence",
+        "options": [],
+        "correctIndex": 0,
+        "audioText": "Penso che",
+        "audioLang": "it-IT",
+        "imageOptions": [
+          "🤔"
+        ]
+      },
+      {
+        "id": "it_u3_l4q_f1",
+        "type": "flashcard",
+        "prompt": "Önemli",
+        "options": [],
+        "correctIndex": 0,
+        "audioText": "Importante",
+        "audioLang": "it-IT",
+        "imageOptions": [
+          "⭐"
+        ]
+      },
+      {
+        "id": "it_u3_l4q_f2",
+        "type": "flashcard",
+        "prompt": "Belki",
+        "options": [],
+        "correctIndex": 0,
+        "audioText": "Forse",
+        "audioLang": "it-IT",
+        "imageOptions": [
+          "🤷"
+        ]
+      },
+      {
+        "id": "it_u3_l4q_t1",
+        "type": "imageChoice",
+        "prompt": "Hangisi 'Bence' demektir?",
+        "options": [
+          "Alakasız",
+          "Penso che",
+          "Yanlış cevap",
+          "Hatalı"
+        ],
+        "imageOptions": [
+          "❓",
+          "🤔",
+          "❓",
+          "❓"
+        ],
+        "correctIndex": 1,
+        "audioText": "Penso che",
+        "audioLang": "it-IT"
+      },
+      {
+        "id": "it_u3_l4q_cs0",
+        "type": "constructSentence",
+        "prompt": "Şu cümleyi çevir: Bence bu çok önemli",
+        "options": [
+          "Penso",
+          "molto",
+          "che",
+          "sia",
+          "fake2",
+          "importante",
+          "fake1"
+        ],
+        "correctAnswer": [
+          "Penso",
+          "che",
+          "sia",
+          "molto",
+          "importante"
+        ],
+        "correctIndex": 0,
+        "audioText": "Penso che sia molto importante",
+        "audioLang": "it-IT"
+      },
+      {
+        "id": "it_u3_l4q_tr0",
+        "type": "translate",
+        "prompt": "Çevir: Penso che sia molto importante",
+        "options": [
+          "Yanlış çeviri 3",
+          "Yanlış çeviri 2",
+          "Yanlış çeviri 1",
+          "Bence bu çok önemli"
+        ],
+        "correctIndex": 3,
+        "audioText": "Penso che sia molto importante",
+        "audioLang": "it-IT"
+      },
+      {
+        "id": "it_u3_l4q_cs1",
+        "type": "constructSentence",
+        "prompt": "Şu cümleyi çevir: Emin değilim",
+        "options": [
+          "Non",
+          "sono",
+          "fake2",
+          "fake1",
           "sicuro"
         ],
         "correctAnswer": [
@@ -1018,18 +2816,444 @@ export const italianContent = [
         "correctIndex": 0,
         "audioText": "Non sono sicuro",
         "audioLang": "it-IT"
+      },
+      {
+        "id": "it_u3_l4q_tr1",
+        "type": "translate",
+        "prompt": "Çevir: Non sono sicuro",
+        "options": [
+          "Yanlış çeviri 2",
+          "Yanlış çeviri 1",
+          "Emin değilim",
+          "Yanlış çeviri 3"
+        ],
+        "correctIndex": 2,
+        "audioText": "Non sono sicuro",
+        "audioLang": "it-IT"
+      },
+      {
+        "id": "it_u3_l4q_ls0",
+        "type": "listen",
+        "prompt": "Duyduğun cümleyi seç",
+        "options": [
+          "Yanlış cümle 3",
+          "Penso che sia molto importante",
+          "Yanlış cümle 1",
+          "Yanlış cümle 2"
+        ],
+        "correctIndex": 1,
+        "audioText": "Penso che sia molto importante",
+        "audioLang": "it-IT"
+      },
+      {
+        "id": "it_u3_l4q_sp0",
+        "type": "speak",
+        "prompt": "Lütfen şu cümleyi mikrofona söyle:",
+        "options": [],
+        "correctIndex": 0,
+        "audioText": "Penso che sia molto importante",
+        "audioLang": "it-IT"
+      },
+      {
+        "id": "it_u3_l4q_ls1",
+        "type": "listen",
+        "prompt": "Duyduğun cümleyi seç",
+        "options": [
+          "Yanlış cümle 1",
+          "Yanlış cümle 3",
+          "Non sono sicuro",
+          "Yanlış cümle 2"
+        ],
+        "correctIndex": 2,
+        "audioText": "Non sono sicuro",
+        "audioLang": "it-IT"
+      },
+      {
+        "id": "it_u3_l4q_sp1",
+        "type": "speak",
+        "prompt": "Lütfen şu cümleyi mikrofona söyle:",
+        "options": [],
+        "correctIndex": 0,
+        "audioText": "Non sono sicuro",
+        "audioLang": "it-IT"
+      }
+    ]
+  },
+  {
+    "id": "it_u3_l5",
+    "title": "Fikir Belirtme (B1) - Bölüm 5",
+    "description": "B2'ye giden yolda kapsamlı eğitim",
+    "icon": "📖",
+    "xpReward": 20,
+    "questions": [
+      {
+        "id": "it_u3_l5q_f0",
+        "type": "flashcard",
+        "prompt": "Bence",
+        "options": [],
+        "correctIndex": 0,
+        "audioText": "Penso che",
+        "audioLang": "it-IT",
+        "imageOptions": [
+          "🤔"
+        ]
+      },
+      {
+        "id": "it_u3_l5q_f1",
+        "type": "flashcard",
+        "prompt": "Önemli",
+        "options": [],
+        "correctIndex": 0,
+        "audioText": "Importante",
+        "audioLang": "it-IT",
+        "imageOptions": [
+          "⭐"
+        ]
+      },
+      {
+        "id": "it_u3_l5q_f2",
+        "type": "flashcard",
+        "prompt": "Belki",
+        "options": [],
+        "correctIndex": 0,
+        "audioText": "Forse",
+        "audioLang": "it-IT",
+        "imageOptions": [
+          "🤷"
+        ]
+      },
+      {
+        "id": "it_u3_l5q_t1",
+        "type": "imageChoice",
+        "prompt": "Hangisi 'Bence' demektir?",
+        "options": [
+          "Hatalı",
+          "Alakasız",
+          "Yanlış cevap",
+          "Penso che"
+        ],
+        "imageOptions": [
+          "🤔",
+          "❓",
+          "❓",
+          "❓"
+        ],
+        "correctIndex": 3,
+        "audioText": "Penso che",
+        "audioLang": "it-IT"
+      },
+      {
+        "id": "it_u3_l5q_cs0",
+        "type": "constructSentence",
+        "prompt": "Şu cümleyi çevir: Bence bu çok önemli",
+        "options": [
+          "che",
+          "molto",
+          "fake2",
+          "Penso",
+          "fake1",
+          "importante",
+          "sia"
+        ],
+        "correctAnswer": [
+          "Penso",
+          "che",
+          "sia",
+          "molto",
+          "importante"
+        ],
+        "correctIndex": 0,
+        "audioText": "Penso che sia molto importante",
+        "audioLang": "it-IT"
+      },
+      {
+        "id": "it_u3_l5q_tr0",
+        "type": "translate",
+        "prompt": "Çevir: Penso che sia molto importante",
+        "options": [
+          "Yanlış çeviri 2",
+          "Yanlış çeviri 1",
+          "Bence bu çok önemli",
+          "Yanlış çeviri 3"
+        ],
+        "correctIndex": 2,
+        "audioText": "Penso che sia molto importante",
+        "audioLang": "it-IT"
+      },
+      {
+        "id": "it_u3_l5q_cs1",
+        "type": "constructSentence",
+        "prompt": "Şu cümleyi çevir: Emin değilim",
+        "options": [
+          "Non",
+          "sono",
+          "fake2",
+          "sicuro",
+          "fake1"
+        ],
+        "correctAnswer": [
+          "Non",
+          "sono",
+          "sicuro"
+        ],
+        "correctIndex": 0,
+        "audioText": "Non sono sicuro",
+        "audioLang": "it-IT"
+      },
+      {
+        "id": "it_u3_l5q_tr1",
+        "type": "translate",
+        "prompt": "Çevir: Non sono sicuro",
+        "options": [
+          "Yanlış çeviri 3",
+          "Yanlış çeviri 2",
+          "Yanlış çeviri 1",
+          "Emin değilim"
+        ],
+        "correctIndex": 3,
+        "audioText": "Non sono sicuro",
+        "audioLang": "it-IT"
+      },
+      {
+        "id": "it_u3_l5q_ls0",
+        "type": "listen",
+        "prompt": "Duyduğun cümleyi seç",
+        "options": [
+          "Yanlış cümle 3",
+          "Yanlış cümle 1",
+          "Yanlış cümle 2",
+          "Penso che sia molto importante"
+        ],
+        "correctIndex": 3,
+        "audioText": "Penso che sia molto importante",
+        "audioLang": "it-IT"
+      },
+      {
+        "id": "it_u3_l5q_sp0",
+        "type": "speak",
+        "prompt": "Lütfen şu cümleyi mikrofona söyle:",
+        "options": [],
+        "correctIndex": 0,
+        "audioText": "Penso che sia molto importante",
+        "audioLang": "it-IT"
+      },
+      {
+        "id": "it_u3_l5q_ls1",
+        "type": "listen",
+        "prompt": "Duyduğun cümleyi seç",
+        "options": [
+          "Non sono sicuro",
+          "Yanlış cümle 1",
+          "Yanlış cümle 2",
+          "Yanlış cümle 3"
+        ],
+        "correctIndex": 0,
+        "audioText": "Non sono sicuro",
+        "audioLang": "it-IT"
+      },
+      {
+        "id": "it_u3_l5q_sp1",
+        "type": "speak",
+        "prompt": "Lütfen şu cümleyi mikrofona söyle:",
+        "options": [],
+        "correctIndex": 0,
+        "audioText": "Non sono sicuro",
+        "audioLang": "it-IT"
+      }
+    ]
+  },
+  {
+    "id": "it_u3_l6",
+    "title": "Fikir Belirtme (B1) - Bölüm 6",
+    "description": "B2'ye giden yolda kapsamlı eğitim",
+    "icon": "👑",
+    "xpReward": 50,
+    "questions": [
+      {
+        "id": "it_u3_l6q_f0",
+        "type": "flashcard",
+        "prompt": "Bence",
+        "options": [],
+        "correctIndex": 0,
+        "audioText": "Penso che",
+        "audioLang": "it-IT",
+        "imageOptions": [
+          "🤔"
+        ]
+      },
+      {
+        "id": "it_u3_l6q_f1",
+        "type": "flashcard",
+        "prompt": "Önemli",
+        "options": [],
+        "correctIndex": 0,
+        "audioText": "Importante",
+        "audioLang": "it-IT",
+        "imageOptions": [
+          "⭐"
+        ]
+      },
+      {
+        "id": "it_u3_l6q_f2",
+        "type": "flashcard",
+        "prompt": "Belki",
+        "options": [],
+        "correctIndex": 0,
+        "audioText": "Forse",
+        "audioLang": "it-IT",
+        "imageOptions": [
+          "🤷"
+        ]
+      },
+      {
+        "id": "it_u3_l6q_t1",
+        "type": "imageChoice",
+        "prompt": "Hangisi 'Bence' demektir?",
+        "options": [
+          "Alakasız",
+          "Hatalı",
+          "Yanlış cevap",
+          "Penso che"
+        ],
+        "imageOptions": [
+          "🤔",
+          "❓",
+          "❓",
+          "❓"
+        ],
+        "correctIndex": 3,
+        "audioText": "Penso che",
+        "audioLang": "it-IT"
+      },
+      {
+        "id": "it_u3_l6q_cs0",
+        "type": "constructSentence",
+        "prompt": "Şu cümleyi çevir: Bence bu çok önemli",
+        "options": [
+          "molto",
+          "importante",
+          "fake2",
+          "fake1",
+          "che",
+          "Penso",
+          "sia"
+        ],
+        "correctAnswer": [
+          "Penso",
+          "che",
+          "sia",
+          "molto",
+          "importante"
+        ],
+        "correctIndex": 0,
+        "audioText": "Penso che sia molto importante",
+        "audioLang": "it-IT"
+      },
+      {
+        "id": "it_u3_l6q_tr0",
+        "type": "translate",
+        "prompt": "Çevir: Penso che sia molto importante",
+        "options": [
+          "Yanlış çeviri 3",
+          "Yanlış çeviri 1",
+          "Bence bu çok önemli",
+          "Yanlış çeviri 2"
+        ],
+        "correctIndex": 2,
+        "audioText": "Penso che sia molto importante",
+        "audioLang": "it-IT"
+      },
+      {
+        "id": "it_u3_l6q_cs1",
+        "type": "constructSentence",
+        "prompt": "Şu cümleyi çevir: Emin değilim",
+        "options": [
+          "sicuro",
+          "fake2",
+          "sono",
+          "fake1",
+          "Non"
+        ],
+        "correctAnswer": [
+          "Non",
+          "sono",
+          "sicuro"
+        ],
+        "correctIndex": 0,
+        "audioText": "Non sono sicuro",
+        "audioLang": "it-IT"
+      },
+      {
+        "id": "it_u3_l6q_tr1",
+        "type": "translate",
+        "prompt": "Çevir: Non sono sicuro",
+        "options": [
+          "Yanlış çeviri 2",
+          "Emin değilim",
+          "Yanlış çeviri 1",
+          "Yanlış çeviri 3"
+        ],
+        "correctIndex": 1,
+        "audioText": "Non sono sicuro",
+        "audioLang": "it-IT"
+      },
+      {
+        "id": "it_u3_l6q_ls0",
+        "type": "listen",
+        "prompt": "Duyduğun cümleyi seç",
+        "options": [
+          "Yanlış cümle 1",
+          "Penso che sia molto importante",
+          "Yanlış cümle 2",
+          "Yanlış cümle 3"
+        ],
+        "correctIndex": 1,
+        "audioText": "Penso che sia molto importante",
+        "audioLang": "it-IT"
+      },
+      {
+        "id": "it_u3_l6q_sp0",
+        "type": "speak",
+        "prompt": "Lütfen şu cümleyi mikrofona söyle:",
+        "options": [],
+        "correctIndex": 0,
+        "audioText": "Penso che sia molto importante",
+        "audioLang": "it-IT"
+      },
+      {
+        "id": "it_u3_l6q_ls1",
+        "type": "listen",
+        "prompt": "Duyduğun cümleyi seç",
+        "options": [
+          "Yanlış cümle 3",
+          "Yanlış cümle 2",
+          "Yanlış cümle 1",
+          "Non sono sicuro"
+        ],
+        "correctIndex": 3,
+        "audioText": "Non sono sicuro",
+        "audioLang": "it-IT"
+      },
+      {
+        "id": "it_u3_l6q_sp1",
+        "type": "speak",
+        "prompt": "Lütfen şu cümleyi mikrofona söyle:",
+        "options": [],
+        "correctIndex": 0,
+        "audioText": "Non sono sicuro",
+        "audioLang": "it-IT"
       }
     ]
   },
   {
     "id": "it_u4_l1",
-    "title": "İş ve Duygular (B2) - VOCAB",
-    "description": "B2'ye giden yolda vocab becerileri",
-    "icon": "🔤",
+    "title": "İş ve Duygular (B2) - Bölüm 1",
+    "description": "B2'ye giden yolda kapsamlı eğitim",
+    "icon": "📖",
     "xpReward": 20,
     "questions": [
       {
-        "id": "it_u4_l1q0",
+        "id": "it_u4_l1q_f0",
         "type": "flashcard",
         "prompt": "Müzakere",
         "options": [],
@@ -1041,7 +3265,7 @@ export const italianContent = [
         ]
       },
       {
-        "id": "it_u4_l1q1",
+        "id": "it_u4_l1q_f1",
         "type": "flashcard",
         "prompt": "Hayal Kırıklığı",
         "options": [],
@@ -1053,7 +3277,7 @@ export const italianContent = [
         ]
       },
       {
-        "id": "it_u4_l1q2",
+        "id": "it_u4_l1q_f2",
         "type": "flashcard",
         "prompt": "Sorumluluk",
         "options": [],
@@ -1069,43 +3293,223 @@ export const italianContent = [
         "type": "imageChoice",
         "prompt": "Hangisi 'Müzakere' demektir?",
         "options": [
-          "Negoziazione",
           "Yanlış cevap",
+          "Negoziazione",
           "Alakasız",
           "Hatalı"
         ],
         "imageOptions": [
-          "🤝",
           "❓",
+          "🤝",
           "❓",
           "❓"
         ],
-        "correctIndex": 0,
+        "correctIndex": 1,
         "audioText": "Negoziazione",
+        "audioLang": "it-IT"
+      },
+      {
+        "id": "it_u4_l1q_cs0",
+        "type": "constructSentence",
+        "prompt": "Şu cümleyi çevir: Müzakere oldukça zorluydu",
+        "options": [
+          "fake1",
+          "piuttosto",
+          "stata",
+          "è",
+          "impegnativa",
+          "negoziazione",
+          "fake2",
+          "La"
+        ],
+        "correctAnswer": [
+          "La",
+          "negoziazione",
+          "è",
+          "stata",
+          "piuttosto",
+          "impegnativa"
+        ],
+        "correctIndex": 0,
+        "audioText": "La negoziazione è stata piuttosto impegnativa",
+        "audioLang": "it-IT"
+      },
+      {
+        "id": "it_u4_l1q_tr0",
+        "type": "translate",
+        "prompt": "Çevir: La negoziazione è stata piuttosto impegnativa",
+        "options": [
+          "Müzakere oldukça zorluydu",
+          "Yanlış çeviri 2",
+          "Yanlış çeviri 3",
+          "Yanlış çeviri 1"
+        ],
+        "correctIndex": 0,
+        "audioText": "La negoziazione è stata piuttosto impegnativa",
+        "audioLang": "it-IT"
+      },
+      {
+        "id": "it_u4_l1q_cs1",
+        "type": "constructSentence",
+        "prompt": "Şu cümleyi çevir: Bu durum beni hayal kırıklığına uğrattı",
+        "options": [
+          "fake2",
+          "situazione",
+          "mi",
+          "fake1",
+          "ha",
+          "Questa",
+          "deluso"
+        ],
+        "correctAnswer": [
+          "Questa",
+          "situazione",
+          "mi",
+          "ha",
+          "deluso"
+        ],
+        "correctIndex": 0,
+        "audioText": "Questa situazione mi ha deluso",
+        "audioLang": "it-IT"
+      },
+      {
+        "id": "it_u4_l1q_tr1",
+        "type": "translate",
+        "prompt": "Çevir: Questa situazione mi ha deluso",
+        "options": [
+          "Bu durum beni hayal kırıklığına uğrattı",
+          "Yanlış çeviri 3",
+          "Yanlış çeviri 2",
+          "Yanlış çeviri 1"
+        ],
+        "correctIndex": 0,
+        "audioText": "Questa situazione mi ha deluso",
+        "audioLang": "it-IT"
+      },
+      {
+        "id": "it_u4_l1q_ls0",
+        "type": "listen",
+        "prompt": "Duyduğun cümleyi seç",
+        "options": [
+          "Yanlış cümle 3",
+          "La negoziazione è stata piuttosto impegnativa",
+          "Yanlış cümle 2",
+          "Yanlış cümle 1"
+        ],
+        "correctIndex": 1,
+        "audioText": "La negoziazione è stata piuttosto impegnativa",
+        "audioLang": "it-IT"
+      },
+      {
+        "id": "it_u4_l1q_sp0",
+        "type": "speak",
+        "prompt": "Lütfen şu cümleyi mikrofona söyle:",
+        "options": [],
+        "correctIndex": 0,
+        "audioText": "La negoziazione è stata piuttosto impegnativa",
+        "audioLang": "it-IT"
+      },
+      {
+        "id": "it_u4_l1q_ls1",
+        "type": "listen",
+        "prompt": "Duyduğun cümleyi seç",
+        "options": [
+          "Yanlış cümle 1",
+          "Yanlış cümle 2",
+          "Questa situazione mi ha deluso",
+          "Yanlış cümle 3"
+        ],
+        "correctIndex": 2,
+        "audioText": "Questa situazione mi ha deluso",
+        "audioLang": "it-IT"
+      },
+      {
+        "id": "it_u4_l1q_sp1",
+        "type": "speak",
+        "prompt": "Lütfen şu cümleyi mikrofona söyle:",
+        "options": [],
+        "correctIndex": 0,
+        "audioText": "Questa situazione mi ha deluso",
         "audioLang": "it-IT"
       }
     ]
   },
   {
     "id": "it_u4_l2",
-    "title": "İş ve Duygular (B2) - SENTENCE",
-    "description": "B2'ye giden yolda sentence becerileri",
-    "icon": "✍️",
+    "title": "İş ve Duygular (B2) - Bölüm 2",
+    "description": "B2'ye giden yolda kapsamlı eğitim",
+    "icon": "📖",
     "xpReward": 20,
     "questions": [
+      {
+        "id": "it_u4_l2q_f0",
+        "type": "flashcard",
+        "prompt": "Müzakere",
+        "options": [],
+        "correctIndex": 0,
+        "audioText": "Negoziazione",
+        "audioLang": "it-IT",
+        "imageOptions": [
+          "🤝"
+        ]
+      },
+      {
+        "id": "it_u4_l2q_f1",
+        "type": "flashcard",
+        "prompt": "Hayal Kırıklığı",
+        "options": [],
+        "correctIndex": 0,
+        "audioText": "Delusione",
+        "audioLang": "it-IT",
+        "imageOptions": [
+          "😔"
+        ]
+      },
+      {
+        "id": "it_u4_l2q_f2",
+        "type": "flashcard",
+        "prompt": "Sorumluluk",
+        "options": [],
+        "correctIndex": 0,
+        "audioText": "Responsabilità",
+        "audioLang": "it-IT",
+        "imageOptions": [
+          "📋"
+        ]
+      },
+      {
+        "id": "it_u4_l2q_t1",
+        "type": "imageChoice",
+        "prompt": "Hangisi 'Müzakere' demektir?",
+        "options": [
+          "Negoziazione",
+          "Yanlış cevap",
+          "Hatalı",
+          "Alakasız"
+        ],
+        "imageOptions": [
+          "❓",
+          "🤝",
+          "❓",
+          "❓"
+        ],
+        "correctIndex": 0,
+        "audioText": "Negoziazione",
+        "audioLang": "it-IT"
+      },
       {
         "id": "it_u4_l2q_cs0",
         "type": "constructSentence",
         "prompt": "Şu cümleyi çevir: Müzakere oldukça zorluydu",
         "options": [
-          "La",
           "negoziazione",
-          "impegnativa",
-          "wrong2",
-          "piuttosto",
           "stata",
           "è",
-          "wrong1"
+          "piuttosto",
+          "impegnativa",
+          "fake2",
+          "fake1",
+          "La"
         ],
         "correctAnswer": [
           "La",
@@ -1138,13 +3542,13 @@ export const italianContent = [
         "type": "constructSentence",
         "prompt": "Şu cümleyi çevir: Bu durum beni hayal kırıklığına uğrattı",
         "options": [
-          "Questa",
+          "ha",
+          "fake2",
+          "mi",
           "situazione",
           "deluso",
-          "ha",
-          "mi",
-          "wrong2",
-          "wrong1"
+          "fake1",
+          "Questa"
         ],
         "correctAnswer": [
           "Questa",
@@ -1162,12 +3566,58 @@ export const italianContent = [
         "type": "translate",
         "prompt": "Çevir: Questa situazione mi ha deluso",
         "options": [
-          "Yanlış çeviri 2",
-          "Yanlış çeviri 3",
           "Bu durum beni hayal kırıklığına uğrattı",
-          "Yanlış çeviri 1"
+          "Yanlış çeviri 1",
+          "Yanlış çeviri 2",
+          "Yanlış çeviri 3"
         ],
-        "correctIndex": 2,
+        "correctIndex": 0,
+        "audioText": "Questa situazione mi ha deluso",
+        "audioLang": "it-IT"
+      },
+      {
+        "id": "it_u4_l2q_ls0",
+        "type": "listen",
+        "prompt": "Duyduğun cümleyi seç",
+        "options": [
+          "La negoziazione è stata piuttosto impegnativa",
+          "Yanlış cümle 1",
+          "Yanlış cümle 2",
+          "Yanlış cümle 3"
+        ],
+        "correctIndex": 0,
+        "audioText": "La negoziazione è stata piuttosto impegnativa",
+        "audioLang": "it-IT"
+      },
+      {
+        "id": "it_u4_l2q_sp0",
+        "type": "speak",
+        "prompt": "Lütfen şu cümleyi mikrofona söyle:",
+        "options": [],
+        "correctIndex": 0,
+        "audioText": "La negoziazione è stata piuttosto impegnativa",
+        "audioLang": "it-IT"
+      },
+      {
+        "id": "it_u4_l2q_ls1",
+        "type": "listen",
+        "prompt": "Duyduğun cümleyi seç",
+        "options": [
+          "Questa situazione mi ha deluso",
+          "Yanlış cümle 1",
+          "Yanlış cümle 2",
+          "Yanlış cümle 3"
+        ],
+        "correctIndex": 0,
+        "audioText": "Questa situazione mi ha deluso",
+        "audioLang": "it-IT"
+      },
+      {
+        "id": "it_u4_l2q_sp1",
+        "type": "speak",
+        "prompt": "Lütfen şu cümleyi mikrofona söyle:",
+        "options": [],
+        "correctIndex": 0,
         "audioText": "Questa situazione mi ha deluso",
         "audioLang": "it-IT"
       }
@@ -1175,77 +3625,13 @@ export const italianContent = [
   },
   {
     "id": "it_u4_l3",
-    "title": "İş ve Duygular (B2) - LISTEN",
-    "description": "B2'ye giden yolda listen becerileri",
-    "icon": "🎧",
+    "title": "İş ve Duygular (B2) - Bölüm 3",
+    "description": "B2'ye giden yolda kapsamlı eğitim",
+    "icon": "📖",
     "xpReward": 20,
     "questions": [
       {
-        "id": "it_u4_l3q_ls0",
-        "type": "listen",
-        "prompt": "Duyduğun cümleyi seç",
-        "options": [
-          "Yanlış cümle 2",
-          "Yanlış cümle 1",
-          "Yanlış cümle 3",
-          "La negoziazione è stata piuttosto impegnativa"
-        ],
-        "correctIndex": 3,
-        "audioText": "La negoziazione è stata piuttosto impegnativa",
-        "audioLang": "it-IT"
-      },
-      {
-        "id": "it_u4_l3q_ls1",
-        "type": "listen",
-        "prompt": "Duyduğun cümleyi seç",
-        "options": [
-          "Yanlış cümle 2",
-          "Questa situazione mi ha deluso",
-          "Yanlış cümle 1",
-          "Yanlış cümle 3"
-        ],
-        "correctIndex": 1,
-        "audioText": "Questa situazione mi ha deluso",
-        "audioLang": "it-IT"
-      }
-    ]
-  },
-  {
-    "id": "it_u4_l4",
-    "title": "İş ve Duygular (B2) - SPEAK",
-    "description": "B2'ye giden yolda speak becerileri",
-    "icon": "🎤",
-    "xpReward": 20,
-    "questions": [
-      {
-        "id": "it_u4_l4q_sp0",
-        "type": "speak",
-        "prompt": "Lütfen şu cümleyi mikrofona söyle:",
-        "options": [],
-        "correctIndex": 0,
-        "audioText": "La negoziazione è stata piuttosto impegnativa",
-        "audioLang": "it-IT"
-      },
-      {
-        "id": "it_u4_l4q_sp1",
-        "type": "speak",
-        "prompt": "Lütfen şu cümleyi mikrofona söyle:",
-        "options": [],
-        "correctIndex": 0,
-        "audioText": "Questa situazione mi ha deluso",
-        "audioLang": "it-IT"
-      }
-    ]
-  },
-  {
-    "id": "it_u4_l5",
-    "title": "İş ve Duygular (B2) - VOCAB",
-    "description": "B2'ye giden yolda vocab becerileri",
-    "icon": "🔤",
-    "xpReward": 20,
-    "questions": [
-      {
-        "id": "it_u4_l5q0",
+        "id": "it_u4_l3q_f0",
         "type": "flashcard",
         "prompt": "Müzakere",
         "options": [],
@@ -1257,7 +3643,7 @@ export const italianContent = [
         ]
       },
       {
-        "id": "it_u4_l5q1",
+        "id": "it_u4_l3q_f1",
         "type": "flashcard",
         "prompt": "Hayal Kırıklığı",
         "options": [],
@@ -1269,7 +3655,7 @@ export const italianContent = [
         ]
       },
       {
-        "id": "it_u4_l5q2",
+        "id": "it_u4_l3q_f2",
         "type": "flashcard",
         "prompt": "Sorumluluk",
         "options": [],
@@ -1281,7 +3667,7 @@ export const italianContent = [
         ]
       },
       {
-        "id": "it_u4_l5q_t1",
+        "id": "it_u4_l3q_t1",
         "type": "imageChoice",
         "prompt": "Hangisi 'Müzakere' demektir?",
         "options": [
@@ -1299,38 +3685,20 @@ export const italianContent = [
         "correctIndex": 0,
         "audioText": "Negoziazione",
         "audioLang": "it-IT"
-      }
-    ]
-  },
-  {
-    "id": "it_u4_l6",
-    "title": "İş ve Duygular (B2) - BOSS",
-    "description": "B2'ye giden yolda boss becerileri",
-    "icon": "👑",
-    "xpReward": 50,
-    "questions": [
-      {
-        "id": "it_u4_l6q_bsp0",
-        "type": "speak",
-        "prompt": "Akıcı bir şekilde söyle (B2 Challenge):",
-        "options": [],
-        "correctIndex": 0,
-        "audioText": "La negoziazione è stata piuttosto impegnativa",
-        "audioLang": "it-IT"
       },
       {
-        "id": "it_u4_l6q_bcs0",
+        "id": "it_u4_l3q_cs0",
         "type": "constructSentence",
-        "prompt": "Hızlı Çeviri: Müzakere oldukça zorluydu",
+        "prompt": "Şu cümleyi çevir: Müzakere oldukça zorluydu",
         "options": [
-          "stata",
-          "fake2",
-          "negoziazione",
-          "fake1",
+          "La",
           "è",
           "piuttosto",
-          "impegnativa",
-          "La"
+          "stata",
+          "fake1",
+          "negoziazione",
+          "fake2",
+          "impegnativa"
         ],
         "correctAnswer": [
           "La",
@@ -1345,25 +3713,219 @@ export const italianContent = [
         "audioLang": "it-IT"
       },
       {
-        "id": "it_u4_l6q_bsp1",
-        "type": "speak",
-        "prompt": "Akıcı bir şekilde söyle (B2 Challenge):",
-        "options": [],
+        "id": "it_u4_l3q_tr0",
+        "type": "translate",
+        "prompt": "Çevir: La negoziazione è stata piuttosto impegnativa",
+        "options": [
+          "Müzakere oldukça zorluydu",
+          "Yanlış çeviri 1",
+          "Yanlış çeviri 2",
+          "Yanlış çeviri 3"
+        ],
+        "correctIndex": 0,
+        "audioText": "La negoziazione è stata piuttosto impegnativa",
+        "audioLang": "it-IT"
+      },
+      {
+        "id": "it_u4_l3q_cs1",
+        "type": "constructSentence",
+        "prompt": "Şu cümleyi çevir: Bu durum beni hayal kırıklığına uğrattı",
+        "options": [
+          "ha",
+          "deluso",
+          "fake1",
+          "fake2",
+          "Questa",
+          "situazione",
+          "mi"
+        ],
+        "correctAnswer": [
+          "Questa",
+          "situazione",
+          "mi",
+          "ha",
+          "deluso"
+        ],
         "correctIndex": 0,
         "audioText": "Questa situazione mi ha deluso",
         "audioLang": "it-IT"
       },
       {
-        "id": "it_u4_l6q_bcs1",
+        "id": "it_u4_l3q_tr1",
+        "type": "translate",
+        "prompt": "Çevir: Questa situazione mi ha deluso",
+        "options": [
+          "Bu durum beni hayal kırıklığına uğrattı",
+          "Yanlış çeviri 1",
+          "Yanlış çeviri 2",
+          "Yanlış çeviri 3"
+        ],
+        "correctIndex": 0,
+        "audioText": "Questa situazione mi ha deluso",
+        "audioLang": "it-IT"
+      },
+      {
+        "id": "it_u4_l3q_ls0",
+        "type": "listen",
+        "prompt": "Duyduğun cümleyi seç",
+        "options": [
+          "Yanlış cümle 3",
+          "Yanlış cümle 2",
+          "Yanlış cümle 1",
+          "La negoziazione è stata piuttosto impegnativa"
+        ],
+        "correctIndex": 3,
+        "audioText": "La negoziazione è stata piuttosto impegnativa",
+        "audioLang": "it-IT"
+      },
+      {
+        "id": "it_u4_l3q_sp0",
+        "type": "speak",
+        "prompt": "Lütfen şu cümleyi mikrofona söyle:",
+        "options": [],
+        "correctIndex": 0,
+        "audioText": "La negoziazione è stata piuttosto impegnativa",
+        "audioLang": "it-IT"
+      },
+      {
+        "id": "it_u4_l3q_ls1",
+        "type": "listen",
+        "prompt": "Duyduğun cümleyi seç",
+        "options": [
+          "Yanlış cümle 2",
+          "Yanlış cümle 1",
+          "Questa situazione mi ha deluso",
+          "Yanlış cümle 3"
+        ],
+        "correctIndex": 2,
+        "audioText": "Questa situazione mi ha deluso",
+        "audioLang": "it-IT"
+      },
+      {
+        "id": "it_u4_l3q_sp1",
+        "type": "speak",
+        "prompt": "Lütfen şu cümleyi mikrofona söyle:",
+        "options": [],
+        "correctIndex": 0,
+        "audioText": "Questa situazione mi ha deluso",
+        "audioLang": "it-IT"
+      }
+    ]
+  },
+  {
+    "id": "it_u4_l4",
+    "title": "İş ve Duygular (B2) - Bölüm 4",
+    "description": "B2'ye giden yolda kapsamlı eğitim",
+    "icon": "📖",
+    "xpReward": 20,
+    "questions": [
+      {
+        "id": "it_u4_l4q_f0",
+        "type": "flashcard",
+        "prompt": "Müzakere",
+        "options": [],
+        "correctIndex": 0,
+        "audioText": "Negoziazione",
+        "audioLang": "it-IT",
+        "imageOptions": [
+          "🤝"
+        ]
+      },
+      {
+        "id": "it_u4_l4q_f1",
+        "type": "flashcard",
+        "prompt": "Hayal Kırıklığı",
+        "options": [],
+        "correctIndex": 0,
+        "audioText": "Delusione",
+        "audioLang": "it-IT",
+        "imageOptions": [
+          "😔"
+        ]
+      },
+      {
+        "id": "it_u4_l4q_f2",
+        "type": "flashcard",
+        "prompt": "Sorumluluk",
+        "options": [],
+        "correctIndex": 0,
+        "audioText": "Responsabilità",
+        "audioLang": "it-IT",
+        "imageOptions": [
+          "📋"
+        ]
+      },
+      {
+        "id": "it_u4_l4q_t1",
+        "type": "imageChoice",
+        "prompt": "Hangisi 'Müzakere' demektir?",
+        "options": [
+          "Negoziazione",
+          "Yanlış cevap",
+          "Alakasız",
+          "Hatalı"
+        ],
+        "imageOptions": [
+          "❓",
+          "❓",
+          "❓",
+          "🤝"
+        ],
+        "correctIndex": 0,
+        "audioText": "Negoziazione",
+        "audioLang": "it-IT"
+      },
+      {
+        "id": "it_u4_l4q_cs0",
         "type": "constructSentence",
-        "prompt": "Hızlı Çeviri: Bu durum beni hayal kırıklığına uğrattı",
+        "prompt": "Şu cümleyi çevir: Müzakere oldukça zorluydu",
+        "options": [
+          "fake2",
+          "La",
+          "stata",
+          "negoziazione",
+          "piuttosto",
+          "fake1",
+          "impegnativa",
+          "è"
+        ],
+        "correctAnswer": [
+          "La",
+          "negoziazione",
+          "è",
+          "stata",
+          "piuttosto",
+          "impegnativa"
+        ],
+        "correctIndex": 0,
+        "audioText": "La negoziazione è stata piuttosto impegnativa",
+        "audioLang": "it-IT"
+      },
+      {
+        "id": "it_u4_l4q_tr0",
+        "type": "translate",
+        "prompt": "Çevir: La negoziazione è stata piuttosto impegnativa",
+        "options": [
+          "Yanlış çeviri 3",
+          "Yanlış çeviri 2",
+          "Yanlış çeviri 1",
+          "Müzakere oldukça zorluydu"
+        ],
+        "correctIndex": 3,
+        "audioText": "La negoziazione è stata piuttosto impegnativa",
+        "audioLang": "it-IT"
+      },
+      {
+        "id": "it_u4_l4q_cs1",
+        "type": "constructSentence",
+        "prompt": "Şu cümleyi çevir: Bu durum beni hayal kırıklığına uğrattı",
         "options": [
           "fake1",
-          "Questa",
           "fake2",
+          "Questa",
+          "ha",
           "situazione",
           "mi",
-          "ha",
           "deluso"
         ],
         "correctAnswer": [
@@ -1373,6 +3935,444 @@ export const italianContent = [
           "ha",
           "deluso"
         ],
+        "correctIndex": 0,
+        "audioText": "Questa situazione mi ha deluso",
+        "audioLang": "it-IT"
+      },
+      {
+        "id": "it_u4_l4q_tr1",
+        "type": "translate",
+        "prompt": "Çevir: Questa situazione mi ha deluso",
+        "options": [
+          "Bu durum beni hayal kırıklığına uğrattı",
+          "Yanlış çeviri 1",
+          "Yanlış çeviri 2",
+          "Yanlış çeviri 3"
+        ],
+        "correctIndex": 0,
+        "audioText": "Questa situazione mi ha deluso",
+        "audioLang": "it-IT"
+      },
+      {
+        "id": "it_u4_l4q_ls0",
+        "type": "listen",
+        "prompt": "Duyduğun cümleyi seç",
+        "options": [
+          "La negoziazione è stata piuttosto impegnativa",
+          "Yanlış cümle 2",
+          "Yanlış cümle 1",
+          "Yanlış cümle 3"
+        ],
+        "correctIndex": 0,
+        "audioText": "La negoziazione è stata piuttosto impegnativa",
+        "audioLang": "it-IT"
+      },
+      {
+        "id": "it_u4_l4q_sp0",
+        "type": "speak",
+        "prompt": "Lütfen şu cümleyi mikrofona söyle:",
+        "options": [],
+        "correctIndex": 0,
+        "audioText": "La negoziazione è stata piuttosto impegnativa",
+        "audioLang": "it-IT"
+      },
+      {
+        "id": "it_u4_l4q_ls1",
+        "type": "listen",
+        "prompt": "Duyduğun cümleyi seç",
+        "options": [
+          "Yanlış cümle 3",
+          "Yanlış cümle 2",
+          "Yanlış cümle 1",
+          "Questa situazione mi ha deluso"
+        ],
+        "correctIndex": 3,
+        "audioText": "Questa situazione mi ha deluso",
+        "audioLang": "it-IT"
+      },
+      {
+        "id": "it_u4_l4q_sp1",
+        "type": "speak",
+        "prompt": "Lütfen şu cümleyi mikrofona söyle:",
+        "options": [],
+        "correctIndex": 0,
+        "audioText": "Questa situazione mi ha deluso",
+        "audioLang": "it-IT"
+      }
+    ]
+  },
+  {
+    "id": "it_u4_l5",
+    "title": "İş ve Duygular (B2) - Bölüm 5",
+    "description": "B2'ye giden yolda kapsamlı eğitim",
+    "icon": "📖",
+    "xpReward": 20,
+    "questions": [
+      {
+        "id": "it_u4_l5q_f0",
+        "type": "flashcard",
+        "prompt": "Müzakere",
+        "options": [],
+        "correctIndex": 0,
+        "audioText": "Negoziazione",
+        "audioLang": "it-IT",
+        "imageOptions": [
+          "🤝"
+        ]
+      },
+      {
+        "id": "it_u4_l5q_f1",
+        "type": "flashcard",
+        "prompt": "Hayal Kırıklığı",
+        "options": [],
+        "correctIndex": 0,
+        "audioText": "Delusione",
+        "audioLang": "it-IT",
+        "imageOptions": [
+          "😔"
+        ]
+      },
+      {
+        "id": "it_u4_l5q_f2",
+        "type": "flashcard",
+        "prompt": "Sorumluluk",
+        "options": [],
+        "correctIndex": 0,
+        "audioText": "Responsabilità",
+        "audioLang": "it-IT",
+        "imageOptions": [
+          "📋"
+        ]
+      },
+      {
+        "id": "it_u4_l5q_t1",
+        "type": "imageChoice",
+        "prompt": "Hangisi 'Müzakere' demektir?",
+        "options": [
+          "Hatalı",
+          "Negoziazione",
+          "Yanlış cevap",
+          "Alakasız"
+        ],
+        "imageOptions": [
+          "❓",
+          "❓",
+          "❓",
+          "🤝"
+        ],
+        "correctIndex": 1,
+        "audioText": "Negoziazione",
+        "audioLang": "it-IT"
+      },
+      {
+        "id": "it_u4_l5q_cs0",
+        "type": "constructSentence",
+        "prompt": "Şu cümleyi çevir: Müzakere oldukça zorluydu",
+        "options": [
+          "fake1",
+          "impegnativa",
+          "piuttosto",
+          "è",
+          "fake2",
+          "negoziazione",
+          "La",
+          "stata"
+        ],
+        "correctAnswer": [
+          "La",
+          "negoziazione",
+          "è",
+          "stata",
+          "piuttosto",
+          "impegnativa"
+        ],
+        "correctIndex": 0,
+        "audioText": "La negoziazione è stata piuttosto impegnativa",
+        "audioLang": "it-IT"
+      },
+      {
+        "id": "it_u4_l5q_tr0",
+        "type": "translate",
+        "prompt": "Çevir: La negoziazione è stata piuttosto impegnativa",
+        "options": [
+          "Yanlış çeviri 2",
+          "Müzakere oldukça zorluydu",
+          "Yanlış çeviri 3",
+          "Yanlış çeviri 1"
+        ],
+        "correctIndex": 1,
+        "audioText": "La negoziazione è stata piuttosto impegnativa",
+        "audioLang": "it-IT"
+      },
+      {
+        "id": "it_u4_l5q_cs1",
+        "type": "constructSentence",
+        "prompt": "Şu cümleyi çevir: Bu durum beni hayal kırıklığına uğrattı",
+        "options": [
+          "deluso",
+          "fake1",
+          "ha",
+          "fake2",
+          "mi",
+          "situazione",
+          "Questa"
+        ],
+        "correctAnswer": [
+          "Questa",
+          "situazione",
+          "mi",
+          "ha",
+          "deluso"
+        ],
+        "correctIndex": 0,
+        "audioText": "Questa situazione mi ha deluso",
+        "audioLang": "it-IT"
+      },
+      {
+        "id": "it_u4_l5q_tr1",
+        "type": "translate",
+        "prompt": "Çevir: Questa situazione mi ha deluso",
+        "options": [
+          "Yanlış çeviri 2",
+          "Yanlış çeviri 1",
+          "Yanlış çeviri 3",
+          "Bu durum beni hayal kırıklığına uğrattı"
+        ],
+        "correctIndex": 3,
+        "audioText": "Questa situazione mi ha deluso",
+        "audioLang": "it-IT"
+      },
+      {
+        "id": "it_u4_l5q_ls0",
+        "type": "listen",
+        "prompt": "Duyduğun cümleyi seç",
+        "options": [
+          "Yanlış cümle 1",
+          "Yanlış cümle 3",
+          "La negoziazione è stata piuttosto impegnativa",
+          "Yanlış cümle 2"
+        ],
+        "correctIndex": 2,
+        "audioText": "La negoziazione è stata piuttosto impegnativa",
+        "audioLang": "it-IT"
+      },
+      {
+        "id": "it_u4_l5q_sp0",
+        "type": "speak",
+        "prompt": "Lütfen şu cümleyi mikrofona söyle:",
+        "options": [],
+        "correctIndex": 0,
+        "audioText": "La negoziazione è stata piuttosto impegnativa",
+        "audioLang": "it-IT"
+      },
+      {
+        "id": "it_u4_l5q_ls1",
+        "type": "listen",
+        "prompt": "Duyduğun cümleyi seç",
+        "options": [
+          "Questa situazione mi ha deluso",
+          "Yanlış cümle 1",
+          "Yanlış cümle 2",
+          "Yanlış cümle 3"
+        ],
+        "correctIndex": 0,
+        "audioText": "Questa situazione mi ha deluso",
+        "audioLang": "it-IT"
+      },
+      {
+        "id": "it_u4_l5q_sp1",
+        "type": "speak",
+        "prompt": "Lütfen şu cümleyi mikrofona söyle:",
+        "options": [],
+        "correctIndex": 0,
+        "audioText": "Questa situazione mi ha deluso",
+        "audioLang": "it-IT"
+      }
+    ]
+  },
+  {
+    "id": "it_u4_l6",
+    "title": "İş ve Duygular (B2) - Bölüm 6",
+    "description": "B2'ye giden yolda kapsamlı eğitim",
+    "icon": "👑",
+    "xpReward": 50,
+    "questions": [
+      {
+        "id": "it_u4_l6q_f0",
+        "type": "flashcard",
+        "prompt": "Müzakere",
+        "options": [],
+        "correctIndex": 0,
+        "audioText": "Negoziazione",
+        "audioLang": "it-IT",
+        "imageOptions": [
+          "🤝"
+        ]
+      },
+      {
+        "id": "it_u4_l6q_f1",
+        "type": "flashcard",
+        "prompt": "Hayal Kırıklığı",
+        "options": [],
+        "correctIndex": 0,
+        "audioText": "Delusione",
+        "audioLang": "it-IT",
+        "imageOptions": [
+          "😔"
+        ]
+      },
+      {
+        "id": "it_u4_l6q_f2",
+        "type": "flashcard",
+        "prompt": "Sorumluluk",
+        "options": [],
+        "correctIndex": 0,
+        "audioText": "Responsabilità",
+        "audioLang": "it-IT",
+        "imageOptions": [
+          "📋"
+        ]
+      },
+      {
+        "id": "it_u4_l6q_t1",
+        "type": "imageChoice",
+        "prompt": "Hangisi 'Müzakere' demektir?",
+        "options": [
+          "Alakasız",
+          "Hatalı",
+          "Yanlış cevap",
+          "Negoziazione"
+        ],
+        "imageOptions": [
+          "🤝",
+          "❓",
+          "❓",
+          "❓"
+        ],
+        "correctIndex": 3,
+        "audioText": "Negoziazione",
+        "audioLang": "it-IT"
+      },
+      {
+        "id": "it_u4_l6q_cs0",
+        "type": "constructSentence",
+        "prompt": "Şu cümleyi çevir: Müzakere oldukça zorluydu",
+        "options": [
+          "impegnativa",
+          "La",
+          "fake1",
+          "negoziazione",
+          "fake2",
+          "è",
+          "stata",
+          "piuttosto"
+        ],
+        "correctAnswer": [
+          "La",
+          "negoziazione",
+          "è",
+          "stata",
+          "piuttosto",
+          "impegnativa"
+        ],
+        "correctIndex": 0,
+        "audioText": "La negoziazione è stata piuttosto impegnativa",
+        "audioLang": "it-IT"
+      },
+      {
+        "id": "it_u4_l6q_tr0",
+        "type": "translate",
+        "prompt": "Çevir: La negoziazione è stata piuttosto impegnativa",
+        "options": [
+          "Yanlış çeviri 3",
+          "Yanlış çeviri 2",
+          "Yanlış çeviri 1",
+          "Müzakere oldukça zorluydu"
+        ],
+        "correctIndex": 3,
+        "audioText": "La negoziazione è stata piuttosto impegnativa",
+        "audioLang": "it-IT"
+      },
+      {
+        "id": "it_u4_l6q_cs1",
+        "type": "constructSentence",
+        "prompt": "Şu cümleyi çevir: Bu durum beni hayal kırıklığına uğrattı",
+        "options": [
+          "deluso",
+          "mi",
+          "situazione",
+          "fake1",
+          "ha",
+          "fake2",
+          "Questa"
+        ],
+        "correctAnswer": [
+          "Questa",
+          "situazione",
+          "mi",
+          "ha",
+          "deluso"
+        ],
+        "correctIndex": 0,
+        "audioText": "Questa situazione mi ha deluso",
+        "audioLang": "it-IT"
+      },
+      {
+        "id": "it_u4_l6q_tr1",
+        "type": "translate",
+        "prompt": "Çevir: Questa situazione mi ha deluso",
+        "options": [
+          "Yanlış çeviri 1",
+          "Yanlış çeviri 2",
+          "Bu durum beni hayal kırıklığına uğrattı",
+          "Yanlış çeviri 3"
+        ],
+        "correctIndex": 2,
+        "audioText": "Questa situazione mi ha deluso",
+        "audioLang": "it-IT"
+      },
+      {
+        "id": "it_u4_l6q_ls0",
+        "type": "listen",
+        "prompt": "Duyduğun cümleyi seç",
+        "options": [
+          "La negoziazione è stata piuttosto impegnativa",
+          "Yanlış cümle 1",
+          "Yanlış cümle 3",
+          "Yanlış cümle 2"
+        ],
+        "correctIndex": 0,
+        "audioText": "La negoziazione è stata piuttosto impegnativa",
+        "audioLang": "it-IT"
+      },
+      {
+        "id": "it_u4_l6q_sp0",
+        "type": "speak",
+        "prompt": "Lütfen şu cümleyi mikrofona söyle:",
+        "options": [],
+        "correctIndex": 0,
+        "audioText": "La negoziazione è stata piuttosto impegnativa",
+        "audioLang": "it-IT"
+      },
+      {
+        "id": "it_u4_l6q_ls1",
+        "type": "listen",
+        "prompt": "Duyduğun cümleyi seç",
+        "options": [
+          "Yanlış cümle 3",
+          "Yanlış cümle 2",
+          "Yanlış cümle 1",
+          "Questa situazione mi ha deluso"
+        ],
+        "correctIndex": 3,
+        "audioText": "Questa situazione mi ha deluso",
+        "audioLang": "it-IT"
+      },
+      {
+        "id": "it_u4_l6q_sp1",
+        "type": "speak",
+        "prompt": "Lütfen şu cümleyi mikrofona söyle:",
+        "options": [],
         "correctIndex": 0,
         "audioText": "Questa situazione mi ha deluso",
         "audioLang": "it-IT"
